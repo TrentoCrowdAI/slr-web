@@ -2,14 +2,14 @@ import React, {useEffect} from "react";
 
 /**
  * component svg order arrow button
- * 'up' is a flag for checking where the arrow is pointing
+@param {string} up [ASC or DESC]
  */
 const OrderArrow= function ({up}) {
     var from="";
     var to="";
 
     //I check where the arrow should point to(up or down) checking the 'up' flag passed by the parent component
-    if(up){
+    if(up ==="ASC"){
         from="371.7,293 500,165 628.3,293 ";
         to="371.7,491.9 500,619.9 628.3,491.9 ";
     }else{

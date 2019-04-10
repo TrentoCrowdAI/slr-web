@@ -1,87 +1,50 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useRef} from "react";
 import {Link} from 'react-router-dom'
 import ClampLines from 'react-clamp-lines';
 import queryString from "query-string";
 
 
-import CheckBox from "src/components/forms/checkbox";
 import {paperDao} from 'src/dao/paper.dao';
 import {projectPapersDao} from 'src/dao/projectPapers.dao'
+
+import CheckBox from "src/components/forms/checkbox";
+import RadioBox from "src/components/forms/radiobox";
 import LoadIcon from 'src/components/svg/loadIcon';
 import SearchButton from 'src/components/svg/searchButton';
-import {searchCheckboxesToParams, join} from 'src/utils/index';
-import {PrintLocalSearchList, PrintScoupusSearchList} from 'src/components/papers/printPapersList';
+import {PrintScoupusSearchList} from 'src/components/papers/printPapersList';
 import Select from 'src/components/forms/select';
 import OrderArrow from 'src/components/svg/orderArrow';
+import Pagination from "src/components/modules/pagination";
+
+import {searchCheckboxesToParams, join, createQueryStringFromObject,getIndexOfObjectArrayByKeyAndValue} from 'src/utils/index';
 
 import {AppContext} from 'src/components/providers/appProvider'
-import Pagination from "src/components/modules/pagination";
 
 // Load the lodash build
 var _ = require('lodash');
 
 //order options
-const options = [
+const orderByOptions = [
     { value: 'title', label: 'Title' },
     { value: 'date', label: 'Date' }
   ];
 
-/*this is component form to search for the paper in project page*/
+//search by  options
+const searchByOptions = ["all", "author", "content"];
+
+//year options
+const startYear = 2017;
+const endYear = 2020;
+
+/**
+ * this is component form to search for the paper in project page
+ * */
 
 const SearchForm = function ({project_id, location, match, history}) {
-    
-    //ordering components
-    const [orderBy, setOrderBy] = useState(0);//the number index of the options array
-    const [sort, setSort] = useState(true);//true means "asc"
 
-    //handler for sort selection(ID|last modified|title)
-    function handleSelection(e){
-        setOrderBy(parseInt(e.target.getAttribute('data-value')));
-    }
-
-    //handler for order slection(ASC|DESC)
-    function handelOrder(e){
-        document.getElementById("ani-order-arrow").beginElement();//trigger svg animation
-        setSort(!sort);
-    }
-
-    //default searchby options(used for avoiding user errors)
-    const sbyOptions = ["all", "author", "paperTitle"];
-    //default year options
-    const yearOptions = _.range(2017,2020).map(String);//it will be more useful once there will be multiple years
-    //set query params from url
-    const params = queryString.parse(location.search);
-    const count = params.count || 10;
-    const start = params.start || 0;
-    const query = params.query || "";
-
-    //query params flags(I don't send errors if the user adds a value different from the default ones)
-    const scopus = (params.scopus === 'false') ? false : Boolean(params.scopus || false);
-    const googleScholar = (params.scopus === 'false') ? false : Boolean(params.googleScholar || false);
-    const arXiv = (params.scopus === 'false') ? false : Boolean(params.arXiv || false);
-    let searchby = params.searchby;
-    if(!sbyOptions.includes(searchby)){//if the value in input doesn't exists as default one I select 'all'
-        searchby = "all";
-    }
-    let years = (params.years || "").split(",");
-    if(years[0] === ""){
-        years = [];
-    }
-
-    //options on search
-    const initialCheckboxesState = {"scopus": scopus, "googleScholar": googleScholar, "arXiv": arXiv, //source
-                                    "all": (searchby === "all"), "author": (searchby === "author"), "paperTitle": (searchby === "paperTitle"), //searchby
-                                    "years": years};//year
-    const [checkboxes, setCheckboxes] = useState(initialCheckboxesState);
 
     //fetch data
     const [papersList, setPapersList] = useState([]);
-
-    //selected list of papers
-    const [selectedPapers, setSelectedPapers] = useState([]);
-
-    //input search string
-    const [inputToSearch, setInputToSearch] = useState(query);
 
     //bool to control the visualization of page
     const [display, setDisplay] = useState(true);
@@ -93,41 +56,39 @@ const SearchForm = function ({project_id, location, match, history}) {
     const appConsumer = useContext(AppContext);
 
 
-    const queryData = {query, start, count, orderBy: options[orderBy].value, sort: (sort) ? "ASC" : "DESC"};
+    //set query params from url
+    let queryData = createQueryData(location.search);
+    console.log(queryData);
+
+    //selected list of papers
+    let selectedPapers = [];
 
 
     useEffect(() => {
 
-
         //a wrapper function ask by react hook
         const fetchData = async () => {
 
-            //empty the list
-            setSelectedPapers([]);
-
+            //hide the page
 
             //if there is queryString from URL
-            if (query !== "") {
+            if (queryData.query !== "") {
 
-                //hide the page
                 setDisplay(false);
-                console.log(queryData);
-                let res;
-                
-                //always call the dao to search on scopus
-                res = await paperDao.search(queryData);
 
+                //always call the dao to search on scopus
+                let res = await paperDao.search(queryData);
 
                 //error checking
                 //if is 404 error
-                if (res.message === "Not Found") {
+                if (res && res.message === "Not Found") {
                     setPapersList([]);
                     setTotalResults(0);
                     //show the page
                     setDisplay(true);
                 }
                 //if is other error
-                else if (res.message) {
+                else if (res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
                 }
@@ -141,53 +102,58 @@ const SearchForm = function ({project_id, location, match, history}) {
                 }
             }
 
+
         };
 
         fetchData();
 
-    }, [start, count, sort, orderBy, query, scopus, googleScholar, arXiv, project_id]);  //re-execute when these variables change
+    }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count,  queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
 
-    /**
-     * update the checkbox state
-     */
-    function handleCheckboxChange(e) {
-        //copy the object
-        let newState = {...checkboxes};
-        let optionName = e.target.value;
-        if(yearOptions.includes(optionName)){//if it's an year option
-            if (!checkboxes.years.includes(optionName)) {//I check whether the year wasn't selected
-                newState.years.push(optionName);
-            }else{
-                var array = checkboxes.years.filter(function (value) {
-                    return value !== optionName;
-                });
-                newState.years = array;
-            }
-        }else{
-            newState[optionName] = !checkboxes[optionName];
-        }
-        setCheckboxes(newState);
+
+    //handler for sort selection
+    function handleSelection(e){
+        //get index
+        let index = parseInt(e.target.getAttribute('data-value'));
+        //get value by index
+        queryData.orderBy=orderByOptions[index].value;
+        //update url
+        let queryString = createQueryStringFromObject(queryData);
+        history.push(queryString);
+
     }
+
+    //handler for order selection(ASC|DESC)
+    function handelOrder(e){
+        //trigger svg animation
+        document.getElementById("ani-order-arrow").beginElement();
+
+        if(queryData.sort === "ASC"){
+            queryData.sort = "DESC";
+        }
+        else{
+            queryData.sort = "ASC";
+        }
+        //update url
+        let queryString = createQueryStringFromObject(queryData);
+        history.push(queryString);
+    }
+
 
     /*function to insert and remove the paper id from selected list*/
     function handlePaperSelection(event) {
         let id = event.target.value;
         //if id is not included in the list yet
         if (!selectedPapers.includes(id)) {
-            //copy array
-            let array = [...selectedPapers];
-            array.push(id);
+            //insert into array
+            selectedPapers.push(id);
 
-            //update the state
-            setSelectedPapers(array);
         }
         //if id already exists in the list
         else {
-            //create a new array without the target paper id
-            var array = selectedPapers.filter(function (value) {
+            //remove the  target paper id
+            selectedPapers = selectedPapers.filter(function (value) {
                 return value !== id;
             });
-            setSelectedPapers(array);
         }
     }
 
@@ -195,9 +161,8 @@ const SearchForm = function ({project_id, location, match, history}) {
     async function handleAddPapers(event) {
 
         event.preventDefault();
-        //hide the page
-        //setDisplay(false);
-        console.log(selectedPapers);
+
+        //console.log(selectedPapers);
         //for to insert papers into DB
         
         //call dao
@@ -211,10 +176,8 @@ const SearchForm = function ({project_id, location, match, history}) {
             return null;
         }
 
-        //show the page
-        //setDisplay(true);
-
         alert("insert completed");
+        window.location.reload();
     }
 
 
@@ -223,17 +186,71 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         event.preventDefault();
         //if query input is empty
-        if (inputToSearch === "") {
+        if (queryData.query === "") {
             alert("search string is empty")
         }
         else {
-            //concatenate the query string
-            let queryParams = "?query=" + encodeURIComponent(inputToSearch);
-            queryParams += searchCheckboxesToParams(checkboxes);
 
-            //update url to start the search
-            history.push(queryParams);
+            //update url
+            let queryString = createQueryStringFromObject(queryData);
+            //launch to search
+            history.push(queryString);
+
         }
+
+    }
+
+    /**
+     *synchronizes the value between queryData and input form
+     */
+    function handleOnInputChange(event){
+
+        switch (event.target.name) {
+            case "query":
+                queryData.query=event.target.value;
+                break;
+            case "Scopus":
+                //switch between true and false
+                if(queryData.scopus ==="false"){
+                    queryData.scopus = "true";
+                }
+                else{
+                    queryData.scopus = "false";
+                }
+                break;
+            case "Google Scholar":
+                //switch between true and false
+                if(queryData.googleScholar ==="false"){
+                    queryData.googleScholar = "true";
+                }
+                else{
+                    queryData.googleScholar = "false";
+                }
+                break;
+            case "arXiv":
+                //switch between true and false
+                if(queryData.arXiv ==="false"){
+                    queryData.arXiv = "true";
+                }
+                else{
+                    queryData.arXiv = "false";
+                }
+                break;
+            case "searchBy":
+                queryData.searchBy=event.target.value;
+                break;
+            case "year":
+                //if value is "all", deletes the year property
+                if(event.target.value==="all"){
+                    delete queryData.year;
+                }
+                //else get year value
+                else{
+                    queryData.year=event.target.value;
+                }
+                break;
+        }
+
 
     }
 
@@ -244,15 +261,16 @@ const SearchForm = function ({project_id, location, match, history}) {
      */
     let formPart = (//creare un componente a part
         <>{}
-            <form className={(query === "") ? 'search-form' : 'search-form small'}
+            <form className={(queryData.query === "") ? 'search-form' : 'search-form small'}
                   onSubmit={handleSendSearch}>
                 {/*search form*/}
                 <div style={{position: 'relative'}}>
                     <input
                         type="text"
                         placeholder="search"
-                        defaultValue={inputToSearch}
-                        onChange={e => setInputToSearch(e.target.value)}
+                        name="query"
+                        defaultValue={queryData.query}
+                        onChange={handleOnInputChange}
                     />
                     <button type="submit" value="Submit">
                         <SearchButton/>
@@ -261,29 +279,29 @@ const SearchForm = function ({project_id, location, match, history}) {
 
                 <div className="option-holder">
                     <label>Source:</label><br/>
-                    <div className="checkboxes-holder">
 
-                        <CheckBox label="Scopus" value="scopus" isChecked={checkboxes.scopus} handler={handleCheckboxChange}/>
-                        <CheckBox label="Google Scholar" value="googleScholar" isChecked={checkboxes.googleScholar} handler={handleCheckboxChange}/>
-                        <CheckBox label="arXiv" value="arXiv" isChecked={checkboxes.arXiv} handler={handleCheckboxChange}/>
+                    <div className="checkboxes-holder">
+                        <CheckBox label="Scopus" val="" isChecked={queryData.scopus==="true" } handler={handleOnInputChange}/>
+                        <CheckBox label="Google Scholar" val="" isChecked={queryData.googleScholar ==="true"} handler={handleOnInputChange}/>
+                        <CheckBox label="arXiv" val="" isChecked={queryData.arXiv ==="true"} handler={handleOnInputChange}/>
                     </div>
 
                     <label>Search by:</label><br/>
-                    <div className="checkboxes-holder">
 
-                        <CheckBox label="All" value="all" isChecked={checkboxes.all} handler={handleCheckboxChange}/>
-                        <CheckBox label="Author" value="author" isChecked={checkboxes.author} handler={handleCheckboxChange}/>
-                        <CheckBox label="Paper title" value="paperTitle" isChecked={checkboxes.paperTitle} handler={handleCheckboxChange}/>
-
+                    <div className="checkboxes-holder" onChange={handleOnInputChange}>
+                        <RadioBox label={searchByOptions[0]} name ="searchBy" val={searchByOptions[0]} isChecked={queryData.searchBy===searchByOptions[0]} />
+                        <RadioBox label={searchByOptions[1]} name ="searchBy" val={searchByOptions[1]} isChecked={queryData.searchBy===searchByOptions[1]} />
+                        <RadioBox label={searchByOptions[2]} name ="searchBy"  val={searchByOptions[2]} isChecked={queryData.searchBy===searchByOptions[2]} />
                     </div>
 
                     <label>Year:</label><br/>
-                    <div className="checkboxes-holder">
-
-                        <CheckBox label="2019" value="2019" isChecked={checkboxes.years.includes("2019")} handler={handleCheckboxChange}/>
-                        <CheckBox label="2018" value="2018" isChecked={checkboxes.years.includes("2018")} handler={handleCheckboxChange}/>
-                        <CheckBox label="2017" value="2017" isChecked={checkboxes.years.includes("2017")} handler={handleCheckboxChange}/>
-
+                    <div className="checkboxes-holder" onChange={handleOnInputChange}>
+                        <RadioBox label={"all"} name ="year" val={"all"} isChecked={queryData.year==="all"} />
+                        {
+                            _.range(startYear,endYear).map((year, index)=>
+                                <RadioBox key={index} label={year} name ="year" val={year} isChecked={parseInt(queryData.year)===year} />
+                            )
+                        }
                     </div>
                 </div>
 
@@ -294,13 +312,13 @@ const SearchForm = function ({project_id, location, match, history}) {
     let resultPart="";
 
     //if the search results list is empty
-    if (display === true && papersList.length === 0 && query !== "") {
+    if (display === true && papersList.length === 0 && queryData.query !== "") {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
             <div className="not-found"> not found :( </div> 
         );
     }
-    else if(papersList.length > 0 && query !== ""){
+    else if(papersList.length > 0 && queryData.query !== ""){
 
 
         let printList = (<PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection}/>);
@@ -310,11 +328,11 @@ const SearchForm = function ({project_id, location, match, history}) {
             <div className="paper-card-holder">
                 <div className="order">
                         <label>sort by:</label>
-                        <Select options={options} selected={orderBy} handler={handleSelection}/>
-                        <button type="button" onClick={handelOrder}><OrderArrow up={(sort)}/></button>
+                        <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
+                        <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
                 </div>
                 {printList}
-                <Pagination start={start} count={count} totalResults={totalResults} path={match.url}/>
+                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
                 <button className="bottom-left-btn" type="submit" value="Submit">
                     +
                 </button>
@@ -329,8 +347,8 @@ const SearchForm = function ({project_id, location, match, history}) {
             <div className="paper-card-holder">
                 <div className="order" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
                         <label>sort by:</label>
-                        <Select options={options} selected={orderBy} handler={handleSelection}/>
-                        <button type="button" onClick={handelOrder}><OrderArrow up={(sort)}/></button>
+                        <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
+                        <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
                 </div>
                 <div className="search-loading-holder">
                     <LoadIcon class={"small"}/>
@@ -351,6 +369,41 @@ const SearchForm = function ({project_id, location, match, history}) {
 };
 
 
+/**
+ * internal function to prepare a object of queryData
+ * @param queryUrl
+ * @return object of queryData for the fetch
+ */
+function createQueryData(queryUrl){
+
+
+
+    //set query params from queryString of url
+    let params = queryString.parse( queryUrl);
+    let query = params.query || "";
+
+    let searchBy = params.searchBy || "all";
+    let orderBy = params.orderBy || "title";
+    let sort = params.sort || "ASC";
+    let start = params.start || 0;
+    let count = params.count || 10;
+
+    let scopus = params.scopus || "false";
+    let googleScholar = params.googleScholar|| "false";
+    let arXiv = params.arXiv|| "false";
+
+    let year = params.year || "all";
+
+    let queryData = {query, searchBy,orderBy, sort, scopus ,googleScholar,arXiv, start, count };
+    //set year property only when year value is not "all"
+    if(year !== "all"){
+        queryData.year = year;
+    }
+
+
+    return queryData;
+
+}
 
 
 export default SearchForm;

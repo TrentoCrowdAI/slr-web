@@ -19,6 +19,6 @@ const UserInfo = function(props){
                 </div>
             </div>
     );
-}
+};
 
 export  default  UserInfo;

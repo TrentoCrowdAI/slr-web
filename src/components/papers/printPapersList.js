@@ -1,11 +1,12 @@
 import React from "react";
 import ClampLines from 'react-clamp-lines';
 import {Link} from 'react-router-dom';
+
 import CheckBox from "src/components/forms/checkbox";
 /**
  * prints the papers list of a local search on the fake database
  */
-
+/*
 const PrintLocalSearchList = function ({papersList, handlePaperSelection}) {
 
     let output = papersList.map((element, index) =>
@@ -26,14 +27,15 @@ const PrintLocalSearchList = function ({papersList, handlePaperSelection}) {
     );
     return output;
 
-}
+};
+*/
 
 /**
  * prints the results of a search on scopus
  */
 const PrintScoupusSearchList = function ({papersList, handlePaperSelection}) {
 
-    let exampleAbstract ="I am a description I am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a descriptionI am a description";
+
 
     let output = papersList.map((element, index) =>
         <div key={index} className="paper-card">
@@ -58,13 +60,13 @@ const PrintScoupusSearchList = function ({papersList, handlePaperSelection}) {
     );
     return output;
 
-}
+};
 
 /**
  * prints a list of papers
  */
 
-const PrintList = function ({papersList}) {
+const PrintPapersList = function ({papersList}) {
 
     let output;
     //if list is empty, print a notice message
@@ -76,7 +78,7 @@ const PrintList = function ({papersList}) {
     //if list isn't empty, print list of papers
     else {
         output = (
-            papersList.map((element, index) =>
+            papersList.map((element) =>
                 <div key={element.id} className="paper-card">
                     <Link to={"#"}>
                         <h3>{element.data.title}</h3>
@@ -103,6 +105,6 @@ const PrintList = function ({papersList}) {
     return output;
 
 
-}
+};
 
-export {PrintLocalSearchList, PrintScoupusSearchList, PrintList};
+export  {PrintPapersList, PrintScoupusSearchList};

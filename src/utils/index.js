@@ -46,32 +46,52 @@ function join(base, path){
 /**
  *
  *
- * function that set pagesize and after value by query string (if exist)
- * @param query query string
- * @return {number[]} pagesize, before, after
+ * function to create string of query by queryObject
+ * @param queryData query object
+ * @return {string} query string
  */
-function setPaginationParamsFromQuery(query){
-    //initial value
-    let pagesize=10;
-    let before=-1;
-    let after=0;
+function createQueryStringFromObject(queryData){
+
+    let queryString ="?";
+    //create a array of keys
+    let keys = Object.keys(queryData);
+    //concatenate the object.property
+    for(let i =0; i< keys.length; i++){
+        queryString += keys[i]+"="+encodeURIComponent(queryData[keys[i]]);
+        //if it isn't the last element, add symbol "&"
+        if(i !== (keys.length-1)){
+            queryString += "&";
+        }
+    }
+    return queryString;
+
+}
 
 
-    let params = queryString.parse(query);
-    if(params.pagesize){
-        pagesize = Number(params.pagesize);
+/**
+ * get element index of a object array by [key, value]
+ * @param array to find
+ * @param key to find
+ * @param value to find
+ * @return {number} index of element, -1 if didn't find
+ */
+function getIndexOfObjectArrayByKeyAndValue(array ,key, value){
+    let index=-1;
+    for(let i=0; i<array.length; i++){
+        if(array[i][key] === value){
+            index = i;
+            break;
+        }
     }
-    //is there is before, ignore the after
-    if(params.before){
-        before = Number(params.before);
-    }
-    else if(params.after){
-        after = Number(params.after);
-    }
-    return [pagesize, before, after];
+    return index;
 }
 
 
 
+export  {
+    searchCheckboxesToParams,
+    join,
+    createQueryStringFromObject,
+    getIndexOfObjectArrayByKeyAndValue,
 
-export  {searchCheckboxesToParams, join, setPaginationParamsFromQuery};
+};

@@ -1,4 +1,4 @@
-import React, {useContext,useState,useEffect} from "react";
+import React, {useState} from "react";
 
 import {AppContext} from "src/components/providers/appProvider";
 import EditButton from "src/components/svg/editButton";
@@ -8,7 +8,7 @@ import EditButton from "src/components/svg/editButton";
  */
 
 
-const ProjectDscription = function({description, update}){
+const ProjectDescription = function({description, update}){
 
 
     //this is used as a toggle for checking if the user is trying to edit the name of the project
@@ -16,12 +16,12 @@ const ProjectDscription = function({description, update}){
 
     //handles the click on the edit/confirm button
     function handleEditRequest(e){
-        console.log("CLICK")
+        console.log("CLICK");
         if(!editing){//if the user was not editing I allow him to edit
-            setTimeout(//I wait for the button event to fire before blurring out the textares
+            setTimeout(//I wait for the button event to fire before blurring out the textarea
                 function(){
                     document.getElementById("edit-project-description-input").focus();
-                },100)
+                },100);
             
             setEditing(true);
             console.log(editing)
@@ -38,13 +38,16 @@ const ProjectDscription = function({description, update}){
             <form className="edit-project-description">
                     <textarea id="edit-project-description-input"  defaultValue={description} style={{width: (editing) ? "100%" : "0%", padding: (editing) ? "" : "0px", height:(editing) ? "" : "0px"}}
                     onBlur={(e) => {
-                                    console.log("blurring");setEditing(false);
+                                    console.log("blurring");
+                                    setEditing(false);
                                 }}
                     />
-                    <button className="edit-button" onMouseDown={handleEditRequest} type="button"><EditButton confirm={editing}/></button>
-                </form>
+                    <button className="edit-button" onMouseDown={handleEditRequest} type="button">
+                        <EditButton confirm={editing}/>
+                    </button>
+            </form>
         </div>
     );
 }
 
-export default ProjectDscription;
+export default ProjectDescription;

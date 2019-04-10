@@ -33,18 +33,18 @@ const ProjectPage = (props) => {
 
     const substrUrl = window.location.pathname.substring(window.location.pathname.length - 7, window.location.pathname.length);
 
+    //set the project title
     useEffect(() => {
         if(project.data.name === "loading..."){
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name}</h2> </div>);//I set the page title
         }else{
-            appConsumer.setTitle(<ProjectName name={project.data.name} update={updateName}/>);
+            appConsumer.setTitle(<ProjectName name={project.data.name} update={updateProject}/>);
         }
     
     }, [project]);
 
     //set animation effects on menu by parsing the url
     useEffect(() => {
-
         if (substrUrl === '/search' || substrUrl === 'search/') {
             setSlider(false);
         }
@@ -76,7 +76,7 @@ const ProjectPage = (props) => {
                 //show the page
                 setDisplay(true);
             }
-        }
+        };
         fetchData();
         //when the component will unmount
         return () => {
@@ -84,16 +84,20 @@ const ProjectPage = (props) => {
             projectsDao.abortRequest();
         };
     }, [project_id]); //re-execute when these variables change
+    
 
-    //function for updating the descriptio
-    function updateDescription(){
+    //function for updating the description and name
+    async function updateProject(){
 
-        var new_desc = document.getElementById("edit-project-description-input").value;
+        let new_name = document.getElementById("edit-project-name-input").value;
+        let new_desc = document.getElementById("edit-project-description-input").value;
 
-        const putData = async () => {
+
+        //if the new name o description are difference from the old name o description
+        if(new_name !== project.data.name || new_desc !== project.data.description){
 
             //call the dao
-            let res = await projectsDao.putProject(project_id, {name: project.data.name, description : new_desc});
+            let res = await projectsDao.putProject(project_id, {name: new_name, description : new_desc});
 
             //error checking
             //if is other error
@@ -103,45 +107,14 @@ const ProjectPage = (props) => {
             }
             //if res isn't null
             else if (res !== null) {
-                console.log("UPDATED SUCCESFULLY!");
+                console.log("UPDATED SUCCESSFULLY!");
                 window.location.reload();
             }
-        }
 
-        if(new_desc !== project.data.description){
-            putData();
+
         }
     }
 
-    //function for updating the name
-    function updateName(){
-
-        console.log("UPDATING");
-        var new_name = document.getElementById("edit-project-name-input").value;
-        console.log(new_name);
-
-        const putData = async () => {
-
-            //call the dao
-            let res = await projectsDao.putProject(project_id, {name: new_name, description : project.data.description});
-
-            //error checking
-            //if is other error
-            if (res.message) {
-                //pass error object to global context
-                appConsumer.setError(res);
-            }
-            //if res isn't null
-            else if (res !== null) {
-                console.log("UPDATED SUCCESFULLY!")
-                window.location.reload();
-            }
-        }
-
-        if(new_name !== project.data.name){
-            putData();
-        }
-    }
 
     let output;
 
@@ -158,8 +131,8 @@ const ProjectPage = (props) => {
                 {/*route the papers list*/}
                 <Route exact  path={props.match.url} render={() =>
                     <>
-                        <ProjectDescription description={project.data.description} update={updateDescription}/>
-                        <PapersList project_id={project_id} location={props.location} match={props.match} />
+                        <ProjectDescription description={project.data.description} update={updateProject}/>
+                        <PapersList project_id={project_id} location={props.location} match={props.match} history={props.history}/>
                     </>
                 }/>
 
@@ -173,7 +146,7 @@ const ProjectPage = (props) => {
     }
 
     return output;
-}
+};
 
 /**
  * this is the local component to print head of project page
@@ -198,7 +171,7 @@ const ProjectPageHead = function ({project, match, slider}) {
     );
     return output;
 
-}
+};
 
 
 export default ProjectPage;

@@ -11,6 +11,8 @@ const Select = ({ options, selected, handler }) => {
     //this is useful for the animation
     const [focused, setFocused] = useState(false);
 
+
+
     function handleFocus(e){
         //handle arrow animation and focus of menu
         document.getElementById("ani-select-arrow").beginElement();//trigger svg animation

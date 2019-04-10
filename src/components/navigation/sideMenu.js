@@ -56,10 +56,10 @@ const SideMenu = function (props) {
         </div>
     );
 
-}
+};
 
 /**
- *local compotent to print menu
+ *internal component that is used only for print menu items
  */
 const PrintMenu = function (props) {
 

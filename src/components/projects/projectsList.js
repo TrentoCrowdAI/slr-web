@@ -36,12 +36,8 @@ const ProjectsList = function (props) {
     const appConsumer = useContext(AppContext);
 
     //set query params from url
-    const params = queryString.parse( props.location.search && props.location.search);
-    const count = params.count || 10;
-    const start = params.start || 0;
+    const queryData = createQueryData(props.location.search);
 
-    //if "before" is defined by query then insert it in object, else insert "after" in object
-    const queryData = {start, count};
 
     //set title when component mounts
     useEffect(() => {
@@ -87,7 +83,7 @@ const ProjectsList = function (props) {
                 //show the page
                 setDisplay(true);
             }
-        }
+        };
 
         fetchData();
 
@@ -96,7 +92,33 @@ const ProjectsList = function (props) {
             //stop all ongoing request
             projectsDao.abortRequest();
         };
-    }, [start, count]); //re-execute when these variables change
+    }, [queryData.start, queryData.count]); //re-execute when these variables change
+
+
+    //handle to delete project
+    async function handleDelete(id){
+
+        console.log("deleting " + id);
+        //call the dao
+        let res = await projectsDao.deleteProject(id);
+        //error checking
+        //if is other error
+        if (res.message) {
+            //pass error object to global context
+            appConsumer.setError(res);
+        }
+        //if res isn't null
+        else if (res !== null) {
+            //create a new array without the project deleted
+            let newProjectsList = projectsList.filter((project)=>project.id !== id);
+            //update project list state
+            setProjectsList(newProjectsList);
+
+            alert("DELETED SUCCESSFULLY!");
+        }
+    }
+
+
 
     let output;
     //if the page is loading
@@ -111,9 +133,9 @@ const ProjectsList = function (props) {
             <div>
                 <Cover cls={toggleform ? "full-screen" : ""} handler={setToggleForm}/>
                 {/*print list of projects*/}
-                <PrintList projectsList={projectsList} path={props.match.url}/>
+                <PrintList projectsList={projectsList} path={props.match.url} handleDelete={handleDelete}/>
                 {/*set listId and continues value*/}
-                <Pagination start={start} count={count} totalResults={totalResults} path={props.match.url}/>
+                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={props.match.url}/>
 
                 {/*print the input form to create/update the projects*/}
                 <ProjectForm visibility={toggleform} setVisibility={setToggleForm} history={props.history}/>
@@ -134,38 +156,14 @@ const ProjectsList = function (props) {
 
 
 /**
- *  local component to print list
+ *  internal component only to print the list
  * @param projectsList projects list data
  * @param path current page url
- */
-const PrintList = function ({projectsList, path}) {
-
-    //get data from global context
-    const appConsumer = useContext(AppContext);
+ * @param handleDelete function to delete the project
+ * */
+const PrintList = function ({projectsList, path, handleDelete}) {
 
     let sideOptions= ["delete"];
-
-    function handleDelete(id){
-        console.log("deleting " + id);
-        const deleteData = async () => {
-
-            //call the dao
-            let res = await projectsDao.deleteProject(id);
-
-            //error checking
-            //if is other error
-            if (res.message) {
-                //pass error object to global context
-                appConsumer.setError(res);
-            }
-            //if res isn't null
-            else if (res !== null) {
-                console.log("DELETED SUCCESFULLY!")
-            }
-        }
-
-        deleteData();
-    }
 
     let maps;
     //if list is empty, print a notice message
@@ -196,6 +194,27 @@ const PrintList = function ({projectsList, path}) {
     return output;
 
 };
+
+/**
+ * internal function to prepare a object of queryData
+ * @param query
+ * @return object of queryData for the fetch
+ */
+function createQueryData(query){
+
+    //set query params from queryString of url
+    let params = queryString.parse( query);
+    let count = params.count || 10;
+    let start = params.start || 0;
+
+    //if "before" is defined by query then insert it in object, else insert "after" in object
+    let queryData = {start, count};
+    return queryData;
+
+}
+
+
+
 
 
 export default ProjectsList;
