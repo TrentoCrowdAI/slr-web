@@ -1,0 +1,50 @@
+form.new-paper-form{
+    width: 80%;
+    margin: 0 auto;
+}
+
+form.new-paper-form div.new-paper-form-ad{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: 0px 10% 20px 10%;
+}
+
+form.new-paper-form div.new-paper-form-ad input[type=text]{
+    width: 100%;
+    display: block;
+    margin: 0 0 5px 0;
+    font-size: 18px;
+}
+
+form.new-paper-form div.new-paper-form-ad input[type=date]{
+    height: 26px;
+}
+
+form.new-paper-form textarea{
+    height: 400px;
+    width: 80%;
+    margin: 0px 10% 20px 10%;
+    font-family: inherit;
+    background-color: transparent;
+    border: 0px;
+    border-bottom: solid 1px black;
+    resize: none;
+    color: black;
+}
+
+form.new-paper-form input#title{
+    display: block;
+    width: 80%;
+    margin: 0px 10% 20px 10%;
+    font-size: 22px;
+    text-align: center;
+}
+
+form.new-paper-form button{
+    border: solid 1px grey;
+    font-size: 18px;
+    width: 20%;
+    height: 30px;
+    margin: 5px 40% 5px 40%;
+}
