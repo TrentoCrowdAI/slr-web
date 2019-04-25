@@ -18,7 +18,6 @@ import {AppContext} from 'src/components/providers/appProvider'
 //order options
 const orderByOptions = [
     { value: 'date_created', label: 'date_created' },
-    { value: 'eid', label: 'EID' },
     { value: 'title', label: 'Title' },
     { value: 'authors', label: 'Authors' }
   ];
@@ -52,6 +51,7 @@ const PapersList = ({project_id, location, match, history}) => {
             //hide the page
             setDisplay(false);
 
+            console.log(queryData);
             //call the dao
             let res = await projectPapersDao.getPapersList(queryData);
 
