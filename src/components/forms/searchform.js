@@ -30,7 +30,7 @@ const orderByOptions = [
   ];
 
 //search by  options
-const searchByOptions = ["all", "author", "content"];
+const searchByOptions = ["all", "author", "content", "advanced"];
 
 //year options
 const startYear = 2017;
@@ -299,9 +299,10 @@ const SearchForm = function ({project_id, location, match, history}) {
                     <label>Search by:</label><br/>
 
                     <div className="checkboxes-holder" onChange={handleOnInputChange}>
-                        <RadioBox label={searchByOptions[0]} name ="searchBy" val={searchByOptions[0]} isChecked={searchBy===searchByOptions[0]} />
-                        <RadioBox label={searchByOptions[1]} name ="searchBy" val={searchByOptions[1]} isChecked={searchBy===searchByOptions[1]} />
-                        <RadioBox label={searchByOptions[2]} name ="searchBy"  val={searchByOptions[2]} isChecked={searchBy===searchByOptions[2]} />
+                        <RadioBox label={searchByOptions[0]} name ="searchBy" val={searchByOptions[0]} isChecked={queryData.searchBy===searchByOptions[0]} />
+                        <RadioBox label={searchByOptions[1]} name ="searchBy" val={searchByOptions[1]} isChecked={queryData.searchBy===searchByOptions[1]} />
+                        <RadioBox label={searchByOptions[2]} name ="searchBy"  val={searchByOptions[2]} isChecked={queryData.searchBy===searchByOptions[2]} />
+                        <RadioBox label={"adv. query"} name ="searchBy" val={searchByOptions[3]} isChecked={queryData.searchBy===searchByOptions[3]} />
                     </div>
 
                     <label>Year:</label><br/>

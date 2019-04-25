@@ -23,6 +23,7 @@ form.search-form button{
   top: 0px;
   right: 0px;
   border-bottom: solid 1px black;
+  border-radius: 0px;
 }
 
 form.search-form button svg#search-icon{
