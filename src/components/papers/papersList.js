@@ -17,6 +17,7 @@ import {AppContext} from 'src/components/providers/appProvider'
 
 //order options
 const orderByOptions = [
+    { value: 'date_created', label: 'date_created' },
     { value: 'eid', label: 'EID' },
     { value: 'title', label: 'Title' },
     { value: 'authors', label: 'Authors' }
@@ -42,7 +43,7 @@ const PapersList = ({project_id, location, match, history}) => {
 
     //set query params from url
     const queryData = createQueryData(project_id, location.search);
-
+    console.log(queryData);
 
     useEffect(() => {
 
@@ -124,7 +125,7 @@ const PapersList = ({project_id, location, match, history}) => {
                 <div className="order" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
                     <label>sort by:</label>
                     <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
+                    <button type="button" onClick={handelOrder}><OrderArrow up={queryData.sort}/></button>
                 </div>
                 <LoadIcon class={"small"}/>
             </div> );
@@ -135,8 +136,8 @@ const PapersList = ({project_id, location, match, history}) => {
             <div className="paper-card-holder">
                 <div className="order">
                     <label>sort by:</label>
-                    <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
+                    <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)} handler={handleSelection}/>
+                    <button type="button" onClick={handelOrder}><OrderArrow up={queryData.sort}/></button>
                 </div>
                 <PrintPapersList papersList={papersList}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
@@ -156,6 +157,7 @@ const PapersList = ({project_id, location, match, history}) => {
 
 
 
+
 /**
  * internal function to prepare a object of queryData
  * @param project_id
@@ -168,7 +170,7 @@ function createQueryData(project_id, query){
     let params = queryString.parse( query);
     let count = params.count || 10;
     let start = params.start || 0;
-    let orderBy = params.orderBy || "eid";
+    let orderBy = params.orderBy || "date_created";
     let sort = params.sort || "ASC";
 
     //if "before" is defined by query then insert it in object, else insert "after" in object

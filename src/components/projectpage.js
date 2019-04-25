@@ -19,7 +19,7 @@ const PapersList = ({id, papers, setPapersList}) => {
             //call the dao
             let res = await projectPapersDao.getPapersList({project_id: id});
             //let res2 = await projectsDao.getProject(match.params.id);
-            console.log(res);
+            //console.log(res);
             setFetching(false);
             //update only when there are the results
             if (res !== null /*&& res2 !== null*/) {

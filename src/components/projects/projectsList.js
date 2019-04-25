@@ -57,14 +57,14 @@ const ProjectsList = function (props) {
 
             //error checking
             //if is 404 error
-            if (res.message === "Not Found") {
+            if (res && res.message === "Not Found") {
                 setProjectsList([]);
                 setTotalResults(0);
                 //show the page
                 setDisplay(true);
             }
             //if is other error
-            else if (res.message) {
+            else if (res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }

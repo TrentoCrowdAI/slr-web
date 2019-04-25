@@ -35,6 +35,8 @@ const searchByOptions = ["all", "author", "content"];
 //year options
 const startYear = 2017;
 const endYear = 2020;
+const yearOptions = ["all", ...(_.range(startYear,endYear))];
+
 
 /**
  * this is component form to search for the paper in project page
@@ -63,19 +65,28 @@ const SearchForm = function ({project_id, location, match, history}) {
     //selected list of papers
     let selectedPapers = [];
 
+    const  [keywords, setKeyWords ] = useState("");
+    const  [source,setSource]=useState({"scopus":true, "googleScholar": false, "arXiv": false});
+    const  [searchBy, setSearchBy] = useState("all");
+    const  [year, setYear] = useState("all");
+
+
 
     useEffect(() => {
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
 
-            //hide the page
+            //update the values of state from url
+            setKeyWords(queryData.query);
+            setSource({"scopus":queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
+            setSearchBy(queryData.searchBy);
+            setYear(queryData.year);
 
             //if there is queryString from URL
             if (queryData.query !== "") {
 
                 setDisplay(false);
-
                 //always call the dao to search on scopus
                 let res = await paperDao.search(queryData);
 
@@ -186,12 +197,19 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         event.preventDefault();
         //if query input is empty
-        if (queryData.query === "") {
+        if (keywords === "") {
             alert("search string is empty")
         }
         else {
 
-            //update url
+            queryData.query = keywords;
+            queryData.scopus=source.scopus;
+            queryData.googleScholar=source.googleScholar;
+            queryData.arXiv = source.arXiv;
+            queryData.searchBy = searchBy;
+            queryData.year = year;
+
+            //send query url
             let queryString = createQueryStringFromObject(queryData);
             //launch to search
             history.push(queryString);
@@ -205,49 +223,41 @@ const SearchForm = function ({project_id, location, match, history}) {
      */
     function handleOnInputChange(event){
 
+        let newSource;
+
         switch (event.target.name) {
             case "query":
-                queryData.query=event.target.value;
+                setKeyWords(event.target.value);
                 break;
-            case "Scopus":
+            case "scopus":
+                //copy the old source
+                newSource = {...source};
                 //switch between true and false
-                if(queryData.scopus ==="false"){
-                    queryData.scopus = "true";
-                }
-                else{
-                    queryData.scopus = "false";
-                }
+                newSource.scopus = !source.scopus;
+                setSource(newSource);
                 break;
-            case "Google Scholar":
+
+            case "googleScholar":
+                //copy the old source
+                newSource = {...source};
                 //switch between true and false
-                if(queryData.googleScholar ==="false"){
-                    queryData.googleScholar = "true";
-                }
-                else{
-                    queryData.googleScholar = "false";
-                }
+                newSource.googleScholar = !source.googleScholar;
+                setSource(newSource);
                 break;
             case "arXiv":
+                //copy the old source
+                newSource = {...source};
                 //switch between true and false
-                if(queryData.arXiv ==="false"){
-                    queryData.arXiv = "true";
-                }
-                else{
-                    queryData.arXiv = "false";
-                }
+                newSource.arXiv = !source.arXiv;
+                setSource(newSource);
                 break;
             case "searchBy":
-                queryData.searchBy=event.target.value;
+                setSearchBy(event.target.value);
                 break;
             case "year":
-                //if value is "all", deletes the year property
-                if(event.target.value==="all"){
-                    delete queryData.year;
-                }
-                //else get year value
-                else{
-                    queryData.year=event.target.value;
-                }
+                setYear(parseInt(event.target.value));
+                break;
+            default:
                 break;
         }
 
@@ -259,7 +269,7 @@ const SearchForm = function ({project_id, location, match, history}) {
      need to  create a new child component for the part of <form>, when we have more information on search options
      ######################################
      */
-    let formPart = (//creare un componente a part
+    let formPart = (
         <>{}
             <form className={(queryData.query === "") ? 'search-form' : 'search-form small'}
                   onSubmit={handleSendSearch}>
@@ -269,7 +279,7 @@ const SearchForm = function ({project_id, location, match, history}) {
                         type="text"
                         placeholder="search"
                         name="query"
-                        defaultValue={queryData.query}
+                        value={keywords}
                         onChange={handleOnInputChange}
                     />
                     <button type="submit" value="Submit">
@@ -281,25 +291,24 @@ const SearchForm = function ({project_id, location, match, history}) {
                     <label>Source:</label><br/>
 
                     <div className="checkboxes-holder">
-                        <CheckBox label="Scopus" val="" isChecked={queryData.scopus==="true" } handler={handleOnInputChange}/>
-                        <CheckBox label="Google Scholar" val="" isChecked={queryData.googleScholar ==="true"} handler={handleOnInputChange}/>
-                        <CheckBox label="arXiv" val="" isChecked={queryData.arXiv ==="true"} handler={handleOnInputChange}/>
+                        <CheckBox label="Scopus" name="scopus" val="" isChecked={source.scopus} handler={handleOnInputChange}/>
+                        <CheckBox label="Google Scholar" name="googleScholar" val="" isChecked={source.googleScholar} handler={handleOnInputChange}/>
+                        <CheckBox label="arXiv" name="arXiv" val="" isChecked={source.arXiv} handler={handleOnInputChange}/>
                     </div>
 
                     <label>Search by:</label><br/>
 
                     <div className="checkboxes-holder" onChange={handleOnInputChange}>
-                        <RadioBox label={searchByOptions[0]} name ="searchBy" val={searchByOptions[0]} isChecked={queryData.searchBy===searchByOptions[0]} />
-                        <RadioBox label={searchByOptions[1]} name ="searchBy" val={searchByOptions[1]} isChecked={queryData.searchBy===searchByOptions[1]} />
-                        <RadioBox label={searchByOptions[2]} name ="searchBy"  val={searchByOptions[2]} isChecked={queryData.searchBy===searchByOptions[2]} />
+                        <RadioBox label={searchByOptions[0]} name ="searchBy" val={searchByOptions[0]} isChecked={searchBy===searchByOptions[0]} />
+                        <RadioBox label={searchByOptions[1]} name ="searchBy" val={searchByOptions[1]} isChecked={searchBy===searchByOptions[1]} />
+                        <RadioBox label={searchByOptions[2]} name ="searchBy"  val={searchByOptions[2]} isChecked={searchBy===searchByOptions[2]} />
                     </div>
 
                     <label>Year:</label><br/>
                     <div className="checkboxes-holder" onChange={handleOnInputChange}>
-                        <RadioBox label={"all"} name ="year" val={"all"} isChecked={queryData.year==="all"} />
                         {
-                            _.range(startYear,endYear).map((year, index)=>
-                                <RadioBox key={index} label={year} name ="year" val={year} isChecked={parseInt(queryData.year)===year} />
+                            yearOptions.map((singleYear, index)=>
+                                <RadioBox key={index} label={singleYear} name ="year" val={singleYear} isChecked={year===singleYear} />
                             )
                         }
                     </div>
@@ -311,18 +320,30 @@ const SearchForm = function ({project_id, location, match, history}) {
 
     let resultPart="";
 
+    //if is loading
+    if (display === false) {
+
+        resultPart = (
+            <div className="paper-card-holder">
+                <div className="order" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
+                    <label>sort by:</label>
+                    <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
+                    <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
+                </div>
+                <div className="search-loading-holder">
+                    <LoadIcon class={"small"}/>
+                </div>
+            </div>);
+    }
+
     //if the search results list is empty
-    if (display === true && papersList.length === 0 && queryData.query !== "") {
+   else if (papersList.length === 0 && queryData.query !== "") {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
             <div className="not-found"> not found :( </div> 
         );
     }
     else if(papersList.length > 0 && queryData.query !== ""){
-
-
-        let printList = (<PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection}/>);
-
 
         resultPart = (
             <div className="paper-card-holder">
@@ -331,7 +352,7 @@ const SearchForm = function ({project_id, location, match, history}) {
                         <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
                         <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
                 </div>
-                {printList}
+                <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
                 <button className="bottom-left-btn" type="submit" value="Submit">
                     +
@@ -340,21 +361,7 @@ const SearchForm = function ({project_id, location, match, history}) {
         );
     }
 
-    //if is loading
-    if (display === false) {
 
-        resultPart = (
-            <div className="paper-card-holder">
-                <div className="order" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
-                        <label>sort by:</label>
-                        <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
-                        <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
-                </div>
-                <div className="search-loading-holder">
-                    <LoadIcon class={"small"}/>
-                </div>
-            </div>);
-    }
 
     let output = (
         <>
@@ -388,18 +395,21 @@ function createQueryData(queryUrl){
     let start = params.start || 0;
     let count = params.count || 10;
 
-    let scopus = params.scopus || "false";
-    let googleScholar = params.googleScholar|| "false";
-    let arXiv = params.arXiv|| "false";
 
-    let year = params.year || "all";
-
-    let queryData = {query, searchBy,orderBy, sort, scopus ,googleScholar,arXiv, start, count };
-    //set year property only when year value is not "all"
-    if(year !== "all"){
-        queryData.year = year;
+    let scopus;
+    if (params.scopus===undefined){
+        scopus = true;
+    }
+    else{
+        scopus= (params.scopus==="true");
     }
 
+    let googleScholar = (params.googleScholar ==="true");
+    let arXiv = (params.arXiv ==="true");
+
+    let year = parseInt(params.year) || "all";
+
+    let queryData = {query, searchBy,orderBy, sort, scopus ,googleScholar,arXiv, year, start, count };
 
     return queryData;
 

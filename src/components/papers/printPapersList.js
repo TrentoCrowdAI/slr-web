@@ -11,7 +11,7 @@ const PrintLocalSearchList = function ({papersList, handlePaperSelection}) {
 
     let output = papersList.map((element, index) =>
         <div key={element.id} className="paper-card">
-            <CheckBox val={element.id} label={""} handler={handlePaperSelection}/>
+            <CheckBox name={""} label={""} val={element.eid}  handler={handlePaperSelection}/>
             <Link to={"#"}><h3>{element.data && element.data.title}</h3></Link>
             <ClampLines
                 text={element.data && element.data.abstract}
@@ -39,7 +39,7 @@ const PrintScoupusSearchList = function ({papersList, handlePaperSelection}) {
 
     let output = papersList.map((element, index) =>
         <div key={index} className="paper-card">
-            <CheckBox val={element.eid} label={""} handler={handlePaperSelection}/>
+            <CheckBox name={""} label={""} val={element.eid}  handler={handlePaperSelection}/>
             <Link to={"#"}><h3>{element.title}</h3></Link>
             <div className="extra-info">
                 <p className="authors">{element.authors}</p>
