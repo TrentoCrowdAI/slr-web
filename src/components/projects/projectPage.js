@@ -4,6 +4,7 @@ import {Flipper, Flipped} from 'react-flip-toolkit';
 
 import SearchForm from 'src/components/forms/searchform';
 import PapersList from 'src/components/papers/papersList';
+import PaperForm from './../../components/forms/custompaper'; //fix relative url!
 import {projectsDao} from 'src/dao/projects.dao';
 import LoadIcon from 'src/components/svg/loadIcon';
 import ProjectDescription from 'src/components/projects/projectDescription';
@@ -133,6 +134,9 @@ const ProjectPage = (props) => {
                     <>
                         <ProjectDescription description={project.data.description} update={updateProject}/>
                         <PapersList project_id={project_id} location={props.location} match={props.match} history={props.history}/>
+                        <button className="bottom-left-btn">
+                            <Link to={join(props.match.url,"/addpaper")}>+</Link>
+                        </button>
                     </>
                 }/>
 
@@ -140,6 +144,13 @@ const ProjectPage = (props) => {
                 <Route exact path={props.match.url + "/search"} render={(props) =>
                     <SearchForm project_id={project_id} {...props} />
                 }/>
+
+                <Route path = {props.match.url + "/addpaper"} render={() =>
+                    <>
+                        <Link className="back" to={props.match.url}> +- </Link>
+                        <PaperForm projectId={project.id} url={props.match.url} history={props.history}/>
+                    </>
+                } />
 
             </div>
         );
@@ -152,9 +163,10 @@ const ProjectPage = (props) => {
  * this is the local component to print head of project page
  */
 const ProjectPageHead = function ({project, match, slider}) {
+    var lc = window.location.pathname.substr(window.location.pathname.length - 9);
     let output = (
         <>
-            <div className="project-nav-link-wrapper">
+            <div className="project-nav-link-wrapper" style={{display: (lc === "/addpaper" || lc === "addpaper/") ? "none" : ""}}>
                 <div className="nav-link">
                     <Link to={match.url}>papers</Link>
                 </div>

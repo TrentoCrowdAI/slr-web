@@ -1,12 +1,18 @@
 import React, {useEffect, useState, useContext} from "react";
 import { Formik, Form, Field } from "formik";
-import { string } from 'yup';
 
-import {projectsDao} from 'src/dao/projects.dao';
+import {projectPapersDao} from 'src/dao/projectPapers.dao'
 
-import CloseButton from 'src/components/svg/closeButton';
+import Select from 'src/components/forms/selectformik';
 
 import { AppContext } from 'src/components/providers/appProvider'
+
+//order options
+const paperType = [
+    { value: 'article', label: 'article' },
+    { value: 'book_chapter', label: 'book chapter' },
+    { value: 'other', label: 'other' }
+  ];
 
 /**
  * this is the form for create or edit the project
@@ -19,8 +25,10 @@ function PaperForm(props) {
 
     const paperValidationSchema = yup.object().shape({
         title: yup.string().required('please enter a title'),
-        author: yup.string().required('please enter an author'),
+        authors: yup.string().required('please enter an author'),
+        eid: yup.string().required('please enter the paper eid'),
         date: yup.string().required('please enter a date'),
+        //document_type: yup.string().required('please enter a paper type'),
         abstract: yup.string().required('please enter the abstract')
     });
 
@@ -30,13 +38,31 @@ function PaperForm(props) {
     return (
         <>
         <Formik
-            initialValues={{ title: '', abstract: '', author: '', coauthors: '', date: ''}}
+            initialValues={{ title: '', eid:'', authors: '', document_type: '', date: '', abstract: ''}}
             validationSchema={paperValidationSchema}
-            onSubmit={(values, { setSubmitting }) => {
-                setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
+            onSubmit={async (values, { setSubmitting }) => {
+                const paperData = {...values, 
+                    year: values.date.substr(0, 4), 
+                    source_title: values.title, 
+                    link: "custom_paper", 
+                    source: "slr_custom_papers", 
+                    abstract_structured: "0",
+                    filter_oa_include: "0",
+                    filter_study_include: "0",
+                    notes: ""}
+                console.log(paperData);
+                
+                let res = await projectPapersDao.postPaperIntoProject({
+                    paper: paperData, project_id: props.projectId
+                });
+                //error checking
+                if (res && res.message) {
+                    //pass error object to global context
+                    appConsumer.setError(res);
+                }else{
+                    props.history.push(props.url);
+                }
                 setSubmitting(false);
-                }, 400);
             }}
             validateOnChange={false}
             validateOnBlur={false}
@@ -52,19 +78,28 @@ function PaperForm(props) {
                 <div className="new-paper-form-ad">
                     <div>
                         <Field
-                            style={{border: (errors.author) ? "1px solid red" : ""}}
-                            name="author"
+                            style={{border: (errors.authors) ? "1px solid red" : ""}}
+                            name="authors"
                             type="text" 
                             placeholder="paper author"/>
-                        <Field 
-                            name="coauthors"
+                        <Field
+                            style={{border: (errors.eid) ? "1px solid red" : ""}}
+                            name="eid"
                             type="text" 
-                            placeholder="paper co-authors;"/>
+                            placeholder="paper EID"/>
                     </div>
-                    <Field 
-                        style={{border: (errors.date) ? "1px solid red" : ""}}
-                        name="date"
-                        type="date"/>
+                    <div>
+                        <Field 
+                            style={{border: (errors.date) ? "1px solid red" : ""}}
+                            name="date"
+                            type="date"/>
+                        <Field
+                            name="document_type"
+                            render={({ field, form }) => (
+                                    <Select options={paperType} {...field} form={form}/>
+                            )}
+                        />
+                    </div>
                 </div>
                 <Field
                     style={{border: (errors.abstract) ? "1px solid red" : ""}}

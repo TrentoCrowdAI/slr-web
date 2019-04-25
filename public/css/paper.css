@@ -10,15 +10,30 @@ form.new-paper-form div.new-paper-form-ad{
     margin: 0px 10% 20px 10%;
 }
 
-form.new-paper-form div.new-paper-form-ad input[type=text]{
+form.new-paper-form div.new-paper-form-ad input{
     width: 100%;
     display: block;
     margin: 0 0 5px 0;
     font-size: 18px;
 }
 
-form.new-paper-form div.new-paper-form-ad input[type=date]{
+form.new-paper-form div.new-paper-form-ad div.custom-select{
+    position: relative;
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+}
+
+form.new-paper-form div.new-paper-form-ad div.custom-select div.selected{
+    width: 100%;
+    font-size: 18px;
     height: 26px;
+    padding-left: 5px;
+}
+
+form.new-paper-form div.new-paper-form-ad div.custom-select div.options-holder{
+    position: absolute;
+    width: 100%;
 }
 
 form.new-paper-form textarea{

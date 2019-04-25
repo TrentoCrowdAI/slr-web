@@ -14,7 +14,6 @@ import ProjectPage from 'src/components/projects/projectPage';
 
 
 import  {AppProvider} from 'src/components/providers/appProvider';
-import PaperForm from './components/forms/custompaper';
 
 
 /**
@@ -39,7 +38,6 @@ const App = function(props) {
                             <Switch>
                                 <Route exact path="/" render={() => <Home/> }/>
                                 <Route exact path="/projects" render={(props) => <ProjectsList {...props} />}/>
-                                <Route exact path="/addpaper" render={(props) => <PaperForm {...props} />}/>
                                 <Route path="/projects/:id" render={(props) => <ProjectPage {...props} />}/>
                                 <Route render={(props) => <div>404</div>}/>
                             </Switch>

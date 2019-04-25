@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {Route, Link} from 'react-router-dom';
 import {Flipper, Flipped} from 'react-flip-toolkit';
 import SearchForm from 'src/components/forms/searchform';
+import PaperForm from './components/forms/custompaper';
 import {projectPapersDao} from 'src/dao/projectPapers.dao';
 import {projectsDao} from 'src/dao/projects.dao';
 import LoadIcon from 'src/components/loadicon';
@@ -124,10 +125,10 @@ const ProjectPage = ({match}) => {
                 <div className="title">{project.data.name.toUpperCase()}</div>
                 <div className="project-nav-link-wrapper">
                     <div className="nav-link">
-                        <Link to={match.url}>papers</Link>
+                        <Link to={match.url}>papersx</Link>
                     </div>
                     <div className="nav-link">
-                        <Link to={join(match.url,"/search")}>search</Link>
+                        <Link to={join(match.url,"/search")}>searchxz</Link>
                     </div>
                     <Flipper flipKey={slider}>
                         <Flipped flipId="underline">
@@ -139,6 +140,9 @@ const ProjectPage = ({match}) => {
                     <>
                         <div className="project-description">{project.data.description}</div>
                         <PapersList id={match.params.id} papers={papers} setPapersList={setPapersList}/>
+                        <button className="bottom-left-btn">
+                            <Link to={join(match.url,"/addpaper")}>+</Link>
+                        </button>
                     </>
                 }/>
                 <Route path = {match.url + "/search"} render={() =>
@@ -146,6 +150,9 @@ const ProjectPage = ({match}) => {
                                 checkboxes={checkboxes} setCheckboxes={setCheckboxes}
                                 results={results} setResults={setResults}
                                 selectedpapers={selectedpapers} setSelectedPapers={setSelectedPapers}/>
+                } />
+                <Route path = {match.url + "/addpaper"} render={() =>
+                    <PaperForm projectId={project.id} />
                 } />
             </div>
         );
