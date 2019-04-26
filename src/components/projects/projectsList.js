@@ -140,9 +140,11 @@ const ProjectsList = function (props) {
                 {/*print the input form to create/update the projects*/}
                 <ProjectForm visibility={toggleform} setVisibility={setToggleForm} history={props.history}/>
                 {/*button to show input form*/}
-                <button className="bottom-left-btn" type="button" value="toggle-insert-form" onClick={(e) => {
+                <button className="bottom-left-btn add-project-btn" type="button" value="toggle-insert-form" 
+                onClick={(e) => {
                     setToggleForm(!toggleform);
-                }}>+
+                }}>
+                    <div className="btn-title">Add Project</div><div className="btn-icon"> </div>
                 </button>
             </div>
         );
@@ -176,7 +178,7 @@ const PrintList = function ({projectsList, path, handleDelete}) {
     else {
         maps = (projectsList.map((element, index) =>
                 <div key={element.id} className="light-modal project-card">
-                    <SideOptions options={sideOptions} handler={handleDelete} target={element.id} cls="project-card-options"/>
+                    <SideOptions options={sideOptions} handler={handleDelete} target={element.id} cls="card-options project-card-options"/>
                     <Link to={join(path, "/" + element.id)}>
                         <h3>{element.data.name}</h3>
                         <p>{element.data.description}</p>

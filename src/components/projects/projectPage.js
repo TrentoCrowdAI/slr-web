@@ -134,9 +134,12 @@ const ProjectPage = (props) => {
                     <>
                         <ProjectDescription description={project.data.description} update={updateProject}/>
                         <PapersList project_id={project_id} location={props.location} match={props.match} history={props.history}/>
-                        <button className="bottom-left-btn">
-                            <Link to={join(props.match.url,"/addpaper")}>+</Link>
-                        </button>
+                        <Link to={join(props.match.url,"/addpaper")}>
+                            <button className="bottom-left-btn add-custompaper-btn">
+                                <div className="btn-title">Add Custom Paper</div><div className="btn-icon"> </div>
+                            </button>
+                        </Link>
+
                     </>
                 }/>
 
@@ -147,7 +150,7 @@ const ProjectPage = (props) => {
 
                 <Route path = {props.match.url + "/addpaper"} render={() =>
                     <>
-                        <Link className="back" to={props.match.url}> +- </Link>
+                        <Link className="back" to={props.match.url}>  </Link>
                         <PaperForm projectId={project.id} url={props.match.url} history={props.history}/>
                     </>
                 } />

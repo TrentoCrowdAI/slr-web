@@ -118,6 +118,7 @@ div.navigation-wrapper nav{
   background-color: aliceblue;
   border-bottom: solid 2px black;
   line-height: 50px;
+  box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.75);
 }
 
 div.navigation-wrapper nav div.nav-elements{
@@ -219,6 +220,7 @@ div.navigation-wrapper div.menu div.side-menu{
   left: 15px;
   width: 300px;
   font-size: 10px;
+  box-shadow: 0px 0px 16px -6px rgba(0, 0, 0, 0.75)
 }
 
 /*sidemenu animation*/

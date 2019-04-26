@@ -16,25 +16,11 @@ div.project-cards-holder div.project-card{
   transition: all 0.3s;
   display: inline-block;
   position: relative;
-}
-div.project-cards-holder div.project-card div.project-card-options{
-  position: absolute;
-  top: 7px;
-  right: 5px;
-  width: 20px;
-  z-index: 1;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+  background-color: #fcfcff;
 }
 div.project-cards-holder div.project-card div.project-card-options div.options-list{
-  background-color: white;
-  border-radius: 3px;
-  text-align: center;
-  width: 60px;
-  cursor: pointer;
-  transition: 0.3s all;
-}
-div.project-cards-holder div.project-card div.project-card-options button svg#options-button{
-  height: 20px;
-  width: 20px;
+  box-shadow: 0px 0px 2px -1px rgba(0, 0, 0, 0.25);
 }
 
 div.project-cards-holder div.project-card:hover h3{
@@ -51,6 +37,14 @@ div.project-cards-holder div.project-card p{
   padding: 0px 10px 0px 10px;
 }
 
+/*add project button*/ /*projectslist.js*/
+button.add-project-btn div.btn-icon{
+  background-image: url('./../img/add.svg');
+  background-size: 75%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /*add project form*/ /*projectslist.js*/
 form.add-project{
   font-size: 14px;
@@ -62,6 +56,7 @@ form.add-project{
   width: 400px;
   text-align: center;
   z-index: 1;
+  box-shadow: 0px 0px 16px -6px rgba(0, 0, 0, 0.75);
 }
 form.add-project button{
   border: solid 1px grey;

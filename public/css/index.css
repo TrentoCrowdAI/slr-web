@@ -237,11 +237,45 @@ svg#loading-icon path#loading-circle2{
 
 /*buttons*/
 button.bottom-left-btn{
-  font-weight: 300;
-  font-size: 50px;
+  border-radius: 7px;
   position: fixed;
   bottom: 20px;
   right: 40px;
+  display: flex;
+  border: solid 1px #c4c4c4;
+  height: 50px;
+  transition: all 0.3s;
+  background-color: #fcfcff;
+  border-radius: 25px;
+}
+button.bottom-left-btn:hover, button.bottom-left-btn:focus{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
+  border-radius: 7px;
+}
+button.bottom-left-btn div.btn-title{
+  line-height: 50px;
+  vertical-align: middle;
+  margin: 0 0px 0 0px;
+  font-size: 20px;
+  font-weight: 300;
+  transition: all 0.3s;
+  overflow: hidden;
+  max-width: 0px;
+}
+button.bottom-left-btn:hover div.btn-title, button.bottom-left-btn:focus div.btn-title{
+  margin: 0 0px 0 8px;
+  max-width: 260px;
+}
+button.bottom-left-btn div.btn-icon{
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  margin: 5px 5px 0 5px;
+  font-size: 40px;
+  line-height: 30px;
+  text-align: center;
+  vertical-align: center;
+  background-color: #fcfcff;
 }
 
 /*<select> custom element*/
@@ -279,6 +313,27 @@ div.arrow svg#arrow-select{
   margin: 10%;
 }
 .st-arrow-select{fill:none;stroke:#000000;stroke-width:88;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+/*side options for cards*/
+div.card-options{
+  position: absolute;
+  top: 7px;
+  right: 5px;
+  width: 20px;
+  z-index: 1;
+}
+div.card-options div.options-list{
+  background-color: white;
+  border-radius: 3px;
+  text-align: center;
+  width: 60px;
+  cursor: pointer;
+  transition: 0.3s all;
+}
+div.card-options button svg#options-button{
+  height: 20px;
+  width: 20px;
+}
 
 /*order arrow element*/
 .st-order-arrow{fill:none;stroke:#000000;stroke-width:88;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10}

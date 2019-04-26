@@ -355,8 +355,8 @@ const SearchForm = function ({project_id, location, match, history}) {
                 </div>
                 <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
-                <button className="bottom-left-btn" type="submit" value="Submit">
-                    +
+                <button className="bottom-left-btn add-resultpaper-btn" type="submit" value="Submit">
+                    <div className="btn-title">Add Selected Paper</div><div className="btn-icon"> </div>
                 </button>
             </div>
         );

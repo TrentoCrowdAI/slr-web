@@ -108,7 +108,7 @@ const PrintPapersList = function ({papersList}) {
         output = (
             papersList.map((element) =>
                 <div key={element.id} className="paper-card">
-                    <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} cls="paper-card-options"/>
+                    <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} cls="card-options paper-card-options"/>
                     <Link to={"#"}>
                         <h3>{element.data.title}</h3>
                     </Link>
