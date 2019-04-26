@@ -4,7 +4,7 @@ import {Flipper, Flipped} from 'react-flip-toolkit';
 
 import SearchForm from 'src/components/forms/searchform';
 import PapersList from 'src/components/papers/papersList';
-import PaperForm from './../../components/forms/custompaper'; //fix relative url!
+import PaperForm from 'src/components/forms/custompaper'; //fix relative url!
 import {projectsDao} from 'src/dao/projects.dao';
 import LoadIcon from 'src/components/svg/loadIcon';
 import ProjectDescription from 'src/components/projects/projectDescription';

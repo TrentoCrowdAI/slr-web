@@ -110,7 +110,7 @@ div.paper-card a:hover{
 
 div.paper-card h3{
   font-size: 25px;
-  margin: 10px auto 2px 0px;
+  margin: 10px 20px 2px 0px;
 }
 div.paper-card div.extra-info{
   padding: 0px 10px 0px 10px;
@@ -147,6 +147,33 @@ div.paper-card button{
   font-weight: 300;
 }
 
+/*paper-card for project papers*/
+div.paper-card:hover div.paper-card-options{
+  display: block;
+}
+div.paper-card:focus-within div.paper-card-options{
+  display: block;
+}
+div.paper-card div.paper-card-options{
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  z-index: 1;
+}
+div.paper-card div.paper-card-options div.options-list{
+  background-color: white;
+  border-radius: 3px;
+  text-align: center;
+  width: 60px;
+  cursor: pointer;
+  transition: 0.3s all;
+}
+div.paper-card div.paper-card-options button svg#options-button{
+  height: 20px;
+  width: 20px;
+}
 
 /*===SEARCH_RESULTS===*/
 form.search-results{
