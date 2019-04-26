@@ -23,6 +23,7 @@ const Error = function () {
     //function to return to previous page
     function handleOnGoBack(){
         window.history.back();
+        appConsumer.setError(null);
     }
 
 
