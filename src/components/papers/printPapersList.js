@@ -2,10 +2,10 @@ import React, {useContext} from "react";
 import ClampLines from 'react-clamp-lines';
 import {Link} from 'react-router-dom';
 
-import CheckBox from "src/components/forms/checkbox";
-import SideOptions from 'src/components/modules/sideOptions';
-import {projectPapersDao} from 'src/dao/projectPapers.dao';
-import {AppContext} from 'src/components/providers/appProvider'
+import CheckBox from "components/forms/checkbox";
+import SideOptions from 'components/modules/sideOptions';
+import {projectPapersDao} from 'dao/projectPapers.dao';
+import {AppContext} from 'components/providers/appProvider'
 /**
  * prints the papers list of a local search on the fake database
  */

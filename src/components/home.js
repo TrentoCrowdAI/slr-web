@@ -1,6 +1,6 @@
 import React, {useContext, useEffect} from "react";
 
-import {AppContext} from "src/components/providers/appProvider";
+import {AppContext} from "components/providers/appProvider";
 
 /**
  * this is home component

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import SelectArrow from 'src/components/svg/selectArrow';
+import SelectArrow from 'components/svg/selectArrow';
 
 
 /**

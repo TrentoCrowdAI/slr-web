@@ -2,16 +2,16 @@ import React, {useState, useEffect, useContext} from "react";
 import {Route, Link} from 'react-router-dom';
 import {Flipper, Flipped} from 'react-flip-toolkit';
 
-import SearchForm from 'src/components/forms/searchform';
-import PapersList from 'src/components/papers/papersList';
-import PaperForm from 'src/components/forms/custompaper'; //fix relative url!
-import {projectsDao} from 'src/dao/projects.dao';
-import LoadIcon from 'src/components/svg/loadIcon';
-import ProjectDescription from 'src/components/projects/projectDescription';
-import ProjectName from 'src/components/projects/projectName';
-import {join} from 'src/utils/index';
+import SearchForm from 'components/forms/searchform';
+import PapersList from 'components/papers/papersList';
+import PaperForm from 'components/forms/custompaper'; //fix relative url!
+import {projectsDao} from 'dao/projects.dao';
+import LoadIcon from 'components/svg/loadIcon';
+import ProjectDescription from 'components/projects/projectDescription';
+import ProjectName from 'components/projects/projectName';
+import {join} from 'utils/index';
 
-import {AppContext} from 'src/components/providers/appProvider'
+import {AppContext} from 'components/providers/appProvider'
 
 
 /**

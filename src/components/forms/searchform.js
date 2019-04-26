@@ -4,21 +4,21 @@ import ClampLines from 'react-clamp-lines';
 import queryString from "query-string";
 
 
-import {paperDao} from 'src/dao/paper.dao';
-import {projectPapersDao} from 'src/dao/projectPapers.dao'
+import {paperDao} from 'dao/paper.dao';
+import {projectPapersDao} from 'dao/projectPapers.dao'
 
-import CheckBox from "src/components/forms/checkbox";
-import RadioBox from "src/components/forms/radiobox";
-import LoadIcon from 'src/components/svg/loadIcon';
-import SearchButton from 'src/components/svg/searchButton';
-import {PrintScoupusSearchList} from 'src/components/papers/printPapersList';
-import Select from 'src/components/forms/select';
-import OrderArrow from 'src/components/svg/orderArrow';
-import Pagination from "src/components/modules/pagination";
+import CheckBox from "components/forms/checkbox";
+import RadioBox from "components/forms/radiobox";
+import LoadIcon from 'components/svg/loadIcon';
+import SearchButton from 'components/svg/searchButton';
+import {PrintScoupusSearchList} from 'components/papers/printPapersList';
+import Select from 'components/forms/select';
+import OrderArrow from 'components/svg/orderArrow';
+import Pagination from "components/modules/pagination";
 
-import {searchCheckboxesToParams, join, createQueryStringFromObject,getIndexOfObjectArrayByKeyAndValue} from 'src/utils/index';
+import {searchCheckboxesToParams, join, createQueryStringFromObject,getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
 
-import {AppContext} from 'src/components/providers/appProvider'
+import {AppContext} from 'components/providers/appProvider'
 
 // Load the lodash build
 var _ = require('lodash');

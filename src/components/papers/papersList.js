@@ -1,16 +1,16 @@
 import React, {useState, useEffect, useContext} from "react";
 import queryString from "query-string";
 
-import {projectPapersDao} from 'src/dao/projectPapers.dao';
+import {projectPapersDao} from 'dao/projectPapers.dao';
 
-import LoadIcon from 'src/components/svg/loadIcon';
-import {PrintPapersList} from 'src/components/papers/printPapersList';
-import Select from 'src/components/forms/select';
-import OrderArrow from 'src/components/svg/orderArrow';
-import Pagination from "src/components/modules/pagination";
-import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'src/utils/index';
+import LoadIcon from 'components/svg/loadIcon';
+import {PrintPapersList} from 'components/papers/printPapersList';
+import Select from 'components/forms/select';
+import OrderArrow from 'components/svg/orderArrow';
+import Pagination from "components/modules/pagination";
+import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
 
-import {AppContext} from 'src/components/providers/appProvider'
+import {AppContext} from 'components/providers/appProvider'
 
 
 

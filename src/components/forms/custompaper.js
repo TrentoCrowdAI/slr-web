@@ -1,11 +1,11 @@
 import React, {useEffect, useState, useContext} from "react";
 import { Formik, Form, Field } from "formik";
 
-import {projectPapersDao} from 'src/dao/projectPapers.dao'
+import {projectPapersDao} from 'dao/projectPapers.dao'
 
-import Select from 'src/components/forms/selectformik';
+import Select from 'components/forms/selectformik';
 
-import { AppContext } from 'src/components/providers/appProvider'
+import { AppContext } from 'components/providers/appProvider'
 
 //order options
 const paperType = [

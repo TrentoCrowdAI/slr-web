@@ -1,6 +1,6 @@
 import React, {useContext,useState,useEffect} from "react";
 
-import EditButton from "src/components/svg/editButton";
+import EditButton from "components/svg/editButton";
 
 /**
  * this is the head component of page

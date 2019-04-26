@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 
-import {AppContext} from "src/components/providers/appProvider";
-import EditButton from "src/components/svg/editButton";
+import {AppContext} from "components/providers/appProvider";
+import EditButton from "components/svg/editButton";
 
 /**
  * this is the head component of page

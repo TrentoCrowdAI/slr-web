@@ -1,6 +1,6 @@
 import React,{useState} from "react";
 
-import OptionsButton from 'src/components/svg/optionsButton';
+import OptionsButton from 'components/svg/optionsButton';
 
 /**
  * component side options

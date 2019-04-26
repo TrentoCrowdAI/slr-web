@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import config from 'src/config/index';
+import config from 'config/index';
 
 /**
  * this is the component for pagination
