@@ -33,13 +33,13 @@ const PrintLocalSearchList = function ({papersList, handlePaperSelection}) {
 /**
  * prints the results of a search on scopus
  */
-const PrintScoupusSearchList = function ({papersList, handlePaperSelection}) {
+const PrintScoupusSearchList = function ({papersList, handlePaperSelection, selectedEidList}) {
 
 
 
     let output = papersList.map((element, index) =>
         <div key={index} className="paper-card">
-            <CheckBox name={""} label={""} val={element.eid}  handler={handlePaperSelection}/>
+            <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
             <Link to={"#"}><h3>{element.title}</h3></Link>
             <div className="extra-info">
                 <p className="authors">{element.authors}</p>

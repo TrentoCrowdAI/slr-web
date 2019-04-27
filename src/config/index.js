@@ -15,6 +15,7 @@ const config = {
         {id: 5, content: "my projects", link: "/projects"},
         {id: 6, content: "account", link: "#"}
     ],
+    "max_total_number_for_results": 5000
 
 
 
