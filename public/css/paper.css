@@ -63,3 +63,14 @@ form.new-paper-form button{
     height: 30px;
     margin: 5px 40% 5px 40%;
 }
+
+a.back{
+    position: absolute;
+    left: 5px;
+    height: 40px;
+    width: 40px;
+    background-image: url('./../img/back.svg');
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}

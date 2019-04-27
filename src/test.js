@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 //dao function to access paper resource
-import {paperDao} from './dao/paper.dao'
+import {paperDao} from 'dao/paper.dao'
 
 
 function Test() {

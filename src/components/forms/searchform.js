@@ -4,22 +4,23 @@ import ClampLines from 'react-clamp-lines';
 import queryString from "query-string";
 
 
-import {paperDao} from 'src/dao/paper.dao';
-import {projectPapersDao} from 'src/dao/projectPapers.dao'
+import {paperDao} from 'dao/paper.dao';
+import {projectPapersDao} from 'dao/projectPapers.dao'
 
-import CheckBox from "src/components/forms/checkbox";
-import RadioBox from "src/components/forms/radiobox";
-import LoadIcon from 'src/components/svg/loadIcon';
-import SearchButton from 'src/components/svg/searchButton';
-import {PrintScoupusSearchList} from 'src/components/papers/printPapersList';
-import Select from 'src/components/forms/select';
-import OrderArrow from 'src/components/svg/orderArrow';
-import Pagination from "src/components/modules/pagination";
+import CheckBox from "components/forms/checkbox";
+import RadioBox from "components/forms/radiobox";
+import LoadIcon from 'components/svg/loadIcon';
+import SearchButton from 'components/svg/searchButton';
+import {PrintScoupusSearchList} from 'components/papers/printPapersList';
+import Select from 'components/forms/select';
+import OrderArrow from 'components/svg/orderArrow';
+import Pagination from "components/modules/pagination";
 
-import {searchCheckboxesToParams, join, createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'src/utils/index';
+import {searchCheckboxesToParams, join, createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
 
-import {AppContext} from 'src/components/providers/appProvider'
-import {projectsDao} from "../../dao/projects.dao";
+import {AppContext} from 'components/providers/appProvider'
+import {projectsDao} from "dao/projects.dao";
+
 
 // Load the lodash build
 var _ = require('lodash');
@@ -391,11 +392,11 @@ const SearchForm = function ({project_id, location, match, history}) {
                     <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
                     <SelectedPapersListBox selectedPapersList={selectedPapersList}/>
                 </div>
+
                 <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid}/>
-                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults}
-                            path={match.url}/>
-                <button className="bottom-left-btn" type="submit" value="Submit">
-                    +
+                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
+                <button className="bottom-left-btn add-resultpaper-btn" type="submit" value="Submit">
+                    <div className="btn-title">Add Selected Paper</div><div className="btn-icon"> </div>
                 </button>
             </div>
         );
