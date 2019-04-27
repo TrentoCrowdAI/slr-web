@@ -16,14 +16,14 @@ import Select from 'components/forms/select';
 import OrderArrow from 'components/svg/orderArrow';
 import Pagination from "components/modules/pagination";
 
-import {searchCheckboxesToParams, join, createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
-
 import {AppContext} from 'components/providers/appProvider'
-import {projectsDao} from "dao/projects.dao";
+
+import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
+
 
 
 // Load the lodash build
-var _ = require('lodash');
+const _ = require('lodash');
 
 //order options
 const orderByOptions = [
@@ -68,7 +68,7 @@ const SearchForm = function ({project_id, location, match, history}) {
 
     //set query params from url
     let queryData = createQueryData(location.search);
-    console.log(queryData);
+    //console.log(queryData);
 
     // list of selected papers
     const [selectedPapersList, setSelectedPapersList] = useState([]);
@@ -95,6 +95,7 @@ const SearchForm = function ({project_id, location, match, history}) {
             if (queryData.query !== "") {
 
                 setDisplay(false);
+                
                 //always call the dao to search on scopus
                 let res = await paperDao.search(queryData);
 
@@ -120,13 +121,11 @@ const SearchForm = function ({project_id, location, match, history}) {
                     setDisplay(true);
                 }
             }
-
-
         };
 
         fetchData();
 
-    }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
+    }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv, queryData, appConsumer]);  //re-execute when these variables change
 
 
 
@@ -164,35 +163,35 @@ const SearchForm = function ({project_id, location, match, history}) {
     /*function to insert and remove the paper id from selected list*/
     function handlePaperSelection(event) {
         let newList;
+        //get eid
         let eid = event.target.value;
+        //get ttitle
         let title = event.target.name;
         //if id is not included in the list yet
         if (getIndexOfObjectArrayByKeyAndValue(selectedPapersList, "eid", eid) === -1) {
-            //insert into array
+           //create a copy of array
             newList = [...selectedPapersList];
+            //insert into array
             newList.push({"eid": eid, "title": title});
 
         }
         //if id already exists in the list
         else {
-            //remove the  target paper eid
+            //remove the  target paper from array
             newList = selectedPapersList.filter(function (element) {
                 return element.eid !== eid;
             });
         }
 
-        //update list
+        //update array
         setSelectedPapersList(newList);
-
     }
 
     /*function to add the post in the project*/
     async function handleAddPapers(event) {
 
         event.preventDefault();
-
         //console.log(selectedPapersList);
-        //for to insert papers into DB
 
        //create a eidList from the list of selected paper
         let arrayEid = selectedPapersList.map(element => element.eid);
@@ -201,7 +200,7 @@ const SearchForm = function ({project_id, location, match, history}) {
             "arrayEid": arrayEid, "project_id": project_id
         });
         //if there is the error
-        if (res.message) {
+        if (res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);
             return null;
@@ -218,12 +217,13 @@ const SearchForm = function ({project_id, location, match, history}) {
     async function handleSendSearch(event) {
 
         event.preventDefault();
+
         //if query input is empty
         if (keywords === "") {
             alert("search string is empty")
         }
         else {
-
+            //synchronize the query data from react state hooks
             queryData.query = keywords;
             queryData.scopus = source.scopus;
             queryData.googleScholar = source.googleScholar;
@@ -241,7 +241,7 @@ const SearchForm = function ({project_id, location, match, history}) {
     }
 
     /**
-     *synchronizes the value between queryData and input form
+     *handle to update hook state by input change
      */
     function handleOnInputChange(event) {
 
@@ -363,6 +363,7 @@ const SearchForm = function ({project_id, location, match, history}) {
                             selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
                             handler={handleSelection}/>
                     <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
+                    <SelectedPapersListBox selectedPapersList={selectedPapersList}/>
                 </div>
                 <div className="search-loading-holder">
                     <LoadIcon class={"small"}/>
