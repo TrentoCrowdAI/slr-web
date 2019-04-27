@@ -74,7 +74,7 @@ const SearchForm = function ({project_id, location, match, history}) {
     const [selectedPapersList, setSelectedPapersList] = useState([]);
 
     //state for search form
-    const [keywords, setKeyWords] = useState("");
+    const [keywords, setKeyWords] = useState("_");
     const [source, setSource] = useState({"scopus": true, "googleScholar": false, "arXiv": false});
     const [searchBy, setSearchBy] = useState("all");
     const [year, setYear] = useState("all");
@@ -125,7 +125,7 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         fetchData();
 
-    }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv, queryData, appConsumer]);  //re-execute when these variables change
+    }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
 
 
 
@@ -249,7 +249,9 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         switch (event.target.name) {
             case "query":
+                console.log(event.target.value);
                 setKeyWords(event.target.value);
+                console.log("-> " + keywords);
                 break;
             case "scopus":
                 //copy the old source
@@ -396,7 +398,7 @@ const SearchForm = function ({project_id, location, match, history}) {
 
                 <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
-                <button className="bottom-left-btn add-resultpaper-btn" type="submit" value="Submit">
+                <button style={{opacity: (selectedPapersList.length>0) ? "1.0" : "0.0", pointerEvents: (selectedPapersList.length>0) ? "auto" : "none"}} className="bottom-left-btn add-resultpaper-btn" type="submit" value="Submit">
                     <div className="btn-title">Add Selected Paper</div><div className="btn-icon"> </div>
                 </button>
             </div>
