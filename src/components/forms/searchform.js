@@ -15,6 +15,8 @@ import {PrintScoupusSearchList} from 'components/papers/printPapersList';
 import Select from 'components/forms/select';
 import OrderArrow from 'components/svg/orderArrow';
 import Pagination from "components/modules/pagination";
+import CloseButton from 'components/svg/closeButton';
+import RemoveButton from 'components/svg/removeButton';
 
 import {AppContext} from 'components/providers/appProvider'
 
@@ -167,8 +169,11 @@ const SearchForm = function ({project_id, location, match, history}) {
         let eid = event.target.value;
         //get ttitle
         let title = event.target.name;
+        console.log("EID : " + eid);
+        console.log("title : " + title);
         //if id is not included in the list yet
         if (getIndexOfObjectArrayByKeyAndValue(selectedPapersList, "eid", eid) === -1) {
+            console.log("NOT PRESENT");
            //create a copy of array
             newList = [...selectedPapersList];
             //insert into array
@@ -177,6 +182,7 @@ const SearchForm = function ({project_id, location, match, history}) {
         }
         //if id already exists in the list
         else {
+            console.log("PRESENT")
             //remove the  target paper from array
             newList = selectedPapersList.filter(function (element) {
                 return element.eid !== eid;
@@ -365,8 +371,8 @@ const SearchForm = function ({project_id, location, match, history}) {
                             selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
                             handler={handleSelection}/>
                     <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
-                    <SelectedPapersListBox selectedPapersList={selectedPapersList}/>
                 </div>
+                <SelectedPapersListBox selectedPapersList={selectedPapersList}/>
                 <div className="search-loading-holder">
                     <LoadIcon class={"small"}/>
                 </div>
@@ -393,14 +399,11 @@ const SearchForm = function ({project_id, location, match, history}) {
                             selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
                             handler={handleSelection}/>
                     <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
-                    <SelectedPapersListBox selectedPapersList={selectedPapersList}/>
                 </div>
+                <SelectedPapersListBox selectedPapersList={selectedPapersList} handlePaperSelection={handlePaperSelection}/>
 
                 <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
-                <button style={{opacity: (selectedPapersList.length>0) ? "1.0" : "0.0", pointerEvents: (selectedPapersList.length>0) ? "auto" : "none"}} className="bottom-left-btn add-resultpaper-btn" type="submit" value="Submit">
-                    <div className="btn-title">Add Selected Paper</div><div className="btn-icon"> </div>
-                </button>
             </div>
         );
     }
@@ -422,24 +425,34 @@ const SearchForm = function ({project_id, location, match, history}) {
 /**
  * internal component to print the box of list of selected paper
  */
-const SelectedPapersListBox = function ({selectedPapersList}){
+const SelectedPapersListBox = function ({selectedPapersList, handlePaperSelection}){
 
     let output = "";
-    //print only if list contains the elements
-    if(selectedPapersList.length > 0){
-        output = (
-            <div className="selected-papers-list-box ">
-                <div>
-                    {selectedPapersList.length} {"papers are selected"}
+    output = (
+        <div className="selected-papers-list" style={{opacity: (selectedPapersList.length>0) ? "1.0" : "0.0", pointerEvents: (selectedPapersList.length>0) ? "auto" : "none"}}>
+            <h3>
+                {"SELECTED PAPERS"} <br/><span>(total : {selectedPapersList.length})</span>
+            </h3>
+            <div className="submission-wrapper">
+                <div className="papers-wrapper" style={{border: (selectedPapersList.length>0) ? "" : "0px"}}>
+                    <div className="papers-flex" style={{padding: (selectedPapersList.length>0) ? "" : "0px"}}>
+                        {selectedPapersList.map((element, index) =>
+                            <p key={index}>
+                                <span>{element.title}</span> 
+                                <button type="button" className="remove-btn" name={element.title} value={element.eid} //name and value don't work on the button event for some reasons
+                                    onClick={(e) => {handlePaperSelection({target: {name: element.title, value:element.eid}})}}>
+                                    <RemoveButton/>
+                                </button>
+                            </p>
+                        )}
+                    </div>
                 </div>
-                <div>
-                    {selectedPapersList.map((element, index) =>
-                        <p key={index}>{element.title}</p>
-                    )}
-                </div>
+                <button style={{border: (selectedPapersList.length>0) ? "" : "0px", margin: (selectedPapersList.length>0) ? "" : "0px", height: (selectedPapersList.length>0) ? "" : "0px", pointerEvents: (selectedPapersList.length>0) ? "auto" : "none"}} className="ti-btn add-resultpaper-btn" type="submit" value="Submit">
+                    <div className="btn-title">Add Selected Paper</div><div className="btn-icon"> </div>
+                </button>
             </div>
-        );
-    }
+        </div>
+    );
 
     return output;
 

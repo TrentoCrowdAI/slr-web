@@ -60,6 +60,10 @@ form.add-project{
 }
 form.add-project button{
   border: solid 1px grey;
+  transition: box-shadow 0.3s;
+}
+form.add-project button:hover{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
 }
 form.add-project button[type=submit]{
   font-size: 18px;

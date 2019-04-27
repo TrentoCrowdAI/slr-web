@@ -4,5 +4,10 @@
 <style type="text/css">
 	.st0{fill:gray;stroke:#000000;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 </style>
-<circle class="st0" cx="500" cy="450" r="400"/>
+<circle class="st0" cx="500" cy="450" r="400">
+	<animate attributeName="r" dur="0.2s" repeatCount="1" fill="freeze"
+                    from="0"
+                    to="400"
+	/>
+</circle>
 </svg>

@@ -169,6 +169,94 @@ form.search-results{
   margin-top: 10px;
 }
 
+/*selected papers list for search results*/ /*searchform.js*/
+div.selected-papers-list{
+  position: fixed;
+  padding: 15px 15px 0px 15px;
+  width: 370px;
+  bottom: 0px;
+  right: 40px;
+  text-align: center;
+  border: solid 1px #b7b7b7;
+  box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.25);
+  border-bottom: none;
+  border-radius: 10px 10px 0px 0px;
+  background-color: #fcfcff;
+  transition: all 0.3s;
+}
+div.selected-papers-list h3 {
+	font-size: 16px;
+	margin: 0 auto 9px auto;
+	position: relative;
+	line-height: 16px;
+}
+div.selected-papers-list h3 span{
+  font-weight: 300;
+  font-size: 13px;
+}
+div.selected-papers-list div.submission-wrapper{
+  max-height: 0px;
+  overflow: hidden;
+  transition: all 0.5s;
+}
+div.selected-papers-list:hover div.submission-wrapper{
+  max-height: 300px;
+}
+div.selected-papers-list div.papers-wrapper{
+  max-height: 200px;
+  overflow-y: auto;
+  border-bottom: solid 1px grey;
+  border-top: solid 1px grey;
+}
+div.selected-papers-list div.papers-flex{
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 5px 0px 5px 0px;
+}
+div.selected-papers-list div.papers-flex p{
+  text-align: left;
+  margin: 0px;
+  padding: 5px 10px 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  line-height: 20px;
+}
+div.selected-papers-list div.papers-flex p span { 
+  display: block;
+  width: 280px;
+  word-wrap: break-word;
+  font-size: 12px;
+}
+div.selected-papers-list div.papers-flex p button.remove-btn{
+  margin: auto 0;
+  height: 20px;
+  width: 20px;
+  position: relative;
+  display: none;
+}
+div.selected-papers-list div.papers-flex p:hover button.remove-btn{
+  display: block;
+}
+div.selected-papers-list div.papers-flex p button.remove-btn svg#remove-button{
+  height: 70%;
+  width: 70%;
+  margin-top: 15%;
+}
+div.selected-papers-list button.add-resultpaper-btn{
+  margin: 15px auto 15px auto;
+  height: 40px;
+  overflow: hidden;
+}
+div.selected-papers-list button.add-resultpaper-btn div.btn-title{
+  font-size: 16px;
+  line-height: 40px;
+}
+div.selected-papers-list button.add-resultpaper-btn div.btn-icon{
+  height: 30px;
+  width: 30px;
+  margin: 5px 5px 0 5px;
+}
+
 /*paper-card for search result*/ /*searchform.js*/
 form.search-results div.paper-card{
   width: 100%;
