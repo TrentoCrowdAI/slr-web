@@ -103,6 +103,7 @@ async function request(url, options = {}) {
  * @return {object} response data
  */
 async function get(url, queryData = "") {
+    console.log(queryData);
     let query = "";
     if (queryData !== "") {
         query = "?";

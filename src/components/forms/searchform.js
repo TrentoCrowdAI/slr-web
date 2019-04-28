@@ -370,7 +370,7 @@ const SearchForm = function ({project_id, location, match, history}) {
                     <Select options={orderByOptions}
                             selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
                             handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
+                    <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
                 </div>
                 <SelectedPapersListBox selectedPapersList={selectedPapersList}/>
                 <div className="search-loading-holder">
@@ -398,7 +398,7 @@ const SearchForm = function ({project_id, location, match, history}) {
                     <Select options={orderByOptions}
                             selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
                             handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
+                    <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
                 </div>
                 <SelectedPapersListBox selectedPapersList={selectedPapersList} handlePaperSelection={handlePaperSelection}/>
 

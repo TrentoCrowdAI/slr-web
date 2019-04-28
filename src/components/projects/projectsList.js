@@ -53,7 +53,7 @@ const ProjectsList = function (props) {
             setDisplay(false);
 
             //call the dao
-            const res = await projectsDao.getProjectsList(queryData);
+            const res = await projectsDao.getProjectsList({orderBy: "date_last_modified", ...queryData});
 
             //error checking
             //if is 404 error
@@ -74,11 +74,11 @@ const ProjectsList = function (props) {
 
                 //I put even first and then odd ones so I can display 2 columns with left-right flow 
                 var even_projs = [];
-                even_projs = res.results.filter(function(element){ if( element.id % 2 ) return element;});
+                even_projs = res.results.filter(function(element, index){ if( index % 2 ) return element;});
                 var odd_projs = [];
-                odd_projs = res.results.filter(function(element){ if( !(element.id % 2) ) return element;});
+                odd_projs = res.results.filter(function(element, index){ if( !(index % 2) ) return element;});
 
-                setProjectsList(even_projs.concat(odd_projs));
+                setProjectsList(odd_projs.concat(even_projs));
                 setTotalResults(res.totalResults);
                 //show the page
                 setDisplay(true);

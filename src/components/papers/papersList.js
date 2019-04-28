@@ -17,7 +17,7 @@ import {AppContext} from 'components/providers/appProvider'
 
 //order options
 const orderByOptions = [
-    { value: 'date_created', label: 'date_created' },
+    { value: 'date_created', label: 'most recent' },
     { value: 'title', label: 'Title' },
     { value: 'authors', label: 'Authors' }
   ];
@@ -41,8 +41,7 @@ const PapersList = ({project_id, location, match, history}) => {
     const appConsumer = useContext(AppContext);
 
     //set query params from url
-    const queryData = createQueryData(project_id, location.search);
-    console.log(queryData);
+    const queryData = createQueryData(location.search);
 
     useEffect(() => {
 
@@ -51,9 +50,8 @@ const PapersList = ({project_id, location, match, history}) => {
             //hide the page
             setDisplay(false);
 
-            console.log(queryData);
             //call the dao
-            let res = await projectPapersDao.getPapersList(queryData);
+            let res = await projectPapersDao.getPapersList({project_id, ...queryData});
 
             //error checking
             //if is 404 error
@@ -92,6 +90,11 @@ const PapersList = ({project_id, location, match, history}) => {
     //handler for sort selection
     function handleSelection(e){
         let index = parseInt(e.target.getAttribute('data-value'));
+
+        //if I previously ordered by 'most recent' then I sort the next order by ASC
+        if(queryData.orderBy === "date_created"){
+            queryData.sort = "ASC";
+        }
         queryData.orderBy=orderByOptions[index].value;
 
         //update url
@@ -125,7 +128,7 @@ const PapersList = ({project_id, location, match, history}) => {
                 <div className="order" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
                     <label>sort by:</label>
                     <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow up={queryData.sort}/></button>
+                    <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={queryData.sort}/></button>
                 </div>
                 <LoadIcon class={"small"}/>
             </div> );
@@ -137,7 +140,7 @@ const PapersList = ({project_id, location, match, history}) => {
                 <div className="order">
                     <label>sort by:</label>
                     <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)} handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow up={queryData.sort}/></button>
+                    <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={queryData.sort}/></button>
                 </div>
                 <PrintPapersList papersList={papersList}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
@@ -160,11 +163,10 @@ const PapersList = ({project_id, location, match, history}) => {
 
 /**
  * internal function to prepare a object of queryData
- * @param project_id
  * @param query
  * @return object of queryData for the fetch
  */
-function createQueryData(project_id, query){
+function createQueryData(query){
 
     //set query params from queryString of url
     let params = queryString.parse( query);
@@ -173,8 +175,12 @@ function createQueryData(project_id, query){
     let orderBy = params.orderBy || "date_created";
     let sort = params.sort || "ASC";
 
+    if(orderBy === "date_created"){
+        sort = "DESC";
+    }
+
     //if "before" is defined by query then insert it in object, else insert "after" in object
-    let queryData = {project_id, orderBy, sort, start, count };
+    let queryData = {orderBy, sort, start, count };
     return queryData;
 
 }

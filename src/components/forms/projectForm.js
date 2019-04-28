@@ -70,7 +70,7 @@ function ProjectForm(props) {
                 <br/>
                 <button type="submit" disabled={isSubmitting || 
                     ((errors.name && touched.name) ||
-                    (errors.description && touched.description))}>Add paper</button>
+                    (errors.description && touched.description))}>Add Project</button>
             </Form>
             );
             return output;
