@@ -59,12 +59,12 @@
     border-bottom: solid 1px black;
   }
   100%{
-    border-bottom: solid 1px #c31f1f;
+    border-bottom: solid 1px #d81e1e;
   }
 }
 @keyframes de-danger {
   0% {
-    border-bottom: solid 1px #c31f1f;
+    border-bottom: solid 1px #d81e1e;
   }
   100%{
     border-bottom: solid 1px black;
@@ -133,13 +133,14 @@ button{
 
 button:disabled{
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 textarea:focus, input:focus, a:focus, div:focus{
   outline: none;
 }
 
-input[type=text], input[type=date], input[type=password]{
+input[type=text], input[type=date], input[type=password], textarea{
   box-sizing: border-box;
   background-color: transparent;
   border: 0px;
@@ -147,7 +148,9 @@ input[type=text], input[type=date], input[type=password]{
   padding: 3px 5px 3px 5px;
   color: black;
   font-family: inherit;
+  transition: border 0.4s;
 }
+
 
 .warning{
   animation: danger 0.3s linear forwards;

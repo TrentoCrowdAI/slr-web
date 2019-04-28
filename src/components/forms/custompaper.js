@@ -9,9 +9,9 @@ import { AppContext } from 'components/providers/appProvider'
 
 //order options
 const paperType = [
-    { value: 'article', label: 'article' },
-    { value: 'book_chapter', label: 'book chapter' },
-    { value: 'other', label: 'other' }
+    { value: 'article', label: 'Article' },
+    { value: 'book_chapter', label: 'Book Chapter' },
+    { value: 'conf_publication', label: 'Conf. Publication' }
   ];
 
 /**
@@ -64,33 +64,32 @@ function PaperForm(props) {
                 }
                 setSubmitting(false);
             }}
-            validateOnChange={false}
             validateOnBlur={false}
         >
-        {({ errors, isSubmitting }) => (
+        {({ errors, touched, isSubmitting }) => (
             <Form className="new-paper-form">
                 <Field
-                    style={{border: (errors.title) ? "1px solid red" : ""}}
+                    style={{borderBottom: (errors.title && touched.title) ? "1px solid #d81e1e" : ""}}
                     id="title"
                     name="title"
                     type="text" 
-                    placeholder="paper title"/>
+                    placeholder="Paper Title"/>
                 <div className="new-paper-form-ad">
                     <div>
                         <Field
-                            style={{border: (errors.authors) ? "1px solid red" : ""}}
+                            style={{borderBottom: (errors.authors && touched.authors) ? "1px solid #d81e1e" : ""}}
                             name="authors"
                             type="text" 
                             placeholder="paper author"/>
                         <Field
-                            style={{border: (errors.eid) ? "1px solid red" : ""}}
+                            style={{borderBottom: (errors.eid && touched.eid) ? "1px solid #d81e1e" : ""}}
                             name="eid"
                             type="text" 
-                            placeholder="paper EID"/>
+                            placeholder="Paper EID"/>
                     </div>
                     <div>
                         <Field 
-                            style={{border: (errors.date) ? "1px solid red" : ""}}
+                            style={{borderBottom: (errors.date && touched.date) ? "1px solid #d81e1e" : ""}}
                             name="date"
                             type="date"/>
                         <Field
@@ -102,11 +101,17 @@ function PaperForm(props) {
                     </div>
                 </div>
                 <Field
-                    style={{border: (errors.abstract) ? "1px solid red" : ""}}
+                    style={{borderBottom: (errors.abstract && touched.abstract) ? "1px solid #d81e1e" : ""}}
                     name="abstract"
-                    placeholder="paper abstract"
+                    placeholder="Paper Abstract"
                     component="textarea"/>
-                <button type="submit" disabled={isSubmitting}>Add paper</button>
+                <button type="submit" disabled={isSubmitting ||
+                    (errors.title && touched.title) ||
+                    (errors.authors && touched.authors) ||
+                    (errors.eid && touched.eid) ||
+                    (errors.date && touched.date) ||
+                    (errors.abstract && touched.abstract)
+                }>Add paper</button>
             </Form>
         )}
         </Formik>

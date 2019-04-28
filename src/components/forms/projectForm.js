@@ -45,7 +45,6 @@ function ProjectForm(props) {
                 }
                 setSubmitting(false);
             }}
-            validateOnChange={false}
             validateOnBlur={false}
         >
         {function ({ errors, touched, isSubmitting, setErrors, validateField, handleChange }) {
@@ -56,20 +55,22 @@ function ProjectForm(props) {
                 }}><CloseButton/></button>
                 <br/>
                 <Field
-                    className={(errors.name) ? "warning" : ""}
+                    style={{borderBottom : (errors.name && touched.name) ? "solid 1px #d81e1e" : ""}}
                     name="name"
                     type="text" 
-                    placeholder="project name"
+                    placeholder="Project Name"
                     onChange={(e) => {handleChange(e); validateField('name')}}/>
                 <br/>
                 <br/>
                 <Field
-                    className={(errors.description) ? "warning" : ""}
+                    style={{borderBottom : (errors.description && touched.description) ? "solid 1px #d81e1e" : ""}}
                     name="description"
                     component="textarea"
-                    placeholder="project description"/>
+                    placeholder="Project Description"/>
                 <br/>
-                <button type="submit" disabled={isSubmitting}>Add paper</button>
+                <button type="submit" disabled={isSubmitting || 
+                    ((errors.name && touched.name) ||
+                    (errors.description && touched.description))}>Add paper</button>
             </Form>
             );
             return output;

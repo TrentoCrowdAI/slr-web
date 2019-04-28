@@ -1,6 +1,6 @@
 form.new-paper-form{
     width: 80%;
-    margin: 0 auto;
+    margin: 90px auto 0px auto;
 }
 
 form.new-paper-form div.new-paper-form-ad{
@@ -37,7 +37,7 @@ form.new-paper-form div.new-paper-form-ad div.custom-select div.options-holder{
 }
 
 form.new-paper-form textarea{
-    height: 400px;
+    height: 300px;
     width: 80%;
     margin: 0px 10% 20px 10%;
     font-family: inherit;
@@ -53,20 +53,28 @@ form.new-paper-form input#title{
     width: 80%;
     margin: 0px 10% 20px 10%;
     font-size: 22px;
+    line-height: 29px;
     text-align: center;
 }
 
 form.new-paper-form button{
     border: solid 1px grey;
-    font-size: 18px;
+    font-size: 20px;
     width: 20%;
-    height: 30px;
+    height: 40px;
     margin: 5px 40% 5px 40%;
+    font-weight: lighter;
+    transition: box-shadow 0.3s;
 }
+
+form.new-paper-form button:hover{
+    box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
+  }
 
 a.back{
     position: absolute;
     left: 5px;
+    top: -25px;
     height: 40px;
     width: 40px;
     background-image: url('./../img/back.svg');
