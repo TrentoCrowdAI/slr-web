@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {HashRouter as Router, Route, Switch} from "react-router-dom";
 
 
 
@@ -24,7 +24,7 @@ const App = function(props) {
 
 
         return (
-            <Router basename={"slr-web/"}>
+            <Router>
                 <div className="app">
 
                     {/*mount a root context object*/}
