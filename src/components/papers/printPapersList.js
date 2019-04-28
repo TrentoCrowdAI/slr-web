@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import ClampLines from 'react-clamp-lines';
 import {Link} from 'react-router-dom';
 
@@ -69,6 +69,8 @@ const PrintScoupusSearchList = function ({papersList, handlePaperSelection, sele
 
 const PrintPapersList = function ({papersList, location, history}) {
 
+    const [localPaperList, setLocalPaperList] = useState(papersList);
+
     //get data from global context
     const appConsumer = useContext(AppContext);
 
@@ -91,18 +93,15 @@ const PrintPapersList = function ({papersList, location, history}) {
             else if (res !== null) {
 
                 alert("DELETED SUCCESSFULLY!");
-                if(papersList.length !== 1){
-                    window.location.reload();
-                }else{
-                   window.location.href = window.location.href.split("?")[0];
-                }
+                let newPapersList = localPaperList.filter((paper)=>paper.id !== id);
+                setLocalPaperList(newPapersList);
             }
         }
     }
 
     let output;
     //if list is empty, print a notice message
-    if (papersList.length === 0) {
+    if (localPaperList.length === 0) {
         output = (
             <div>there are no papers here, you can add new ones by searching</div>
         );
@@ -110,7 +109,7 @@ const PrintPapersList = function ({papersList, location, history}) {
     //if list isn't empty, print list of papers
     else {
         output = (
-            papersList.map((element) =>
+            localPaperList.map((element) =>
                 <div key={element.id} className="paper-card">
                     <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} cls="card-options paper-card-options"/>
                     <Link to={"#"}>
