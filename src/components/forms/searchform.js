@@ -169,11 +169,8 @@ const SearchForm = function ({project_id, location, match, history}) {
         let eid = event.target.value;
         //get ttitle
         let title = event.target.name;
-        console.log("EID : " + eid);
-        console.log("title : " + title);
         //if id is not included in the list yet
         if (getIndexOfObjectArrayByKeyAndValue(selectedPapersList, "eid", eid) === -1) {
-            console.log("NOT PRESENT");
            //create a copy of array
             newList = [...selectedPapersList];
             //insert into array
@@ -182,7 +179,6 @@ const SearchForm = function ({project_id, location, match, history}) {
         }
         //if id already exists in the list
         else {
-            console.log("PRESENT")
             //remove the  target paper from array
             newList = selectedPapersList.filter(function (element) {
                 return element.eid !== eid;
@@ -255,9 +251,7 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         switch (event.target.name) {
             case "query":
-                console.log(event.target.value);
                 setKeyWords(event.target.value);
-                console.log("-> " + keywords);
                 break;
             case "scopus":
                 //copy the old source

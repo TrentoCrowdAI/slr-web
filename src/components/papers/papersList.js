@@ -142,7 +142,7 @@ const PapersList = ({project_id, location, match, history}) => {
                     <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)} handler={handleSelection}/>
                     <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={queryData.sort}/></button>
                 </div>
-                <PrintPapersList papersList={papersList}/>
+                <PrintPapersList papersList={papersList} location={location} history={history}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
             </div>
         );

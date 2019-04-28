@@ -67,7 +67,7 @@ const PrintScoupusSearchList = function ({papersList, handlePaperSelection, sele
  * prints a list of papers and handles their removal from the project
  */
 
-const PrintPapersList = function ({papersList}) {
+const PrintPapersList = function ({papersList, location, history}) {
 
     //get data from global context
     const appConsumer = useContext(AppContext);
@@ -91,7 +91,11 @@ const PrintPapersList = function ({papersList}) {
             else if (res !== null) {
 
                 alert("DELETED SUCCESSFULLY!");
-                window.location.reload();
+                if(papersList.length !== 1){
+                    window.location.reload();
+                }else{
+                   window.location.href = window.location.href.split("?")[0];
+                }
             }
         }
     }
