@@ -43,7 +43,14 @@ const PapersList = ({project_id, location, match, history}) => {
     //set query params from url
     const queryData = createQueryData(location.search);
 
+    const [up, setUp] = useState(queryData.sort);
+
     useEffect(() => {
+
+        if(queryData.orderBy !== "date_created" && up !== queryData.sort){
+            setUp(queryData.sort);
+            document.getElementById("ani-order-arrow").beginElement();
+        }
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
@@ -105,7 +112,6 @@ const PapersList = ({project_id, location, match, history}) => {
     //handler for order selection(ASC|DESC)
     function handelOrder(e){
         //trigger svg animation
-        document.getElementById("ani-order-arrow").beginElement();
         if(queryData.sort === "ASC"){
             queryData.sort = "DESC";
         }
@@ -128,7 +134,7 @@ const PapersList = ({project_id, location, match, history}) => {
                 <div className="order" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
                     <label>sort by:</label>
                     <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={queryData.sort}/></button>
+                    <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={up}/></button>
                 </div>
                 <LoadIcon class={"small"}/>
             </div> );
@@ -140,7 +146,7 @@ const PapersList = ({project_id, location, match, history}) => {
                 <div className="order">
                     <label>sort by:</label>
                     <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)} handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={queryData.sort}/></button>
+                    <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={up}/></button>
                 </div>
                 <PrintPapersList papersList={papersList} location={location} history={history}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
