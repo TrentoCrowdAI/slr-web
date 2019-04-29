@@ -4,37 +4,49 @@ import ClampLines from 'react-clamp-lines';
 import queryString from "query-string";
 
 
-import {paperDao} from 'src/dao/paper.dao';
-import {projectPapersDao} from 'src/dao/projectPapers.dao'
+import {paperDao} from 'dao/paper.dao';
+import {projectPapersDao} from 'dao/projectPapers.dao'
 
-import CheckBox from "src/components/forms/checkbox";
-import RadioBox from "src/components/forms/radiobox";
-import LoadIcon from 'src/components/svg/loadIcon';
-import SearchButton from 'src/components/svg/searchButton';
-import {PrintScoupusSearchList} from 'src/components/papers/printPapersList';
-import Select from 'src/components/forms/select';
-import OrderArrow from 'src/components/svg/orderArrow';
-import Pagination from "src/components/modules/pagination";
+import CheckBox from "components/forms/checkbox";
+import RadioBox from "components/forms/radiobox";
+import LoadIcon from 'components/svg/loadIcon';
+import SearchButton from 'components/svg/searchButton';
+import {PrintScoupusSearchList} from 'components/papers/printPapersList';
+import Select from 'components/forms/select';
+import OrderArrow from 'components/svg/orderArrow';
+import Pagination from "components/modules/pagination";
+import CloseButton from 'components/svg/closeButton';
+import RemoveButton from 'components/svg/removeButton';
 
-import {searchCheckboxesToParams, join, createQueryStringFromObject,getIndexOfObjectArrayByKeyAndValue} from 'src/utils/index';
+import {AppContext} from 'components/providers/appProvider'
 
-import {AppContext} from 'src/components/providers/appProvider'
+import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
+
+
 
 // Load the lodash build
-var _ = require('lodash');
+const _ = require('lodash');
 
 //order options
 const orderByOptions = [
-    { value: 'title', label: 'Title' },
-    { value: 'date', label: 'Date' }
-  ];
+    {label: 'Title', value: 'title'},
+    {label: 'Date', value: 'date'}
+];
 
 //search by  options
-const searchByOptions = ["all", "author", "content"];
+const searchByOptions = [
+    {label: 'all', value: 'all'},
+    {label: 'author', value: 'author'},
+    {label: 'content', value: 'content'},
+    {label: 'adv. query', value: 'advanced'}
+];
 
 //year options
 const startYear = 2017;
 const endYear = 2020;
+//create a int array from startYear to endYear, then convert it to string array, after this concatenate with "all"
+const yearOptions = ["all", ...(_.range(startYear, endYear).map(String))];
+
 
 /**
  * this is component form to search for the paper in project page
@@ -58,10 +70,16 @@ const SearchForm = function ({project_id, location, match, history}) {
 
     //set query params from url
     let queryData = createQueryData(location.search);
-    console.log(queryData);
+    //console.log(queryData);
 
-    //selected list of papers
-    let selectedPapers = [];
+    // list of selected papers
+    const [selectedPapersList, setSelectedPapersList] = useState([]);
+
+    //state for search form
+    const [keywords, setKeyWords] = useState("_");
+    const [source, setSource] = useState({"scopus": true, "googleScholar": false, "arXiv": false});
+    const [searchBy, setSearchBy] = useState("all");
+    const [year, setYear] = useState("all");
 
 
     useEffect(() => {
@@ -69,13 +87,17 @@ const SearchForm = function ({project_id, location, match, history}) {
         //a wrapper function ask by react hook
         const fetchData = async () => {
 
-            //hide the page
+            //update the values of state from url
+            setKeyWords(queryData.query);
+            setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
+            setSearchBy(queryData.searchBy);
+            setYear(queryData.year);
 
             //if there is queryString from URL
             if (queryData.query !== "") {
 
                 setDisplay(false);
-
+                
                 //always call the dao to search on scopus
                 let res = await paperDao.search(queryData);
 
@@ -101,21 +123,22 @@ const SearchForm = function ({project_id, location, match, history}) {
                     setDisplay(true);
                 }
             }
-
-
         };
 
         fetchData();
 
-    }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count,  queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
+    }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
+
+
+
 
 
     //handler for sort selection
-    function handleSelection(e){
+    function handleSelection(e) {
         //get index
         let index = parseInt(e.target.getAttribute('data-value'));
         //get value by index
-        queryData.orderBy=orderByOptions[index].value;
+        queryData.orderBy = orderByOptions[index].value;
         //update url
         let queryString = createQueryStringFromObject(queryData);
         history.push(queryString);
@@ -123,14 +146,14 @@ const SearchForm = function ({project_id, location, match, history}) {
     }
 
     //handler for order selection(ASC|DESC)
-    function handelOrder(e){
+    function handelOrder(e) {
         //trigger svg animation
         document.getElementById("ani-order-arrow").beginElement();
 
-        if(queryData.sort === "ASC"){
+        if (queryData.sort === "ASC") {
             queryData.sort = "DESC";
         }
-        else{
+        else {
             queryData.sort = "ASC";
         }
         //update url
@@ -141,43 +164,54 @@ const SearchForm = function ({project_id, location, match, history}) {
 
     /*function to insert and remove the paper id from selected list*/
     function handlePaperSelection(event) {
-        let id = event.target.value;
+        let newList;
+        //get eid
+        let eid = event.target.value;
+        //get ttitle
+        let title = event.target.name;
         //if id is not included in the list yet
-        if (!selectedPapers.includes(id)) {
+        if (getIndexOfObjectArrayByKeyAndValue(selectedPapersList, "eid", eid) === -1) {
+           //create a copy of array
+            newList = [...selectedPapersList];
             //insert into array
-            selectedPapers.push(id);
+            newList.push({"eid": eid, "title": title});
 
         }
         //if id already exists in the list
         else {
-            //remove the  target paper id
-            selectedPapers = selectedPapers.filter(function (value) {
-                return value !== id;
+            //remove the  target paper from array
+            newList = selectedPapersList.filter(function (element) {
+                return element.eid !== eid;
             });
         }
+
+        //update array
+        setSelectedPapersList(newList);
     }
 
     /*function to add the post in the project*/
     async function handleAddPapers(event) {
 
         event.preventDefault();
+        //console.log(selectedPapersList);
 
-        //console.log(selectedPapers);
-        //for to insert papers into DB
-        
+       //create a eidList from the list of selected paper
+        let arrayEid = selectedPapersList.map(element => element.eid);
         //call dao
         let res = await projectPapersDao.postPaperIntoProject({
-            arrayEid: selectedPapers, project_id: project_id
+            "arrayEid": arrayEid, "project_id": project_id
         });
         //if there is the error
-        if (res.message) {
+        if (res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);
             return null;
         }
 
+        //empties the state
+        setSelectedPapersList([]);
         alert("insert completed");
-        window.location.reload();
+
     }
 
 
@@ -185,13 +219,21 @@ const SearchForm = function ({project_id, location, match, history}) {
     async function handleSendSearch(event) {
 
         event.preventDefault();
+
         //if query input is empty
-        if (queryData.query === "") {
+        if (keywords === "") {
             alert("search string is empty")
         }
         else {
+            //synchronize the query data from react state hooks
+            queryData.query = keywords;
+            queryData.scopus = source.scopus;
+            queryData.googleScholar = source.googleScholar;
+            queryData.arXiv = source.arXiv;
+            queryData.searchBy = searchBy;
+            queryData.year = year;
 
-            //update url
+            //send query url
             let queryString = createQueryStringFromObject(queryData);
             //launch to search
             history.push(queryString);
@@ -201,53 +243,45 @@ const SearchForm = function ({project_id, location, match, history}) {
     }
 
     /**
-     *synchronizes the value between queryData and input form
+     *handle to update hook state by input change
      */
-    function handleOnInputChange(event){
+    function handleOnInputChange(event) {
+
+        let newSource;
 
         switch (event.target.name) {
             case "query":
-                queryData.query=event.target.value;
+                setKeyWords(event.target.value);
                 break;
-            case "Scopus":
+            case "scopus":
+                //copy the old source
+                newSource = {...source};
                 //switch between true and false
-                if(queryData.scopus ==="false"){
-                    queryData.scopus = "true";
-                }
-                else{
-                    queryData.scopus = "false";
-                }
+                newSource.scopus = !source.scopus;
+                setSource(newSource);
                 break;
-            case "Google Scholar":
+
+            case "googleScholar":
+                //copy the old source
+                newSource = {...source};
                 //switch between true and false
-                if(queryData.googleScholar ==="false"){
-                    queryData.googleScholar = "true";
-                }
-                else{
-                    queryData.googleScholar = "false";
-                }
+                newSource.googleScholar = !source.googleScholar;
+                setSource(newSource);
                 break;
             case "arXiv":
+                //copy the old source
+                newSource = {...source};
                 //switch between true and false
-                if(queryData.arXiv ==="false"){
-                    queryData.arXiv = "true";
-                }
-                else{
-                    queryData.arXiv = "false";
-                }
+                newSource.arXiv = !source.arXiv;
+                setSource(newSource);
                 break;
             case "searchBy":
-                queryData.searchBy=event.target.value;
+                setSearchBy(event.target.value);
                 break;
             case "year":
-                //if value is "all", deletes the year property
-                if(event.target.value==="all"){
-                    delete queryData.year;
-                }
-                //else get year value
-                else{
-                    queryData.year=event.target.value;
-                }
+                setYear(event.target.value);
+                break;
+            default:
                 break;
         }
 
@@ -259,7 +293,7 @@ const SearchForm = function ({project_id, location, match, history}) {
      need to  create a new child component for the part of <form>, when we have more information on search options
      ######################################
      */
-    let formPart = (//creare un componente a part
+    let formPart = (
         <>{}
             <form className={(queryData.query === "") ? 'search-form' : 'search-form small'}
                   onSubmit={handleSendSearch}>
@@ -269,7 +303,7 @@ const SearchForm = function ({project_id, location, match, history}) {
                         type="text"
                         placeholder="search"
                         name="query"
-                        defaultValue={queryData.query}
+                        value={keywords}
                         onChange={handleOnInputChange}
                     />
                     <button type="submit" value="Submit">
@@ -281,25 +315,33 @@ const SearchForm = function ({project_id, location, match, history}) {
                     <label>Source:</label><br/>
 
                     <div className="checkboxes-holder">
-                        <CheckBox label="Scopus" val="" isChecked={queryData.scopus==="true" } handler={handleOnInputChange}/>
-                        <CheckBox label="Google Scholar" val="" isChecked={queryData.googleScholar ==="true"} handler={handleOnInputChange}/>
-                        <CheckBox label="arXiv" val="" isChecked={queryData.arXiv ==="true"} handler={handleOnInputChange}/>
+                        <CheckBox label="Scopus" name="scopus" val="" isChecked={source.scopus}
+                                  handler={handleOnInputChange}/>
+                        <CheckBox label="Google Scholar" name="googleScholar" val="" isChecked={source.googleScholar}
+                                  handler={handleOnInputChange}/>
+                        <CheckBox label="arXiv" name="arXiv" val="" isChecked={source.arXiv}
+                                  handler={handleOnInputChange}/>
                     </div>
 
                     <label>Search by:</label><br/>
 
-                    <div className="checkboxes-holder" onChange={handleOnInputChange}>
-                        <RadioBox label={searchByOptions[0]} name ="searchBy" val={searchByOptions[0]} isChecked={queryData.searchBy===searchByOptions[0]} />
-                        <RadioBox label={searchByOptions[1]} name ="searchBy" val={searchByOptions[1]} isChecked={queryData.searchBy===searchByOptions[1]} />
-                        <RadioBox label={searchByOptions[2]} name ="searchBy"  val={searchByOptions[2]} isChecked={queryData.searchBy===searchByOptions[2]} />
+                    <div className="checkboxes-holder" >
+                        <RadioBox label={searchByOptions[0].label} name="searchBy" val={searchByOptions[0].value}
+                                  isChecked={searchBy === searchByOptions[0].value} handler={handleOnInputChange}/>
+                        <RadioBox label={searchByOptions[1].label} name="searchBy" val={searchByOptions[1].value}
+                                  isChecked={searchBy === searchByOptions[1].value} handler={handleOnInputChange}/>
+                        <RadioBox label={searchByOptions[2].label} name="searchBy" val={searchByOptions[2].value}
+                                  isChecked={searchBy === searchByOptions[2].value} handler={handleOnInputChange}/>
+                        <RadioBox label={searchByOptions[3].label} name="searchBy" val={searchByOptions[3].value}
+                                  isChecked={searchBy === searchByOptions[3].value} handler={handleOnInputChange}/>
                     </div>
 
                     <label>Year:</label><br/>
-                    <div className="checkboxes-holder" onChange={handleOnInputChange}>
-                        <RadioBox label={"all"} name ="year" val={"all"} isChecked={queryData.year==="all"} />
+                    <div className="checkboxes-holder" >
                         {
-                            _.range(startYear,endYear).map((year, index)=>
-                                <RadioBox key={index} label={year} name ="year" val={year} isChecked={parseInt(queryData.year)===year} />
+                            yearOptions.map((singleYear, index) =>
+                                <RadioBox key={index} label={singleYear} name="year" val={singleYear}
+                                          isChecked={year === singleYear} handler={handleOnInputChange}/>
                             )
                         }
                     </div>
@@ -309,52 +351,57 @@ const SearchForm = function ({project_id, location, match, history}) {
         </>);
 
 
-    let resultPart="";
-
-    //if the search results list is empty
-    if (display === true && papersList.length === 0 && queryData.query !== "") {
-        //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
-        resultPart = (
-            <div className="not-found"> not found :( </div> 
-        );
-    }
-    else if(papersList.length > 0 && queryData.query !== ""){
-
-
-        let printList = (<PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection}/>);
-
-
-        resultPart = (
-            <div className="paper-card-holder">
-                <div className="order">
-                        <label>sort by:</label>
-                        <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
-                        <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
-                </div>
-                {printList}
-                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
-                <button className="bottom-left-btn" type="submit" value="Submit">
-                    +
-                </button>
-            </div>
-        );
-    }
+    let resultPart = "";
 
     //if is loading
     if (display === false) {
 
         resultPart = (
             <div className="paper-card-holder">
-                <div className="order" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
-                        <label>sort by:</label>
-                        <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
-                        <button type="button" onClick={handelOrder}><OrderArrow up={(queryData.sort)}/></button>
+                <div className="order"
+                     style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
+                    <label>sort by:</label>
+                    <Select options={orderByOptions}
+                            selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
+                            handler={handleSelection}/>
+                    <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
                 </div>
+                <SelectedPapersListBox selectedPapersList={selectedPapersList}/>
                 <div className="search-loading-holder">
                     <LoadIcon class={"small"}/>
                 </div>
             </div>);
     }
+
+    //if the search results list is empty
+    else if (papersList.length === 0 && queryData.query !== "") {
+        //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
+        resultPart = (
+            <div className="not-found"> not found :( </div>
+        );
+    }
+    else if (papersList.length > 0 && queryData.query !== "") {
+
+        //create a eidList from the list of selected paper
+        let arrayEid = selectedPapersList.map(element => element.eid);
+
+        resultPart = (
+            <div className="paper-card-holder">
+                <div className="order">
+                    <label>sort by:</label>
+                    <Select options={orderByOptions}
+                            selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
+                            handler={handleSelection}/>
+                    <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
+                </div>
+                <SelectedPapersListBox selectedPapersList={selectedPapersList} handlePaperSelection={handlePaperSelection}/>
+
+                <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid}/>
+                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
+            </div>
+        );
+    }
+
 
     let output = (
         <>
@@ -370,16 +417,52 @@ const SearchForm = function ({project_id, location, match, history}) {
 
 
 /**
+ * internal component to print the box of list of selected paper
+ */
+const SelectedPapersListBox = function ({selectedPapersList, handlePaperSelection}){
+
+    let output = "";
+    output = (
+        <div className="selected-papers-list" style={{opacity: (selectedPapersList.length>0) ? "1.0" : "0.0", pointerEvents: (selectedPapersList.length>0) ? "auto" : "none"}}>
+            <h3>
+                {"SELECTED PAPERS"} <br/><span>(total : {selectedPapersList.length})</span>
+            </h3>
+            <div className="submission-wrapper">
+                <div className="papers-wrapper" style={{border: (selectedPapersList.length>0) ? "" : "0px"}}>
+                    <div className="papers-flex" style={{padding: (selectedPapersList.length>0) ? "" : "0px"}}>
+                        {selectedPapersList.map((element, index) =>
+                            <p key={index}>
+                                <span>{element.title}</span> 
+                                <button type="button" className="remove-btn" name={element.title} value={element.eid} //name and value don't work on the button event for some reasons
+                                    onClick={(e) => {handlePaperSelection({target: {name: element.title, value:element.eid}})}}>
+                                    <RemoveButton/>
+                                </button>
+                            </p>
+                        )}
+                    </div>
+                </div>
+                <button style={{border: (selectedPapersList.length>0) ? "" : "0px", margin: (selectedPapersList.length>0) ? "" : "0px", height: (selectedPapersList.length>0) ? "" : "0px", pointerEvents: (selectedPapersList.length>0) ? "auto" : "none"}} className="ti-btn add-resultpaper-btn" type="submit" value="Submit">
+                    <div className="btn-title">Add Selected Paper</div><div className="btn-icon"> </div>
+                </button>
+            </div>
+        </div>
+    );
+
+    return output;
+
+};
+
+
+/**
  * internal function to prepare a object of queryData
  * @param queryUrl
  * @return object of queryData for the fetch
  */
-function createQueryData(queryUrl){
-
+function createQueryData(queryUrl) {
 
 
     //set query params from queryString of url
-    let params = queryString.parse( queryUrl);
+    let params = queryString.parse(queryUrl);
     let query = params.query || "";
 
     let searchBy = params.searchBy || "all";
@@ -388,18 +471,21 @@ function createQueryData(queryUrl){
     let start = params.start || 0;
     let count = params.count || 10;
 
-    let scopus = params.scopus || "false";
-    let googleScholar = params.googleScholar|| "false";
-    let arXiv = params.arXiv|| "false";
+
+    let scopus;
+    if (params.scopus === undefined) {
+        scopus = true;
+    }
+    else {
+        scopus = (params.scopus === "true");
+    }
+
+    let googleScholar = (params.googleScholar === "true");
+    let arXiv = (params.arXiv === "true");
 
     let year = params.year || "all";
 
-    let queryData = {query, searchBy,orderBy, sort, scopus ,googleScholar,arXiv, start, count };
-    //set year property only when year value is not "all"
-    if(year !== "all"){
-        queryData.year = year;
-    }
-
+    let queryData = {query, searchBy, orderBy, sort, scopus, googleScholar, arXiv, year, start, count};
 
     return queryData;
 

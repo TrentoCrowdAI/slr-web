@@ -3,15 +3,15 @@ import {Link} from 'react-router-dom';
 import queryString from 'query-string';
 
 
-import {projectsDao} from 'src/dao/projects.dao';
-import LoadIcon from 'src/components/svg/loadIcon';
-import ProjectForm from 'src/components/forms/projectForm';
-import Pagination from 'src/components/modules/pagination';
-import {join} from 'src/utils/index';
-import Cover from 'src/components/modules/cover';
-import SideOptions from 'src/components/modules/sideOptions';
+import {projectsDao} from 'dao/projects.dao';
+import LoadIcon from 'components/svg/loadIcon';
+import ProjectForm from 'components/forms/projectForm';
+import Pagination from 'components/modules/pagination';
+import {join} from 'utils/index';
+import Cover from 'components/modules/cover';
+import SideOptions from 'components/modules/sideOptions';
 
-import {AppContext} from "src/components/providers/appProvider";
+import {AppContext} from "components/providers/appProvider";
 
 /**
  *this component will show a projects list page
@@ -53,18 +53,18 @@ const ProjectsList = function (props) {
             setDisplay(false);
 
             //call the dao
-            const res = await projectsDao.getProjectsList(queryData);
+            const res = await projectsDao.getProjectsList({orderBy: "date_last_modified", ...queryData});
 
             //error checking
             //if is 404 error
-            if (res.message === "Not Found") {
+            if (res && res.message === "Not Found") {
                 setProjectsList([]);
                 setTotalResults(0);
                 //show the page
                 setDisplay(true);
             }
             //if is other error
-            else if (res.message) {
+            else if (res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
@@ -74,11 +74,11 @@ const ProjectsList = function (props) {
 
                 //I put even first and then odd ones so I can display 2 columns with left-right flow 
                 var even_projs = [];
-                even_projs = res.results.filter(function(element){ if( element.id % 2 ) return element;});
+                even_projs = res.results.filter(function(element, index){ if( index % 2 ) return element;});
                 var odd_projs = [];
-                odd_projs = res.results.filter(function(element){ if( !(element.id % 2) ) return element;});
+                odd_projs = res.results.filter(function(element, index){ if( !(index % 2) ) return element;});
 
-                setProjectsList(even_projs.concat(odd_projs));
+                setProjectsList(odd_projs.concat(even_projs));
                 setTotalResults(res.totalResults);
                 //show the page
                 setDisplay(true);
@@ -140,9 +140,11 @@ const ProjectsList = function (props) {
                 {/*print the input form to create/update the projects*/}
                 <ProjectForm visibility={toggleform} setVisibility={setToggleForm} history={props.history}/>
                 {/*button to show input form*/}
-                <button className="bottom-left-btn" type="button" value="toggle-insert-form" onClick={(e) => {
+                <button className="bottom-left-btn add-project-btn" type="button" value="toggle-insert-form" 
+                onClick={(e) => {
                     setToggleForm(!toggleform);
-                }}>+
+                }}>
+                    <div className="btn-title">Add Project</div><div className="btn-icon"> </div>
                 </button>
             </div>
         );
@@ -176,7 +178,7 @@ const PrintList = function ({projectsList, path, handleDelete}) {
     else {
         maps = (projectsList.map((element, index) =>
                 <div key={element.id} className="light-modal project-card">
-                    <SideOptions options={sideOptions} handler={handleDelete} target={element.id} cls="project-card-options"/>
+                    <SideOptions options={sideOptions} handler={handleDelete} target={element.id} cls="card-options project-card-options"/>
                     <Link to={join(path, "/" + element.id)}>
                         <h3>{element.data.name}</h3>
                         <p>{element.data.description}</p>

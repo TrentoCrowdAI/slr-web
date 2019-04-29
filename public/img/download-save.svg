@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#1c1c1c;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#1c1c1c;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<polyline class="st0" points="371.7,481.9 500,609.9 628.3,481.9 "/>
+<line class="st0" x1="500" y1="163.8" x2="500" y2="609.9"/>
+<polyline class="st0" points="827.3,687.1 827.3,818 172.7,818 172.7,687.1 "/>
+<g>
+	<polygon class="st1" points="500,752.5 242,752.5 299.9,695.5 500,695.5 700.1,695.5 758,752.5 	"/>
+	<line class="st1" x1="299.9" y1="740.6" x2="700.1" y2="740.6"/>
+	<line class="st1" x1="328.4" y1="724" x2="671.6" y2="724"/>
+	<line class="st1" x1="344.9" y1="707.6" x2="655.1" y2="707.6"/>
+</g>
+</svg>

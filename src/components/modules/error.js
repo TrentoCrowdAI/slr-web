@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {AppContext} from "src/components/providers/appProvider";
+import {AppContext} from "components/providers/appProvider";
 
 
 const Error = function () {
@@ -15,6 +15,16 @@ const Error = function () {
         }
 
     });
+
+    //function to delete the error object in context
+    function handleOnRefresh(){
+        appConsumer.setError(null);
+    }
+    //function to return to previous page
+    function handleOnGoBack(){
+        window.history.back();
+        appConsumer.setError(null);
+    }
 
 
     //console.dir(appConsumer.error);
@@ -48,6 +58,13 @@ const Error = function () {
     output = (
         <div className="error-wrapper" style={{textAlign: "center"}}>
             {output}
+            <br/>
+            <button type="button" onClick={handleOnGoBack}><u>return to previous page</u></button>
+            <br/>
+            <p>or</p>
+            <br/>
+            <button type="button" onClick={handleOnRefresh}><u>refresh</u></button>
+
         </div>
     );
 

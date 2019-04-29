@@ -57,10 +57,13 @@ function createQueryStringFromObject(queryData){
     let keys = Object.keys(queryData);
     //concatenate the object.property
     for(let i =0; i< keys.length; i++){
-        queryString += keys[i]+"="+encodeURIComponent(queryData[keys[i]]);
-        //if it isn't the last element, add symbol "&"
-        if(i !== (keys.length-1)){
-            queryString += "&";
+        //I don't need to sort for the recently added sorting
+        if(queryData["orderBy"] !== "date_created" || keys[i] !== "sort"){
+            queryString += keys[i]+"="+encodeURIComponent(queryData[keys[i]]);
+            //if it isn't the last element, add symbol "&"
+            if(i !== (keys.length-1)){
+                queryString += "&";
+            }
         }
     }
     return queryString;

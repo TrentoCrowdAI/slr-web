@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import config from 'src/config/index';
+import config from 'config/index';
 
 /**
  * this is the component for pagination
@@ -30,7 +30,8 @@ const Pagination = function({start, count, totalResults, path}) {
     //the page count start by 1.
     let paged = Math.floor(start / count) + 1;
     //get total page number
-    let totalPage = Math.round(totalResults / count);
+    let totalPage = Math.ceil(totalResults / count);
+
 
     //we need the pagination only the totalPage is major than 1
     if (totalPage > 1) {

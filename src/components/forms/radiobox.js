@@ -1,11 +1,23 @@
 import React from "react";
 
-const RadioBox = ({ label, name, val, isChecked }) => (
-    <label className="radiobox-container">
-      <input type="radio" value={val} name={name} defaultChecked={isChecked} />
-      <span className="radiomark"></span>
-      <span>{label}</span>
-    </label>
-);
+import RadioTick from 'components/svg/radioTick';
+
+const RadioBox = function ({ label, name, val, isChecked , handler}) {
+
+    let output = "";
+    let tick = "";
+    if(isChecked){
+        tick = <RadioTick/>;
+    }
+
+    output= (
+        <label className="radiobox-container">
+        <input type="radio" value={val} name={name} checked={isChecked} onChange={handler}/>
+        <span className="radiomark">{tick}</span>
+        <span>{label}</span>
+        </label>
+    );
+    return output;
+}
 
 export default RadioBox;

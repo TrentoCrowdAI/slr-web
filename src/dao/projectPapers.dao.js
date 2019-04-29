@@ -1,5 +1,5 @@
-import http from 'src/utils/conn'
-import config from 'src/config/index'
+import http from 'utils/conn'
+import config from 'config/index'
 
 /**
  * dao to get a list of paper associated with a project
@@ -8,7 +8,6 @@ import config from 'src/config/index'
  */
 async function getPapersList(queryData) {
     let url = config.home + config.papers
-
     const res = await http.get(url, queryData);
     return res;
 

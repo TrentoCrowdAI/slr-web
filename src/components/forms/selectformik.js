@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import SelectArrow from 'components/svg/selectArrow';
 
 
@@ -6,12 +6,25 @@ import SelectArrow from 'components/svg/selectArrow';
  * this component acts as an html <select>
  * it needs an array of options, the index of the selected one and the hadler to change the status of the upper component calling this one
  */
-const Select = ({ options, selected, handler }) => {
+const Select = ({ options, form, name }) => {
     
+
     //this is useful for the animation
     const [focused, setFocused] = useState(false);
 
+    //this keeps the selected option
+    const [selected, setSelected] = useState(0)
 
+    //this handle the selection setting the index of the selected option
+    function handler(e){
+        let index = parseInt(e.target.getAttribute('data-value'));
+        setSelected(index);
+    }
+
+    //this updates the field value for formik
+    useEffect(() => {
+        form.setFieldValue(name, options[selected].value);
+    }, [selected])
 
     function handleFocus(e){
         //handle arrow animation and focus of menu

@@ -1,19 +1,19 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {HashRouter as Router, Route, Switch} from "react-router-dom";
 
 
 
-import Main from 'src/components/main';
-import Home from 'src/components/home';
+import Main from 'components/main';
+import Home from 'components/home';
 
-import NavBar from 'src/components/navigation/navBar';
-import SideMenu from 'src/components/navigation/sideMenu';
+import NavBar from 'components/navigation/navBar';
+import SideMenu from 'components/navigation/sideMenu';
 
-import ProjectsList from 'src/components/projects/projectsList';
-import ProjectPage from 'src/components/projects/projectPage';
+import ProjectsList from 'components/projects/projectsList';
+import ProjectPage from 'components/projects/projectPage';
 
 
-import  {AppProvider} from 'src/components/providers/appProvider';
+import  {AppProvider} from 'components/providers/appProvider';
 
 
 /**
@@ -24,7 +24,7 @@ const App = function(props) {
 
 
         return (
-            <Router basename={"slr-web/"}>
+            <Router>
                 <div className="app">
 
                     {/*mount a root context object*/}
