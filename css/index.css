@@ -54,6 +54,22 @@
     transform: rotate(360deg);
   }
 }
+@keyframes danger {
+  0% {
+    border-bottom: solid 1px black;
+  }
+  100%{
+    border-bottom: solid 1px #d81e1e;
+  }
+}
+@keyframes de-danger {
+  0% {
+    border-bottom: solid 1px #d81e1e;
+  }
+  100%{
+    border-bottom: solid 1px black;
+  }
+}
 
 /*===DEFAULT_STYLING===*/
 * {
@@ -112,17 +128,19 @@ button{
   font: inherit;
   cursor: pointer;
   outline: inherit;
+  border-radius: 5px;
 }
 
 button:disabled{
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 textarea:focus, input:focus, a:focus, div:focus{
   outline: none;
 }
 
-input[type=text]{
+input[type=text], input[type=date], input[type=password], textarea{
   box-sizing: border-box;
   background-color: transparent;
   border: 0px;
@@ -130,6 +148,15 @@ input[type=text]{
   padding: 3px 5px 3px 5px;
   color: black;
   font-family: inherit;
+  transition: border 0.4s;
+}
+
+
+.warning{
+  animation: danger 0.3s linear forwards;
+}
+.de-warning{
+  animation: de-danger 0.5s linear forwards;
 }
 
 /*checkboxes*/
@@ -138,6 +165,7 @@ input[type=checkbox]{
   opacity: 0;
   height: 0;
   width: 0;
+  cursor: pointer;
 }
 .checkmark {
   display: inline-block;
@@ -151,21 +179,13 @@ input[type=checkbox]{
 .checkbox-container{
   cursor: pointer;
 }
-.checkbox-container:hover input ~ .checkmark {
+.checkbox-container:hover span.checkmark {
   background-color: rgb(241, 241, 241);
 }
-.checkmark:after {
-  content: url('./../img/tick.svg');
-  display: none;
-}
-.checkbox-container input:checked ~ .checkmark:after {
-  display: block;
-}
-.checkbox-container .checkmark:after {
-  margin-left: 2px;
-  margin-top: 2px;
-  width: 14px;
-  height: 14px;
+.checkbox-container span.checkmark  svg#select-tick{
+  height: 80%;
+  width: 80%;
+  margin: 10%;
 }
 /*radiobox*/
 input[type=radio]{
@@ -173,6 +193,7 @@ input[type=radio]{
   opacity: 0;
   height: 0;
   width: 0;
+  cursor: pointer;
 }
 .radiomark {
   display: inline-block;
@@ -186,21 +207,13 @@ input[type=radio]{
 .radiobox-container{
   cursor: pointer;
 }
-.radiobox-container:hover input ~ .radiomark {
+.radiobox-container:hover span.radiomark {
   background-color: rgb(241, 241, 241);
 }
-.radiomark:after {
-  content: url('./../img/circle.svg');
-  display: none;
-}
-.radiobox-container input:checked ~ .radiomark:after {
-  display: block;
-}
-.radiobox-container .radiomark:after {
-  margin-left: 2px;
-  margin-top: 2px;
-  width: 14px;
-  height: 14px;
+.radiobox-container span.radiomark svg#radio-tick{
+  height: 80%;
+  width: 80%;
+  margin: 10%;
 }
 /*loading icon*/
 svg#loading-icon.small{
@@ -236,11 +249,77 @@ svg#loading-icon path#loading-circle2{
 
 /*buttons*/
 button.bottom-left-btn{
-  font-weight: 300;
-  font-size: 50px;
+  border-radius: 7px;
   position: fixed;
   bottom: 20px;
   right: 40px;
+  display: flex;
+  border: solid 1px #c4c4c4;
+  height: 50px;
+  transition: all 0.3s;
+  background-color: #fcfcff;
+  border-radius: 25px;
+}
+button.bottom-left-btn:hover, button.bottom-left-btn:focus{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
+  border-radius: 7px;
+}
+button.bottom-left-btn div.btn-title{
+  line-height: 50px;
+  vertical-align: middle;
+  margin: 0 0px 0 0px;
+  font-size: 20px;
+  font-weight: 300;
+  transition: all 0.3s;
+  overflow: hidden;
+  max-width: 0px;
+}
+button.bottom-left-btn:hover div.btn-title, button.bottom-left-btn:focus div.btn-title{
+  margin: 0 0px 0 8px;
+  max-width: 260px;
+}
+button.bottom-left-btn div.btn-icon{
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  margin: 5px 5px 0 5px;
+  font-size: 40px;
+  line-height: 30px;
+  text-align: center;
+  vertical-align: center;
+  background-color: #fcfcff;
+}
+
+/*button with title and icon*/
+button.ti-btn{
+  display: flex;
+  border: solid 1px #c4c4c4;
+  height: 50px;
+  transition: all 0.3s;
+  background-color: #fcfcff;
+  border-radius: 7px;
+}
+button.ti-btn:hover{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
+}
+button.ti-btn div.btn-title{
+  line-height: 50px;
+  vertical-align: middle;
+  font-size: 20px;
+  font-weight: 300;
+  overflow: hidden;
+  margin: 0 0px 0 8px;
+}
+button.ti-btn div.btn-icon{
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  margin: 5px 5px 0 5px;
+  font-size: 40px;
+  line-height: 30px;
+  text-align: center;
+  vertical-align: center;
+  background-color: #fcfcff;
 }
 
 /*<select> custom element*/
@@ -279,6 +358,27 @@ div.arrow svg#arrow-select{
 }
 .st-arrow-select{fill:none;stroke:#000000;stroke-width:88;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 
+/*side options for cards*/
+div.card-options{
+  position: absolute;
+  top: 7px;
+  right: 5px;
+  width: 20px;
+  z-index: 1;
+}
+div.card-options div.options-list{
+  background-color: white;
+  border-radius: 3px;
+  text-align: center;
+  width: 60px;
+  cursor: pointer;
+  transition: 0.3s all;
+}
+div.card-options button svg#options-button{
+  height: 20px;
+  width: 20px;
+}
+
 /*order arrow element*/
 .st-order-arrow{fill:none;stroke:#000000;stroke-width:88;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10}
 .st-order-arrow-head{fill:none;stroke:#000000;stroke-width:55;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10}
@@ -298,6 +398,13 @@ button.edit-button{
 
 /*options button*/
 .st-options{stroke: #737373;stroke-width: 140;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+/*tick icon*/
+.st-tick{fill:none;stroke:#000000;stroke-width:120;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st-circle{fill:#3b3b3b;stroke:#000000;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+/*remove button*/
+.rb{stroke:#c31f1f;stroke-width:88;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 
 /*code tag*/
 code{

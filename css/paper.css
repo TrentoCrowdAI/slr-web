@@ -1,0 +1,84 @@
+form.new-paper-form{
+    width: 80%;
+    margin: 90px auto 0px auto;
+}
+
+form.new-paper-form div.new-paper-form-ad{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: 0px 10% 20px 10%;
+}
+
+form.new-paper-form div.new-paper-form-ad input{
+    width: 100%;
+    display: block;
+    margin: 0 0 5px 0;
+    font-size: 18px;
+}
+
+form.new-paper-form div.new-paper-form-ad div.custom-select{
+    position: relative;
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+}
+
+form.new-paper-form div.new-paper-form-ad div.custom-select div.selected{
+    width: 100%;
+    font-size: 18px;
+    height: 26px;
+    padding-left: 5px;
+}
+
+form.new-paper-form div.new-paper-form-ad div.custom-select div.options-holder{
+    position: absolute;
+    width: 100%;
+}
+
+form.new-paper-form textarea{
+    height: 300px;
+    width: 80%;
+    margin: 0px 10% 20px 10%;
+    font-family: inherit;
+    background-color: transparent;
+    border: 0px;
+    border-bottom: solid 1px black;
+    resize: none;
+    color: black;
+}
+
+form.new-paper-form input#title{
+    display: block;
+    width: 80%;
+    margin: 0px 10% 20px 10%;
+    font-size: 22px;
+    line-height: 29px;
+    text-align: center;
+}
+
+form.new-paper-form button{
+    border: solid 1px grey;
+    font-size: 20px;
+    width: 20%;
+    height: 40px;
+    margin: 5px 40% 5px 40%;
+    font-weight: lighter;
+    transition: box-shadow 0.3s;
+}
+
+form.new-paper-form button:hover{
+    box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
+  }
+
+a.back{
+    position: absolute;
+    left: 5px;
+    top: -25px;
+    height: 40px;
+    width: 40px;
+    background-image: url('./../img/back.svg');
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
