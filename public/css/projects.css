@@ -160,7 +160,6 @@ div.project-nav-link-wrapper div.underline-to-right{
 div.paper-card-holder div.order{
   display: flex;
   flex-direction: row;
-  width: 600px;
   height: 20px;
   padding: 0px 0px 0px 10px;
 }

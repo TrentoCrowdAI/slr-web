@@ -3,6 +3,44 @@ import queryString from 'query-string';
 
 //here are the common support function
 
+/**
+ * compares two arrays of objects
+ */
+function arrayOfObjectsEquals(a,b){
+
+    if (a == null || b == null) return false;
+    if (a.length != b.length) return false;
+
+    a.sort(); b.sort();
+
+
+    for (var i = 0; i < a.length; ++i) {
+        if (JSON.stringify(a[i]) !== JSON.stringify(b[i]) ) return false;
+    }
+    
+    return true;
+}
+
+/**
+ * checks if B is contained in A, using a key to check the inclusion
+ * @param {array} a 
+ * @param {array} b 
+ * @param {string} key (object field)
+ */
+function arrayOfObjectsContains(a,b, key){
+
+    if(a == null || b == null) return false;
+    if(a.length == 0 || b.length ==  0) return false;
+
+    //iterate over all elements of B and check if A contains it 
+    //by checking wether and element in A has the same key as the selected B element(b[i])
+    for (var i = 0; i < b.length; ++i) {
+        //if doesn't contain the given element then it meand that the vector A doesn't include the vector B
+        if (!a.some(e => e[key] === b[i][key])) return false; 
+    }
+    
+    return true;
+}
 
 /**
  * converts the checkboxes object of the search form into parameters for the url
@@ -92,6 +130,8 @@ function getIndexOfObjectArrayByKeyAndValue(array ,key, value){
 
 
 export  {
+    arrayOfObjectsEquals,
+    arrayOfObjectsContains,
     searchCheckboxesToParams,
     join,
     createQueryStringFromObject,

@@ -61,12 +61,6 @@ div.option-holder div.checkboxes-holder label:first-child {
 div.option-holder div.checkboxes-holder label:last-child {
   text-align: right;
 }
-div.option-holder div.checkboxes-holder input {
-  vertical-align: middle;
-}
-div.option-holder div.checkboxes-holder label span {
-  vertical-align: middle;
-}
 
 /*options when results are shown*/
 form.small{
@@ -258,6 +252,15 @@ div.selected-papers-list button.add-resultpaper-btn div.btn-icon{
 }
 
 /*paper-card for search result*/ /*searchform.js*/
+div.paper-card-holder div.paper-card-holder-head{
+  display: flex;
+  justify-content: space-between;
+  width: 730px;
+  transform: translateX(-30px);
+}
+div.paper-card-holder div.paper-card-holder-head div.select-all label.checkbox-container span.name{
+  margin-left: 9px;
+}
 form.search-results div.paper-card{
   width: 100%;
   margin: 0px auto 20px 0px;

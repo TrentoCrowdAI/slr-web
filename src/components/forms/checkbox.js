@@ -14,7 +14,7 @@ const CheckBox = function ({ val, name, label, isChecked, handler }) {
         <label className="checkbox-container">
             <input type="checkbox" value={val} name={name} checked={isChecked} onChange={handler} />
             <span className="checkmark">{tick}</span>
-            <span>{label}</span>
+            <span className="name">{label}</span>
         </label>
     );
     return output;

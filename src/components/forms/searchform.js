@@ -20,7 +20,7 @@ import RemoveButton from 'components/svg/removeButton';
 
 import {AppContext} from 'components/providers/appProvider'
 
-import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
+import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
 
 
 
@@ -81,10 +81,12 @@ const SearchForm = function ({project_id, location, match, history}) {
     const [searchBy, setSearchBy] = useState("all");
     const [year, setYear] = useState("all");
 
+    //state for sorting arrow animation
     const [up, setUp] = useState(queryData.sort);
 
     useEffect(() => {
 
+        //if the sorting parameter changes I update the status and trigger the SVG animation
         if(up !== queryData.sort){
             setUp(queryData.sort);
             document.getElementById("ani-order-arrow").beginElement();
@@ -153,8 +155,6 @@ const SearchForm = function ({project_id, location, match, history}) {
 
     //handler for order selection(ASC|DESC)
     function handelOrder(e) {
-        //trigger svg animation
-        document.getElementById("ani-order-arrow").beginElement();
 
         if (queryData.sort === "ASC") {
             queryData.sort = "DESC";
@@ -192,6 +192,28 @@ const SearchForm = function ({project_id, location, match, history}) {
         }
 
         //update array
+        setSelectedPapersList(newList);
+    }
+
+    /*function to select all papers*/
+    function selectAllPapers(event) {
+        
+        let newList = undefined;
+        
+        //if not all papers are selected yet
+        if(!arrayOfObjectsContains(selectedPapersList, papersList, "eid")){
+            //I get the list of the papers in the current page
+            let allPapersInPage = papersList.map((paper) => {return {"eid" : paper.eid, "title" : paper.title}});
+            //and merge them with the previously selected ones
+            let tmpList = [...allPapersInPage, ...selectedPapersList];
+            newList = _.uniqBy(tmpList, 'eid');
+        }else{//otherwise
+            //I get the list of the papers in the current page
+            let allPapersInPage = papersList.map((paper) => {return {"eid" : paper.eid, "title" : paper.title}});
+            //I filter the selectedPapersList by removing the papers that are in the current page
+            newList = selectedPapersList.filter(x => !allPapersInPage.some(paper => paper.eid === x.eid));
+        }
+        
         setSelectedPapersList(newList);
     }
 
@@ -364,13 +386,17 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         resultPart = (
             <div className="paper-card-holder">
-                <div className="order"
-                     style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
-                    <label>sort by:</label>
-                    <Select options={orderByOptions}
-                            selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
-                            handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
+                <div className="paper-card-holder-head" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
+                    <div className="select-all">
+                    <CheckBox label="Select All" name="select_all" val="" isChecked={false} handler={selectAllPapers}/>
+                    </div>
+                    <div className="order">
+                        <label>sort by:</label>
+                        <Select options={orderByOptions}
+                                selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
+                                handler={handleSelection}/>
+                        <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
+                    </div>
                 </div>
                 <SelectedPapersListBox selectedPapersList={selectedPapersList}/>
                 <div className="search-loading-holder">
@@ -393,12 +419,17 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         resultPart = (
             <div className="paper-card-holder">
-                <div className="order">
-                    <label>sort by:</label>
-                    <Select options={orderByOptions}
-                            selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
-                            handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
+                <div className="paper-card-holder-head">
+                    <div className="select-all">
+                    <CheckBox label="Select All" name="select_all" val="" isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")} handler={selectAllPapers}/>
+                    </div>
+                    <div className="order">
+                        <label>sort by:</label>
+                        <Select options={orderByOptions}
+                                selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
+                                handler={handleSelection}/>
+                        <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
+                    </div>
                 </div>
                 <SelectedPapersListBox selectedPapersList={selectedPapersList} handlePaperSelection={handlePaperSelection}/>
 
