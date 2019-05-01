@@ -81,8 +81,14 @@ const SearchForm = function ({project_id, location, match, history}) {
     const [searchBy, setSearchBy] = useState("all");
     const [year, setYear] = useState("all");
 
+    const [up, setUp] = useState(queryData.sort);
 
     useEffect(() => {
+
+        if(up !== queryData.sort){
+            setUp(queryData.sort);
+            document.getElementById("ani-order-arrow").beginElement();
+        }
 
         //a wrapper function ask by react hook
         const fetchData = async () => {

@@ -32,9 +32,24 @@ div.project-cards-holder div.project-card h3{
   font-size: 20px;
   margin: 10px auto 10px auto;
 }
-div.project-cards-holder div.project-card p{
-  margin: 0px auto 10px auto;
+div.project-cards-holder div.project-card p.description{
+  margin: 0px auto 5px auto;
   padding: 0px 10px 0px 10px;
+}
+div.project-cards-holder div.project-card div.project-dates{
+  display: flex;
+  margin: 0px 10px 10px 10px;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 300;
+}
+
+div.project-cards-holder div.project-card div.project-dates p{
+  padding: 0px;
+  margin: 0px;
+}
+div.project-cards-holder div.project-card div.project-dates p i{
+  font-size: 10px;
 }
 
 /*add project button*/ /*projectslist.js*/
@@ -188,6 +203,14 @@ div.project-description{
 div.project-description p{
   margin: 0px;
 }
+div.project-description p.project-date-info{
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+}
+div.project-description p.project-date-info span.date{
+  font-weight: 300;
+}
 div.hidden-form-description form button{
   opacity: 0.0;
 }
@@ -213,6 +236,10 @@ div.project-description form.edit-project-description textarea{
   overflow-wrap: normal;
   word-wrap: normal;
 }
+
 div.project-description h2{
-  margin-top: 15px;
+  margin: 15px 0px 10px 0px;
+}
+div.project-description h2:first-child{
+  margin: 15px 0px 10px 0px;
 }
