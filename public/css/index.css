@@ -329,6 +329,23 @@ button.ti-btn div.btn-icon{
   background-color: #fcfcff;
 }
 
+/*button for file upload*/
+div.file-input-container input[type=file]{
+  display: none;
+}
+div.file-input-container button.browse-btn{
+  position: relative;
+  border-radius: 7px;
+  height: 55px;
+  width: 305px;
+  margin: 0px auto 20px auto;
+  border: solid 1px #c4c4c4;
+}
+div.file-input-container button.browse-btn svg#loading-icon{
+  width: 45px;
+  height: 45px;
+}
+
 /*<select> custom element*/
 div.custom-select {
   width: 120px;

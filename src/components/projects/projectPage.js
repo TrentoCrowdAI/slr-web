@@ -4,7 +4,7 @@ import {Flipper, Flipped} from 'react-flip-toolkit';
 
 import SearchForm from 'components/forms/searchform';
 import PapersList from 'components/papers/papersList';
-import PaperForm from 'components/forms/custompaper';
+import CustomPaperPage from 'components/papers/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
 import LoadIcon from 'components/svg/loadIcon';
 import ProjectDescription from 'components/projects/projectDescription';
@@ -144,7 +144,7 @@ const ProjectPage = (props) => {
                     <Route path = {props.match.url + "/addpaper"} render={() =>
                         <>
                             <Link className="back" to={props.match.url}>  </Link>
-                            <PaperForm projectId={project.id} url={props.match.url} history={props.history}/>
+                            <CustomPaperPage projectId={project.id} url={props.match.url} history={props.history}/>
                         </>
                     } />
                     <Route render={function(props){setNotFound(true); return <div>404</div>;}}/>

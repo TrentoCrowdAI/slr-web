@@ -119,15 +119,6 @@ div.similar-search-paper-upload button.DOI-btn svg#go-button{
 }
 div.similar-search-paper-upload button.DOI-btn svg#go-button .st0-go{stroke-width:50;}
 div.similar-search-paper-upload button.DOI-btn svg#go-button .st1-go{stroke-width:30;}
-div.file-input-container input[type=file]{
-  display: none;
-}
-div.file-input-container button.browse-btn{
-  border-radius: 7px;
-  padding: 15px 100px 15px 100px;
-  margin: 0px auto 20px auto;
-  border: solid 1px #c4c4c4;
-}
 div.similar-search-paper-upload h3.similar-paper-title{
 	width: 80%;
 	margin: 10px 10% 10px 10%;
