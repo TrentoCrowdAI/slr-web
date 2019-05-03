@@ -3,6 +3,14 @@ form.search-form{
   width: 500px;
   margin: 60px auto 20px auto;
   z-index: 100;
+  position: relative;
+  transition: 0.4s height; transition: 0.4s margin;
+}
+
+form.search-form div.searchbar-holder{
+  position: relative;
+  transition: 0.4s all;
+  overflow: hidden;
 }
 
 form.search-form input[type=text]{
@@ -11,10 +19,10 @@ form.search-form input[type=text]{
   font-size: 20px;
   height: 40px;
   padding-left: 7px;
-  margin-bottom: 30px;
+  transition: margin 0.3s;
 }
 
-form.search-form button{
+form.search-form button.go-search{
   background-color: white;
   position: absolute;
   float: right;
@@ -24,6 +32,24 @@ form.search-form button{
   right: 0px;
   border-bottom: solid 1px black;
   border-radius: 0px;
+}
+
+form.search-form button.go-similar {
+  background-color: white;
+	position: absolute;
+	float: right;
+	width: 40px;
+	height: 40px;
+	top: 0px;
+	right: 35px;
+	border-bottom: solid 1px black;
+	border-radius: 0px;
+}
+
+form.search-form button.go-similar svg#similar-paper-search-icon{
+	margin-top: 5px;
+  width: 30px;
+  margin-right: 5px;
 }
 
 form.search-form button svg#search-icon{
@@ -36,6 +62,80 @@ div.option-holder{
   font-size: 18px;
   width: 80%;
   margin: 0px 10% 0% 10%;
+}
+
+/*search by similar paper div*/
+div.similar-search-paper-upload{
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+  background-color: #fcfcff;
+  margin-bottom: 30px;
+  transition: 0.4s height; transition: 0.4s margin;
+}
+div.similar-search-paper-upload p.similar-description{
+  margin: 10px auto 0px 20px;
+  text-align: left;
+}
+div.similar-search-paper-upload button.close-btn{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border: solid 1px grey;
+}
+div.similar-search-paper-upload button.close-btn svg#close-button{
+  width: 70%;
+  height: 70%;
+  margin: 15% auto;
+}
+div.similar-search-paper-upload button.red-x{
+  border: none;
+}
+div.similar-search-paper-upload button.red-x svg#close-button .ln{
+  stroke: #c31f1f;
+}
+div.similar-search-paper-upload div.DOI-holder{
+  width: 80%;
+  position: relative;
+  margin: 20px 10% 10px 10%;
+  display: block;
+  height: 30px;
+}
+div.similar-search-paper-upload input[type=text]{
+  font-size: 15px;
+  height: auto;
+  width: 100%;
+  margin: 0px;
+}
+div.similar-search-paper-upload button.DOI-btn{
+  height: 26px;
+}
+div.similar-search-paper-upload button.DOI-btn svg#go-button{
+  width: 80%;
+}
+div.similar-search-paper-upload button.DOI-btn svg#go-button .st0-go{stroke-width:50;}
+div.similar-search-paper-upload button.DOI-btn svg#go-button .st1-go{stroke-width:30;}
+div.file-input-container input[type=file]{
+  display: none;
+}
+div.file-input-container button.browse-btn{
+  border-radius: 7px;
+  padding: 15px 100px 15px 100px;
+  margin: 0px auto 20px auto;
+  border: solid 1px #c4c4c4;
+}
+div.similar-search-paper-upload h3.similar-paper-title{
+	width: 80%;
+	margin: 10px 10% 10px 10%;
+	font-size: 25px;
+}
+div.similar-search-paper-upload div.similar-paper-paragraph{
+	width: 80%;
+	margin: 0px 10% 10px 10%;
 }
 
 /*options*/
@@ -65,14 +165,14 @@ div.option-holder div.checkboxes-holder label:last-child {
 /*options when results are shown*/
 form.small{
   width: 680px;
-  margin: 20px auto 20px 10px;
-  height: 60px;
+  margin: 20px auto 20px 10px !important;
 }
 form.small div.option-holder {
   margin: 10px 0% 0% 0%;
   width: 200px;
   position: absolute;
-  right: 0px;
+  right: -300px;
+  top: 0px;
 }
 form.small div.option-holder div.checkboxes-holder label{
   display: table-row;
@@ -177,6 +277,7 @@ div.selected-papers-list{
   border-radius: 10px 10px 0px 0px;
   background-color: #fcfcff;
   transition: all 0.3s;
+  z-index: 101;
 }
 div.selected-papers-list h3 {
 	font-size: 16px;

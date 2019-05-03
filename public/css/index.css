@@ -377,9 +377,15 @@ div.card-options div.options-list{
   background-color: white;
   border-radius: 3px;
   text-align: center;
-  width: 60px;
+  width: 100px;
   cursor: pointer;
   transition: 0.3s all;
+}
+div.card-options div.options-list div.option{
+  transition: 0.2s all;
+}
+div.card-options div.options-list div.option:hover{
+  background-color: #e0e0e0;
 }
 div.card-options button svg#options-button{
   height: 20px;
@@ -412,6 +418,17 @@ button.edit-button{
 
 /*remove button*/
 .rb{stroke:#c31f1f;stroke-width:88;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+/*go button*/
+.st0-go{fill:none;stroke:#000000;stroke-width:70;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st1-go{fill:none;stroke:#000000;stroke-width:50;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+/*similar paper search toggle*/
+.st0-sps{fill:none;stroke:#000000;stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st1-sps{fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st2-sps{fill:none;stroke:#000000;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st3-sps{fill:#26110A;stroke:#333333;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st4-sps{fill:none;stroke:#000000;stroke-width:38;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 
 /*code tag*/
 code{

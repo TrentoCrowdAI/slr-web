@@ -6,7 +6,6 @@ import React, {useState, useEffect} from "react";
  */
 const OrderArrow= function ({display, up}) {
 
-    console.log("UP => " + up)
     let output = "";
 
     let from="";

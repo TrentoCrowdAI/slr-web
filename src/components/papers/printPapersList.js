@@ -38,11 +38,37 @@ const PrintLocalSearchList = function ({papersList, handlePaperSelection}) {
  */
 const PrintScoupusSearchList = function ({papersList, handlePaperSelection, selectedEidList}) {
 
+    //side options
+    let sideOptions= ["search similar"];
 
+    //get data from global context
+    const appConsumer = useContext(AppContext);
+
+    //handle for the side options
+    async function handleSideOptions(id, name){
+        if(name === "delete"){
+            console.log("deleting " + id);
+            //call the dao
+            let res = await projectPapersDao.deletePaper(id);
+            //error checking
+            //if is other error
+            if (res.message) {
+                //pass error object to global context
+                appConsumer.setError(res);
+            }
+            //if res isn't null
+            else if (res !== null) {
+
+                alert("DELETED SUCCESSFULLY!");
+
+            }
+        }
+    }
 
     let output = papersList.map((element, index) =>
         <div key={index} className="paper-card">
             <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
+            <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} cls="card-options paper-card-options"/>
             <Link to={"#"}><h3>{element.title}</h3></Link>
             <div className="extra-info">
                 <p className="authors">{element.authors}</p>
@@ -75,7 +101,7 @@ const PrintPapersList = function ({papersList, location, history}) {
     const appConsumer = useContext(AppContext);
 
     //side options
-    let sideOptions= ["delete"];
+    let sideOptions= ["delete", "search similar"];
 
     //handle for the side options
     async function handleSideOptions(id, name){
