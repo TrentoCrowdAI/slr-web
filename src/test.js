@@ -24,7 +24,7 @@ function Test() {
         //when the component will unmount
         return () => {
             //stop all ongoing request
-            paperDao.abortRequest();
+            //paperDao.abortRequest();
         };
     }, [queryString]); //re-excute only searchQuery is changed
 

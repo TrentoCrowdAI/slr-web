@@ -90,7 +90,7 @@ const ProjectsList = function (props) {
         //when the component will unmount
         return () => {
             //stop all ongoing request
-            projectsDao.abortRequest();
+            //projectsDao.abortRequest();
         };
     }, [queryData.start, queryData.count]); //re-execute when these variables change
 

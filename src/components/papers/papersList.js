@@ -89,7 +89,7 @@ const PapersList = ({project_id, location, match, history}) => {
         //when the component will unmount
         return () => {
             //stop all ongoing request
-            projectPapersDao.abortRequest();
+            //projectPapersDao.abortRequest();
         };
     }, [queryData.start, queryData.count, queryData.sort, queryData.orderBy]); //re-execute when these variables change
 

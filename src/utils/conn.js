@@ -7,16 +7,6 @@ var abortRequestType;
 //10seconds for timeout
 var timeOutTime = 10 * 1000;
 
-//object to export
-const http = {
-    "get": get,
-    "post": post,
-    "delete": deletes,
-    "put": put,
-    "abortRequest": abortRequest,
-
-}
-
 
 /**
  * abort all request in progeress by user
@@ -149,6 +139,28 @@ async function post(url, bodyData = "") {
     return await request(url, options);
 }
 
+/**
+ * post pdf method
+ * @param url
+ * @param bodyData
+ * @return {object} response data
+ */
+async function postPdf(url, bodyData = "") {
+
+    let jsonHeaders = new Headers();
+    jsonHeaders.append('Accept', 'application/json, text/plain, */*');
+    jsonHeaders.append('Cache-Control', 'no-cache');
+    jsonHeaders.append('Content-Type', 'application/pdf');
+    let body = JSON.stringify(bodyData, null, 2);
+    let options = {
+        "method": 'POST',
+        "headers": jsonHeaders,
+        "body": body,
+    };
+
+    return await request(url, options);
+}
+
 
 /**
  * put method
@@ -221,5 +233,16 @@ async function parseResponseData(response) {
     return data;
 }
 
+
+
+//object to export
+const http = {
+    get,
+    post,
+    deletes,
+    put,
+    abortRequest,
+    postPdf
+};
 
 export default http;

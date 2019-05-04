@@ -15,14 +15,14 @@ const paperType = [
   ];
 
 /**
- * this is the form for create or edit the project
- * @param props.project  project object if we want to update a old project
- * @param null if we want to create a new project
+ * this is the form for create or edit the paper
+ * @param props.projectId  relative project where we will insert the paper
  */
 function PaperForm(props) {
 
     let yup = require('yup');
 
+    //validation schema for form
     const paperValidationSchema = yup.object().shape({
         title: yup.string().required('please enter a title'),
         authors: yup.string().required('please enter an author'),
