@@ -70,7 +70,7 @@ const ProjectPage = (props) => {
         //when the component will unmount
         return () => {
             //stop all ongoing request
-            //projectsDao.abortRequest();
+            projectsDao.abortRequest();
         };
     }, [project_id]); //re-execute when these variables change
     

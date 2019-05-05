@@ -1,11 +1,11 @@
 /*this is the file to communicate with backend by fetch request*/
 
 //signal to abort the request
-var abortController;
+let abortController;
 //int to know abort error type
-var abortRequestType;
+let abortRequestType;
 //10seconds for timeout
-var timeOutTime = 10 * 1000;
+let timeOutTime = 10 * 1000;
 
 
 /**
@@ -29,9 +29,11 @@ function timeOut() {
  * create a basic fetch request
  * @param url
  * @param options request config
+ * @param {int} timeOutTime
  * @return {object} response data
+
  */
-async function request(url, options = {}) {
+async function request(url, options, timeOutTime) {
     try {
 
         //create a new abortController for this request
@@ -55,7 +57,7 @@ async function request(url, options = {}) {
 
         let response = await fetch(url, requestOptions);
 
-        //clear timeoyt clock
+        //clear timeout clock
         clearTimeout(timer);
 
 
@@ -67,6 +69,8 @@ async function request(url, options = {}) {
 
     }
     catch (error) {
+
+        //console.dir(error);
 
         //if abort error is caused by timeout
         if (abortRequestType === 2) {
@@ -102,7 +106,17 @@ async function get(url, queryData = "") {
         //delete the last &
         query = query.slice(0, query.length - 1);
     }
-    return await request(url + query);
+
+    let jsonHeaders = new Headers();
+    jsonHeaders.append('Accept', 'application/json');
+    jsonHeaders.append('Content-Type', 'application/json;charset=UTF-8');
+
+    let options = {
+        "method": 'GET',
+        "headers": jsonHeaders,
+    };
+
+    return await request(url + query, options, timeOutTime);
 }
 
 /**
@@ -114,7 +128,7 @@ async function deletes(url) {
         "method": 'DELETE'
     };
 
-    return await request(url, options);
+    return await request(url, options, timeOutTime);
 }
 
 /**
@@ -136,29 +150,31 @@ async function post(url, bodyData = "") {
         "body": body,
     };
 
-    return await request(url, options);
+    return await request(url, options, timeOutTime);
 }
 
 /**
- * post pdf method
+ * post file method
  * @param url
  * @param bodyData
  * @return {object} response data
  */
-async function postPdf(url, bodyData = "") {
+async function postFile(url, bodyData = "") {
+
+    //custom timeout for request
+    let customTimeOutTime= 60 * 1000;
 
     let jsonHeaders = new Headers();
     jsonHeaders.append('Accept', 'application/json, text/plain, */*');
     jsonHeaders.append('Cache-Control', 'no-cache');
-    jsonHeaders.append('Content-Type', 'application/pdf');
-    let body = JSON.stringify(bodyData, null, 2);
+   // jsonHeaders.append('Content-Type', 'multipart/form-data');
     let options = {
         "method": 'POST',
         "headers": jsonHeaders,
-        "body": body,
+        "body": bodyData
     };
 
-    return await request(url, options);
+    return await request(url, options, customTimeOutTime);
 }
 
 
@@ -180,7 +196,7 @@ async function put(url, bodyData = "") {
         "body": body,
     };
 
-    return await request(url, options);
+    return await request(url, options,timeOutTime);
 }
 
 
@@ -241,8 +257,8 @@ const http = {
     post,
     deletes,
     put,
+    postFile,
     abortRequest,
-    postPdf
 };
 
 export default http;

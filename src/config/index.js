@@ -16,7 +16,7 @@ const config = {
         {id: 6, content: "account", link: "#"}
     ],
     "max_total_number_for_results": 5000,
-    "pdf_parse_server": "http://scienceparse.allenai.org/v1"
+    "pdf_parse_server": "pdf"
 
 
 

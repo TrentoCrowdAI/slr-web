@@ -38,12 +38,15 @@ function PaperForm(props) {
     return (
         <>
         <Formik
-            initialValues={{ title: (props.customPaper && props.customPaper.title) || '', 
-                                eid: (props.customPaper && props.customPaper.eid) || '', 
-                                authors: (props.customPaper && props.customPaper.authors) || '', 
-                                document_type: (props.customPaper && props.customPaper.document_type) || '', 
-                                date: (props.customPaper && props.customPaper.date) || '', 
-                                abstract: (props.customPaper && props.customPaper.abstract) || ''}}
+            initialValues={{
+                title: (props.customPaper && props.customPaper.title) || '',
+                authors: (props.customPaper && props.customPaper.authors) || '',
+                date: (props.customPaper && props.customPaper.year) || '',
+                abstract: (props.customPaper && props.customPaper.abstract) || '',
+                //it is not present in pdf parse service
+                document_type: (props.customPaper && props.customPaper.document_type) || '',
+                eid: (props.customPaper && props.customPaper.eid) || '',
+            }}
             validationSchema={paperValidationSchema}
             onSubmit={async (values, { setSubmitting }) => {
                 const paperData = {...values, 

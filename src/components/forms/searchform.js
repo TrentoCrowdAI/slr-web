@@ -217,7 +217,7 @@ const SearchForm = function ({project_id, location, match, history}) {
                 console.log("no file (& no similarPaperString)");
             }
 
-        }
+        };
 
         //I check whether we are requesting a similiraty
         if(queryData.similarity){
@@ -229,6 +229,12 @@ const SearchForm = function ({project_id, location, match, history}) {
             setSimilarPaperFile(undefined);
             setSimilarPaperString("");
         }
+
+        //when the component will unmount
+        return () => {
+            //stop all ongoing request
+            paperDao.abortRequest();
+        };
 
     }, [project_id, queryData.similarity, queryData.similarPaperString, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
 
