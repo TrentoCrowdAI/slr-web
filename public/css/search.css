@@ -128,6 +128,12 @@ div.similar-search-paper-upload div.similar-paper-paragraph{
 	width: 80%;
 	margin: 0px 10% 10px 10%;
 }
+div.similar-search-paper-upload div.load-icon-similar-paper{
+  height: 150px;
+}
+div.similar-search-paper-upload div.load-icon-similar-paper svg#loading-icon{
+  width: 60px;
+}
 
 /*options*/
 div.option-holder label{
@@ -356,6 +362,7 @@ div.paper-card-holder div.paper-card-holder-head div.select-all label.checkbox-c
 form.search-results div.paper-card{
   width: 100%;
   margin: 0px auto 20px 0px;
+  z-index: -1;
 }
 form.search-results div.paper-card a{
   margin: 0px auto 0px 10px;
