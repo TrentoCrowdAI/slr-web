@@ -18,7 +18,7 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
                                 setPaperFile //handles the input of a file(when we upload a file instead os specifying the paper by a string)
                             }) => {
     
-                                let output = "";
+    let output = "";
     let content = "";
 
     //reference for the input file field
@@ -37,6 +37,7 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
         }
     }
 
+    console.log("FETGHINF : " + fetching);
     //output
     if(fetching){
         content = (<div className="load-icon-similar-paper"><LoadIcon/></div>);
@@ -84,7 +85,8 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
         <div style={{...style}} className="light-modal similar-search-paper-upload">
             <button type="button" className={(paperInfo) ? "close-btn red-x" : "close-btn"} onClick={(e) => {
                 if(paperInfo){
-                    setPaperInfo(undefined);
+                    setPaperInfo(undefined);//I delete the similar paper info
+                    setPaperFile(undefined);//I delete its file
                 }else{
                     close(false);
                 }

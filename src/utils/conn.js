@@ -162,7 +162,7 @@ async function post(url, bodyData = "") {
 async function postFile(url, bodyData = "") {
 
     //custom timeout for request
-    let customTimeOutTime= 60 * 1000;
+    let customTimeOutTime= 10 * 1000;
 
     let jsonHeaders = new Headers();
     jsonHeaders.append('Accept', 'application/json, text/plain, */*');

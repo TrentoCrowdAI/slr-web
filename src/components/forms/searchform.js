@@ -5,7 +5,8 @@ import queryString from "query-string";
 
 
 import {paperDao} from 'dao/paper.dao';
-import {projectPapersDao} from 'dao/projectPapers.dao'
+import {projectPapersDao} from 'dao/projectPapers.dao';
+import {updateFileDao} from "dao/updateFile.dao";
 
 import CheckBox from "components/forms/checkbox";
 import RadioBox from "components/forms/radiobox";
@@ -165,7 +166,58 @@ const SearchForm = function ({project_id, location, match, history}) {
             setSimilarFormVisibility(true);
 
             //if there is similarPaperString from URL(I temporarely do a random search)
+
+            if(similarPaperFile){//it there's a file I can do an api call to search for papers similar to the file
+                
+                let res = undefined;
+
+                //check file extension and its mine type
+                if(!/\.(pdf|PDF)$/.test(similarPaperFile.name) || similarPaperFile.type.indexOf("application/pdf") === -1){
+                    alert("the file must be a pdf");
+                }
+                else{
+                    //open flag of loading
+                    setDisplay(false);
+                    setSimilarPaperFetch(true);
+                    console.log("FETCHING PARSE PDF")
+                    //prepare the form data for post
+                    let formData = new FormData();
+                    formData.append('file', similarPaperFile);
+
+                    //call the dao
+                    console.log("CALLING THE PAPER PARSER SERVICE")
+                    res = await updateFileDao.updatePdf(formData);
+    
+                    //if there is a error
+                    if (res && res.message) {
+                        //pass error object to global context
+                        alert("Error during parsing file");
+                        setDisplay(true);
+                        setSimilarPaperFetch(false);
+                    }
+                    else{
+                        console.log(res);
+                        //set paperdata
+                        setSimilarPaperData(res);
+                        //display the paper data
+                        setSimilarPaperFetch(false);
+                    }
+    
+                    //I call the dao for searching for similar papers based on similarPaperString
+                    res = await paperDao.search({"query": "Trento"});
+                    //close flag of loading
+                    setDisplay(true);
+                    
+    
+                }
+
+
+
+                console.log("there's a file to search for similarities")
+            }else
             if (queryData.similarPaperString !== "") {
+
+                console.log("SIMILAR PAPER STRING : " + queryData.similarPaperString);
 
                 setDisplay(false);
                 
@@ -200,19 +252,6 @@ const SearchForm = function ({project_id, location, match, history}) {
                     //show the page
                     setDisplay(true);
                 }
-            }else if(similarPaperFile){//it there's a file I can do an api call to search for papers similar to the file
-                //setDisplay(false);
-                
-                //setSimilarPaperFetch(true);
-                //random api call for extracting pdf data
-                //setSimilarPaperData(paperData.data);
-                //setSimilarPaperFetch(false);
-
-                //call for the search results
-                //setResults
-                //setDisplay(true)
-
-                console.log("there's a file to search for similarities")
             }else{
                 console.log("no file (& no similarPaperString)");
             }
@@ -236,7 +275,7 @@ const SearchForm = function ({project_id, location, match, history}) {
             paperDao.abortRequest();
         };
 
-    }, [project_id, queryData.similarity, queryData.similarPaperString, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
+    }, [project_id, similarPaperFile, queryData.similarity, queryData.similarPaperString, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
 
 
     /*
@@ -278,13 +317,21 @@ const SearchForm = function ({project_id, location, match, history}) {
 
     /*function to send the query in case of similrity search*/
     async function similaritySearch(a){
+        console.log("similarity search was called");
         //if query input is empty
         if (similarPaperString === "" && a === "") {
             alert("similar paper string is empty")
         }
         else {
             //synchronize the query data from react state hooks
-            queryData.similarPaperString = similarPaperString;
+            //if there isn't any file I search with the string
+            if(!a || a === ""){
+                console.log("there isn't a file")
+                queryData.similarPaperString = similarPaperString;
+            }else{
+                console.log("there's a file")
+                queryData.similarPaperString = "";
+            }
             queryData.scopus = source.scopus;
             queryData.googleScholar = source.googleScholar;
             queryData.arXiv = source.arXiv;
@@ -295,7 +342,7 @@ const SearchForm = function ({project_id, location, match, history}) {
             //send query url
             let queryString = createQueryStringFromObject(queryData);
             //launch to search
-            history.push(queryString);
+            history.push(queryString + "&rndc=" + Math.floor(Math.random() * 1000));//this allows pushing the same data and refreshing the page with the hash router
 
         }
     }
@@ -371,7 +418,7 @@ const SearchForm = function ({project_id, location, match, history}) {
      */
     let formPart = (
         <>
-            <form className={(queryData.query === "" && queryData.similarPaperString === "") ? 'search-form' : 'search-form small'}
+            <form className={(display && papersList.length === 0 && ((queryData.query === "" && !queryData.similarity) || (queryData.similarity && queryData.similarPaperString === "" && !similarPaperFile))) ? 'search-form' : 'search-form small'}
                     style={{marginTop: (similarFormVisibility) ? "30px" : "60px"}}
                     onSubmit={handleSendSearch}>
                 {/*search form*/}
@@ -393,7 +440,7 @@ const SearchForm = function ({project_id, location, match, history}) {
                     </button>
                 </div>
                 
-                <SearchSimilarPapers style={{maxHeight: (similarFormVisibility) ? "200px" : "0px", boxShadow: (similarFormVisibility) ? "0px 0px 3px -1px rgba(0, 0, 0, 0.25)" : "none" , border: (similarFormVisibility) ? "" : "none", top: (queryData.query === "") ? '' : '0px'}} 
+                <SearchSimilarPapers style={{maxHeight: (similarFormVisibility) ? "1000px" : "0px", boxShadow: (similarFormVisibility) ? "0px 0px 3px -1px rgba(0, 0, 0, 0.25)" : "none" , border: (similarFormVisibility) ? "" : "none", top: (queryData.query === "") ? '' : '0px'}} 
                     close={setSimilarFormVisibility} handler={handleOnInputChange} 
                     input={similarPaperString} paperInfo={similarPaperData}
                     fetching={similarPaperFetch} setPaperInfo={setSimilarPaperData}
@@ -550,7 +597,7 @@ const SearchForm = function ({project_id, location, match, history}) {
     */
 
     //if is loading
-    if (display === false) {
+    if (display === false && (queryData.query === "" || queryData.similarPaperString === "" || !similarPaperFile)) {
 
         resultPart = (
             <div className="paper-card-holder">
@@ -574,13 +621,13 @@ const SearchForm = function ({project_id, location, match, history}) {
     }
 
     //if the search results list is empty
-    else if (papersList.length === 0 && queryData.query !== "") {
+    else if (papersList.length === 0 && (queryData.query !== "" || queryData.similarPaperString !== "" || similarPaperFile)) {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
             <div className="not-found"> not found :( </div>
         );
     }
-    else if (papersList.length > 0 && (queryData.query !== "" || queryData.similarPaperString !== "")) {
+    else if (papersList.length > 0 && (queryData.query !== "" || queryData.similarPaperString !== "" || similarPaperFile)) {
 
         //create a eidList from the list of selected paper
         let arrayEid = selectedPapersList.map(element => element.eid);
