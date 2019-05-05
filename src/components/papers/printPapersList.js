@@ -73,7 +73,7 @@ const PrintScoupusSearchList = function ({papersList, handlePaperSelection, sele
             <div className="extra-info">
                 <p className="authors">{element.authors}</p>
                 <p className="eid">{element.eid}</p>
-                <p className="date">{element.date}</p>
+                <p className="date">{element.year}</p>
             </div>
             <ClampLines
                 text={element.abstract}
@@ -143,8 +143,8 @@ const PrintPapersList = function ({papersList, location, history}) {
                     </Link>
                     <div className="extra-info">
                         <p className="authors">{element.data.authors}</p>
-                        <p className="eid">{element.data.eid}</p>
-                        <p className="date">{element.data.date}</p>
+                        <p className="eid">{element.data.eid || element.data.doi}</p>
+                        <p className="date">{element.data.year}</p>
                     </div>
                     <ClampLines
                         text={element.data.abstract}
