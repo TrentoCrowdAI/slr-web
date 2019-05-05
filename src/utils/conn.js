@@ -120,7 +120,7 @@ async function get(url, queryData = "") {
 }
 
 /**
- * deletes method
+ * delete method
  * @param url
  */
 async function deletes(url) {
@@ -255,7 +255,7 @@ async function parseResponseData(response) {
 const http = {
     get,
     post,
-    deletes,
+    "delete" : deletes,
     put,
     postFile,
     abortRequest,
