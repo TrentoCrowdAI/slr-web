@@ -1,3 +1,9 @@
+div.new-paper-page-wrapper{
+    margin: 190px auto 0px auto;
+    text-align: center;
+}
+
+
 form.new-paper-form{
     width: 80%;
     margin: 90px auto 0px auto;
@@ -10,16 +16,24 @@ form.new-paper-form div.new-paper-form-ad{
     margin: 0px 10% 20px 10%;
 }
 
-form.new-paper-form div.new-paper-form-ad input{
-    width: 100%;
-    display: block;
-    margin: 0 0 5px 0;
+form.new-paper-form div.new-paper-form-ad div.author-year input{
+    margin: 0 10px 5px 0;
+    line-height: 29px;
     font-size: 18px;
+    vertical-align: middle;
+}
+
+form.new-paper-form div.new-paper-form-ad div.author-year input[type=number]{
+    width: 100px;
+}
+
+form.new-paper-form div.new-paper-form-ad div.author-year input[type=text]{
+    width: 250px;
 }
 
 form.new-paper-form div.new-paper-form-ad div.custom-select{
     position: relative;
-    width: 100%;
+    width: 150px;
     display: block;
     margin-top: 10px;
 }
@@ -72,9 +86,9 @@ form.new-paper-form button:hover{
   }
 
 a.back{
-    position: absolute;
-    left: 5px;
-    top: -25px;
+    position: fixed;
+    left: 220px;
+    top: 65px;
     height: 40px;
     width: 40px;
     background-image: url('./../img/back.svg');

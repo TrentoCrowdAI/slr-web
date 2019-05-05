@@ -140,7 +140,7 @@ textarea:focus, input:focus, a:focus, div:focus{
   outline: none;
 }
 
-input[type=text], input[type=date], input[type=password], textarea{
+input[type=text], input[type=date], input[type=password], input[type=number], textarea{
   box-sizing: border-box;
   background-color: transparent;
   border: 0px;
@@ -150,7 +150,17 @@ input[type=text], input[type=date], input[type=password], textarea{
   font-family: inherit;
   transition: border 0.4s;
 }
-
+input:invalid {
+  background-color: white;
+  box-shadow: none;
+}
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 
 .warning{
   animation: danger 0.3s linear forwards;

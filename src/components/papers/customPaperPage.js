@@ -60,7 +60,7 @@ function CustomPaperPage({projectId, url, history}) {
 
     if(!displayForm && !paperDataFetch){
         output = (
-            <>
+            <div className="new-paper-page-wrapper">
                 <div className="file-input-container">
                     <input type="file"name ="file" id="real-input" ref={inputElement} onChange={handleSubmission}/>
                     <button type="button" className="browse-btn" onClick={() => {inputElement.current.click();}}>
@@ -71,11 +71,11 @@ function CustomPaperPage({projectId, url, history}) {
                 <button type="button"
                     onClick={() => {setDisplayForm(true)}}
                 >insert data manually</button>
-            </>
+            </div>
         );
     }else if(paperDataFetch){
         output = (
-            <>
+            <div className="new-paper-page-wrapper">
                 <div className="file-input-container">
                     <input type="file" id="real-input"/>
                     <button type="button" className="browse-btn">
@@ -86,7 +86,7 @@ function CustomPaperPage({projectId, url, history}) {
                 <button type="button"
                     onClick={() => {/* reset connection to api if necessary */ setPaperDataFetch(false); setDisplayForm(true);}}
                 >abort and insert data manually</button>
-            </>
+            </div>
         );
     }else{
         output = (
