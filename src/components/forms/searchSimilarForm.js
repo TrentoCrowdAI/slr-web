@@ -5,23 +5,25 @@ import queryString from "query-string";
 
 
 import {paperDao} from 'dao/paper.dao';
-import {projectPapersDao} from 'dao/projectPapers.dao'
+import {projectPapersDao} from 'dao/projectPapers.dao';
+import {updateFileDao} from "dao/updateFile.dao";
 
 import CheckBox from "components/forms/checkbox";
 import RadioBox from "components/forms/radiobox";
-import LoadIcon from 'components/svg/loadIcon';
-import SearchButton from 'components/svg/searchButton';
-import SearchSimilarButton from 'components/svg/searchSimilarButton';
 import {PrintScoupusSearchList} from 'components/papers/printPapersList';
 import Select from 'components/forms/select';
-import OrderArrow from 'components/svg/orderArrow';
 import Pagination from "components/modules/pagination";
-import CloseButton from 'components/svg/closeButton';
+import SearchSimilarPapers from "components/forms/searchSimilarPapers";
+
+import OrderArrow from 'components/svg/orderArrow';
+import LoadIcon from 'components/svg/loadIcon';
+import SearchButton from 'components/svg/searchButton';
 import RemoveButton from 'components/svg/removeButton';
+import SearchSimilarButton from 'components/svg/searchSimilarButton';
 
 import {AppContext} from 'components/providers/appProvider'
 
-import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains, join} from 'utils/index';
+import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
 
 
 
@@ -34,13 +36,6 @@ const orderByOptions = [
     {label: 'Date', value: 'date'}
 ];
 
-//search by  options
-const searchByOptions = [
-    {label: 'all', value: 'all'},
-    {label: 'author', value: 'author'},
-    {label: 'content', value: 'content'},
-    {label: 'adv. query', value: 'advanced'}
-];
 
 //year options
 const startYear = 2017;
@@ -53,13 +48,13 @@ const yearOptions = ["all", ...(_.range(startYear, endYear).map(String))];
  * this is component form to search for the paper in project page
  * */
 
-const SearchForm = function ({project_id, location, match, history}) {
+const SearchSimilarForm = function ({project_id, location, match, history}) {
 
 
-    //fetch data
+    //list of result papers data
     const [papersList, setPapersList] = useState([]);
 
-    //bool to control the visualization of page
+    //bool to control the visualization of the results when fetching results data
     const [display, setDisplay] = useState(true);
 
     //bool to show the pagination list
@@ -77,37 +72,117 @@ const SearchForm = function ({project_id, location, match, history}) {
     const [selectedPapersList, setSelectedPapersList] = useState([]);
 
     //state for search form
-    const [keywords, setKeyWords] = useState("_");
+    const [keywords, setKeyWords] = useState("");
     const [source, setSource] = useState({"scopus": true, "googleScholar": false, "arXiv": false});
-    const [searchBy, setSearchBy] = useState("all");
     const [year, setYear] = useState("all");
+    const [similarPaperData, setSimilarPaperData] = useState(undefined); //the data of the paper to search similarities for
+    const [similarPaperFile, setSimilarPaperFile] = useState(undefined); //the file of the paper to search similarities for
 
     //state for sorting arrow animation
     const [up, setUp] = useState(queryData.sort);
 
+    //state for 'similar papers search' form
+    const [similarFormVisibility, setSimilarFormVisibility] = useState(false);
+
+    //bool for target similar paper fetching
+    const [similarPaperFetch, setSimilarPaperFetch] = useState(false);
+
+
+    /*
+        START OF USEEFFECT FOR HANDLING QUERY PARAMETERS ###################################################
+    */
+
+    //effect for query parameters input
     useEffect(() => {
 
+        console.log(queryData);
         //if the sorting parameter changes I update the status and trigger the SVG animation
         if(up !== queryData.sort){
             setUp(queryData.sort);
             document.getElementById("ani-order-arrow").beginElement();
         }
 
-        //a wrapper function ask by react hook
-        const fetchData = async () => {
 
-            //update the values of state from url
+        //fetches data when searching for similarities
+        const fetchDataSimilarity = async () => {
+
+            //standard options parameters
             setKeyWords(queryData.query);
             setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
-            setSearchBy(queryData.searchBy);
             setYear(queryData.year);
 
-            //if there is queryString from URL
-            if (queryData.query !== "") {
+            //if there is similarPaperString from URL(I temporarely do a random search)
+
+            if(similarPaperFile){//it there's a file I can do an api call to search for papers similar to the file
+                
+                console.log("FILE NAME : " + similarPaperFile.name)
+
+                let res = undefined;
+
+                if(similarPaperData){
+                    //open flag of loading
+                    setDisplay(false);
+                    //I call the dao for searching for similar papers based on similarPaperString
+                    res = await paperDao.search({"query": "Trento"});
+                    setPapersList(res.results);
+                    //close flag of loading
+                    setDisplay(true);
+                }else{
+                    //check file extension and its mine type
+                    if(!/\.(pdf|PDF)$/.test(similarPaperFile.name) || similarPaperFile.type.indexOf("application/pdf") === -1){
+                        alert("the file must be a pdf");
+                    }
+                    else{
+                        //open flag of loading
+                        setDisplay(false);
+                        setSimilarPaperFetch(true);
+                        console.log("FETCHING PARSE PDF")
+                        //prepare the form data for post
+                        let formData = new FormData();
+                        formData.append('file', similarPaperFile);
+
+                        //call the dao
+                        console.log("CALLING THE PAPER PARSER SERVICE")
+                        res = await updateFileDao.updatePdf(formData);
+        
+                        //if there is a error
+                        if (res && res.message) {
+                            //pass error object to global context
+                            alert("Error during parsing file");
+                            setDisplay(true);
+                            setSimilarPaperFetch(false);
+                        }
+                        else{
+                            console.log(res);
+                            //set paperdata
+                            setSimilarPaperData(res);
+                            //display the paper data
+                            setSimilarPaperFetch(false);
+                        }
+        
+                        //I call the dao for searching for similar papers based on similarPaperString
+                        res = await paperDao.search({"query": "Trento"});
+                        setPapersList(res.results);
+                        //close flag of loading
+                        setDisplay(true);
+                        
+        
+                    }
+                }
+            }else if (queryData.query !== "") {
+
+                console.log("SIMILAR PAPER STRING : " + queryData.query);
 
                 setDisplay(false);
                 
-                //always call the dao to search on scopus
+                setSimilarPaperFetch(true);
+                //this will be the call to the service identifying a specific paper
+                let paperData = await paperDao.selectById(16);
+                setSimilarPaperData(paperData.data);
+                setSimilarPaperFetch(false);
+
+
+                //I call the dao for searching for similar papers based on similarPaperString
                 let res = await paperDao.search(queryData);
 
                 //error checking
@@ -131,24 +206,158 @@ const SearchForm = function ({project_id, location, match, history}) {
                     //show the page
                     setDisplay(true);
                 }
+            }else{
+                console.log("no file (& no similarPaperString)");
             }
+
         };
 
-        fetchData();
-        
+
+        fetchDataSimilarity();
+
         //when the component will unmount
         return () => {
             //stop all ongoing request
             paperDao.abortRequest();
         };
 
-    }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
-
-
-
+    }, [project_id, similarPaperFile, queryData.query, queryData.orderBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
 
 
     /*
+        END OF USEEFFECT FOR HANDLING QUERY PARAMETERS #######################################################
+    */
+
+
+
+    /*handles the submission of a search */
+    function handleSendSearch(event) {
+
+        if(event){
+            event.preventDefault();
+        }
+
+        console.log("similarity search was called");
+        //if query input is empty
+        if (keywords === "" && !similarPaperFile) {
+            alert("similar paper string is empty")
+        }
+        else {
+            //synchronize the query data from react state hooks
+            //if there isn't any file I search with the string
+            if(!similarPaperFile){
+                console.log("there isn't a file")
+                queryData.query = keywords;
+            }else{
+                console.log("there's a file")
+                queryData.query = "";
+            }
+            queryData.scopus = source.scopus;
+            queryData.googleScholar = source.googleScholar;
+            queryData.arXiv = source.arXiv;
+            queryData.year = year;
+
+            //send query url
+            let queryString = createQueryStringFromObject(queryData);
+            //launch to search
+            history.push(queryString);//this allows pushing the same data and refreshing the page with the hash router
+
+        }
+
+
+    }
+
+    /**
+     *handle to update hook state by input change on the form fields
+     */
+    function handleOnInputChange(event) {
+
+        let newSource;
+
+        switch (event.target.name) {
+            case "query":
+                setKeyWords(event.target.value);
+                break;
+            case "scopus":
+                //copy the old source
+                newSource = {...source};
+                //switch between true and false
+                newSource.scopus = !source.scopus;
+                setSource(newSource);
+                break;
+
+            case "googleScholar":
+                //copy the old source
+                newSource = {...source};
+                //switch between true and false
+                newSource.googleScholar = !source.googleScholar;
+                setSource(newSource);
+                break;
+            case "arXiv":
+                //copy the old source
+                newSource = {...source};
+                //switch between true and false
+                newSource.arXiv = !source.arXiv;
+                setSource(newSource);
+                break;
+            case "year":
+                setYear(event.target.value);
+                break;
+            default:
+                break;
+        }
+
+
+    }
+
+    /*
+     #######################################
+     need to  create a new child component for the part of <form>, when we have more information on search options
+     ######################################
+     */
+    let formPart = (
+        <>
+            <form className={(queryData.query === "" && !similarPaperFile) ? 'search-form' : 'search-form small'}
+                    style={{marginTop: (similarFormVisibility) ? "30px" : "60px"}}
+                    onSubmit={handleSendSearch}>
+                {/*search form*/}
+                
+                <SearchSimilarPapers style={{boxShadow: "0px 0px 3px -1px rgba(0, 0, 0, 0.25)"}}
+                    project_id={project_id}
+                    close={setSimilarFormVisibility} handler={handleOnInputChange} 
+                    input={keywords} paperInfo={similarPaperData}
+                    fetching={similarPaperFetch} setPaperInfo={setSimilarPaperData}
+                    setPaperFile={setSimilarPaperFile}/>
+                
+                <div className="option-holder">
+                    <label>Source:</label><br/>
+
+                    <div className="checkboxes-holder">
+                        <CheckBox label="Scopus" name="scopus" val="" isChecked={source.scopus}
+                                  handler={handleOnInputChange}/>
+                        <CheckBox label="Google Scholar" name="googleScholar" val="" isChecked={source.googleScholar}
+                                  handler={handleOnInputChange}/>
+                        <CheckBox label="arXiv" name="arXiv" val="" isChecked={source.arXiv}
+                                  handler={handleOnInputChange}/>
+                    </div>
+
+                    <label>Year:</label><br/>
+                    <div className="checkboxes-holder" >
+                        {
+                            yearOptions.map((singleYear, index) =>
+                                <RadioBox key={index} label={singleYear} name="year" val={singleYear}
+                                          isChecked={year === singleYear} handler={handleOnInputChange}/>
+                            )
+                        }
+                    </div>
+                </div>
+            </form>
+        </>);
+
+
+    let resultPart = "";
+
+     /*
         START OF 'RESULT PAPERS HANDLING' ########################################################
     */
 
@@ -257,149 +466,6 @@ const SearchForm = function ({project_id, location, match, history}) {
         END OF 'RESULT PAPERS HANDLING' ########################################################
     */
 
-
-
-    /*function to send the query*/
-    async function handleSendSearch(event) {
-
-        event.preventDefault();
-
-        //if query input is empty
-        if (keywords === "") {
-            alert("search string is empty")
-        }
-        else {
-            //synchronize the query data from react state hooks
-            queryData.query = keywords;
-            queryData.scopus = source.scopus;
-            queryData.googleScholar = source.googleScholar;
-            queryData.arXiv = source.arXiv;
-            queryData.searchBy = searchBy;
-            queryData.year = year;
-
-            //send query url
-            let queryString = createQueryStringFromObject(queryData);
-            //launch to search
-            history.push(queryString);
-
-        }
-
-    }
-
-    /**
-     *handle to update hook state by input change
-     */
-    function handleOnInputChange(event) {
-
-        let newSource;
-
-        switch (event.target.name) {
-            case "query":
-                setKeyWords(event.target.value);
-                break;
-            case "scopus":
-                //copy the old source
-                newSource = {...source};
-                //switch between true and false
-                newSource.scopus = !source.scopus;
-                setSource(newSource);
-                break;
-
-            case "googleScholar":
-                //copy the old source
-                newSource = {...source};
-                //switch between true and false
-                newSource.googleScholar = !source.googleScholar;
-                setSource(newSource);
-                break;
-            case "arXiv":
-                //copy the old source
-                newSource = {...source};
-                //switch between true and false
-                newSource.arXiv = !source.arXiv;
-                setSource(newSource);
-                break;
-            case "searchBy":
-                setSearchBy(event.target.value);
-                break;
-            case "year":
-                setYear(event.target.value);
-                break;
-            default:
-                break;
-        }
-
-
-    }
-
-    /*
-     #######################################
-     need to  create a new child component for the part of <form>, when we have more information on search options
-     ######################################
-     */
-    let formPart = (
-        <>{}
-            <form className={(queryData.query === "") ? 'search-form' : 'search-form small'}
-                  onSubmit={handleSendSearch}>
-                {/*search form*/}
-                <div style={{position: 'relative'}}>
-                    <input
-                        type="text"
-                        placeholder="search"
-                        name="query"
-                        value={keywords}
-                        onChange={handleOnInputChange}
-                    />
-                   <button className="go-search" type="submit" value="Submit">
-                        <SearchButton/>
-                    </button>
-                    <Link to={"/projects/"+ project_id + "/searchsimilar"}><button className="go-similar" type="button">
-                        <SearchSimilarButton/>
-                    </button></Link>
-                </div>
-
-                <div className="option-holder">
-                    <label>Source:</label><br/>
-
-                    <div className="checkboxes-holder">
-                        <CheckBox label="Scopus" name="scopus" val="" isChecked={source.scopus}
-                                  handler={handleOnInputChange}/>
-                        <CheckBox label="Google Scholar" name="googleScholar" val="" isChecked={source.googleScholar}
-                                  handler={handleOnInputChange}/>
-                        <CheckBox label="arXiv" name="arXiv" val="" isChecked={source.arXiv}
-                                  handler={handleOnInputChange}/>
-                    </div>
-
-                    <label>Search by:</label><br/>
-
-                    <div className="checkboxes-holder" >
-                        <RadioBox label={searchByOptions[0].label} name="searchBy" val={searchByOptions[0].value}
-                                  isChecked={searchBy === searchByOptions[0].value} handler={handleOnInputChange}/>
-                        <RadioBox label={searchByOptions[1].label} name="searchBy" val={searchByOptions[1].value}
-                                  isChecked={searchBy === searchByOptions[1].value} handler={handleOnInputChange}/>
-                        <RadioBox label={searchByOptions[2].label} name="searchBy" val={searchByOptions[2].value}
-                                  isChecked={searchBy === searchByOptions[2].value} handler={handleOnInputChange}/>
-                        <RadioBox label={searchByOptions[3].label} name="searchBy" val={searchByOptions[3].value}
-                                  isChecked={searchBy === searchByOptions[3].value} handler={handleOnInputChange}/>
-                    </div>
-
-                    <label>Year:</label><br/>
-                    <div className="checkboxes-holder" >
-                        {
-                            yearOptions.map((singleYear, index) =>
-                                <RadioBox key={index} label={singleYear} name="year" val={singleYear}
-                                          isChecked={year === singleYear} handler={handleOnInputChange}/>
-                            )
-                        }
-                    </div>
-                </div>
-
-            </form>
-        </>);
-
-
-    let resultPart = "";
-
     //if is loading
     if (display === false) {
 
@@ -425,13 +491,13 @@ const SearchForm = function ({project_id, location, match, history}) {
     }
 
     //if the search results list is empty
-    else if (papersList.length === 0 && queryData.query !== "") {
+    else if (papersList.length === 0 && (queryData.query !== "" || similarPaperFile)) {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
             <div className="not-found"> not found :( </div>
         );
     }
-    else if (papersList.length > 0 && queryData.query !== "") {
+    else if (papersList.length > 0 && (queryData.query !== "" || similarPaperFile)) {
 
         //create a eidList from the list of selected paper
         let arrayEid = selectedPapersList.map(element => element.eid);
@@ -521,7 +587,6 @@ function createQueryData(queryUrl) {
     let params = queryString.parse(queryUrl);
     let query = params.query || "";
 
-    let searchBy = params.searchBy || "all";
     let orderBy = params.orderBy || "title";
     let sort = params.sort || "ASC";
     let start = params.start || 0;
@@ -541,11 +606,11 @@ function createQueryData(queryUrl) {
 
     let year = params.year || "all";
 
-    let queryData = {query, searchBy, orderBy, sort, scopus, googleScholar, arXiv, year, start, count};
+    let queryData = {query, orderBy, sort, scopus, googleScholar, arXiv, year, start, count};
 
     return queryData;
 
 }
 
 
-export default SearchForm;
+export default SearchSimilarForm;

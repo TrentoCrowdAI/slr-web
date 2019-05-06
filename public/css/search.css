@@ -20,6 +20,7 @@ form.search-form input[type=text]{
   height: 40px;
   padding-left: 7px;
   transition: margin 0.3s;
+  margin-bottom: 30px;
 }
 
 form.search-form button.go-search{
@@ -355,6 +356,7 @@ div.paper-card-holder div.paper-card-holder-head{
   justify-content: space-between;
   width: 730px;
   transform: translateX(-30px);
+  z-index: 10;
 }
 div.paper-card-holder div.paper-card-holder-head div.select-all label.checkbox-container span.name{
   margin-left: 9px;
@@ -362,7 +364,7 @@ div.paper-card-holder div.paper-card-holder-head div.select-all label.checkbox-c
 form.search-results div.paper-card{
   width: 100%;
   margin: 0px auto 20px 0px;
-  z-index: -1;
+  z-index: 0;
 }
 form.search-results div.paper-card a{
   margin: 0px auto 0px 10px;

@@ -1,5 +1,6 @@
 import React, {useRef, useState} from "react";
 import ClampLines from 'react-clamp-lines';
+import {Link} from 'react-router-dom';
 
 import CloseButton from 'components/svg/closeButton';
 import GoButton from "components/svg/goButton";
@@ -10,6 +11,7 @@ import LoadIcon from "components/svg/loadIcon";
  */
 const SearchSimilarPapers = ({close, //the setter for closing the form when it's visible(sets the visibility to false)
                                 style, //style of the component
+                                project_id,
                                 input, //the string input
                                 handler, //handler for the string input
                                 paperInfo, //the data of the retrieved paper(should match the paper we are searching similarities for)
@@ -20,6 +22,7 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
     
     let output = "";
     let content = "";
+    let topRightButton = "";
 
     //reference for the input file field
     const inputElement = useRef(null);
@@ -37,7 +40,6 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
         }
     }
 
-    console.log("FETGHINF : " + fetching);
     //output
     if(fetching){
         content = (<div className="load-icon-similar-paper"><LoadIcon/></div>);
@@ -65,7 +67,7 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
                         placeholder="type DOI, EID, or paper title"
                         value={input}
                         onChange={handler}
-                        name="similarPaperString"
+                        name="query"
                     />
                     <button className="go-search DOI-btn" type="submit" value="Submit">
                         <GoButton/>
@@ -81,16 +83,21 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
             </>
         );
     }
+    if(paperInfo){
+        topRightButton = (
+            <button type="button" className={"close-btn red-x"} onClick={(e) => {
+                setPaperInfo(undefined);//I delete the similar paper info
+                setPaperFile(undefined);//I delete its file
+            }}><CloseButton/></button>
+        );
+    }else{
+        topRightButton = (
+            <Link to={"/projects/"+ project_id + "/search"} ><button type="button" className={"close-btn"}><CloseButton/></button></Link>
+        );
+    }
     output = (
         <div style={{...style}} className="light-modal similar-search-paper-upload">
-            <button type="button" className={(paperInfo) ? "close-btn red-x" : "close-btn"} onClick={(e) => {
-                if(paperInfo){
-                    setPaperInfo(undefined);//I delete the similar paper info
-                    setPaperFile(undefined);//I delete its file
-                }else{
-                    close(false);
-                }
-            }}><CloseButton/></button>
+            {topRightButton}
             {content}
         </div>
     );

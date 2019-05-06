@@ -358,7 +358,7 @@ div.file-input-container button.browse-btn svg#loading-icon{
 
 /*<select> custom element*/
 div.custom-select {
-  width: 120px;
+  width: 160px;
   z-index: 1;
   cursor: pointer;
 }

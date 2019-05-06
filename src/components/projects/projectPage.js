@@ -3,6 +3,7 @@ import {Route, Link, Switch} from 'react-router-dom';
 import {Flipper, Flipped} from 'react-flip-toolkit';
 
 import SearchForm from 'components/forms/searchform';
+import SearchSimilarForm from 'components/forms/searchSimilarForm';
 import PapersList from 'components/papers/papersList';
 import CustomPaperPage from 'components/papers/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
@@ -141,13 +142,17 @@ const ProjectPage = (props) => {
                         return (<SearchForm project_id={project_id} {...props} />);
                     }}/>
 
+                    <Route exact path={props.match.url + "/searchsimilar"} render={function(props){
+                        setNotFound(false);
+                        return (<SearchSimilarForm project_id={project_id} {...props} />);
+                    }}/>
+
                     <Route path = {props.match.url + "/addpaper"} render={() =>
                         <>
                             <Link className="back" to={props.match.url}>  </Link>
                             <CustomPaperPage projectId={project.id} url={props.match.url} history={props.history}/>
                         </>
                     } />
-                    <Route render={function(props){setNotFound(true); return <div>404</div>;}}/>
                 </Switch>
 
             </div>
