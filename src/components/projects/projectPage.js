@@ -3,8 +3,9 @@ import {Route, Link, Switch} from 'react-router-dom';
 import {Flipper, Flipped} from 'react-flip-toolkit';
 
 import SearchForm from 'components/forms/searchform';
+import SearchSimilarForm from 'components/forms/searchSimilarForm';
 import PapersList from 'components/papers/papersList';
-import PaperForm from 'components/forms/custompaper';
+import CustomPaperPage from 'components/papers/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
 import LoadIcon from 'components/svg/loadIcon';
 import ProjectDescription from 'components/projects/projectDescription';
@@ -123,7 +124,7 @@ const ProjectPage = (props) => {
                         setNotFound(false);
                         return (
                             <>
-                                <ProjectDescription description={project.data.description} update={updateProject}/>
+                                <ProjectDescription description={project.data.description} update={updateProject} date_last_modified={project.date_last_modified} date_created={project.date_created}/>
                                 <PapersList project_id={project_id} location={props.location} match={props.match} history={props.history}/>
                                 <Link to={join(props.match.url,"/addpaper")}>
                                     <button className="bottom-left-btn add-custompaper-btn">
@@ -141,13 +142,17 @@ const ProjectPage = (props) => {
                         return (<SearchForm project_id={project_id} {...props} />);
                     }}/>
 
+                    <Route exact path={props.match.url + "/searchsimilar"} render={function(props){
+                        setNotFound(false);
+                        return (<SearchSimilarForm project_id={project_id} {...props} />);
+                    }}/>
+
                     <Route path = {props.match.url + "/addpaper"} render={() =>
                         <>
                             <Link className="back" to={props.match.url}>  </Link>
-                            <PaperForm projectId={project.id} url={props.match.url} history={props.history}/>
+                            <CustomPaperPage projectId={project.id} url={props.match.url} history={props.history}/>
                         </>
                     } />
-                    <Route render={function(props){setNotFound(true); return <div>404</div>;}}/>
                 </Switch>
 
             </div>

@@ -8,7 +8,7 @@ import EditButton from "components/svg/editButton";
  */
 
 
-const ProjectDescription = function({description, update}){
+const ProjectDescription = function({description, update, date_last_modified, date_created}){
 
 
     //this is used as a toggle for checking if the user is trying to edit the name of the project
@@ -30,12 +30,17 @@ const ProjectDescription = function({description, update}){
         }
     }
 
+    //format the date string
+    function formatDate(date){
+        return <span className="date">{date.slice(0,10)} at {date.slice(11,19)}</span>
+    }
+
 
     return (
         <div className={(!editing) ? "project-description hidden-form-description" : "project-description"}>
-            <h2>description:</h2>
+            <h2>Description:</h2>
             <p style={{fontSize: (editing) ? "0px" : "15px"}}> {description}</p>
-            <form className="edit-project-description">
+            <form className="edit-project-description" style={{height:(editing) ? "" : "0px"}}>
                     <textarea id="edit-project-description-input"  defaultValue={description} style={{width: (editing) ? "100%" : "0%", padding: (editing) ? "" : "0px", height:(editing) ? "" : "0px"}}
                     onBlur={(e) => {
                                     console.log("blurring");
@@ -46,6 +51,9 @@ const ProjectDescription = function({description, update}){
                         <EditButton confirm={editing}/>
                     </button>
             </form>
+            <h2>Additional info:</h2>
+            <p className="project-date-info"> <span>Created</span> {formatDate(date_created)} </p>
+            <p className="project-date-info"> <span>Last edited</span> {formatDate(date_last_modified)} </p>
         </div>
     );
 }

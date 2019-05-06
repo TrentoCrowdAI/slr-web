@@ -57,11 +57,11 @@ async function deletePaper(paper_id) {
 
 
 const projectPapersDao = {
-    "getPapersList": getPapersList,
-    "getPaper": getPaper,
-    "postPaperIntoProject": postPaperIntoProject,
-    "putPaper": putPaper,
-    "deletePaper": deletePaper,
+    getPapersList,
+    getPaper,
+    postPaperIntoProject,
+    putPaper,
+    deletePaper,
     "abortRequest": http.abortRequest
 }
 

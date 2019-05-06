@@ -1,20 +1,25 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 
 import SelectTick from 'components/svg/selectTick';
 
 const CheckBox = function ({ val, name, label, isChecked, handler }) {
 
     let output = "";
-    let tick = "";
-    if(isChecked){
-        tick = <SelectTick/>;
-    }
+    const [tick, setTick] = useState(<></>);
+    useEffect(() => {
+        if(isChecked){
+            setTick(<SelectTick/>);
+        }else{
+            setTick(<></>)
+        }
+    }, [isChecked])
+
     
     output = (
         <label className="checkbox-container">
-            <input type="checkbox" value={val} name={name} checked={isChecked} onChange={handler} />
+            <input type="checkbox" value={val} name={name} checked={isChecked} onChange={(e) => {console.log("clickekdkdkdkd"); handler(e)}} />
             <span className="checkmark">{tick}</span>
-            <span>{label}</span>
+            <span className="name">{label}</span>
         </label>
     );
     return output;

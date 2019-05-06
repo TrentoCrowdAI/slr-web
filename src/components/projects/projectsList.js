@@ -105,7 +105,7 @@ const ProjectsList = function (props) {
         //if is other error
         if (res.message) {
             //pass error object to global context
-            appConsumer.setError(res);
+            appConsumer.setError(res);  
         }
         //if res isn't null
         else if (res !== null) {
@@ -181,7 +181,11 @@ const PrintList = function ({projectsList, path, handleDelete}) {
                     <SideOptions options={sideOptions} handler={handleDelete} target={element.id} cls="card-options project-card-options"/>
                     <Link to={join(path, "/" + element.id)}>
                         <h3>{element.data.name}</h3>
-                        <p>{element.data.description}</p>
+                        <p className="description">{element.data.description}</p>
+                        <div className="project-dates">
+                            <p>{/*created on <i>{element.date_created.slice(0, 10)}</i>*/}</p>
+                            <p>last modified on <i>{(element.date_last_modified === element.date_created) ? "never" : element.date_last_modified.slice(0, 10)}</i></p> 
+                        </div>
                     </Link>
                 </div>
         ));

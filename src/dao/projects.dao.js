@@ -60,11 +60,11 @@ async function deleteProject(project_id) {
 
 
 const projectsDao = {
-    "getProjectsList": getProjectsList,
-    "getProject": getProject,
-    "postProject": postProject,
-    "putProject": putProject,
-    "deleteProject": deleteProject,
+    getProjectsList,
+    getProject,
+    postProject,
+    putProject,
+    deleteProject,
     "abortRequest": http.abortRequest
 }
 

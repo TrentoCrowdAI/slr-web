@@ -14,11 +14,21 @@ async function search(queryData){
 
 }
 
+/**
+ * get a specific paper
+ */
+async function selectById(id){
+    let url = config.home + config.papers + "/" + id;
+
+    const res = await http.get(url);
+    return res;
+}
 
 
 
 const paperDao = {
     search,
+    selectById,
     "abortRequest" : http.abortRequest
 }
 

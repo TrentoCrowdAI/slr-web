@@ -15,19 +15,19 @@ const paperType = [
   ];
 
 /**
- * this is the form for create or edit the project
- * @param props.project  project object if we want to update a old project
- * @param null if we want to create a new project
+ * this is the form for create or edit the paper
+ * @param props.projectId  relative project where we will insert the paper
  */
 function PaperForm(props) {
 
     let yup = require('yup');
+    const uuid = require("uuid");
 
+    //validation schema for form
     const paperValidationSchema = yup.object().shape({
         title: yup.string().required('please enter a title'),
         authors: yup.string().required('please enter an author'),
-        eid: yup.string().required('please enter the paper eid'),
-        date: yup.string().required('please enter a date'),
+        year: yup.number().required('please enter a year').min(1000).max(2020).integer(),
         //document_type: yup.string().required('please enter a paper type'),
         abstract: yup.string().required('please enter the abstract')
     });
@@ -38,18 +38,28 @@ function PaperForm(props) {
     return (
         <>
         <Formik
-            initialValues={{ title: '', eid:'', authors: '', document_type: '', date: '', abstract: ''}}
+            initialValues={{
+                title: (props.customPaper && props.customPaper.title) || '',
+                authors: (props.customPaper && props.customPaper.authors) || '',
+                year: (props.customPaper && props.customPaper.year) || '',
+                abstract: (props.customPaper && props.customPaper.abstract) || '',
+                //it is not present in pdf parse service
+                document_type: (props.customPaper && props.customPaper.document_type) || ''
+            }}
             validationSchema={paperValidationSchema}
             onSubmit={async (values, { setSubmitting }) => {
                 const paperData = {...values, 
-                    year: values.date.substr(0, 4), 
+                    year: values.year.toString(), 
                     source_title: values.title, 
                     link: "custom_paper", 
                     source: "slr_custom_papers", 
                     abstract_structured: "0",
                     filter_oa_include: "0",
                     filter_study_include: "0",
-                    notes: ""}
+                    notes: "",
+                    //data necessary for identifying custom papers
+                    manual: "true",
+                    doi: uuid.v4()}
                 console.log(paperData);
                 
                 let res = await projectPapersDao.postPaperIntoProject({
@@ -75,23 +85,19 @@ function PaperForm(props) {
                     type="text" 
                     placeholder="Paper Title"/>
                 <div className="new-paper-form-ad">
-                    <div>
+                    <div className="author-year">
                         <Field
                             style={{borderBottom: (errors.authors && touched.authors) ? "1px solid #d81e1e" : ""}}
                             name="authors"
                             type="text" 
                             placeholder="paper author"/>
-                        <Field
-                            style={{borderBottom: (errors.eid && touched.eid) ? "1px solid #d81e1e" : ""}}
-                            name="eid"
-                            type="text" 
-                            placeholder="Paper EID"/>
-                    </div>
-                    <div>
                         <Field 
-                            style={{borderBottom: (errors.date && touched.date) ? "1px solid #d81e1e" : ""}}
-                            name="date"
-                            type="date"/>
+                            style={{borderBottom: (errors.year && touched.year) ? "1px solid #d81e1e" : ""}}
+                            name="year"
+                            type="number"
+                            placeholder="year"/>
+                    </div>
+                    <div className="type">
                         <Field
                             name="document_type"
                             render={({ field, form }) => (
@@ -108,8 +114,7 @@ function PaperForm(props) {
                 <button type="submit" disabled={isSubmitting ||
                     (errors.title && touched.title) ||
                     (errors.authors && touched.authors) ||
-                    (errors.eid && touched.eid) ||
-                    (errors.date && touched.date) ||
+                    (errors.year && touched.year) ||
                     (errors.abstract && touched.abstract)
                 }>Add paper</button>
             </Form>

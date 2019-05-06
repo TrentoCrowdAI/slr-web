@@ -140,7 +140,7 @@ textarea:focus, input:focus, a:focus, div:focus{
   outline: none;
 }
 
-input[type=text], input[type=date], input[type=password], textarea{
+input[type=text], input[type=date], input[type=password], input[type=number], textarea{
   box-sizing: border-box;
   background-color: transparent;
   border: 0px;
@@ -150,7 +150,17 @@ input[type=text], input[type=date], input[type=password], textarea{
   font-family: inherit;
   transition: border 0.4s;
 }
-
+input:invalid {
+  background-color: white;
+  box-shadow: none;
+}
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 
 .warning{
   animation: danger 0.3s linear forwards;
@@ -186,6 +196,12 @@ input[type=checkbox]{
   height: 80%;
   width: 80%;
   margin: 10%;
+}
+label input {
+  vertical-align: middle;
+}
+label.checkbox-container span, label.radiobox-container span{
+  vertical-align: middle;
 }
 /*radiobox*/
 input[type=radio]{
@@ -259,6 +275,7 @@ button.bottom-left-btn{
   transition: all 0.3s;
   background-color: #fcfcff;
   border-radius: 25px;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
 }
 button.bottom-left-btn:hover, button.bottom-left-btn:focus{
   box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
@@ -322,9 +339,26 @@ button.ti-btn div.btn-icon{
   background-color: #fcfcff;
 }
 
+/*button for file upload*/
+div.file-input-container input[type=file]{
+  display: none;
+}
+div.file-input-container button.browse-btn{
+  position: relative;
+  border-radius: 7px;
+  height: 55px;
+  width: 305px;
+  margin: 0px auto 20px auto;
+  border: solid 1px #c4c4c4;
+}
+div.file-input-container button.browse-btn svg#loading-icon{
+  width: 45px;
+  height: 45px;
+}
+
 /*<select> custom element*/
 div.custom-select {
-  width: 120px;
+  width: 160px;
   z-index: 1;
   cursor: pointer;
 }
@@ -370,9 +404,15 @@ div.card-options div.options-list{
   background-color: white;
   border-radius: 3px;
   text-align: center;
-  width: 60px;
+  width: 100px;
   cursor: pointer;
   transition: 0.3s all;
+}
+div.card-options div.options-list div.option{
+  transition: 0.2s all;
+}
+div.card-options div.options-list div.option:hover{
+  background-color: #e0e0e0;
 }
 div.card-options button svg#options-button{
   height: 20px;
@@ -405,6 +445,24 @@ button.edit-button{
 
 /*remove button*/
 .rb{stroke:#c31f1f;stroke-width:88;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+/*go button*/
+.st0-go{fill:none;stroke:#000000;stroke-width:70;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st1-go{fill:none;stroke:#000000;stroke-width:50;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+/*similar paper search toggle*/
+.st0-sps{fill:none;stroke:#000000;stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st1-sps{fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st2-sps{fill:none;stroke:#000000;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st3-sps{fill:#26110A;stroke:#333333;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st4-sps{fill:none;stroke:#000000;stroke-width:38;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+/*clamp lines*/
+button.clamp-lines__button{
+  font-size: 14px;
+  font-weight: lighter;
+  text-decoration: underline;
+}
 
 /*code tag*/
 code{

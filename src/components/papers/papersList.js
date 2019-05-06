@@ -17,7 +17,7 @@ import {AppContext} from 'components/providers/appProvider'
 
 //order options
 const orderByOptions = [
-    { value: 'date_created', label: 'most recent' },
+    { value: 'date_created', label: 'Recently Added' },
     { value: 'title', label: 'Title' },
     { value: 'authors', label: 'Authors' }
   ];

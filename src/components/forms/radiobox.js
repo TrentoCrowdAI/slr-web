@@ -1,14 +1,18 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 
 import RadioTick from 'components/svg/radioTick';
 
 const RadioBox = function ({ label, name, val, isChecked , handler}) {
 
     let output = "";
-    let tick = "";
-    if(isChecked){
-        tick = <RadioTick/>;
-    }
+    const [tick, setTick] = useState(<></>);
+    useEffect(() => {
+        if(isChecked){
+            setTick(<RadioTick/>);
+        }else{
+            setTick(<></>)
+        }
+    }, [isChecked])
 
     output= (
         <label className="radiobox-container">
