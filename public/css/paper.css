@@ -16,33 +16,35 @@ form.new-paper-form div.new-paper-form-ad{
     margin: 0px 10% 20px 10%;
 }
 
-form.new-paper-form div.new-paper-form-ad div.author-year input{
+form.new-paper-form div.new-paper-form-ad div.author-year input, form.new-paper-form div.new-paper-form-ad div.type-doi input{
     margin: 0 10px 5px 0;
     line-height: 29px;
     font-size: 18px;
     vertical-align: middle;
 }
 
-form.new-paper-form div.new-paper-form-ad div.author-year input[type=number]{
-    width: 100px;
-}
-
-form.new-paper-form div.new-paper-form-ad div.author-year input[type=text]{
+form.new-paper-form div.new-paper-form-ad div.author-year input[type=text], form.new-paper-form div.new-paper-form-ad div.author-year input[type=number]{
     width: 250px;
+    display: block;
 }
 
 form.new-paper-form div.new-paper-form-ad div.custom-select{
     position: relative;
-    width: 150px;
+    width: 100%;
     display: block;
     margin-top: 10px;
 }
 
-form.new-paper-form div.new-paper-form-ad div.custom-select div.selected{
+form.new-paper-form div.new-paper-form-ad div.type-doi div.custom-select div.selected{
     width: 100%;
     font-size: 18px;
     height: 26px;
     padding-left: 5px;
+    margin: 0 10px 5px 0;
+}
+
+form.new-paper-form div.new-paper-form-ad div.type-doi input{
+    margin: 0 0 5px 0;
 }
 
 form.new-paper-form div.new-paper-form-ad div.custom-select div.options-holder{
