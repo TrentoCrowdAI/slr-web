@@ -47,21 +47,25 @@ const ProjectPage = (props) => {
 
     useEffect(() => {
 
+        //flag that represents the state of component
+        let mounted = true;
+
         setDisplay(false);
         //a wrapper function ask by react hook
         const fetchData = async () => {
+            console.log("fetch project page");
 
             //call the dao
             let res = await projectsDao.getProject(project_id);
 
             //error checking
-            //if is other error
-            if (res.message) {
+            //if the component is still mounted and there is some other errors
+            if (mounted && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
-            //if res isn't null
-            else if (res !== null) {
+            //if the component is still mounted and res isn't null
+            else if (mounted && res ) {
                 //update state
                 setProject(res);
                 //show the page
@@ -71,8 +75,9 @@ const ProjectPage = (props) => {
         fetchData();
         //when the component will unmount
         return () => {
-            //stop all ongoing request
-            projectsDao.abortRequest();
+
+            //set flag as unmounted
+            mounted = false;
         };
     }, [project_id]); //re-execute when these variables change
     
@@ -92,12 +97,12 @@ const ProjectPage = (props) => {
 
             //error checking
             //if is other error
-            if (res.message) {
+            if (res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if res isn't null
-            else if (res !== null) {
+            else if (res && res !== null) {
                 console.log("UPDATED SUCCESSFULLY!");
                 window.location.reload();
             }

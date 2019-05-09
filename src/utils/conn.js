@@ -14,6 +14,8 @@ let timeOutTime = 10 * 1000;
 function abortRequest() {
     abortController.abort();
     abortRequestType = 1;
+    console.log("abort")
+
 }
 
 /**

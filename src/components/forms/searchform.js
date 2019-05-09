@@ -101,6 +101,8 @@ const SearchForm = function ({project_id, location, match, history}) {
 
 
     useEffect(() => {
+        //flag that represents the state of component
+        let mounted = true;
 
         //if the sorting parameter changes I update the status and trigger the SVG animation
         if (up !== queryData.sort) {
@@ -126,20 +128,20 @@ const SearchForm = function ({project_id, location, match, history}) {
                 let res = await paperDao.search(queryData);
 
                 //error checking
-                //if is 404 error
-                if (res && res.message === "Not Found") {
+                //if the component is still mounted and  is 404 error
+                if (mounted && res && res.message === "Not Found") {
                     setPapersList([]);
                     setTotalResults(0);
                     //show the page
                     setDisplay(true);
                 }
-                //if is other error
-                else if (res && res.message) {
+                //if the component is still mounted and  there are some other errors
+                else if (mounted && res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
                 }
-                //if res isn't null
-                else if (res !== null) {
+                //if the component is still mounted and  res isn't null
+                else if (mounted && res) {
                     //update state
                     setPapersList(res.results);
                     setTotalResults(res.totalResults);
@@ -153,8 +155,8 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         //when the component will unmount
         return () => {
-            //stop all ongoing request
-            paperDao.abortRequest();
+            //set flag as unmounted
+            mounted = false;
         };
 
     }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change

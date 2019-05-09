@@ -48,9 +48,12 @@ const ProjectsList = function (props) {
 
     useEffect(() => {
 
+        //flag that represents the state of component
+        let mounted = true;
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
+
             //hide the page
             setDisplay(false);
 
@@ -58,20 +61,20 @@ const ProjectsList = function (props) {
             const res = await projectsDao.getProjectsList({orderBy: "date_last_modified", ...queryData});
 
             //error checking
-            //if is 404 error
-            if (res && res.message === "Not Found") {
+            //if the component is still mounted and  is 404 error
+            if (mounted && res && res.message === "Not Found") {
                 setProjectsList([]);
                 setTotalResults(0);
                 //show the page
                 setDisplay(true);
             }
-            //if is other error
-            else if (res && res.message) {
+            //if the component is still mounted and  there are some other errors
+            else if (mounted && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
-            //if res isn't null
-            else if (res !== null) {
+            //if the component is still mounted and  res isn't null
+            else if (mounted && res) {
                 //update state
 
                 //I put even first and then odd ones so I can display 2 columns with left-right flow 
@@ -91,8 +94,8 @@ const ProjectsList = function (props) {
 
         //when the component will unmount
         return () => {
-            //stop all ongoing request
-            projectsDao.abortRequest();
+            //set flag as unmounted
+            mounted = false;
         };
     }, [queryData.start, queryData.count]); //re-execute when these variables change
 
@@ -105,12 +108,12 @@ const ProjectsList = function (props) {
         let res = await projectsDao.deleteProject(id);
         //error checking
         //if is other error
-        if (res.message) {
+        if (res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);  
         }
         //if res isn't null
-        else if (res !== null) {
+        else if (res && res !== null) {
             //create a new array without the project deleted
             let newProjectsList = projectsList.filter((project)=>project.id !== id);
             //update project list state

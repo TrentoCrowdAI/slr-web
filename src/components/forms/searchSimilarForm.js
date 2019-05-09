@@ -95,6 +95,8 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
     //effect for query parameters input
     useEffect(() => {
 
+        let mounted = true;
+
         console.log(queryData);
         //if the sorting parameter changes I update the status and trigger the SVG animation
         if(up !== queryData.sort){
@@ -217,8 +219,8 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
         //when the component will unmount
         return () => {
-            //stop all ongoing request
-            paperDao.abortRequest();
+
+            mounted = false;
         };
 
     }, [project_id, similarPaperFile, queryData.query, queryData.orderBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
