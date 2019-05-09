@@ -213,6 +213,10 @@ div.paper-card p.authors{
   font-size: 12px;
   margin: 0px;
   font-weight: 300;
+  max-width: 270px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 div.paper-card p.date{
   font-size: 12px;

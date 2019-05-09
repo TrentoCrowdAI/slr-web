@@ -1,12 +1,15 @@
 div.new-paper-page-wrapper{
-    margin: 190px auto 0px auto;
+    position: relative;
+    margin: 20px auto 0px auto;
     text-align: center;
 }
-
+div.new-paper-page-wrapper > div{
+    padding-top: 150px;
+}
 
 form.new-paper-form{
     width: 80%;
-    margin: 90px auto 0px auto;
+    margin: 20px auto 0px auto;
 }
 
 form.new-paper-form div.new-paper-form-ad{
@@ -16,33 +19,35 @@ form.new-paper-form div.new-paper-form-ad{
     margin: 0px 10% 20px 10%;
 }
 
-form.new-paper-form div.new-paper-form-ad div.author-year input{
+form.new-paper-form div.new-paper-form-ad div.author-year input, form.new-paper-form div.new-paper-form-ad div.type-doi input{
     margin: 0 10px 5px 0;
     line-height: 29px;
     font-size: 18px;
     vertical-align: middle;
 }
 
-form.new-paper-form div.new-paper-form-ad div.author-year input[type=number]{
-    width: 100px;
-}
-
-form.new-paper-form div.new-paper-form-ad div.author-year input[type=text]{
+form.new-paper-form div.new-paper-form-ad div.author-year input[type=text], form.new-paper-form div.new-paper-form-ad div.author-year input[type=number]{
     width: 250px;
+    display: block;
 }
 
 form.new-paper-form div.new-paper-form-ad div.custom-select{
     position: relative;
-    width: 150px;
+    width: 100%;
     display: block;
     margin-top: 10px;
 }
 
-form.new-paper-form div.new-paper-form-ad div.custom-select div.selected{
+form.new-paper-form div.new-paper-form-ad div.type-doi div.custom-select div.selected{
     width: 100%;
     font-size: 18px;
     height: 26px;
     padding-left: 5px;
+    margin: 0 10px 5px 0;
+}
+
+form.new-paper-form div.new-paper-form-ad div.type-doi input{
+    margin: 0 0 5px 0;
 }
 
 form.new-paper-form div.new-paper-form-ad div.custom-select div.options-holder{
@@ -86,9 +91,9 @@ form.new-paper-form button:hover{
   }
 
 a.back{
-    position: fixed;
-    left: 220px;
-    top: 65px;
+    position: absolute;
+    left: 0px;
+    top: -5px;
     height: 40px;
     width: 40px;
     background-image: url('./../img/back.svg');

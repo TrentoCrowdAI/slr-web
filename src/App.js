@@ -8,6 +8,7 @@ import Home from 'components/home';
 
 import NavBar from 'components/navigation/navBar';
 import SideMenu from 'components/navigation/sideMenu';
+import BreadCrumbs from 'components/breadCrumbs';
 
 import ProjectsList from 'components/projects/projectsList';
 import ProjectPage from 'components/projects/projectPage';
@@ -34,6 +35,9 @@ const App = function(props) {
                             {/*component menu*/}
                             <SideMenu/>
                         </NavBar>
+                        <Switch>
+                            <Route render={(props) => <BreadCrumbs {...props}/>}/>
+                        </Switch>
                         <Main>
                             <Switch>
                                 <Route exact path="/" render={() => <Home/> }/>

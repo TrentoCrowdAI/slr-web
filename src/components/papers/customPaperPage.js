@@ -61,16 +61,18 @@ function CustomPaperPage({projectId, url, history}) {
     if(!displayForm && !paperDataFetch){
         output = (
             <div className="new-paper-page-wrapper">
-                <div className="file-input-container">
-                    <input type="file"name ="file" id="real-input" ref={inputElement} onChange={handleSubmission}/>
-                    <button type="button" className="browse-btn" onClick={() => {inputElement.current.click();}}>
-                        Upload a Paper
-                    </button>
+                <div>
+                    <div className="file-input-container">
+                        <input type="file"name ="file" id="real-input" ref={inputElement} onChange={handleSubmission}/>
+                        <button type="button" className="browse-btn" onClick={() => {inputElement.current.click();}}>
+                            Upload a Paper
+                        </button>
+                    </div>
+                        or<br/>
+                    <button type="button"
+                        onClick={() => {setDisplayForm(true)}}
+                    >insert data manually</button>
                 </div>
-                    or<br/>
-                <button type="button"
-                    onClick={() => {setDisplayForm(true)}}
-                >insert data manually</button>
             </div>
         );
     }else if(paperDataFetch){

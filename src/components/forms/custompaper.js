@@ -44,10 +44,15 @@ function PaperForm(props) {
                 year: (props.customPaper && props.customPaper.year) || '',
                 abstract: (props.customPaper && props.customPaper.abstract) || '',
                 //it is not present in pdf parse service
-                document_type: (props.customPaper && props.customPaper.document_type) || ''
+                document_type: (props.customPaper && props.customPaper.document_type) || '',
+                doi: (props.customPaper && props.customPaper.doi) || ""
             }}
             validationSchema={paperValidationSchema}
             onSubmit={async (values, { setSubmitting }) => {
+                //if doi is not specified I set it as empty string
+                if(values.doi === undefined){
+                    values.doi = "";
+                }
                 const paperData = {...values, 
                     year: values.year.toString(), 
                     source_title: values.title, 
@@ -58,8 +63,7 @@ function PaperForm(props) {
                     filter_study_include: "0",
                     notes: "",
                     //data necessary for identifying custom papers
-                    manual: "true",
-                    doi: uuid.v4()}
+                    manual: "true"}
                 console.log(paperData);
                 
                 let res = await projectPapersDao.postCustomPaperIntoProject({
@@ -97,13 +101,17 @@ function PaperForm(props) {
                             type="number"
                             placeholder="year"/>
                     </div>
-                    <div className="type">
+                    <div className="type-doi">
                         <Field
                             name="document_type"
                             render={({ field, form }) => (
                                     <Select options={paperType} {...field} form={form}/>
                             )}
                         />
+                        <Field 
+                            name="doi"
+                            type="text"
+                            placeholder="DOI(optional)"/>
                     </div>
                 </div>
                 <Field
