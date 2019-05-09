@@ -24,7 +24,6 @@ import {AppContext} from 'components/providers/appProvider'
 import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains, join} from 'utils/index';
 
 
-
 // Load the lodash build
 const _ = require('lodash');
 
@@ -73,8 +72,23 @@ const SearchForm = function ({project_id, location, match, history}) {
     let queryData = createQueryData(location.search);
     //console.log(queryData);
 
+    //get the localStorage object
+    const storage = window.localStorage;
+    let selectedPapersListFromStorage;
+    if (!window.localStorage) {
+        console.log("the browser must be support localStorage");
+    }
+    //if exists already this attribute in the local storage
+    if (storage.getItem("selectedPapersList")) {
+        selectedPapersListFromStorage = JSON.parse(storage.getItem("selectedPapersList"));
+    }
+    //if not exists, we create a new array
+    else {
+        selectedPapersListFromStorage = [];
+    }
+
     // list of selected papers
-    const [selectedPapersList, setSelectedPapersList] = useState([]);
+    const [selectedPapersList, setSelectedPapersList] = useState(selectedPapersListFromStorage);
 
     //state for search form
     const [keywords, setKeyWords] = useState("_");
@@ -85,10 +99,11 @@ const SearchForm = function ({project_id, location, match, history}) {
     //state for sorting arrow animation
     const [up, setUp] = useState(queryData.sort);
 
+
     useEffect(() => {
 
         //if the sorting parameter changes I update the status and trigger the SVG animation
-        if(up !== queryData.sort){
+        if (up !== queryData.sort) {
             setUp(queryData.sort);
             document.getElementById("ani-order-arrow").beginElement();
         }
@@ -106,7 +121,7 @@ const SearchForm = function ({project_id, location, match, history}) {
             if (queryData.query !== "") {
 
                 setDisplay(false);
-                
+
                 //always call the dao to search on scopus
                 let res = await paperDao.search(queryData);
 
@@ -135,7 +150,7 @@ const SearchForm = function ({project_id, location, match, history}) {
         };
 
         fetchData();
-        
+
         //when the component will unmount
         return () => {
             //stop all ongoing request
@@ -145,12 +160,9 @@ const SearchForm = function ({project_id, location, match, history}) {
     }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
 
 
-
-
-
     /*
-        START OF 'RESULT PAPERS HANDLING' ########################################################
-    */
+     START OF 'RESULT PAPERS HANDLING' ########################################################
+     */
 
     //handler for sort selection
     function handleSelection(e) {
@@ -181,6 +193,7 @@ const SearchForm = function ({project_id, location, match, history}) {
 
     /*function to insert and remove the paper id from selected list*/
     function handlePaperSelection(event) {
+
         let newList;
         //get eid
         let eid = event.target.value;
@@ -188,7 +201,7 @@ const SearchForm = function ({project_id, location, match, history}) {
         let title = event.target.name;
         //if id is not included in the list yet
         if (getIndexOfObjectArrayByKeyAndValue(selectedPapersList, "eid", eid) === -1) {
-           //create a copy of array
+            //create a copy of array
             newList = [...selectedPapersList];
             //insert into array
             newList.push({"eid": eid, "title": title});
@@ -204,59 +217,79 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         //update array
         setSelectedPapersList(newList);
+        //update array in local storage
+        storage.setItem("selectedPapersList", JSON.stringify(newList));
     }
 
     /*function to select all papers*/
     function selectAllPapers(event) {
-        
-        let newList = undefined;
-        
+
+        let newList;
+
         //if not all papers are selected yet
-        if(!arrayOfObjectsContains(selectedPapersList, papersList, "eid")){
+        if (!arrayOfObjectsContains(selectedPapersList, papersList, "eid")) {
+
             //I get the list of the papers in the current page
-            let allPapersInPage = papersList.map((paper) => {return {"eid" : paper.eid, "title" : paper.title}});
+            let allPapersInPage = papersList.map((paper) => {
+                return {"eid": paper.eid, "title": paper.title}
+            });
             //and merge them with the previously selected ones
             let tmpList = [...allPapersInPage, ...selectedPapersList];
             newList = _.uniqBy(tmpList, 'eid');
-        }else{//otherwise
+
+        }
+        //if all papers are selected, we need to remove them
+        else {
             //I get the list of the papers in the current page
-            let allPapersInPage = papersList.map((paper) => {return {"eid" : paper.eid, "title" : paper.title}});
+            let allPapersInPage = papersList.map((paper) => {
+                return {"eid": paper.eid, "title": paper.title}
+            });
             //I filter the selectedPapersList by removing the papers that are in the current page
             newList = selectedPapersList.filter(x => !allPapersInPage.some(paper => paper.eid === x.eid));
         }
-        
+
+        //update array
         setSelectedPapersList(newList);
+        //update array in local storage
+        storage.setItem("selectedPapersList", JSON.stringify(newList));
     }
+
 
     /*function to add the post in the project*/
     async function handleAddPapers(event) {
 
         event.preventDefault();
-        //console.log(selectedPapersList);
 
-       //create a eidList from the list of selected paper
-        let arrayEid = selectedPapersList.map(element => element.eid);
-        //call dao
-        let res = await projectPapersDao.postPaperIntoProject({
-            "arrayEid": arrayEid, "project_id": project_id
-        });
-        //if there is the error
-        if (res && res.message) {
-            //pass error object to global context
-            appConsumer.setError(res);
-            return null;
+        if (selectedPapersList.length === 0) {
+            alert("the list is empty!");
         }
+        else {
 
-        //empties the state
-        setSelectedPapersList([]);
-        alert("insert completed");
+            //create a eidList from the list of selected paper
+            let arrayEid = selectedPapersList.map(element => element.eid);
+            //call dao
+            let res = await projectPapersDao.postPaperIntoProject({
+                "arrayEid": arrayEid, "project_id": project_id
+            });
+            //if there is the error
+            if (res && res.message) {
+                //pass error object to global context
+                appConsumer.setError(res);
+                return null;
+            }
+
+            //empties the state
+            setSelectedPapersList([]);
+            //update the storage
+            storage.setItem("selectedPapersList", JSON.stringify(selectedPapersList));
+            alert("insert completed");
+        }
 
     }
 
     /*
-        END OF 'RESULT PAPERS HANDLING' ########################################################
-    */
-
+     END OF 'RESULT PAPERS HANDLING' ########################################################
+     */
 
 
     /*function to send the query*/
@@ -350,12 +383,14 @@ const SearchForm = function ({project_id, location, match, history}) {
                         value={keywords}
                         onChange={handleOnInputChange}
                     />
-                   <button className="go-search" type="submit" value="Submit">
+                    <button className="go-search" type="submit" value="Submit">
                         <SearchButton/>
                     </button>
-                    <Link to={"/projects/"+ project_id + "/searchsimilar"}><button className="go-similar" type="button">
-                        <SearchSimilarButton/>
-                    </button></Link>
+                    <Link to={"/projects/" + project_id + "/searchsimilar"}>
+                        <button className="go-similar" type="button">
+                            <SearchSimilarButton/>
+                        </button>
+                    </Link>
                 </div>
 
                 <div className="option-holder">
@@ -372,7 +407,7 @@ const SearchForm = function ({project_id, location, match, history}) {
 
                     <label>Search by:</label><br/>
 
-                    <div className="checkboxes-holder" >
+                    <div className="checkboxes-holder">
                         <RadioBox label={searchByOptions[0].label} name="searchBy" val={searchByOptions[0].value}
                                   isChecked={searchBy === searchByOptions[0].value} handler={handleOnInputChange}/>
                         <RadioBox label={searchByOptions[1].label} name="searchBy" val={searchByOptions[1].value}
@@ -384,7 +419,7 @@ const SearchForm = function ({project_id, location, match, history}) {
                     </div>
 
                     <label>Year:</label><br/>
-                    <div className="checkboxes-holder" >
+                    <div className="checkboxes-holder">
                         {
                             yearOptions.map((singleYear, index) =>
                                 <RadioBox key={index} label={singleYear} name="year" val={singleYear}
@@ -405,16 +440,19 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         resultPart = (
             <div className="paper-card-holder">
-                <div className="paper-card-holder-head" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
+                <div className="paper-card-holder-head"
+                     style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
                     <div className="select-all">
-                    <CheckBox label="Select All" name="select_all" val="" isChecked={false} handler={selectAllPapers}/>
+                        <CheckBox label="Select All" name="select_all" val="" isChecked={false}
+                                  handler={selectAllPapers}/>
                     </div>
                     <div className="order">
                         <label>sort by:</label>
                         <Select options={orderByOptions}
                                 selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
                                 handler={handleSelection}/>
-                        <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
+                        <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/>
+                        </button>
                     </div>
                 </div>
                 <SelectedPapersListBox selectedPapersList={selectedPapersList}/>
@@ -440,20 +478,26 @@ const SearchForm = function ({project_id, location, match, history}) {
             <div className="paper-card-holder">
                 <div className="paper-card-holder-head">
                     <div className="select-all">
-                    <CheckBox label="Select All" name="select_all" val="" isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")} handler={selectAllPapers}/>
+                        <CheckBox label="Select All" name="select_all" val=""
+                                  isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")}
+                                  handler={selectAllPapers}/>
                     </div>
                     <div className="order">
                         <label>sort by:</label>
                         <Select options={orderByOptions}
                                 selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
                                 handler={handleSelection}/>
-                        <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
+                        <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/>
+                        </button>
                     </div>
                 </div>
-                <SelectedPapersListBox selectedPapersList={selectedPapersList} handlePaperSelection={handlePaperSelection}/>
+                <SelectedPapersListBox selectedPapersList={selectedPapersList}
+                                       handlePaperSelection={handlePaperSelection}/>
 
-                <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid}/>
-                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
+                <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection}
+                                        selectedEidList={arrayEid}/>
+                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults}
+                            path={match.url}/>
             </div>
         );
     }
@@ -475,30 +519,42 @@ const SearchForm = function ({project_id, location, match, history}) {
 /**
  * internal component to print the box of list of selected paper
  */
-const SelectedPapersListBox = function ({selectedPapersList, handlePaperSelection}){
+const SelectedPapersListBox = function ({selectedPapersList, handlePaperSelection}) {
 
     let output = "";
     output = (
-        <div className="selected-papers-list" style={{opacity: (selectedPapersList.length>0) ? "1.0" : "0.0", pointerEvents: (selectedPapersList.length>0) ? "auto" : "none"}}>
+        <div className="selected-papers-list" style={{
+            opacity: (selectedPapersList.length > 0) ? "1.0" : "0.0",
+            pointerEvents: (selectedPapersList.length > 0) ? "auto" : "none"
+        }}>
             <h3>
                 {"SELECTED PAPERS"} <br/><span>(total : {selectedPapersList.length})</span>
             </h3>
             <div className="submission-wrapper">
-                <div className="papers-wrapper" style={{border: (selectedPapersList.length>0) ? "" : "0px"}}>
-                    <div className="papers-flex" style={{padding: (selectedPapersList.length>0) ? "" : "0px"}}>
+                <div className="papers-wrapper" style={{border: (selectedPapersList.length > 0) ? "" : "0px"}}>
+                    <div className="papers-flex" style={{padding: (selectedPapersList.length > 0) ? "" : "0px"}}>
                         {selectedPapersList.map((element, index) =>
                             <p key={index}>
-                                <span>{element.title}</span> 
-                                <button type="button" className="remove-btn" name={element.title} value={element.eid} //name and value don't work on the button event for some reasons
-                                    onClick={(e) => {handlePaperSelection({target: {name: element.title, value:element.eid}})}}>
+                                <span>{element.title}</span>
+                                <button type="button" className="remove-btn" name={element.title}
+                                        value={element.eid} //name and value don't work on the button event for some reasons
+                                        onClick={(e) => {
+                                            handlePaperSelection({target: {name: element.title, value: element.eid}})
+                                        }}>
                                     <RemoveButton/>
                                 </button>
                             </p>
                         )}
                     </div>
                 </div>
-                <button style={{border: (selectedPapersList.length>0) ? "" : "0px", margin: (selectedPapersList.length>0) ? "" : "0px", height: (selectedPapersList.length>0) ? "" : "0px", pointerEvents: (selectedPapersList.length>0) ? "auto" : "none"}} className="ti-btn add-resultpaper-btn" type="submit" value="Submit">
-                    <div className="btn-title">Add Selected Paper</div><div className="btn-icon"> </div>
+                <button style={{
+                    border: (selectedPapersList.length > 0) ? "" : "0px",
+                    margin: (selectedPapersList.length > 0) ? "" : "0px",
+                    height: (selectedPapersList.length > 0) ? "" : "0px",
+                    pointerEvents: (selectedPapersList.length > 0) ? "auto" : "none"
+                }} className="ti-btn add-resultpaper-btn" type="submit" value="Submit">
+                    <div className="btn-title">Add Selected Paper</div>
+                    <div className="btn-icon"></div>
                 </button>
             </div>
         </div>

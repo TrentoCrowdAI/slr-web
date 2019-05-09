@@ -62,7 +62,7 @@ function PaperForm(props) {
                     doi: uuid.v4()}
                 console.log(paperData);
                 
-                let res = await projectPapersDao.postPaperIntoProject({
+                let res = await projectPapersDao.postCustomPaperIntoProject({
                     paper: paperData, project_id: props.projectId
                 });
                 //error checking

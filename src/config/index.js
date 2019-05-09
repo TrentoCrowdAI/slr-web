@@ -10,6 +10,7 @@ const config = {
     "scopus_search": "search-scopus",
     "projects": "projects",
     "papers": "papers",
+    "customPapers": "customPapers",
     "menu_list": [
         {id: 4, content: "home", link: "/"},
         {id: 5, content: "my projects", link: "/projects"},

@@ -34,6 +34,17 @@ async function postPaperIntoProject(bodyData) {
 }
 
 /**
+ * dao to post a new custom paper
+ * @param bodyData
+ * @return {Object} project created
+ */
+async function postCustomPaperIntoProject(bodyData) {
+    let url = config.home + config.customPapers;
+    return await http.post(url, bodyData);
+}
+
+
+/**
  * dao to put a old paper
  * @param paper_id
  * @param bodyData
@@ -60,6 +71,7 @@ const projectPapersDao = {
     getPapersList,
     getPaper,
     postPaperIntoProject,
+    postCustomPaperIntoProject,
     putPaper,
     deletePaper,
     "abortRequest": http.abortRequest
