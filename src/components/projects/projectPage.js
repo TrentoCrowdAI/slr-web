@@ -40,6 +40,7 @@ const ProjectPage = (props) => {
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name}</h2> </div>);//I set the page title
         }else{
             appConsumer.setTitle(<ProjectName name={project.data.name} update={updateProject}/>);
+            appConsumer.setProjectName(project.data.name);
         }
     
     }, [project]);

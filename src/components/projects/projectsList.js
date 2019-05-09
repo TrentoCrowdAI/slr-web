@@ -42,6 +42,8 @@ const ProjectsList = function (props) {
     //set title when component mounts
     useEffect(() => {
         appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">PROJECTS</h2> </div>);
+        //I remove any old project name that was previously saved
+        appConsumer.setProjectName("");
     },[]); //run on component mount
 
     useEffect(() => {

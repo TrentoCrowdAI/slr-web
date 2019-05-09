@@ -24,13 +24,17 @@ const AppProvider = function (props) {
     //title
     const [title, setTitle] = useState(<div className="nav-elements"> <h2 className="static-title">HOME</h2> </div>);
 
+    const [projectName, setProjectName] = useState("");
+
     //preparate an object to be insertd into context
     const contextObject ={
         user,
         error,
         setError,
         title,
-        setTitle
+        setTitle,
+        projectName,
+        setProjectName
     };
 
 

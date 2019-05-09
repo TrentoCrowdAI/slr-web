@@ -1,12 +1,15 @@
 div.new-paper-page-wrapper{
-    margin: 190px auto 0px auto;
+    position: relative;
+    margin: 20px auto 0px auto;
     text-align: center;
 }
-
+div.new-paper-page-wrapper > div{
+    padding-top: 150px;
+}
 
 form.new-paper-form{
     width: 80%;
-    margin: 90px auto 0px auto;
+    margin: 20px auto 0px auto;
 }
 
 form.new-paper-form div.new-paper-form-ad{
@@ -88,9 +91,9 @@ form.new-paper-form button:hover{
   }
 
 a.back{
-    position: fixed;
-    left: 220px;
-    top: 65px;
+    position: absolute;
+    left: 0px;
+    top: -5px;
     height: 40px;
     width: 40px;
     background-image: url('./../img/back.svg');
