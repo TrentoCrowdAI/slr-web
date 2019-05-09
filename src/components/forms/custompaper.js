@@ -45,13 +45,13 @@ function PaperForm(props) {
                 abstract: (props.customPaper && props.customPaper.abstract) || '',
                 //it is not present in pdf parse service
                 document_type: (props.customPaper && props.customPaper.document_type) || '',
-                doi: (props.customPaper && props.customPaper.doi) || undefined
+                doi: (props.customPaper && props.customPaper.doi) || ""
             }}
             validationSchema={paperValidationSchema}
             onSubmit={async (values, { setSubmitting }) => {
-                //if doi is not specified I set it as undefined
-                if(values.doi === ""){
-                    values.doi = undefined;
+                //if doi is not specified I set it as empty string
+                if(values.doi === undefined){
+                    values.doi = "";
                 }
                 const paperData = {...values, 
                     year: values.year.toString(), 
