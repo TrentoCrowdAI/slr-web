@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4c57d101c05828a2e7c9d6935c85a2b4",
+    "revision": "eaff870e6ecdc6ad8d8697b92519b5cb",
     "url": "/slr-web/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/slr-web/static/js/2.1f47d0f3.chunk.js"
   },
   {
-    "revision": "1eb7a0a0313cacfe97da",
-    "url": "/slr-web/static/js/main.821c9ca3.chunk.js"
+    "revision": "546ae0be82096ddaf459",
+    "url": "/slr-web/static/js/main.8acc2eae.chunk.js"
   },
   {
     "revision": "728711b4df32723b671a",
