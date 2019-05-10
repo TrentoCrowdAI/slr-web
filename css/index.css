@@ -96,10 +96,19 @@ div.navigation-wrapper{
   top: 0px;
 }
 
+div.breadcrumbs{
+  position: relative;
+  margin: 60px auto 5px 18px;
+}
+
+div.breadcrumbs a{
+  display: inline-block;
+}
+
 div.main-wrapper{
   position: relative;
   width: 1000px;
-  margin: 60px auto 0px auto;
+  margin: 0px auto 0px auto;
   min-height: 500px;
 }
 
@@ -492,6 +501,7 @@ ul.pagination span.current-page{
 /*notfound error*/
 div.not-found{
   animation: showup 0.3s linear ;
+  margin-left: 10px;
 }
 
 /*cover the page*/
