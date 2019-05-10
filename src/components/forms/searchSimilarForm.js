@@ -39,7 +39,7 @@ const orderByOptions = [
 
 //year options
 const startYear = 2017;
-const endYear = 2020;
+const endYear = new Date().getFullYear() + 2;;
 //create a int array from startYear to endYear, then convert it to string array, after this concatenate with "all"
 const yearOptions = ["all", ...(_.range(startYear, endYear).map(String))];
 
@@ -68,14 +68,40 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
     let queryData = createQueryData(location.search);
     //console.log(queryData);
 
+    //get the localStorage object
+    const storage = window.localStorage;
+    let selectedPapersListFromStorage;
+    let similarPaperDataFromStorage;
+    if (!window.localStorage) {
+        console.log("the browser must be support localStorage");
+    }
+    
+    //if exists already this attribute in the local storage
+    if (storage.getItem("selectedPapersList")) {
+        selectedPapersListFromStorage = JSON.parse(storage.getItem("selectedPapersList"));
+    }
+    //if not exists, we create a new array
+    else {
+        selectedPapersListFromStorage = [];
+    }
+
+    //if exists already this attribute in the local storage
+    if (storage.getItem("similarPaperData")) {
+        similarPaperDataFromStorage = JSON.parse(storage.getItem("similarPaperData"));
+    }
+    //if not exists, we create a new array
+    else {
+        similarPaperDataFromStorage = null;
+    }
+
     // list of selected papers
-    const [selectedPapersList, setSelectedPapersList] = useState([]);
+    const [selectedPapersList, setSelectedPapersList] = useState(selectedPapersListFromStorage);
 
     //state for search form
     const [keywords, setKeyWords] = useState("");
     const [source, setSource] = useState({"scopus": true, "googleScholar": false, "arXiv": false});
     const [year, setYear] = useState("all");
-    const [similarPaperData, setSimilarPaperData] = useState(undefined); //the data of the paper to search similarities for
+    const [similarPaperData, setSimilarPaperData] = useState(similarPaperDataFromStorage); //the data of the paper to search similarities for
     const [similarPaperFile, setSimilarPaperFile] = useState(undefined); //the file of the paper to search similarities for
 
     //state for sorting arrow animation
@@ -101,75 +127,73 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
         //if the sorting parameter changes I update the status and trigger the SVG animation
         if(up !== queryData.sort){
             setUp(queryData.sort);
-            document.getElementById("ani-order-arrow").beginElement();
+            if(document.getElementById("ani-order-arrow")){
+                document.getElementById("ani-order-arrow").beginElement();
+            }
         }
 
 
         //fetches data when searching for similarities
         const fetchDataSimilarity = async () => {
 
+            let res = undefined;
+
             //standard options parameters
             setKeyWords(queryData.query);
             setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
             setYear(queryData.year);
 
-            //if there is similarPaperString from URL(I temporarely do a random search)
-
-            if(similarPaperFile){//it there's a file I can do an api call to search for papers similar to the file
+            //if there's some data in storage
+            if(similarPaperData){
+                //open flag of loading
+                setDisplay(false);
+                //I call the dao for searching for similar papers based on similarPaperString
+                res = await paperDao.search({"query": "Trento"});
+                setPapersList(res.results);
+                //close flag of loading
+                setDisplay(true);
+            }else if(similarPaperFile){//if there's a file I can do an api call to search for papers similar to the file
                 
                 console.log("FILE NAME : " + similarPaperFile.name)
 
-                let res = undefined;
-
-                if(similarPaperData){
+                //check file extension and its mine type
+                if(!/\.(pdf|PDF)$/.test(similarPaperFile.name) || similarPaperFile.type.indexOf("application/pdf") === -1){
+                    alert("the file must be a pdf");
+                }
+                else{
                     //open flag of loading
                     setDisplay(false);
+                    setSimilarPaperFetch(true);
+                    console.log("FETCHING PARSE PDF")
+                    //prepare the form data for post
+                    let formData = new FormData();
+                    formData.append('file', similarPaperFile);
+
+                    //call the dao
+                    console.log("CALLING THE PAPER PARSER SERVICE")
+                    res = await updateFileDao.updatePdf(formData);
+    
+                    //if there is a error
+                    if (res && res.message) {
+                        //pass error object to global context
+                        alert("Error during parsing file");
+                        setDisplay(true);
+                        setSimilarPaperFetch(false);
+                    }
+                    else{
+                        console.log(res);
+                        //set paperdata
+                        setSimilarPaperData(res);
+                        //display the paper data
+                        setSimilarPaperFetch(false);
+                    }
+    
                     //I call the dao for searching for similar papers based on similarPaperString
                     res = await paperDao.search({"query": "Trento"});
                     setPapersList(res.results);
                     //close flag of loading
                     setDisplay(true);
-                }else{
-                    //check file extension and its mine type
-                    if(!/\.(pdf|PDF)$/.test(similarPaperFile.name) || similarPaperFile.type.indexOf("application/pdf") === -1){
-                        alert("the file must be a pdf");
-                    }
-                    else{
-                        //open flag of loading
-                        setDisplay(false);
-                        setSimilarPaperFetch(true);
-                        console.log("FETCHING PARSE PDF")
-                        //prepare the form data for post
-                        let formData = new FormData();
-                        formData.append('file', similarPaperFile);
 
-                        //call the dao
-                        console.log("CALLING THE PAPER PARSER SERVICE")
-                        res = await updateFileDao.updatePdf(formData);
-        
-                        //if there is a error
-                        if (res && res.message) {
-                            //pass error object to global context
-                            alert("Error during parsing file");
-                            setDisplay(true);
-                            setSimilarPaperFetch(false);
-                        }
-                        else{
-                            console.log(res);
-                            //set paperdata
-                            setSimilarPaperData(res);
-                            //display the paper data
-                            setSimilarPaperFetch(false);
-                        }
-        
-                        //I call the dao for searching for similar papers based on similarPaperString
-                        res = await paperDao.search({"query": "Trento"});
-                        setPapersList(res.results);
-                        //close flag of loading
-                        setDisplay(true);
-                        
-        
-                    }
                 }
             }else if (queryData.query !== "") {
 
@@ -219,7 +243,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
         //when the component will unmount
         return () => {
-
+            localStorage.removeItem("similarPaperData");
             mounted = false;
         };
 
@@ -231,10 +255,20 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
     */
 
 
+    //update local storage every time the similar paper data changes
+    useEffect(() => {
+        console.log("effecting");
+        if(similarPaperData){
+            storage.setItem("similarPaperData", JSON.stringify(similarPaperData));
+        }else{
+            storage.removeItem("similarPaperData");
+        }
+    }, [similarPaperData])
 
     /*handles the submission of a search */
     function handleSendSearch(event) {
 
+        console.log("SUBMITTING SEARCH");
         if(event){
             event.preventDefault();
         }
@@ -319,7 +353,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
      */
     let formPart = (
         <>
-            <form className={(queryData.query === "" && !similarPaperFile) ? 'search-form' : 'search-form small'}
+            <form className={(queryData.query === "" && !similarPaperFile && !similarPaperData) ? 'search-form' : 'search-form small'}
                     style={{marginTop: (similarFormVisibility) ? "30px" : "60px"}}
                     onSubmit={handleSendSearch}>
                 {/*search form*/}
@@ -329,7 +363,8 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
                     close={setSimilarFormVisibility} handler={handleOnInputChange} 
                     input={keywords} paperInfo={similarPaperData}
                     fetching={similarPaperFetch} setPaperInfo={setSimilarPaperData}
-                    setPaperFile={setSimilarPaperFile}/>
+                    setPaperFile={setSimilarPaperFile}
+                    history={history}/>
                 
                 <div className="option-holder">
                     <label>Source:</label><br/>
@@ -415,12 +450,13 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
         //update array
         setSelectedPapersList(newList);
+        storage.setItem("selectedPapersList", JSON.stringify(newList));
     }
 
     /*function to select all papers*/
     function selectAllPapers(event) {
         
-        let newList = undefined;
+        let newList;
         
         //if not all papers are selected yet
         if(!arrayOfObjectsContains(selectedPapersList, papersList, "eid")){
@@ -437,6 +473,9 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
         }
         
         setSelectedPapersList(newList);
+
+        //update array in local storage
+        storage.setItem("selectedPapersList", JSON.stringify(newList));
     }
 
     /*function to add the post in the project*/
@@ -460,6 +499,10 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
         //empties the state
         setSelectedPapersList([]);
+
+        //update the storage
+        storage.setItem("selectedPapersList", JSON.stringify(selectedPapersList));
+
         alert("insert completed");
 
     }
@@ -493,13 +536,13 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
     }
 
     //if the search results list is empty
-    else if (papersList.length === 0 && (queryData.query !== "" || similarPaperFile)) {
+    else if (papersList.length === 0 && (queryData.query !== "" || similarPaperFile || similarPaperData)) {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
             <div className="not-found"> not found :( </div>
         );
     }
-    else if (papersList.length > 0 && (queryData.query !== "" || similarPaperFile)) {
+    else if (papersList.length > 0 && (queryData.query !== "" || similarPaperFile || similarPaperData)) {
 
         //create a eidList from the list of selected paper
         let arrayEid = selectedPapersList.map(element => element.eid);

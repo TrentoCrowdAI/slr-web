@@ -43,7 +43,7 @@ const searchByOptions = [
 
 //year options
 const startYear = 2017;
-const endYear = 2020;
+const endYear = new Date().getFullYear() + 2;
 //create a int array from startYear to endYear, then convert it to string array, after this concatenate with "all"
 const yearOptions = ["all", ...(_.range(startYear, endYear).map(String))];
 
@@ -107,7 +107,9 @@ const SearchForm = function ({project_id, location, match, history}) {
         //if the sorting parameter changes I update the status and trigger the SVG animation
         if (up !== queryData.sort) {
             setUp(queryData.sort);
-            document.getElementById("ani-order-arrow").beginElement();
+            if(document.getElementById("ani-order-arrow")){
+                document.getElementById("ani-order-arrow").beginElement();
+            }
         }
 
         //a wrapper function ask by react hook

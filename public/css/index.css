@@ -501,6 +501,7 @@ ul.pagination span.current-page{
 /*notfound error*/
 div.not-found{
   animation: showup 0.3s linear ;
+  margin-left: 10px;
 }
 
 /*cover the page*/

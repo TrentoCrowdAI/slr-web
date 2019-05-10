@@ -17,7 +17,8 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
                                 paperInfo, //the data of the retrieved paper(should match the paper we are searching similarities for)
                                 fetching, //flag to control when the component is fetching the data related to the paper we are searching similarities for
                                 setPaperInfo, //sets the info of the paper we are searching similarites for
-                                setPaperFile //handles the input of a file(when we upload a file instead os specifying the paper by a string)
+                                setPaperFile, //handles the input of a file(when we upload a file instead os specifying the paper by a string)
+                                history
                             }) => {
     
     let output = "";
@@ -60,7 +61,7 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
     }else{
         content = (
             <>
-                <p className="similar-description">you can search for similar papers by a given DOI or a paper pdf</p>
+                <p className="similar-description">Search for Similar Papers</p>
                 <div className="DOI-holder">
                     <input
                         type="text"
@@ -88,6 +89,7 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
             <button type="button" className={"close-btn red-x"} onClick={(e) => {
                 setPaperInfo(undefined);//I delete the similar paper info
                 setPaperFile(undefined);//I delete its file
+                history.push({});
             }}><CloseButton/></button>
         );
     }else{

@@ -27,7 +27,7 @@ function PaperForm(props) {
     const paperValidationSchema = yup.object().shape({
         title: yup.string().required('please enter a title'),
         authors: yup.string().required('please enter an author'),
-        year: yup.number().required('please enter a year').min(1000).max(2020).integer(),
+        year: yup.number().required('please enter a year').min(1000).max(new Date().getFullYear() + 1).integer(),
         //document_type: yup.string().required('please enter a paper type'),
         abstract: yup.string().required('please enter the abstract')
     });

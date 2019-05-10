@@ -19,7 +19,7 @@ const BreadCrumbs = function(props) {
 
     //I don't print ' > ' at the end if there's only one link
     if(path.length === 0){
-        bc.push(<Link key={0} to={href}>home</Link>);
+        bc.push(<> </>);
     }else{
         bc.push(<Link key={0} to={href}>home<span> > </span></Link>);
     }

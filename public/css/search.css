@@ -75,9 +75,10 @@ div.similar-search-paper-upload{
   margin-bottom: 30px;
   transition: 0.4s height; transition: 0.4s margin;
 }
-div.similar-search-paper-upload p.similar-description{
-  margin: 10px auto 0px 20px;
-  text-align: left;
+div.similar-search-paper-upload p.similar-description {
+	margin: 10px auto 26px 20px;
+	text-align: center;
+	font-size: 22px;
 }
 div.similar-search-paper-upload button.close-btn{
   position: absolute;
@@ -164,6 +165,7 @@ div.option-holder div.checkboxes-holder label:last-child {
 form.small{
   width: 680px;
   margin: 20px auto 20px 10px !important;
+  min-height: 55px;
 }
 form.small div.option-holder {
   margin: 10px 0% 0% 0%;
