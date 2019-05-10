@@ -28,6 +28,8 @@ const Home = function (props) {
                 <li>add a new project</li>
                 <li>browse the list of papers on a project</li>
                 <li>search(from scopus) and add papers to a project</li>
+                <li>add custom papers based on a file or form data</li>
+                <li>'fake search' similar papers</li>
             </ul>
             <h2 style={{fontSize: 22, fontWeight: "normal"}}>notes</h2>
             <ul style={{fontSize: 18, fontWeight: "lighter"}}>
