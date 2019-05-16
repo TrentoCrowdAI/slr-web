@@ -70,7 +70,7 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
                         onChange={handler}
                         name="query"
                     />
-                    <button className="go-search DOI-btn" type="submit" value="Submit">
+                    <button className="go-search-similar DOI-btn" type="submit" value="Submit">
                         <GoButton/>
                     </button>
                 </div>

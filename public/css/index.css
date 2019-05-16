@@ -105,6 +105,10 @@ div.breadcrumbs a{
   display: inline-block;
 }
 
+div.breadcrumbs a:last-child{
+  text-decoration: underline;
+}
+
 div.main-wrapper{
   position: relative;
   width: 1000px;
