@@ -21,7 +21,7 @@ const BreadCrumbs = function(props) {
 
     //I don't print ' > ' at the end if there's only one link
     if(path.length === 0){
-        link = (<></>);
+        link = (<div key={0}></div>);
     }else{
         link = (<Link key={0} to={href}>Home<span> > </span></Link>);
     }
