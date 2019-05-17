@@ -9,16 +9,30 @@ const UserInfo = function(props){
     //get data from global context
     const appConsumer = useContext(AppContext);
 
-    return(
+
+    //not logged in as default
+    let output = (
+        <div className="user">
+            <h3>you're not logged in</h3>
+        </div>
+    );
+
+    //if user is logged in I load his data
+    if(appConsumer.user){
+        output = (
             <div className="user" >
-                {appConsumer.user.image}
+                <img className="face" alt="profile" src={appConsumer.user.image}/>
                 <div className="user-info">
                     {appConsumer.user.name}
                     <br/>
                     {appConsumer.user.surname}
                 </div>
             </div>
-    );
+        );
+    }
+
+    return output;
+
 };
 
 export  default  UserInfo;

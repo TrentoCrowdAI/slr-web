@@ -10,6 +10,8 @@ import NavBar from 'components/navigation/navBar';
 import SideMenu from 'components/navigation/sideMenu';
 import BreadCrumbs from 'components/breadCrumbs';
 
+import UsersLoginLogout from 'components/usersLoginLogout';
+
 import ProjectsList from 'components/projects/projectsList';
 import ProjectPage from 'components/projects/projectPage';
 
@@ -36,8 +38,9 @@ const App = function(props) {
                             <SideMenu/>
                         </NavBar>
                         <Switch>
-                            <Route render={(props) => <BreadCrumbs {...props}/>}/>
-                        </Switch>
+                            {/* this route will always be rendered*/}
+                            <Route render={(props) => <><BreadCrumbs {...props}/><UsersLoginLogout {...props}/></>}/>
+                        </Switch>         
                         <Main>
                             <Switch>
                                 <Route exact path="/" render={() => <Home/> }/>

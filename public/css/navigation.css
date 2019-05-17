@@ -277,7 +277,24 @@ div.navigation-wrapper div.menu div.side-menu div.user div.user-info{
   line-height: 30px;
   text-align: center;
 }
+div.navigation-wrapper div.menu h3.not-logged{
+  text-align: center;
+  line-height: 35px;
+  font-size: 24px;
+  color: #677581;
+}
 
+/*===LOGIN_ELEMENTS===*/
+div.login-holder{
+  position: fixed;
+  right: 45px;
+  top: 75px;
+}
+div.logout-holder{
+  position: fixed;
+  right: 45px;
+  top: 75px;
+}
 
 /*===SVG_ELEMENTS===*/
 .st0, .st-t, .st-m, .st-b{stroke:#000000;stroke-width:200;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}

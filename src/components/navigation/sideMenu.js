@@ -1,6 +1,8 @@
 import React, {useState, useContext} from "react";
 import {Link} from 'react-router-dom';
 
+import { AppContext } from 'components/providers/appProvider'
+
 import UserInfo from 'components/navigation/userInfo';
 import config from 'config/index';
 import MenuButton from 'components/svg/menuButton';
@@ -10,6 +12,9 @@ import Cover from 'components/modules/cover';
  *this is the side menu component
  */
 const SideMenu = function (props) {
+
+    //get data from global context
+    const appConsumer = useContext(AppContext);
 
     //bool to control the visualization of menu
     const [shown, setShown] = useState(false);
@@ -39,23 +44,38 @@ const SideMenu = function (props) {
         clsidemenu = "modal side-menu down"
     }
 
-    return (
-        <div className="menu">
-            <Cover cls={(shown) ? "full-screen-transparent" : ""} handler={handleMenuBlur}/>
-            <div className={clsbutton} onClick={handleToggleMenuButton}>
-                <MenuButton/>
+    if(appConsumer.user){
+        return (
+            <div className="menu">
+                <Cover cls={(shown) ? "full-screen-transparent" : ""} handler={handleMenuBlur}/>
+                <div className={clsbutton} onClick={handleToggleMenuButton}>
+                    <MenuButton/>
+                </div>
+
+                <div className={clsidemenu} tabIndex={-1}>
+
+                    {/*user info box*/}
+                    <UserInfo/>
+                    <PrintMenu handleMenuBlur={handleMenuBlur}/>
+
+                </div>
             </div>
+        );
+    }else{
+        return (
+            <div className="menu">
+                <Cover cls={(shown) ? "full-screen-transparent" : ""} handler={handleMenuBlur}/>
+                <div className={clsbutton} onClick={handleToggleMenuButton}>
+                    <MenuButton/>
+                </div>
 
-            <div className={clsidemenu} tabIndex={-1}>
+                <div className={clsidemenu} tabIndex={-1}>
+                    <h3 className="not-logged">You're not logged in</h3>
 
-                {/*user info box*/}
-                <UserInfo/>
-                <PrintMenu handleMenuBlur={handleMenuBlur}/>
-
+                </div>
             </div>
-        </div>
-    );
-
+        );
+    } 
 };
 
 /**

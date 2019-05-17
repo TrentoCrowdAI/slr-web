@@ -12,11 +12,8 @@ const AppContext = React.createContext();
  */
 const AppProvider = function (props) {
 
-    const user = {
-        image: <img className="face" alt="profile" src="https://placekitten.com/100/100"/>,
-        name: "Mario",
-        surname: "Rossi"
-    };
+    //user data
+    const [user, setUser] = useState(null);
 
     //error
     const [error, setError] = useState(null);
@@ -29,6 +26,7 @@ const AppProvider = function (props) {
     //preparate an object to be insertd into context
     const contextObject ={
         user,
+        setUser,
         error,
         setError,
         title,
