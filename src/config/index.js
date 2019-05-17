@@ -4,13 +4,14 @@
 
 
 const config = {
-    "home": "https://crowdai-slr-api-dev.herokuapp.com/",
-    //"home": "http://localhost:3000/",
+    //"home": "https://crowdai-slr-api-dev.herokuapp.com/",
+    "home": "http://localhost:3001/",
     "search": "search",
     "scopus_search": "search-scopus",
     "projects": "projects",
     "papers": "papers",
     "customPapers": "customPapers",
+    "userLogin": "auth/login",
     "menu_list": [
         {id: 4, content: "home", link: "/"},
         {id: 5, content: "my projects", link: "/projects"},
