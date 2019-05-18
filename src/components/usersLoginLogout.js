@@ -1,15 +1,15 @@
 import React, {useContext} from 'react';
 
-import { GoogleLogin } from 'react-google-login';
+import {GoogleLogin} from 'react-google-login';
 import {usersDao} from 'dao/users.dao'
 
 import {AppContext} from 'components/providers/appProvider';
 
 
 /**
- * this component handles the login and logout from the platform
+ * this component handles the google login and logout from the platform
  */
-const UsersLoginLogout = function(props) {
+const UsersLoginLogout = function (props) {
 
     //output var
     let output = "";
@@ -24,57 +24,67 @@ const UsersLoginLogout = function(props) {
     const appConsumer = useContext(AppContext);
 
     /**
-     * google response handler
+     * google response handler function
      */
-    const responseGoogle = async (response) => {
+    async function responseGoogle  (response){
+        console.log(response);
 
-        let userLoginData = {"tokenId": response.tokenId};
+        //if the google login is succeeded
+        if (response.tokenId) {
 
-        //call dao for verfying the user and logging him in
-        let res = await usersDao.postTokenId(userLoginData);
+            let userLoginData = {"tokenId": response.tokenId};
 
-        //error checking
-        if(res.message){
-            //pass error object to global context
-            appConsumer.setError(res);
-        }else{
-            //if success I set the user data
-            appConsumer.setUser(res.user);
-            //and the token
-            storage.setItem("userToken", JSON.stringify(res.token));
+            //call dao for verfying the user and logging him in
+            let res = await usersDao.postTokenId(userLoginData);
 
-            props.history.push("/");
+            //error checking
+            if (res && res.message) {
+                //pass error object to global context
+                appConsumer.setError(res);
+            }
+            //if success
+            else if (res) {
+                // set the user data in context provider
+                appConsumer.setUser(res.user);
+                //and save the token in localStorage
+                storage.setItem("userToken", JSON.stringify(res.token));
+                //redirect to home page
+                props.history.push("/");
+            }
+            console.log(res);
         }
-
-        console.log(res);
     }
 
     /**
-     * logout handler
+     * logout handler function
      */
-    const logout = (e) => {
+    function logout (e){
         console.log("logging out");
 
         //remove token from storage
         localStorage.removeItem("userToken");
-
         //remove user info from context
         appConsumer.setUser(null);
-
+        //redirect to home page
         props.history.push("/");
     }
-    
-    //if exists already this attribute in the local storage
+
+    //part of visualization-----------------------------
+
+    //if user is logged, so exists already this attribute in the local storage
     if (storage.getItem("userToken")) {
-        userToken = JSON.parse(storage.getItem("userToken")).token;
+
+        //userToken = JSON.parse(storage.getItem("userToken")).token;
         //if there's token it means the user is logged and I print the logout option
         output = (
             <div className="logout-holder">
                 <button type="button" onClick={logout}>Log Out</button>
             </div>
         );
-    }else{
-        //otherwise I print the login option
+    }
+    //otherwise I print the login button
+    else {
+
         output = (
             <div className="login-holder">
                 <GoogleLogin
@@ -87,7 +97,6 @@ const UsersLoginLogout = function(props) {
             </div>
         );
     }
-
     return output;
 
 }
