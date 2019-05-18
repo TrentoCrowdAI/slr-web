@@ -7,6 +7,8 @@ let abortRequestType;
 //10seconds for timeout
 let timeOutTime = 10 * 1000;
 
+//get the localStorage object
+const localStorage = window.localStorage;
 
 /**
  * abort all request in progeress by user
@@ -112,6 +114,7 @@ async function get(url, queryData = "") {
     let jsonHeaders = new Headers();
     jsonHeaders.append('Accept', 'application/json');
     jsonHeaders.append('Content-Type', 'application/json;charset=UTF-8');
+    jsonHeaders.append('Authorization', localStorage.getItem("userToken"));
 
     let options = {
         "method": 'GET',
@@ -126,8 +129,13 @@ async function get(url, queryData = "") {
  * @param url
  */
 async function deletes(url) {
+
+    let jsonHeaders = new Headers();
+    jsonHeaders.append('Authorization', localStorage.getItem("userToken"));
+
     let options = {
-        "method": 'DELETE'
+        "method": 'DELETE',
+        "headers": jsonHeaders,
     };
 
     return await request(url, options, timeOutTime);
@@ -145,6 +153,8 @@ async function post(url, bodyData = "") {
     jsonHeaders.append('Accept', 'application/json, text/plain, */*');
     jsonHeaders.append('Cache-Control', 'no-cache');
     jsonHeaders.append('Content-Type', 'application/json;charset=UTF-8');
+    jsonHeaders.append('Authorization', localStorage.getItem("userToken"));
+
     let body = JSON.stringify(bodyData, null, 2);
     let options = {
         "method": 'POST',
@@ -169,6 +179,8 @@ async function postFile(url, bodyData = "") {
     let jsonHeaders = new Headers();
     jsonHeaders.append('Accept', 'application/json, text/plain, */*');
     jsonHeaders.append('Cache-Control', 'no-cache');
+    jsonHeaders.append('Authorization', localStorage.getItem("userToken"));
+
    // jsonHeaders.append('Content-Type', 'multipart/form-data');
     let options = {
         "method": 'POST',
@@ -191,6 +203,8 @@ async function put(url, bodyData = "") {
     jsonHeaders.append('Accept', 'application/json, text/plain, */*');
     jsonHeaders.append('Cache-Control', 'no-cache');
     jsonHeaders.append('Content-Type', 'application/json;charset=UTF-8');
+    jsonHeaders.append('Authorization', localStorage.getItem("userToken"));
+
     let body = JSON.stringify(bodyData, null, 2);
     let options = {
         "method": 'PUT',

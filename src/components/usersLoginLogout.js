@@ -1,6 +1,8 @@
 import React, {useContext} from 'react';
-
 import {GoogleLogin} from 'react-google-login';
+
+import config from 'config/index'
+
 import {usersDao} from 'dao/users.dao'
 
 import {AppContext} from 'components/providers/appProvider';
@@ -46,8 +48,8 @@ const UsersLoginLogout = function (props) {
             else if (res) {
                 // set the user data in context provider
                 appConsumer.setUser(res.user);
-                //and save the token in localStorage
-                storage.setItem("userToken", JSON.stringify(res.token));
+                //and save the token as string in localStorage
+                storage.setItem("userToken", res.token);
                 //redirect to home page
                 props.history.push("/");
             }
@@ -88,7 +90,7 @@ const UsersLoginLogout = function (props) {
         output = (
             <div className="login-holder">
                 <GoogleLogin
-                    clientId="282160526683-84sdnoqh3bc1obojfpepcbonnfg3uks4.apps.googleusercontent.com"
+                    clientId={config.google_login_client_id}
                     buttonText="Login"
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
