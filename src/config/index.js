@@ -8,6 +8,7 @@ const config = {
     "home": "http://localhost:3001/",
     "search": "search",
     "scopus_search": "search-scopus",
+    "search_similar": "search/similar",
     "projects": "projects",
     "papers": "papers",
     "customPapers": "customPapers",

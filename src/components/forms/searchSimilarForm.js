@@ -143,16 +143,21 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
             setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
             setYear(queryData.year);
 
-            //if there's some data in storage
+            //if there's some data in storage(it means I'm probaly fetching a second page of results)
             if(similarPaperData){
                 //open flag of loading
                 setDisplay(false);
-                //I call the dao for searching for similar papers based on similarPaperString
-                res = await paperDao.search({"query": "Trento"});
+                
+                //I call the dao for searching for similar papers based on the data
+                //this will be the call for the similarity search
+                res = await paperDao.searchSimilar({"query": "Trento", "start" : queryData.start, "count" : queryData.count});
                 setPapersList(res.results);
+                
                 //close flag of loading
                 setDisplay(true);
-            }else if(similarPaperFile){//if there's a file I can do an api call to search for papers similar to the file
+
+            }//if there's a file I can do an api call to search for papers similar to the file
+            else if(similarPaperFile){
                 
                 console.log("FILE NAME : " + similarPaperFile.name)
 
@@ -188,28 +193,31 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
                         setSimilarPaperFetch(false);
                     }
     
-                    //I call the dao for searching for similar papers based on similarPaperString
-                    res = await paperDao.search({"query": "Trento"});
+                    //I call the dao for searching for similar papers based on the data
+                    //this will be the call for the similarity search
+                    res = await paperDao.searchSimilar({"query" : "Trento", "start" : queryData.start, "count" : queryData.count});
                     setPapersList(res.results);
+                    
                     //close flag of loading
                     setDisplay(true);
 
                 }
-            }else if (queryData.query !== "") {
-
-                console.log("SIMILAR PAPER STRING : " + queryData.query);
+            }//if there's a query I can retrieve similar papers based on the query
+            else if (queryData.query !== "") {
 
                 setDisplay(false);
                 
                 setSimilarPaperFetch(true);
                 //this will be the call to the service identifying a specific paper
-                let paperData = await paperDao.selectById(16);
-                setSimilarPaperData(paperData.data);
+                let paperData = await paperDao.search({"query": "Torino"});
+                setSimilarPaperData(paperData.results[0]);
                 setSimilarPaperFetch(false);
 
 
                 //I call the dao for searching for similar papers based on similarPaperString
-                let res = await paperDao.search(queryData);
+                //this will be the call for the similarity search
+                let res = await paperDao.searchSimilar({"query" : "Trento", "start" : queryData.start, "count" : queryData.count});
+                console.log(res);
 
                 //error checking
                 //if is 404 error
@@ -501,7 +509,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
         setSelectedPapersList([]);
 
         //update the storage
-        storage.setItem("selectedPapersList", JSON.stringify(selectedPapersList));
+        storage.removeItem("selectedPapersList");
 
         alert("insert completed");
 

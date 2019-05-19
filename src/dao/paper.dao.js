@@ -24,11 +24,27 @@ async function selectById(id){
     return res;
 }
 
+/**
+ * dao to search similar papers
+ * @param bodyData
+ * @return {array[objects]}
+ */
+async function searchSimilar(bodyData){
+    let url = config.home+config.search_similar;
 
+    console.log(bodyData);
+
+    const res = await http.post(url, bodyData);
+    
+    
+    return res;
+
+}
 
 const paperDao = {
     search,
     selectById,
+    searchSimilar,
     "abortRequest" : http.abortRequest
 }
 

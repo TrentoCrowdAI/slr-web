@@ -285,7 +285,7 @@ const SearchForm = function ({project_id, location, match, history}) {
             //empties the state
             setSelectedPapersList([]);
             //update the storage
-            storage.setItem("selectedPapersList", JSON.stringify(selectedPapersList));
+            storage.removeItem("selectedPapersList");
             alert("insert completed");
         }
 
