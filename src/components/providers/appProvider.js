@@ -1,8 +1,10 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 
 import NavBar from 'components/navigation/navBar';
 import Main from 'components/main';
 import Error from 'components/modules/error';
+
+import {usersDao} from 'dao/users.dao';
 
 //create a context object
 const AppContext = React.createContext();
@@ -14,6 +16,9 @@ const AppProvider = function (props) {
 
     //user data
     const [user, setUser] = useState(null);
+
+    //user data fetch flag
+    const [userFetch, setUserFetch] = useState(true);
 
     //error
     const [error, setError] = useState(null);
@@ -27,6 +32,8 @@ const AppProvider = function (props) {
     const contextObject ={
         user,
         setUser,
+        userFetch,
+        setUserFetch,
         error,
         setError,
         title,
@@ -35,6 +42,28 @@ const AppProvider = function (props) {
         setProjectName
     };
 
+
+    //effect on context mount to fetch user data if he's logged
+    useEffect(() => {
+        //get the localStorage object
+        const storage = window.localStorage;
+
+        if (storage.getItem("userToken")) {
+            async function getUserData(){
+
+
+                let res = await usersDao.getUserByTokenId(storage.getItem("userToken"));
+
+                // set the user data in context provider
+                setUser(res.user);
+
+                setUserFetch(false);
+            }
+            getUserData();
+        }
+
+        
+    }, [])
 
     //if there isn't error
     if (!error) {

@@ -13,6 +13,8 @@ const config = {
     "papers": "papers",
     "customPapers": "customPapers",
     "userLogin": "auth/login",
+    "userInfo": "user-info",
+    "userLogout": "auth/logout",
     "menu_list": [
         {id: 4, content: "home", link: "/"},
         {id: 5, content: "my projects", link: "/projects"},

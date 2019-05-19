@@ -29,12 +29,13 @@ const UsersLoginLogout = function (props) {
      * google response handler function
      */
     async function responseGoogle  (response){
-        console.log(response);
 
         //if the google login is succeeded
         if (response.tokenId) {
 
             let userLoginData = {"tokenId": response.tokenId};
+
+            appConsumer.setUserFetch(true);
 
             //call dao for verfying the user and logging him in
             let res = await usersDao.postTokenId(userLoginData);
@@ -46,29 +47,52 @@ const UsersLoginLogout = function (props) {
             }
             //if success
             else if (res) {
+
+
                 // set the user data in context provider
                 appConsumer.setUser(res.user);
                 //and save the token as string in localStorage
                 storage.setItem("userToken", res.token);
+
+
                 //redirect to home page
                 props.history.push("/");
             }
-            console.log(res);
+            
+            appConsumer.setUserFetch(false);
         }
     }
 
     /**
      * logout handler function
      */
-    function logout (e){
+    async function logout (e){
         console.log("logging out");
 
-        //remove token from storage
-        localStorage.removeItem("userToken");
-        //remove user info from context
-        appConsumer.setUser(null);
-        //redirect to home page
-        props.history.push("/");
+        appConsumer.setUserFetch(true);
+
+        //call dao for logging user out
+        let res = await usersDao.logoutUser();
+
+        //error checking
+        if (res && res.message) {
+            //pass error object to global context
+            appConsumer.setError(res);
+        }
+        //if success
+        else if (res) {
+
+            //remove token from storage
+            localStorage.removeItem("userToken");
+            //remove user info from context
+            appConsumer.setUser(null);
+            //redirect to home page
+            props.history.push("/");
+
+        }
+
+        appConsumer.setUserFetch(false);
+
     }
 
     //part of visualization-----------------------------
@@ -80,7 +104,7 @@ const UsersLoginLogout = function (props) {
         //if there's token it means the user is logged and I print the logout option
         output = (
             <div className="logout-holder">
-                <button type="button" onClick={logout}>Log Out</button>
+                <button type="button" onClick={logout}>Log out</button>
             </div>
         );
     }

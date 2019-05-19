@@ -61,6 +61,20 @@ const SideMenu = function (props) {
                 </div>
             </div>
         );
+    }else if(appConsumer.userFetch){
+        return (
+            <div className="menu">
+                <Cover cls={(shown) ? "full-screen-transparent" : ""} handler={handleMenuBlur}/>
+                <div className={clsbutton} onClick={handleToggleMenuButton}>
+                    <MenuButton/>
+                </div>
+
+                <div className={clsidemenu} tabIndex={-1}>
+                    <h3 className="not-logged">logging in...</h3>
+
+                </div>
+            </div>
+        );
     }else{
         return (
             <div className="menu">
@@ -75,7 +89,7 @@ const SideMenu = function (props) {
                 </div>
             </div>
         );
-    } 
+    }
 };
 
 /**

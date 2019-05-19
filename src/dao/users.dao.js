@@ -11,9 +11,28 @@ async function postTokenId(bodyData) {
     return await http.post(url, bodyData);
 }
 
+/**
+ * get user by token
+ * @return {Object} user data
+ */
+async function getUserByTokenId() {
+    let url = config.home + config.userInfo;
+    return await http.get(url);
+}
+
+/**
+ * logout user
+ * @return {Object} user data
+ */
+async function logoutUser() {
+    let url = config.home + config.userLogout;
+    return await http.get(url);
+}
 
 const usersDao = {
-    postTokenId
+    postTokenId,
+    getUserByTokenId,
+    logoutUser
 }
 
 
