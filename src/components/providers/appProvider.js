@@ -60,6 +60,8 @@ const AppProvider = function (props) {
                 setUserFetch(false);
             }
             getUserData();
+        }else{
+            setUserFetch(false);
         }
 
         

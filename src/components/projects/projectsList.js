@@ -189,7 +189,7 @@ const PrintList = function ({projectsList, path, handleDelete}) {
                         <p className="description">{element.data.description}</p>
                         <div className="project-dates">
                             <p>{/*created on <i>{element.date_created.slice(0, 10)}</i>*/}</p>
-                            <p>last modified on <i>{(element.date_last_modified === element.date_created) ? "never" : element.date_last_modified.slice(0, 10)}</i></p> 
+                            <p>last modified on <i>{element.date_last_modified.slice(0, 10)}</i></p> 
                         </div>
                     </Link>
                 </div>

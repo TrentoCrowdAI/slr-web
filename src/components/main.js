@@ -39,11 +39,8 @@ const Main = function(props){
             </Switch>
         );
     }
-    //otherwise if the user is not logged in display the home
-    else if(!appConsumer.user){
+    else{
         output = (<Home/>);
-    }else{
-        output = (<LoadIcon/>);
     }
 
     return (
