@@ -277,7 +277,42 @@ div.navigation-wrapper div.menu div.side-menu div.user div.user-info{
   line-height: 30px;
   text-align: center;
 }
+div.navigation-wrapper div.menu h3.not-logged{
+  text-align: center;
+  line-height: 35px;
+  font-size: 24px;
+  color: #677581;
+}
 
+/*===BREADCRUMBS & LOGIN_ELEMENTS===*/
+div.relative-header{
+  position: relative;
+  margin: 60px 18px 5px 18px;
+  display: flex;
+  justify-content: space-between;
+}
+div.breadcrumbs a{
+  display: inline-block;
+}
+div.breadcrumbs a:last-child{
+  text-decoration: underline;
+}
+
+div.login-holder{
+  position: fixed;
+  right: 45px;
+  top: 75px;
+  z-index: 99999;
+}
+div.logout-holder{
+  border-bottom: 1px dotted #525252;
+  color: #808080;
+  transition: 0.3s all;
+}
+div.logout-holder:hover{
+  border-bottom: 1px dotted #000;
+  color: #000;
+}
 
 /*===SVG_ELEMENTS===*/
 .st0, .st-t, .st-m, .st-b{stroke:#000000;stroke-width:200;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
