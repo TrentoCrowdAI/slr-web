@@ -1,5 +1,7 @@
 import React, {useContext, useEffect} from "react";
 
+import {withRouter} from 'react-router-dom';
+
 import {AppContext} from "components/providers/appProvider";
 
 /**
@@ -16,6 +18,14 @@ const Home = function (props) {
         appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">HOME</h2> </div>);
     },[])//run on component mount
 
+    const { history, location } = props;
+
+    useEffect(() => {
+        //if user is not logged it I redirect to homepage
+        if(!appConsumer.user){
+            history.push("/");
+        }
+    }, [location.pathname]) //every time location changes
 
     return (
         <>
@@ -46,4 +56,5 @@ const Home = function (props) {
 
 };
 
-export default Home;
+
+export default withRouter(Home); //I export passing router componets to the Home so it can access history and location

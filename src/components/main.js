@@ -18,12 +18,6 @@ const Main = function(props){
     //get data from global context
     const appConsumer = useContext(AppContext);
 
-    console.log(typeof appConsumer.userFetch);
-
-    console.log(appConsumer.userFetch);
-
-    console.log(appConsumer.user);
-
     //If I'm fecthing the user I dispay a loading icon
     if(appConsumer.userFetch){
         output = (<LoadIcon/>);
