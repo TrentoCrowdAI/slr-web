@@ -20,7 +20,7 @@ const NavBar = function(props){
         <div className="navigation-wrapper">
 
             {/*background of the menu-bar*/}
-            <nav className="main-nav">
+            <nav className={appConsumer.user ? "main-nav" : "main-nav nav-title-to-left"}>
                 {appConsumer.title}
             </nav>
             {props.children}
