@@ -16,9 +16,9 @@ const config = {
     "userInfo": "user-info",
     "userLogout": "auth/logout",
     "menu_list": [
-        {id: 4, content: "home", link: "/"},
-        {id: 5, content: "my projects", link: "/projects"},
-        {id: 6, content: "account", link: "#"}
+        {id: 4, content: "Home", link: "/"},
+        {id: 5, content: "My projects", link: "/projects"},
+        {id: 6, content: "Account", link: "#"}
     ],
     "max_total_number_for_results": 5000,
     "pdf_parse_server": "pdf",

@@ -2,6 +2,7 @@ import React, {useState, useContext} from "react";
 import {Link} from 'react-router-dom';
 
 import { AppContext } from 'components/providers/appProvider'
+import {usersDao} from 'dao/users.dao';
 
 import UserInfo from 'components/navigation/userInfo';
 import config from 'config/index';
@@ -32,6 +33,41 @@ const SideMenu = function (props) {
         setShown(false);
     }
 
+    /**
+     * logout handler function
+     */
+    async function logout (e){
+        console.log("logging out");
+
+        //this way we won't trigger the menu animation again if the user logs in again 
+        setFirstTime(true);
+
+        appConsumer.setUserFetch(true);
+
+        //call dao for logging user out
+        let res = await usersDao.logoutUser();
+
+        //error checking
+        if (res && res.message) {
+            //pass error object to global context
+            appConsumer.setError(res);
+        }
+        //if success
+        else if (res) {
+
+            //remove token from storage
+            localStorage.removeItem("userToken");
+            //remove user info from context
+            appConsumer.setUser(null);
+            //redirect to home page
+            //props.history.push("/");
+
+        }
+
+        appConsumer.setUserFetch(false);
+
+    }
+
     //change the class of element by menu state
     var clsidemenu = "modal side-menu up";
     var clsbutton = "button-wrapper close";
@@ -57,7 +93,9 @@ const SideMenu = function (props) {
                     {/*user info box*/}
                     <UserInfo/>
                     <PrintMenu handleMenuBlur={handleMenuBlur}/>
-
+                    <div className="entry-holder">
+                        <button type="button" className="menu-option" onClick={logout} onMouseUp={handleMenuBlur}>Log out</button>
+                    </div>
                 </div>
             </div>
         );
@@ -76,7 +114,7 @@ const PrintMenu = function (props) {
 
     let output = (
         config.menu_list.map((element, index) => (
-                <div key={index}>
+                <div key={index} className="entry-holder">
                     <Link to={element.link} className="menu-option"
                           onMouseUp={props.handleMenuBlur}>{element.content}</Link>
                 </div>

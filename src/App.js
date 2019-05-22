@@ -9,7 +9,7 @@ import NavBar from 'components/navigation/navBar';
 import SideMenu from 'components/navigation/sideMenu';
 import BreadCrumbs from 'components/breadCrumbs';
 
-import UsersLoginLogout from 'components/usersLoginLogout';
+import UsersLogin from 'components/usersLogin';
 
 
 import  {AppProvider} from 'components/providers/appProvider';
@@ -35,11 +35,13 @@ const App = function(props) {
                         </NavBar>
                         <Switch>
                             {/* this route will always be rendered*/}
-                            <Route render={(props) => <div className="relative-header"><BreadCrumbs {...props}/><UsersLoginLogout {...props}/></div>}/>
+                            <Route render={(props) => <div className="relative-header"><BreadCrumbs {...props}/></div>}/>
                         </Switch> 
 
                         <Main/>
-                    
+
+                        <UsersLogin/>
+
                     </AppProvider>
                 </div>
             </Router>
