@@ -33,10 +33,8 @@ const App = function(props) {
                             {/*component menu*/}
                             <SideMenu/>
                         </NavBar>
-                        <Switch>
-                            {/* this route will always be rendered*/}
-                            <Route render={(props) => <div className="relative-header"><BreadCrumbs {...props}/></div>}/>
-                        </Switch> 
+
+                        <BreadCrumbs/>
 
                         <Main/>
 

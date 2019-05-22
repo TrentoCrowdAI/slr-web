@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 import {AppContext} from 'components/providers/appProvider';
 
@@ -9,13 +9,15 @@ const BreadCrumbs = function(props) {
     //get data from global context
     const appConsumer = useContext(AppContext);
     
-
     let bcPath = <></>;
 
     function createBreadCrumbs(){
 
+        //I extract the location from the router
+        const { location } = props;
+
         //I split the pathname by '/' and remove empty strings
-        let path = props.location.pathname.split('/').filter(x => x);
+        let path = location.pathname.split('/').filter(x => x);
 
         //will contain the partial url
         let href= "/";
@@ -84,9 +86,11 @@ const BreadCrumbs = function(props) {
     
 
     return (
-        <div className="breadcrumbs">{bcPath}</div>
+        <div className="relative-header">
+            <div className="breadcrumbs">{bcPath}</div>
+        </div>
     );
 
 }
 
-export default BreadCrumbs;
+export default withRouter(BreadCrumbs);

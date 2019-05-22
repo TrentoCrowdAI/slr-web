@@ -1,20 +1,35 @@
 import React, {useContext, useEffect} from 'react';
+import {withRouter} from 'react-router-dom';
+
 import {AppContext} from "components/providers/appProvider";
 
 
-const Error = function () {
+const Error = function (props) {
 
     //get data from global context
     const appConsumer = useContext(AppContext);
 
+    //useful router stuff
+    const { history } = props;
+
     useEffect(() => {//not used yet
+
+        console.log(appConsumer.error.payload.statusCode);
+
+        //once the component is mounted I go immediately back if error is 401
+        if(appConsumer.error.payload.statusCode === 401){
+            console.log("pushing back")
+            history.goBack();
+            appConsumer.setError(null);
+        }
 
         return () => {
             //delete the error, so app can resume its work
             appConsumer.setError(null);
         }
 
-    });
+    }, []);
+    
 
     //function to delete the error object in context
     function handleOnRefresh(){
@@ -22,13 +37,13 @@ const Error = function () {
     }
     //function to return to previous page
     function handleOnGoBack(){
-        window.history.back();
+        history.goBack();
         appConsumer.setError(null);
     }
 
-
     //console.dir(appConsumer.error);
-    let output;
+    let output = <></>;
+
     //is a error from backend
     if (appConsumer.error.payload) {
         output = (
@@ -73,4 +88,4 @@ const Error = function () {
 }
 
 
-export default Error;
+export default withRouter(Error);
