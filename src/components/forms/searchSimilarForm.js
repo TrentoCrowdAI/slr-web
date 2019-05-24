@@ -20,6 +20,7 @@ import LoadIcon from 'components/svg/loadIcon';
 import SearchButton from 'components/svg/searchButton';
 import RemoveButton from 'components/svg/removeButton';
 import SearchSimilarButton from 'components/svg/searchSimilarButton';
+import NoSearchResults from "components/svg/noSearchResults";
 
 import {AppContext} from 'components/providers/appProvider'
 
@@ -547,7 +548,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
     else if (papersList.length === 0 && (queryData.query !== "" || similarPaperFile || similarPaperData)) {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
-            <div className="not-found"> not found :( </div>
+            <div className="not-found"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
         );
     }
     else if (papersList.length > 0 && (queryData.query !== "" || similarPaperFile || similarPaperData)) {

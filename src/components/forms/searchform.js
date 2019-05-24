@@ -9,15 +9,17 @@ import {projectPapersDao} from 'dao/projectPapers.dao'
 
 import CheckBox from "components/forms/checkbox";
 import RadioBox from "components/forms/radiobox";
+import {PrintScoupusSearchList} from 'components/papers/printPapersList';
+import Select from 'components/forms/select';
+import Pagination from "components/modules/pagination";
+
 import LoadIcon from 'components/svg/loadIcon';
 import SearchButton from 'components/svg/searchButton';
 import SearchSimilarButton from 'components/svg/searchSimilarButton';
-import {PrintScoupusSearchList} from 'components/papers/printPapersList';
-import Select from 'components/forms/select';
 import OrderArrow from 'components/svg/orderArrow';
-import Pagination from "components/modules/pagination";
 import CloseButton from 'components/svg/closeButton';
 import RemoveButton from 'components/svg/removeButton';
+import NoSearchResults from "components/svg/noSearchResults";
 
 import {AppContext} from 'components/providers/appProvider'
 
@@ -470,7 +472,7 @@ const SearchForm = function ({project_id, location, match, history}) {
     else if (papersList.length === 0 && queryData.query !== "") {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
-            <div className="not-found"> not found :( </div>
+            <div className="no-results"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
         );
     }
     else if (papersList.length > 0 && queryData.query !== "") {

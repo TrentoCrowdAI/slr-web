@@ -465,6 +465,12 @@ button.edit-button{
 .st3-sps{fill:#26110A;stroke:#333333;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 .st4-sps{fill:none;stroke:#000000;stroke-width:38;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 
+/*no search results*/
+.st0-no-results{fill:none;stroke:#000000;stroke-width:37;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st1-no-results{fill:none;stroke:#000000;stroke-width:19;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st2-no-results{fill:none;stroke:#000000;stroke-width:80;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st3-no-results{fill:none;stroke:#000000;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
 /*clamp lines*/
 button.clamp-lines__button{
   font-size: 14px;
@@ -498,9 +504,27 @@ ul.pagination span.current-page{
   font-weight: 700;
 }
 /*notfound error*/
-div.not-found{
+div.no-results{
   animation: showup 0.3s linear ;
   margin-left: 10px;
+  height: 100px;
+  width: 680px;
+  justify-content: center;
+  margin-top: 80px;
+}
+div.no-results svg#no-results{
+  display: block;
+  margin: 0 auto;
+  height: 100px;
+  width: 100px;
+}
+div.no-results p.not-found-description{
+  display: block;
+  text-align: center;
+  width: 100%;
+  margin: 0px;
+  font-size: 30px;
+  font-weight: 300;
 }
 
 /*cover the page*/
