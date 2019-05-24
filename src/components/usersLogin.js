@@ -67,7 +67,7 @@ const UsersLogin = function (props) {
     //part of visualization-----------------------------
 
     //if there's no token or I'm not fetching an user
-    if (!storage.getItem("userToken") && !appConsumer.userFetch) {
+    if ((!storage.getItem("userToken") && !appConsumer.userFetch) || (!appConsumer.userFetch && !appConsumer.user)) {
 
         output = (
             <div className="login-holder">
