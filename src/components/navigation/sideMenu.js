@@ -41,30 +41,10 @@ const SideMenu = function (props) {
 
         //this way we won't trigger the menu animation again if the user logs in again 
         setFirstTime(true);
-
-        appConsumer.setUserFetch(true);
-
-        //call dao for logging user out
-        let res = await usersDao.logoutUser();
-
-        //error checking
-        if (res && res.message) {
-            //pass error object to global context
-            appConsumer.setError(res);
-        }
-        //if success
-        else if (res) {
-
-            //remove token from storage
-            localStorage.removeItem("userToken");
-            //remove user info from context
-            appConsumer.setUser(null);
-            //redirect to home page
-            //props.history.push("/");
-
-        }
-
-        appConsumer.setUserFetch(false);
+        //remove token from storage
+        localStorage.removeItem("userToken");
+        //remove user info from context
+        appConsumer.setUser(null);
 
     }
 

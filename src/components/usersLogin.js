@@ -30,37 +30,23 @@ const UsersLogin = function (props) {
      * google response handler function
      */
     async function responseGoogle(response){
-
         //if the google login is succeeded
         if (response.tokenId) {
+            console.log(response.profileObj);
+            let user = {"email": response.profileObj.email, 
+                        "name": response.profileObj.givenName, 
+                        "surname": response.profileObj.familyName, 
+                        "image": response.profileObj.imageUrl};
 
-            let userLoginData = {"tokenId": response.tokenId};
-
-            appConsumer.setUserFetch(true);
-
-            //call dao for verfying the user and logging him in
-            let res = await usersDao.postTokenId(userLoginData);
-
-            //error checking
-            if (res && res.message) {
-                //pass error object to global context
-                appConsumer.setError(res);
-            }
-            //if success
-            else if (res) {
+            // set the user data in context provider
+            appConsumer.setUser(user);
+            //and save the token as string in localStorage
+            storage.setItem("userToken", response.tokenId);
 
 
-                // set the user data in context provider
-                appConsumer.setUser(res.user);
-                //and save the token as string in localStorage
-                storage.setItem("userToken", res.token);
-
-
-                //redirect to home page
-                history.push("/");
-            }
+            //redirect to home page
+            history.push("/");
             
-            appConsumer.setUserFetch(false);
         }
     }
 

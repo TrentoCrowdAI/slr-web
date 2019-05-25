@@ -4,8 +4,8 @@
 
 
 const config = {
-    "home": "https://crowdai-slr-api-dev.herokuapp.com/",
-    //"home": "http://localhost:3001/",
+    //"home": "https://crowdai-slr-api-dev.herokuapp.com/",
+    "home": "http://localhost:3001/",
     "search": "search",
     "scopus_search": "search-scopus",
     "search_similar": "search/similar",
@@ -13,7 +13,7 @@ const config = {
     "papers": "papers",
     "customPapers": "customPapers",
     "userLogin": "auth/login",
-    "userInfo": "user-info",
+    "userInfo": "https://www.googleapis.com/oauth2/v3/tokeninfo",
     "userLogout": "auth/logout",
     "menu_list": [
         {id: 4, content: "Home", link: "/"},

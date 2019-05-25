@@ -15,9 +15,9 @@ async function postTokenId(bodyData) {
  * get user by token
  * @return {Object} user data
  */
-async function getUserByTokenId() {
-    let url = config.home + config.userInfo;
-    return await http.get(url);
+async function getUserByTokenId(id_token) {
+    let url = config.userInfo;
+    return await http.get(url, {id_token});
 }
 
 /**

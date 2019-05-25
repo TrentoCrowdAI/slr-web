@@ -50,12 +50,18 @@ const AppProvider = function (props) {
 
         if (storage.getItem("userToken")) {
             async function getUserData(){
-
-
                 let res = await usersDao.getUserByTokenId(storage.getItem("userToken"));
 
-                // set the user data in context provider
-                setUser(res.user);
+                //if I receive an error I remove the deprecated token
+                if(res && res.message){
+                    storage.removeItem("userToken");
+                }else{
+                    let user = {"email": res.email, 
+                                "name": res.given_name, 
+                                "surname": res.family_name, 
+                                "image": res.picture};
+                    setUser(user);
+                }
 
                 setUserFetch(false);
             }

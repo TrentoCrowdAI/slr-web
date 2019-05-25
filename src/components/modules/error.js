@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {withRouter} from 'react-router-dom';
 
 import {AppContext} from "components/providers/appProvider";
-
+import {usersDao} from "dao/users.dao";
 
 const Error = function (props) {
 
@@ -12,12 +12,31 @@ const Error = function (props) {
     //useful router stuff
     const { history } = props;
 
-    useEffect(() => {//not used yet
-
+    useEffect(() => {
         console.log(appConsumer.error.payload.statusCode);
 
         //once the component is mounted I go immediately back if error is 401
-        if(appConsumer.error.payload.statusCode === 401){
+        if(appConsumer.error.payload.statusCode === 401 || appConsumer.error.payload.message === "the token does not match any user!"){
+            console.log("unauth call")
+            //once I get unauthorized error I check whether the user token is expired
+            const storage = window.localStorage;
+            if (storage.getItem("userToken")) {
+                async function getUserData(){
+                    let res = await usersDao.getUserByTokenId(storage.getItem("userToken"));
+                    //If the token is expired I remove it and I logout the user
+                    if(res && res.message){
+                        console.log("INVALID TOKEN");
+                        storage.removeItem("userToken");
+                        appConsumer.setUser(null);
+                    }else{
+                        console.log("VALID TOKEN");
+                    }
+                    
+                }
+                console.log("checking token")
+                getUserData();
+            }
+            //then I go back
             console.log("pushing back")
             history.goBack();
             appConsumer.setError(null);

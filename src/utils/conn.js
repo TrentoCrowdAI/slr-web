@@ -1,4 +1,5 @@
 /*this is the file to communicate with backend by fetch request*/
+import config from 'config/index';
 
 //signal to abort the request
 let abortController;
@@ -49,7 +50,7 @@ async function request(url, options, timeOutTime) {
         let requestOptions = Object.assign(
             {
                 //enable the  sending of cookie
-                credentials: 'include',
+                credentials: (url.includes(config.userInfo)) ? 'omit' : 'include', //if it's a google user api request I don't need credentials
                 "mode": 'cors',
                 "signal": signal
             },
