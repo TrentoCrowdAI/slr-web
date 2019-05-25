@@ -69,6 +69,16 @@
   100%{
     border-bottom: solid 1px black;
   }
+}@keyframes ghost-move {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100%{
+    transform: translateY(0px);
+  }
 }
 
 /*===DEFAULT_STYLING===*/
@@ -471,6 +481,24 @@ button.edit-button{
 .st2-no-results{fill:none;stroke:#000000;stroke-width:80;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 .st3-no-results{fill:none;stroke:#000000;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 
+/*empty folder*/
+.st0-empty-folder{fill:#EAEEF1;}
+.st1-empty-folder{fill:#F2F2F3;}
+.st2-empty-folder{fill:#333333;}
+.st3-empty-folder{fill:#E2F5FF;stroke:#000000;stroke-width:14.0887;stroke-miterlimit:10;}
+
+/*no papers*/
+.st0-no-papers{fill:none;stroke:#dadaec;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;}
+.st1-no-papers{fill:none;stroke:#dadaec;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:62.6688,102.1984;}
+.st2-no-papers{fill:none;stroke:#dadaec;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:74.721,121.8527;}
+.st3-no-papers{fill:none;stroke:#dadaec;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:57.9899,94.5681;}
+.st4-no-papers{fill:none;stroke:#dadaec;stroke-width:40;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:58.7767,95.8512;}
+
+/*ghost*/
+.st0-ghost{fill:#f1f7fa;stroke:#000000;stroke-width:8.9609;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st1-ghost{fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:10;}
+.st2-ghost{font-weight: 300;font-size:101.9298px;}
+  
 /*clamp lines*/
 button.clamp-lines__button{
   font-size: 14px;
@@ -503,13 +531,13 @@ ul.pagination li{
 ul.pagination span.current-page{
   font-weight: 700;
 }
+
 /*notfound error*/
 div.no-results{
   animation: showup 0.3s linear ;
   margin-left: 10px;
   height: 100px;
   width: 680px;
-  justify-content: center;
   margin-top: 80px;
 }
 div.no-results svg#no-results{
@@ -525,6 +553,57 @@ div.no-results p.not-found-description{
   margin: 0px;
   font-size: 30px;
   font-weight: 300;
+}
+
+/*empty folder(and project)*/
+div.empty-folder-wrapper{
+  position: relative;
+  width: 800px;
+  margin-top: 80px;
+}
+div.empty-folder-wrapper svg#empty-folder{
+  display: block;
+  margin: 0 auto;
+  height: 200px;
+  width: 200px;
+}
+div.empty-folder-wrapper p.empty-folder-description{
+  width: 800px;
+  display: block;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 300;
+  margin: 0px;
+}
+
+div.empty-project-wrapper{
+  position: relative;
+  width: 650px;
+  margin-top: 50px;
+}
+div.empty-project-wrapper svg#no-papers{
+  display: block;
+  margin: 0 auto;
+  height: 180px;
+  width: 180px;
+}
+div.empty-project-wrapper p.empty-project-description{
+  width: 500px;
+  display: block;
+  font-size: 24px;
+  font-weight: 300;
+  text-align: center;
+  margin: 20px auto;
+}
+
+/*404 page*/
+div.page-not-found-wrapper{
+  margin: 50px auto;
+  width: 500px
+}
+div.page-not-found-wrapper svg#ghost{
+  height: 400px;
+  animation: ghost-move infinite 3s ease-in-out;
 }
 
 /*cover the page*/

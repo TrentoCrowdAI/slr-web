@@ -6,6 +6,8 @@ import CheckBox from "components/forms/checkbox";
 import SideOptions from 'components/modules/sideOptions';
 import {projectPapersDao} from 'dao/projectPapers.dao';
 import {AppContext} from 'components/providers/appProvider'
+
+import NoPapers from "components/svg/noPapers";
 /**
  * prints the papers list of a local search on the fake database
  */
@@ -129,7 +131,7 @@ const PrintPapersList = function ({papersList, location, history}) {
     //if list is empty, print a notice message
     if (localPaperList.length === 0) {
         output = (
-            <div>there are no papers here, you can add new ones by searching</div>
+            <div className="empty-project-wrapper"> <NoPapers/> <p className="empty-project-description"> There are no papers here, you can add new ones by searching </p></div>
         );
     }
     //if list isn't empty, print list of papers

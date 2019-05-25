@@ -7,6 +7,7 @@ import Home from 'components/home';
 import ProjectsList from 'components/projects/projectsList';
 import ProjectPage from 'components/projects/projectPage';
 import LoadIcon from 'components/svg/loadIcon';
+import PageNotFound from "./modules/pageNotFound";
 
 /**
  * compotent main of page
@@ -29,7 +30,7 @@ const Main = function(props){
                 <Route exact path="/" render={() => <Home/> }/>
                 <Route exact path="/projects" render={(props) => <ProjectsList {...props} />}/>
                 <Route path="/projects/:id" render={(props) => <ProjectPage {...props} />}/>
-                <Route render={(props) => <div>404</div>}/>
+                <Route render={(props) => <PageNotFound/>}/>
             </Switch>
         );
     }

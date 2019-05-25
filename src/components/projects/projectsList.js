@@ -12,6 +12,7 @@ import Cover from 'components/modules/cover';
 import SideOptions from 'components/modules/sideOptions';
 
 import {AppContext} from "components/providers/appProvider";
+import EmptyFolder from "components/svg/emptyFolder";
 
 /**
  *this component will show a projects list page
@@ -176,7 +177,7 @@ const PrintList = function ({projectsList, path, handleDelete}) {
     //if list is empty, print a notice message
     if (projectsList.length === 0) {
         maps = (
-            <div>there aren't projects</div>
+            <div className="empty-folder-wrapper"> <EmptyFolder/> <p className="empty-folder-description"> You don't have any projects yet </p></div>
         );
     }
     //if list isn't empty, print list of projects
@@ -197,7 +198,7 @@ const PrintList = function ({projectsList, path, handleDelete}) {
     }
 
     let output =  (
-        <div className="project-cards-holder">
+        <div className={(projectsList.length === 0) ? "project-cards-holder-empty" : "project-cards-holder"}>
             {maps}
         </div>
     );
