@@ -7,9 +7,9 @@ import Main from 'components/main';
 
 import NavBar from 'components/navigation/navBar';
 import SideMenu from 'components/navigation/sideMenu';
-import BreadCrumbs from 'components/breadCrumbs';
+import BreadCrumbs from 'components/modules/breadCrumbs';
 
-import UsersLogin from 'components/usersLogin';
+import UsersLogin from 'components/modules/usersLogin';
 
 
 import  {AppProvider} from 'components/providers/appProvider';
