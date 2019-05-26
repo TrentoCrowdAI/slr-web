@@ -120,7 +120,7 @@ const ProjectsList = function (props) {
             //update project list state
             setProjectsList(newProjectsList);
 
-            alert("DELETED SUCCESSFULLY!");
+            appConsumer.setNotificationMessage("Successfully deleted");
         }
     }
 

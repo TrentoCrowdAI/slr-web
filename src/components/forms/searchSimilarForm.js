@@ -160,7 +160,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
                 //check file extension and its mine type
                 if(!/\.(pdf|PDF)$/.test(similarPaperFile.name) || similarPaperFile.type.indexOf("application/pdf") === -1){
-                    alert("the file must be a pdf");
+                    appConsumer.setNotificationMessage("The file must be a pdf!");
                 }
                 else{
                     //open flag of loading
@@ -178,7 +178,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
                     //if there is a error
                     if (res && res.message) {
                         //pass error object to global context
-                        alert("Error during parsing file");
+                        appConsumer.setNotificationMessage("Error during parsing file");
                         setDisplay(true);
                         setSimilarPaperFetch(false);
                     }
@@ -281,7 +281,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
         console.log("similarity search was called");
         //if query input is empty
         if (keywords === "" && !similarPaperFile) {
-            alert("similar paper string is empty")
+            appConsumer.setNotificationMessage("Similar paper string is empty")
         }
         else {
             //synchronize the query data from react state hooks
@@ -508,7 +508,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
         //update the storage
         storage.removeItem("selectedPapersList");
 
-        alert("insert completed");
+        appConsumer.setNotificationMessage("Insert completed");
 
     }
 

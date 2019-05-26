@@ -61,7 +61,7 @@ const PrintScoupusSearchList = function ({papersList, handlePaperSelection, sele
             //if res isn't null
             else if (res !== null) {
 
-                alert("DELETED SUCCESSFULLY!");
+                appConsumer.setNotificationMessage("Successfully deleted!");
 
             }
         }
@@ -120,7 +120,7 @@ const PrintPapersList = function ({papersList, location, history}) {
             //if res isn't null
             else if (res !== null) {
 
-                alert("DELETED SUCCESSFULLY!");
+                appConsumer.setNotificationMessage("Successfully deleted");
                 let newPapersList = localPaperList.filter((paper)=>paper.id !== id);
                 setLocalPaperList(newPapersList);
             }

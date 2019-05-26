@@ -54,12 +54,30 @@
     transform: rotate(360deg);
   }
 }
-@keyframes danger {
+@keyframes showup {
   0% {
-    border-bottom: solid 1px black;
+    opacity: 0.0;
+    transform: translateX(0px);
+  }
+  20%{
+    opacity: 1.0;
+    transform: translateX(-3px);
+  }
+  40%{
+    opacity: 1.0;
+    transform: translateX(3px);
+  }
+  60%{
+    opacity: 1.0;
+    transform: translateX(-3px);
+  }
+  80%{
+    opacity: 1.0;
+    transform: translateX(3px);
   }
   100%{
-    border-bottom: solid 1px #d81e1e;
+    opacity: 1.0;
+    transform: translateX(0px);
   }
 }
 @keyframes de-danger {
@@ -632,10 +650,11 @@ div.full-screen-transparent{
 
 /* notification */
 div.top-right-notification{
+  animation: showup 0.9s ease-in-out forwards;
   position: fixed;
   right: 15px;
   top: 70px;
-  border: solid 1px #a0a0a0;
+  border: solid 1px #6d6d6d;
   background-color: #F6FCFF;
   box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.3);
   border-radius: 15px;

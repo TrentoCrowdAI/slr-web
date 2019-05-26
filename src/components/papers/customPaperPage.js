@@ -1,8 +1,10 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useContext} from "react";
 import PaperForm from 'components/forms/custompaper';
 import LoadIcon from "components/svg/loadIcon";
 
 import {updateFileDao} from "dao/updateFile.dao";
+
+import {AppContext} from 'components/providers/appProvider';
 
 function CustomPaperPage({projectId, url, history}) {
 
@@ -14,6 +16,9 @@ function CustomPaperPage({projectId, url, history}) {
     //reference for the input file field
     const inputElement = useRef(null);
 
+    //get data from global context
+    const appConsumer = useContext(AppContext);
+
     async function handleSubmission(){
 
         //get the file object
@@ -23,7 +28,7 @@ function CustomPaperPage({projectId, url, history}) {
 
             //check file extension and its mine type
             if(!/\.(pdf|PDF)$/.test(file.name) || file.type.indexOf("application/pdf") === -1){
-                alert("the file must be a pdf");
+                appConsumer.setNotificationMessage("The file must be a pdf!");
             }
             else{
                 //open flag of loading
@@ -39,7 +44,7 @@ function CustomPaperPage({projectId, url, history}) {
                //if there is a error
                 if (res && res.message) {
                     //pass error object to global context
-                    alert("Error during parsing file");
+                    appConsumer.setNotificationMessage("Error during parsing file");
                    
                 }
                 else{

@@ -265,7 +265,7 @@ const SearchForm = function ({project_id, location, match, history}) {
         event.preventDefault();
 
         if (selectedPapersList.length === 0) {
-            alert("the list is empty!");
+            appConsumer.setNotificationMessage("The list is empty!");
         }
         else {
 
@@ -286,7 +286,7 @@ const SearchForm = function ({project_id, location, match, history}) {
             setSelectedPapersList([]);
             //update the storage
             storage.removeItem("selectedPapersList");
-            alert("insert completed");
+            appConsumer.setNotificationMessage("Insert completed");
         }
 
     }
@@ -303,7 +303,7 @@ const SearchForm = function ({project_id, location, match, history}) {
 
         //if query input is empty
         if (keywords === "") {
-            alert("search string is empty")
+            appConsumer.setNotificationMessage("Search string is empty")
         }
         else {
             //synchronize the query data from react state hooks
