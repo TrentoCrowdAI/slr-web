@@ -8,10 +8,10 @@ import queryString from 'query-string';
  */
 function arrayOfObjectsEquals(a, b) {
 
-    if (a == null || b == null) {
+    if (a === null || b === null) {
         return false;
     }
-    if (a.length != b.length) {
+    if (a.length !== b.length) {
         return false;
     }
 
@@ -36,10 +36,10 @@ function arrayOfObjectsEquals(a, b) {
  */
 function arrayOfObjectsContains(a, b, key) {
 
-    if (a == null || b == null) {
+    if (a === null || b === null) {
         return false;
     }
-    if (a.length == 0 || b.length == 0) {
+    if (a.length === 0 || b.length === 0) {
         return false;
     }
 

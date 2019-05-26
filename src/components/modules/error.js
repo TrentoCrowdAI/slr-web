@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {withRouter} from 'react-router-dom';
 
 import {AppContext} from "components/providers/appProvider";
@@ -6,42 +6,59 @@ import {usersDao} from "dao/users.dao";
 
 const Error = function (props) {
 
+    //this avoids setting the error to null on mount
+    const [firstTime, setFirstTime] = useState(true);
     //get data from global context
     const appConsumer = useContext(AppContext);
 
     //useful router stuff
-    const { history } = props;
+    const { history, location } = props;
 
+    //if the pathname changes(and it's not the first time) I remove the error
+    //because it means the user manually changed the path
     useEffect(() => {
-        console.log(appConsumer.error.payload.statusCode);
-
-        //once the component is mounted I go immediately back if error is 401
-        if(appConsumer.error.payload.statusCode === 401 || appConsumer.error.payload.message === "the token does not match any user!"){
-            console.log("unauth call")
-            //once I get unauthorized error I check whether the user token is expired
-            const storage = window.localStorage;
-            if (storage.getItem("userToken")) {
-                async function getUserData(){
-                    let res = await usersDao.getUserByTokenId(storage.getItem("userToken"));
-                    //If the token is expired I remove it and I logout the user
-                    if(res && res.message){
-                        console.log("INVALID TOKEN");
-                        storage.removeItem("userToken");
-                        appConsumer.setUser(null);
-                    }else{
-                        console.log("VALID TOKEN");
-                    }
-                    
-                }
-                console.log("checking token")
-                getUserData();
-            }
-            //then I go back
-            console.log("pushing back")
-            history.goBack();
+        
+        if(firstTime){
+            console.log("error mountes")
+            setFirstTime(false);
+        }else{
             appConsumer.setError(null);
         }
 
+    }, [location.pathname])
+
+    useEffect(() => {
+        try{
+            console.log(appConsumer.error.payload.statusCode);
+
+            //once the component is mounted I go immediately back if error is 401
+            if(appConsumer.error.payload.statusCode === 401 || appConsumer.error.payload.message === "the token does not match any user!"){
+                console.log("unauth call")
+                //once I get unauthorized error I check whether the user token is expired
+                const storage = window.localStorage;
+                if (storage.getItem("userToken")) {
+                    async function getUserData(){
+                        let res = await usersDao.getUserByTokenId(storage.getItem("userToken"));
+                        //If the token is expired I remove it and I logout the user
+                        if(res && res.message){
+                            console.log("INVALID TOKEN");
+                            storage.removeItem("userToken");
+                            appConsumer.setUser(null);
+                        }else{
+                            console.log("VALID TOKEN");
+                        }
+                        
+                    }
+                    console.log("checking token")
+                    getUserData();
+                }
+                //then I go back
+                console.log("pushing back")
+                history.goBack();
+            }
+        }catch (e){
+            console.log("YOU MAY NEED TO CHANGE THE HOME URL PARAMETER FROM 'config/index.js'");
+        }
         return () => {
             //delete the error, so app can resume its work
             appConsumer.setError(null);
