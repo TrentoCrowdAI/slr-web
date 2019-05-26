@@ -1,8 +1,7 @@
 import React, {useState, useContext} from "react";
 import {Link} from 'react-router-dom';
 
-import { AppContext } from 'components/providers/appProvider'
-import {usersDao} from 'dao/users.dao';
+import { AppContext } from 'components/providers/appProvider';
 
 import UserInfo from 'components/navigation/userInfo';
 import config from 'config/index';

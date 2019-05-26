@@ -1,6 +1,4 @@
-import React, {useState, useEffect, useContext, useRef} from "react";
-import {Link} from 'react-router-dom'
-import ClampLines from 'react-clamp-lines';
+import React, {useState, useEffect, useContext} from "react";
 import queryString from "query-string";
 
 
@@ -17,9 +15,7 @@ import SearchSimilarPapers from "components/forms/searchSimilarPapers";
 
 import OrderArrow from 'components/svg/orderArrow';
 import LoadIcon from 'components/svg/loadIcon';
-import SearchButton from 'components/svg/searchButton';
 import RemoveButton from 'components/svg/removeButton';
-import SearchSimilarButton from 'components/svg/searchSimilarButton';
 import NoSearchResults from "components/svg/noSearchResults";
 
 import {AppContext} from 'components/providers/appProvider'

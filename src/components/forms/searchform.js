@@ -1,6 +1,5 @@
-import React, {useState, useEffect, useContext, useRef} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {Link} from 'react-router-dom'
-import ClampLines from 'react-clamp-lines';
 import queryString from "query-string";
 
 
@@ -17,13 +16,12 @@ import LoadIcon from 'components/svg/loadIcon';
 import SearchButton from 'components/svg/searchButton';
 import SearchSimilarButton from 'components/svg/searchSimilarButton';
 import OrderArrow from 'components/svg/orderArrow';
-import CloseButton from 'components/svg/closeButton';
 import RemoveButton from 'components/svg/removeButton';
 import NoSearchResults from "components/svg/noSearchResults";
 
 import {AppContext} from 'components/providers/appProvider'
 
-import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains, join} from 'utils/index';
+import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
 
 
 // Load the lodash build

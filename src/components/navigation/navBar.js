@@ -1,7 +1,6 @@
 import React, {useContext} from "react";
 
 import {AppContext} from "components/providers/appProvider";
-import EditButton from "components/svg/editButton";
 
 /**
  * this is the head component of page

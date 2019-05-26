@@ -1,5 +1,5 @@
 import React from 'react';
-import {HashRouter as Router, Route, Switch} from "react-router-dom";
+import {HashRouter as Router} from "react-router-dom";
 
 
 
@@ -8,6 +8,8 @@ import Main from 'components/main';
 import NavBar from 'components/navigation/navBar';
 import SideMenu from 'components/navigation/sideMenu';
 import BreadCrumbs from 'components/modules/breadCrumbs';
+
+import Notification from 'components/modules/notification';
 
 import UsersLogin from 'components/modules/usersLogin';
 
@@ -35,6 +37,8 @@ const App = function(props) {
                         </NavBar>
 
                         <BreadCrumbs/>
+
+                        <Notification/>
 
                         <Main/>
 

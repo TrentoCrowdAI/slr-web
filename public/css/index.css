@@ -630,6 +630,33 @@ div.full-screen-transparent{
   z-index: 1;
 }
 
+/* notification */
+div.top-right-notification{
+  position: fixed;
+  right: 15px;
+  top: 70px;
+  border: solid 1px #a0a0a0;
+  background-color: #F6FCFF;
+  box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  z-index: 1000;
+}
+div.top-right-notification div.message-content{
+  font-size: 15px;
+  line-height: 20px;
+  margin: 10px 40px 10px 10px;
+  max-width: 300px;
+}
+div.top-right-notification button.close-notification-btn{
+  height: 15px;
+  width: 15px;
+  position: relative;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform:translate(0%, -50%);
+}
+
 /*APP.css----------------------------------------------------------------------------------------------*/
 .App {
   text-align: center;

@@ -1,7 +1,5 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 
-import NavBar from 'components/navigation/navBar';
-import Main from 'components/main';
 import Error from 'components/modules/error';
 
 import {usersDao} from 'dao/users.dao';
@@ -26,6 +24,9 @@ const AppProvider = function (props) {
     //title
     const [title, setTitle] = useState(<div className="nav-elements"> <h2 className="static-title">HOME</h2> </div>);
 
+    //notification message
+    const [notificationMessage, setNotificationMessage] = useState(undefined);
+
     const [projectName, setProjectName] = useState("");
 
     //preparate an object to be insertd into context
@@ -38,6 +39,8 @@ const AppProvider = function (props) {
         setError,
         title,
         setTitle,
+        notificationMessage,
+        setNotificationMessage,
         projectName,
         setProjectName
     };
