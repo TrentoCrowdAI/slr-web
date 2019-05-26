@@ -1,6 +1,6 @@
 import React, {useContext, useState} from "react";
 import ClampLines from 'react-clamp-lines';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 import CheckBox from "components/forms/checkbox";
 import SideOptions from 'components/modules/sideOptions';
@@ -8,6 +8,8 @@ import {projectPapersDao} from 'dao/projectPapers.dao';
 import {AppContext} from 'components/providers/appProvider'
 
 import NoPapers from "components/svg/noPapers";
+
+import {join} from 'utils/index';
 /**
  * prints the papers list of a local search on the fake database
  */
@@ -38,7 +40,7 @@ const PrintLocalSearchList = function ({papersList, handlePaperSelection}) {
 /**
  * prints the results of a search on scopus
  */
-const PrintScoupusSearchList = function ({papersList, handlePaperSelection, selectedEidList}) {
+const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, selectedEidList, history, match, setSimilarPaperData}) {
 
     //side options
     let sideOptions= ["search similar"];
@@ -47,7 +49,7 @@ const PrintScoupusSearchList = function ({papersList, handlePaperSelection, sele
     const appConsumer = useContext(AppContext);
 
     //handle for the side options
-    async function handleSideOptions(id, name){
+    async function handleSideOptions(id, name, data){
         if(name === "delete"){
             console.log("deleting " + id);
             //call the dao
@@ -64,13 +66,30 @@ const PrintScoupusSearchList = function ({papersList, handlePaperSelection, sele
                 appConsumer.setNotificationMessage("Successfully deleted!");
 
             }
+        }else if(name === "search similar"){
+            console.log("here you want to search for a similar paper");
+            console.log(data);
+
+            const storage = window.localStorage;
+            storage.setItem("similarPaperData", JSON.stringify(data));
+
+            //I extract the path to check if I'm on /search or /searchsimilar
+            let path = (match.path[match.path.length - 1] === "/") ? match.path.substring(0, match.path.length - 1) : match.path;
+            let goSimilar = path;
+            if(path[path.length - 1] === "h"){
+                goSimilar = path + "similar";
+                history.push(goSimilar);
+            }else{
+                window.location.reload();
+            }
+
         }
     }
 
     let output = papersList.map((element, index) =>
         <div key={index} className="paper-card">
             <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
-            <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} cls="card-options paper-card-options"/>
+            <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} data={element} cls="card-options paper-card-options"/>
             <Link to={"#"}><h3>{element.title}</h3></Link>
             <div className="extra-info">
                 <p className="authors">{element.authors}</p>
@@ -95,7 +114,7 @@ const PrintScoupusSearchList = function ({papersList, handlePaperSelection, sele
  * prints a list of papers and handles their removal from the project
  */
 
-const PrintPapersList = function ({papersList, location, history}) {
+const PrintPapersList_w = function ({papersList, location, history}) {
 
     const [localPaperList, setLocalPaperList] = useState(papersList);
 
@@ -106,7 +125,7 @@ const PrintPapersList = function ({papersList, location, history}) {
     let sideOptions= ["delete", "search similar"];
 
     //handle for the side options
-    async function handleSideOptions(id, name){
+    async function handleSideOptions(id, name, data){
         if(name === "delete"){
             console.log("deleting " + id);
             //call the dao
@@ -124,6 +143,13 @@ const PrintPapersList = function ({papersList, location, history}) {
                 let newPapersList = localPaperList.filter((paper)=>paper.id !== id);
                 setLocalPaperList(newPapersList);
             }
+        }else if(name === "search similar"){
+            console.log("here you want to search for a similar paper");
+            console.log(location);
+
+            const storage = window.localStorage;
+            storage.setItem("similarPaperData", JSON.stringify(data));
+            history.push(join(location.pathname, "/searchsimilar"));
         }
     }
 
@@ -139,7 +165,7 @@ const PrintPapersList = function ({papersList, location, history}) {
         output = (
             localPaperList.map((element) =>
                 <div key={element.id} className="paper-card">
-                    <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} cls="card-options paper-card-options"/>
+                    <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} data={element.data} cls="card-options paper-card-options"/>
                     <Link to={"#"}>
                         <h3>{element.data.title}</h3>
                     </Link>
@@ -165,4 +191,5 @@ const PrintPapersList = function ({papersList, location, history}) {
 
 };
 
-export  {PrintPapersList, PrintScoupusSearchList};
+export const PrintPapersList = PrintPapersList_w;
+export const PrintScoupusSearchList = withRouter(PrintScoupusSearchList_w);

@@ -9,7 +9,7 @@ import OptionsButton from 'components/svg/optionsButton';
  * the function that will handle the click on the option
  * and, if necessary, a target for the handler function
  */
-const SideOptions = function ({cls, options, handler, target}) {
+const SideOptions = function ({cls, options, handler, target, data}) {
 
     //this is used to display or hide the options of the menu
     const [focused, setFocused] = useState(false)
@@ -29,7 +29,7 @@ const SideOptions = function ({cls, options, handler, target}) {
             <div style={{fontSize: (focused) ? "12px" : "0px", padding: (focused) ? "2px" : "0px", border: (focused) ? "solid 1px #e8e8e8" : "solid 0px #e8e8e8"}} className="options-list">
                 
                 {options.map((element, index) => 
-                    <div key={index} onMouseDown={(e) => handler(target, element)} className="option">{element}</div>
+                    <div key={index} onMouseDown={(e) => handler(target, element, data)} className="option">{element}</div>
                 )}
                 
             </div>
