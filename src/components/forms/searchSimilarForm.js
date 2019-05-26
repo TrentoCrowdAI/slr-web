@@ -120,6 +120,8 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
         let mounted = true;
 
+        console.log("RUNNING THE BIG EFFECT")
+
         console.log(queryData);
         //if the sorting parameter changes I update the status and trigger the SVG animation
         if(up !== queryData.sort){
@@ -133,13 +135,12 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
         //fetches data when searching for similarities
         const fetchDataSimilarity = async () => {
 
-            let res = undefined;
-
             //standard options parameters
             setKeyWords(queryData.query);
             setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
             setYear(queryData.year);
 
+            
             //if there's some data in storage(it means I'm probaly fetching a second page of results)
             if(similarPaperData){
                 //open flag of loading
@@ -147,13 +148,28 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
                 
                 //I call the dao for searching for similar papers based on the data
                 //this will be the call for the similarity search
-                res = await paperDao.searchSimilar({"query": "Trento", "start" : queryData.start, "count" : queryData.count});
+                let res = await paperDao.searchSimilar({"paperData" : {...similarPaperData}, "start" : queryData.start, "count" : queryData.count});
+                if (res && res.message === "Not Found") {
+                    setPapersList([]);
+                    setTotalResults(0);
+                    //show the page
+                    setDisplay(true);
+                }
+                //if there is a error
+                else if (res && res.message) {
+                    //pass error object to global context
+                    appConsumer.setError(res);
+                }
                 setPapersList(res.results);
                 
                 //close flag of loading
                 setDisplay(true);
 
-            }//if there's a file I can do an api call to search for papers similar to the file
+            }
+            
+            
+            
+            //if there's a file I can do an api call to search for papers similar to the file
             else if(similarPaperFile){
                 
                 console.log("FILE NAME : " + similarPaperFile.name)
@@ -173,12 +189,14 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
                     //call the dao
                     console.log("CALLING THE PAPER PARSER SERVICE")
-                    res = await updateFileDao.updatePdf(formData);
+                    let res = await updateFileDao.updatePdf(formData);
     
                     //if there is a error
                     if (res && res.message) {
                         //pass error object to global context
                         appConsumer.setNotificationMessage("Error during parsing file");
+                        setPapersList([]);
+                        setTotalResults(0);
                         setDisplay(true);
                         setSimilarPaperFetch(false);
                     }
@@ -188,55 +206,86 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
                         setSimilarPaperData(res);
                         //display the paper data
                         setSimilarPaperFetch(false);
+                        //I call the dao for searching for similar papers based on the data
+                        //this will be the call for the similarity search
+                        res = await paperDao.searchSimilar({"paperData" : {...res}, "start" : queryData.start, "count" : queryData.count});
+                        if (res && res.message === "Not Found") {
+                            setPapersList([]);
+                            setTotalResults(0);
+                            //show the page
+                            setDisplay(true);
+                        }
+                        //if there is a error
+                        else if (res && res.message) {
+                            //pass error object to global context
+                            appConsumer.setError(res);
+                        }
+                        setPapersList(res.results);
+                        
+                        //close flag of loading
+                        setDisplay(true);
                     }
-    
-                    //I call the dao for searching for similar papers based on the data
-                    //this will be the call for the similarity search
-                    res = await paperDao.searchSimilar({"query" : "Trento", "start" : queryData.start, "count" : queryData.count});
-                    setPapersList(res.results);
-                    
-                    //close flag of loading
-                    setDisplay(true);
 
                 }
-            }//if there's a query I can retrieve similar papers based on the query
+            }
+            
+            
+            
+            
+            //if there's a query I can retrieve similar papers based on the query
             else if (queryData.query !== "") {
 
                 setDisplay(false);
                 
                 setSimilarPaperFetch(true);
                 //this will be the call to the service identifying a specific paper
-                let paperData = await paperDao.search({"query": "Torino"});
-                setSimilarPaperData(paperData.results[0]);
-                setSimilarPaperFetch(false);
+                let resx = await paperDao.search({"query" : queryData.query});
 
+                console.log(resx);
 
-                //I call the dao for searching for similar papers based on similarPaperString
-                //this will be the call for the similarity search
-                let res = await paperDao.searchSimilar({"query" : "Trento", "start" : queryData.start, "count" : queryData.count});
-                console.log(res);
-
-                //error checking
-                //if is 404 error
-                if (res && res.message === "Not Found") {
-                    setPapersList([]);
-                    setTotalResults(0);
-                    //show the page
-                    setDisplay(true);
-                }
-                //if is other error
-                else if (res && res.message) {
+                //if there is a error
+                if (resx && resx.message) {
                     //pass error object to global context
-                    appConsumer.setError(res);
+                    appConsumer.setError(resx);
+                }else{
+
+                    console.log(resx);
+
+                    console.log("searching the paper")
+                    setSimilarPaperData(resx.results[0]);
+                    setSimilarPaperFetch(false);
+
+
+                    //I call the dao for searching for similar papers based on similarPaperString
+                    //this will be the call for the similarity search
+                    resx = await paperDao.searchSimilar({"paperData" : {...resx.results[0]}, "start" : queryData.start, "count" : queryData.count});
+                    console.log(resx);
+
+                    //error checking
+                    //if is 404 error
+                    if (resx && resx.message === "Not Found") {
+                        setPapersList([]);
+                        setTotalResults(0);
+                        //show the page
+                        setDisplay(true);
+                    }
+                    //if is other error
+                    else if (resx && resx.message) {
+                        //pass error object to global context
+                        appConsumer.setError(resx);
+                    }
+                    //if res isn't null
+                    else if (resx !== null) {
+                        //update state
+                        setPapersList(resx.results);
+                        setTotalResults(resx.totalResults);
+                        //show the page
+                        setDisplay(true);
+                    }
+
                 }
-                //if res isn't null
-                else if (res !== null) {
-                    //update state
-                    setPapersList(res.results);
-                    setTotalResults(res.totalResults);
-                    //show the page
-                    setDisplay(true);
-                }
+
+            
             }else{
                 console.log("no file (& no similarPaperString)");
             }
@@ -248,7 +297,11 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
         //when the component will unmount
         return () => {
+            console.log("unmounting searchSimilar component")
             localStorage.removeItem("similarPaperData");
+            paperDao.abortRequest();
+            projectPapersDao.abortRequest();
+            updateFileDao.abortRequest();
             mounted = false;
         };
 
@@ -262,7 +315,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
     //update local storage every time the similar paper data changes
     useEffect(() => {
-        console.log("effecting");
+        console.log("RUNNING THE SMALL EFFECT");
         if(similarPaperData){
             storage.setItem("similarPaperData", JSON.stringify(similarPaperData));
         }else{
@@ -544,7 +597,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
     else if (papersList.length === 0 && (queryData.query !== "" || similarPaperFile || similarPaperData)) {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
-            <div className="not-found"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
+            <div className="no-results"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
         );
     }
     else if (papersList.length > 0 && (queryData.query !== "" || similarPaperFile || similarPaperData)) {

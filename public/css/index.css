@@ -54,7 +54,7 @@
     transform: rotate(360deg);
   }
 }
-@keyframes showup {
+@keyframes showup-msg {
   0% {
     opacity: 0.0;
     transform: translateX(0px);
@@ -452,7 +452,7 @@ div.card-options button svg#options-button{
 
 /*error wrapper*/
 div.error-wrapper{
-  animation: showup 0.3s linear;
+  animation: showup-msg 0.3s linear;
 }
 
 /*order arrow element*/
@@ -650,7 +650,7 @@ div.full-screen-transparent{
 
 /* notification */
 div.top-right-notification{
-  animation: showup 0.9s ease-in-out forwards;
+  animation: showup-msg 0.9s ease-in-out forwards;
   position: fixed;
   right: 15px;
   top: 70px;
