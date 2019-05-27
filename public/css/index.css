@@ -439,6 +439,14 @@ div.card-options div.options-list{
   cursor: pointer;
   transition: 0.3s all;
 }
+div.card-options div.retract-options{
+  border: solid 1px #6d6d6d00; 
+  font-size: 0px;
+}
+div.card-options div.expand-options{
+  border: solid 1px #6d6d6d; 
+  font-size: 12px;
+}
 div.card-options div.options-list div.option{
   transition: 0.2s all;
 }

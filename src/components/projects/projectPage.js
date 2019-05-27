@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
 import {Route, Link, Switch} from 'react-router-dom';
-import {Flipper, Flipped} from 'react-flip-toolkit';
 
 import SearchForm from 'components/forms/searchform';
 import SearchSimilarForm from 'components/forms/searchSimilarForm';
@@ -13,6 +12,7 @@ import ProjectName from 'components/projects/projectName';
 import {join} from 'utils/index';
 
 import {AppContext} from 'components/providers/appProvider'
+import PageNotFound from "components/modules/pageNotFound";
 
 
 /**
@@ -159,6 +159,7 @@ const ProjectPage = (props) => {
                             <CustomPaperPage projectId={project.id} url={props.match.url} history={props.history}/>
                         </>
                     } />
+                    <Route render={(props) => {setNotFound(true); return <PageNotFound/>}}/>
                 </Switch>
 
             </div>
@@ -183,11 +184,7 @@ const ProjectPageHead = function ({match, notFound}) {
                 <div className="nav-link">
                     <Link to={join(match.url, "/search")}>search</Link>
                 </div>
-                <Flipper flipKey={slider}>
-                    <Flipped flipId="underline">
-                        <div className={slider ? "underline underline-to-left" : "underline underline-to-right"}/>
-                    </Flipped>
-                </Flipper>
+                <div className="underline" style={{left: slider ? "25px" : "175px"}}/>
             </div>
         </>
     );

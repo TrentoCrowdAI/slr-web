@@ -26,7 +26,7 @@ const SideOptions = function ({cls, options, handler, target, data}) {
                         {setFocused(!focused)}}>
                 <OptionsButton/>
             </button>
-            <div style={{fontSize: (focused) ? "12px" : "0px", padding: (focused) ? "2px" : "0px", border: (focused) ? "solid 1px #e8e8e8" : "solid 0px #e8e8e8"}} className="options-list">
+            <div style={{fontSize: (focused) ? "12px" : "0px", padding: (focused) ? "2px" : "0px", border: (focused) ? "solid 1px #e8e8e8" : "solid 0px #e8e8e800"}} className="options-list">
                 
                 {options.map((element, index) => 
                     <div key={index} onMouseDown={(e) => handler(target, element, data)} className="option">{element}</div>

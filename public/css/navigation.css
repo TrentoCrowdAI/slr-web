@@ -79,9 +79,11 @@
 @keyframes show-text{
   0%{
     font-size: 1px;
+    padding: 0px 0px 0px 0px;
   }
   100%{
     font-size: 20px;
+    padding: 5px 15px 5px 15px/*0.25em 0.75em 0.5em 0.75em*/;
   }
 }
 @keyframes down-top{
@@ -98,9 +100,11 @@
 @keyframes hide-text{
   0%{
     font-size: 20px;
+    padding: 5px 15px 5px 15px/*0.25em 0.75em 0.5em 0.75em*/;
   }
   100%{
     font-size: 1px;
+    padding: 0px 0px 0px 0px;
   }
 }
 
@@ -226,17 +230,18 @@ div.navigation-wrapper div.menu div.side-menu{
   box-shadow: 0px 0px 16px -6px rgba(0, 0, 0, 0.75)
 }
 
+
 /*sidemenu animation*/
 div.navigation-wrapper div.down{
   animation: top-down 0.6s forwards; 
 }
-div.navigation-wrapper div.down div.entry-holder, div.navigation-wrapper div.down div.entry-holder button.menu-option{
+div.navigation-wrapper div.down div.entry-holder a.menu-option, div.navigation-wrapper div.down div.entry-holder button.menu-option{
   animation: show-text 0.6s forwards;
 }
 div.navigation-wrapper div.up{
   animation: down-top 0.6s forwards;
 }
-div.navigation-wrapper div.up div.entry-holder, div.navigation-wrapper div.up div.entry-holder button.menu-option{
+div.navigation-wrapper div.up div.entry-holder a.menu-option, div.navigation-wrapper div.up div.entry-holder button.menu-option{
   animation: hide-text 0.6s forwards;
 }
 
@@ -245,14 +250,14 @@ div.navigation-wrapper div.menu div.side-menu a.menu-option{
   display: inline-block;
   width: 100%;
   height: 100%;
-  padding: 0.25em 0.75em 0.25em 0.75em;
+  padding: 0px;
   transition: all 0.11s;
 }
 div.navigation-wrapper div.menu div.side-menu button.menu-option{
   display: inline-block;
   width: 100%;
   height: 100%;
-  padding: 0.25em 0.75em 0.5em 0.75em;
+  padding: 0px;
   transition: all 0.11s;
   text-align: left;
 }
@@ -261,9 +266,6 @@ div.navigation-wrapper div.menu div.side-menu div.entry-holder:hover{
 }
 div.navigation-wrapper div.menu div.side-menu div:last-child{
   border-radius: 0px 0px 12px 12px;
-}
-div.navigation-wrapper div.menu div.side-menu div:nth-child(2) a.menu-option{
-  padding: 0.5em 0.75em 0.25em 0.75em;
 }
 div.navigation-wrapper div.menu div.side-menu div.user{
   height: 150px;

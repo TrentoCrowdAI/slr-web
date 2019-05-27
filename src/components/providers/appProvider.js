@@ -56,7 +56,7 @@ const AppProvider = function (props) {
                 let res = await usersDao.getUserByTokenId(storage.getItem("userToken"));
 
                 //if I receive an error I remove the deprecated token
-                if(res && res.message){
+                if((res && res.message) || !res.email){
                     storage.removeItem("userToken");
                 }else{
                     let user = {"email": res.email, 

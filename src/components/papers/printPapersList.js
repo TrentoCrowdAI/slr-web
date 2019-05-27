@@ -70,17 +70,17 @@ const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, se
             console.log("here you want to search for a similar paper");
             console.log(data);
 
-            const storage = window.localStorage;
-            storage.setItem("similarPaperData", JSON.stringify(data));
-
             //I extract the path to check if I'm on /search or /searchsimilar
             let path = (match.path[match.path.length - 1] === "/") ? match.path.substring(0, match.path.length - 1) : match.path;
             let goSimilar = path;
             if(path[path.length - 1] === "h"){
                 goSimilar = path + "similar";
+                //I set the paper in the storage before switching page
+                const storage = window.localStorage;
+                storage.setItem("similarPaperData", JSON.stringify(data));
                 history.push(goSimilar);
             }else{
-                window.location.reload();
+                setSimilarPaperData(data);
             }
 
         }
