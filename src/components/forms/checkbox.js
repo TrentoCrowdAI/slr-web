@@ -17,7 +17,7 @@ const CheckBox = function ({ val, name, label, isChecked, handler }) {
     
     output = (
         <label className="checkbox-container">
-            <input type="checkbox" value={val} name={name} checked={isChecked} onChange={(e) => {console.log("clickekdkdkdkd"); handler(e)}} />
+            <input type="checkbox" value={val} name={name} checked={isChecked} onChange={(e) => {handler(e)}} />
             <span className="checkmark">{tick}</span>
             <span className="name">{label}</span>
         </label>

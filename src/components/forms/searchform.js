@@ -338,7 +338,9 @@ const SearchForm = function ({project_id, location, match, history}) {
                 //copy the old source
                 newSource = {...source};
                 //switch between true and false
-                newSource.scopus = !source.scopus;
+                newSource.scopus = true;
+                newSource.googleScholar = false;
+                newSource.arXiv = false;
                 setSource(newSource);
                 break;
 
@@ -346,14 +348,18 @@ const SearchForm = function ({project_id, location, match, history}) {
                 //copy the old source
                 newSource = {...source};
                 //switch between true and false
-                newSource.googleScholar = !source.googleScholar;
+                newSource.scopus = false;
+                newSource.googleScholar = true;
+                newSource.arXiv = false;
                 setSource(newSource);
                 break;
             case "arXiv":
                 //copy the old source
                 newSource = {...source};
                 //switch between true and false
-                newSource.arXiv = !source.arXiv;
+                newSource.scopus = false;
+                newSource.googleScholar = false;
+                newSource.arXiv = true;
                 setSource(newSource);
                 break;
             case "searchBy":
@@ -401,11 +407,11 @@ const SearchForm = function ({project_id, location, match, history}) {
                     <label>Source:</label><br/>
 
                     <div className="checkboxes-holder">
-                        <CheckBox label="Scopus" name="scopus" val="" isChecked={source.scopus}
+                        <RadioBox label="Scopus" name="scopus" val="" isChecked={source.scopus}
                                   handler={handleOnInputChange}/>
-                        <CheckBox label="Google Scholar" name="googleScholar" val="" isChecked={source.googleScholar}
+                        <RadioBox label="Google Scholar" name="googleScholar" val="" isChecked={source.googleScholar}
                                   handler={handleOnInputChange}/>
-                        <CheckBox label="arXiv" name="arXiv" val="" isChecked={source.arXiv}
+                        <RadioBox label="arXiv" name="arXiv" val="" isChecked={source.arXiv}
                                   handler={handleOnInputChange}/>
                     </div>
 
@@ -596,8 +602,12 @@ function createQueryData(queryUrl) {
         scopus = (params.scopus === "true");
     }
 
-    let googleScholar = (params.googleScholar === "true");
-    let arXiv = (params.arXiv === "true");
+    let googleScholar = (params.googleScholar === "true" && !scopus);
+    let arXiv = (params.arXiv === "true" && !scopus && !googleScholar);
+
+    if(!scopus && !googleScholar && !arXiv){
+        scopus = true;
+    }
 
     let year = params.year || "all";
 
