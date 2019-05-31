@@ -47,6 +47,9 @@ const yearOptions = ["all", ...(_.range(startYear, endYear).map(String))];
 
 const SearchSimilarForm = function ({project_id, location, match, history}) {
 
+    window.onbeforeunload = function(e){
+        window.localStorage.removeItem("similarPaperData");
+    }
 
     //list of result papers data
     const [papersList, setPapersList] = useState([]);
@@ -166,13 +169,13 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
                     let res = await updateFileDao.updatePdf(formData);
     
                     //if there is a error
-                    if (res && res.message) {
+                    if (mounted && res && res.message) {
                         //pass error object to global context
                         appConsumer.setNotificationMessage("Error during parsing file");
                         setDisplay(true);
                         setSimilarPaperFetch(false);
                     }
-                    else{
+                    else if(mounted){
                         console.log(res);
                         //set paperdata(which whill call the useEffect on the paperData)
                         setSimilarPaperData(res);
@@ -195,10 +198,10 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
                 console.log(resx);
 
                 //if there is a error
-                if (resx && resx.message) {
+                if (mounted && resx && resx.message) {
                     //pass error object to global context
                     appConsumer.setError(resx);
-                }else{
+                }else if(mounted){
                     console.log(resx);
                     //set paperdata(which whill call the useEffect on the paperData)
                     setSimilarPaperData(resx.results[0]);
@@ -219,9 +222,6 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
         return () => {
             console.log("unmounting searchSimilar component")
             localStorage.removeItem("similarPaperData");
-            paperDao.abortRequest();
-            projectPapersDao.abortRequest();
-            updateFileDao.abortRequest();
             mounted = false;
         };
 
@@ -235,6 +235,9 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
     //update local storage every time the similar paper data changes
     useEffect(() => {
+        
+        let mounted = true;
+
         console.log("RUNNING THE SMALL EFFECT");
         if(similarPaperData){
             //fetches for similar papers
@@ -250,19 +253,19 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
                 //error checking
                 //if is 404 error
-                if (resx && resx.message === "Not Found") {
+                if (mounted && resx && resx.message === "Not Found") {
                     setPapersList([]);
                     setTotalResults(0);
                     //show the page
                     setDisplay(true);
                 }
                 //if is other error
-                else if (resx && resx.message) {
+                else if (mounted && resx && resx.message) {
                     //pass error object to global context
                     appConsumer.setError(resx);
                 }
                 //if res isn't null
-                else if (resx !== null) {
+                else if (mounted && (resx !== null)) {
                     //update state
                     setPapersList(resx.results);
                     setTotalResults(resx.totalResults);
@@ -275,6 +278,10 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
         }else{
             storage.removeItem("similarPaperData");
         }
+        //when the component will unmount
+        return () => {
+            mounted = false;
+        };
     }, [similarPaperData, queryData.orderBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv])
 
     /*handles the submission of a search */

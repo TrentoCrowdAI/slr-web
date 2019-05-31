@@ -50,7 +50,7 @@ async function request(url, options, timeOutTime) {
         let requestOptions = Object.assign(
             {
                 //enable the  sending of cookie
-                credentials: (url.includes(config.userInfo)) ? 'omit' : 'include', //if it's a google user api request I don't need credentials
+                //credentials: (url.includes(config.userInfo)) ? 'omit' : 'include', //if it's a google user api request I don't need credentials
                 "mode": 'cors',
                 "signal": signal
             },
