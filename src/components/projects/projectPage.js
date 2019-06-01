@@ -130,7 +130,7 @@ const ProjectPage = (props) => {
                         setNotFound(false);
                         return (
                             <>
-                                <ProjectDescription description={project.data.description} update={updateProject} date_last_modified={project.date_last_modified} date_created={project.date_created}/>
+                                <ProjectDescription description={project.data.description} update={updateProject} date_last_modified={project.date_last_modified} date_created={project.date_created} collaborators={["mario@gmail.com", "pippo@gmail.com", "pluto@gmail.com"]}/>
                                 <PapersList project_id={project_id} location={props.location} match={props.match} history={props.history}/>
                                 <Link to={join(props.match.url,"/addpaper")}>
                                     <button className="bottom-left-btn add-custompaper-btn">

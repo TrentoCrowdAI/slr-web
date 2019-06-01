@@ -1,13 +1,14 @@
 import React, {useState} from "react";
 
 import EditButton from "components/svg/editButton";
+import RemoveButton from "components/svg/removeButton";
 
 /**
  * this is the description component for the project page
  */
 
 
-const ProjectDescription = function({description, update, date_last_modified, date_created}){
+const ProjectDescription = function({description, update, date_last_modified, date_created, collaborators}){
 
 
     //this is used as a toggle for checking if the user is trying to edit the name of the project
@@ -53,6 +54,25 @@ const ProjectDescription = function({description, update, date_last_modified, da
             <h2>Additional info:</h2>
             <p className="project-date-info"> <span>Created</span> {formatDate(date_created)} </p>
             <p className="project-date-info"> <span>Last edited</span> {formatDate(date_last_modified)} </p>
+            <h2>Shared with:</h2>
+            {collaborators.map((element, index) =>
+                <div className="collaborator-wrapper" key={index}>
+                    <p className="collaborator">{element}</p>
+                    <button type="button" className="remove-btn" name={element}
+                        value={element} //name and value don't work on the button event for some reasons
+                        onClick={(e) => {
+                            console.log("removing user");
+                        }}>
+                        <RemoveButton/>
+                    </button>
+                </div>
+            )}
+            <form className="add-collaborator">
+                <input type="text" id="edit-project-description-input" placeholder="add a collaborator"/>
+                <button className="add-collaborator-button">
+                    
+                </button>
+            </form>
         </div>
     );
 }
