@@ -193,7 +193,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
                 setSimilarPaperFetch(true);
                 //this will be the call to the service identifying a specific paper
-                let resx = await paperDao.search({"query" : queryData.query});
+                let resx = await paperDao.search({"query" : queryData.query, "scopus": true});
 
                 console.log(resx);
 
@@ -248,7 +248,7 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
 
                 //I call the dao for searching for similar papers based on similarPaperString
                 //this will be the call for the similarity search
-                let resx = await paperDao.searchSimilar({"paperData" : similarPaperData, "start" : queryData.start, "count" : queryData.count});
+                let resx = await paperDao.searchSimilar({"paperData" : similarPaperData, "start" : queryData.start, "count" : queryData.count, "scopus": true});
                 console.log(resx);
 
                 //error checking
@@ -392,16 +392,6 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
                     history={history}/>
                 
                 <div className="option-holder">
-                    <label>Source:</label><br/>
-
-                    <div className="checkboxes-holder">
-                        <RadioBox label="Scopus" name="scopus" val="" isChecked={source.scopus}
-                                  handler={handleOnInputChange}/>
-                        <RadioBox label="Google Scholar" name="googleScholar" val="" isChecked={source.googleScholar}
-                                  handler={handleOnInputChange}/>
-                        <RadioBox label="arXiv" name="arXiv" val="" isChecked={source.arXiv}
-                                  handler={handleOnInputChange}/>
-                    </div>
 
                     <label>Year:</label><br/>
                     <div className="checkboxes-holder" >
@@ -509,8 +499,15 @@ const SearchSimilarForm = function ({project_id, location, match, history}) {
         event.preventDefault();
         //console.log(selectedPapersList);
 
-       //create a eidList from the list of selected paper
-        let arrayEid = selectedPapersList.map(element => element.eid);
+        let papersToAdd = selectedPapersList;
+        //empties the state
+        setSelectedPapersList([]);
+        //update the storage
+        storage.removeItem("selectedPapersList");
+
+        //create a eidList from the list of selected paper
+        let arrayEid = papersToAdd.map(element => element.eid);
+
         //call dao
         let res = await projectPapersDao.postPaperIntoProject({
             "arrayEid": arrayEid, "project_id": project_id

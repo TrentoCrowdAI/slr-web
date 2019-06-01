@@ -269,8 +269,14 @@ const SearchForm = function ({project_id, location, match, history}) {
         }
         else {
 
+            let papersToAdd = selectedPapersList;
+            //empties the state
+            setSelectedPapersList([]);
+            //update the storage
+            storage.removeItem("selectedPapersList");
+
             //create a eidList from the list of selected paper
-            let arrayEid = selectedPapersList.map(element => element.eid);
+            let arrayEid = papersToAdd.map(element => element.eid);
             //call dao
             let res = await projectPapersDao.postPaperIntoProject({
                 "arrayEid": arrayEid, "project_id": project_id
@@ -282,10 +288,6 @@ const SearchForm = function ({project_id, location, match, history}) {
                 return null;
             }
 
-            //empties the state
-            setSelectedPapersList([]);
-            //update the storage
-            storage.removeItem("selectedPapersList");
             appConsumer.setNotificationMessage("Insert completed");
         }
 
