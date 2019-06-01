@@ -35,7 +35,12 @@ const Main = function(props){
         );
     }
     else{
-        output = (<Home/>);
+        output = (
+            <Switch>
+                <Route path="/projects/:id" render={(props) => <ProjectPage {...props} />}/>
+                <Route render={() => <Home/>}/>
+            </Switch>
+        );
     }
 
     return (

@@ -6,10 +6,12 @@ import SearchSimilarForm from 'components/forms/searchSimilarForm';
 import PapersList from 'components/papers/papersList';
 import CustomPaperPage from 'components/papers/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
-import LoadIcon from 'components/svg/loadIcon';
 import ProjectDescription from 'components/projects/projectDescription';
 import ProjectName from 'components/projects/projectName';
 import {join} from 'utils/index';
+
+import LoadIcon from 'components/svg/loadIcon';
+import Forbidden from 'components/svg/forbidden';
 
 import {AppContext} from 'components/providers/appProvider'
 import PageNotFound from "components/modules/pageNotFound";
@@ -31,6 +33,9 @@ const ProjectPage = (props) => {
 
     //get data from global context
     const appConsumer = useContext(AppContext);
+
+    //flag for unauthorized user
+    const [unauthorized, setUnauthorized] = useState(false);
 
     const project_id = props.match.params.id;
 
@@ -58,9 +63,16 @@ const ProjectPage = (props) => {
             //call the dao
             let res = await projectsDao.getProject(project_id);
 
+            console.log(res.payload);
             //error checking
+            //if unauthorized user
+            if(mounted && res.payload && (res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
+                setUnauthorized(true);
+                setDisplay(true);
+                setProject({data: {name: "UNAUTHORIZED OR INEXISTENT PROJECTS"}});
+            }
             //if the component is still mounted and there is some other errors
-            if (mounted && res && res.message) {
+            else if (mounted && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
@@ -118,6 +130,14 @@ const ProjectPage = (props) => {
     if (display === false) {
         //print svg image
         output = <LoadIcon/>;
+    }
+    else if(unauthorized){
+        output = (
+            <div className="forbidden-wrapper">
+                <Forbidden/>
+                <p>This project does not exist or maybe you are not allowed to see it</p>
+            </div>
+        )
     }
     else {
         output = (

@@ -285,3 +285,18 @@ div.project-description h2{
 div.project-description h2:first-child{
   margin: 15px 0px 10px 0px;
 }
+
+/*forbidden page*/
+div.forbidden-wrapper{
+  text-align: center;
+  position: relative;
+  width: 600px;
+  margin: 50px auto 50px auto;
+}
+div.forbidden-wrapper svg#forbidden{
+  width: 300px;
+}
+div.forbidden-wrapper p{
+  font-size: 26px;
+  font-weight: lighter;
+}

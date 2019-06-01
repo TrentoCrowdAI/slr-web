@@ -524,7 +524,11 @@ button.edit-button{
 .st0-ghost{fill:#f1f7fa;stroke:#000000;stroke-width:8.9609;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 .st1-ghost{fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:10;}
 .st2-ghost{font-weight: 300;font-size:101.9298px;}
-  
+
+/*forbidden*/
+.st0-forbidden{fill:none;stroke:#000000;stroke-width:108;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+.st1-forbidden{fill:none;stroke:#000000;stroke-width:93;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
 /*clamp lines*/
 button.clamp-lines__button{
   font-size: 14px;
