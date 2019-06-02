@@ -25,6 +25,9 @@ const ProjectPage = (props) => {
     //project object of page
     const [project, setProject] = useState({data: {name: "loading..."}});
 
+    //collaborators
+    const [collaborators, setCollaborators] = useState([]);
+
     //bool to control the visualization of page
     const [display, setDisplay] = useState(false);
 
@@ -60,10 +63,9 @@ const ProjectPage = (props) => {
         const fetchData = async () => {
             console.log("fetch project page");
 
-            //call the dao
+            //call the dao for main project data
             let res = await projectsDao.getProject(project_id);
 
-            console.log(res.payload);
             //error checking
             //if unauthorized user
             if(mounted && res.payload && (res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
@@ -78,11 +80,14 @@ const ProjectPage = (props) => {
             }
             //if the component is still mounted and res isn't null
             else if (mounted && res ) {
+                setUnauthorized(false);
                 //update state
                 setProject(res);
                 //show the page
                 setDisplay(true);
             }
+
+
         };
         fetchData();
         //when the component will unmount
@@ -150,7 +155,7 @@ const ProjectPage = (props) => {
                         setNotFound(false);
                         return (
                             <>
-                                <ProjectDescription description={project.data.description} update={updateProject} date_last_modified={project.date_last_modified} date_created={project.date_created} collaborators={["mario@gmail.com", "pippo@gmail.com", "pluto@gmail.com"]}/>
+                                <ProjectDescription project_id={project_id} description={project.data.description} update={updateProject} date_last_modified={project.date_last_modified} date_created={project.date_created} collaborators={collaborators} setCollaborators={setCollaborators}/>
                                 <PapersList project_id={project_id} location={props.location} match={props.match} history={props.history}/>
                                 <Link to={join(props.match.url,"/addpaper")}>
                                     <button className="bottom-left-btn add-custompaper-btn">

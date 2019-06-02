@@ -278,6 +278,10 @@ div.project-description form.add-collaborator button.add-collaborator-button{
   height: 28px;
   width: 29px;
 }
+div.project-description svg#loading-icon{
+  margin-top: 160px;
+  width: 60px;
+}
 
 div.project-description h2{
   margin: 15px 0px 10px 0px;

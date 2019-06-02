@@ -26,12 +26,34 @@ async function getProject(project_id) {
 }
 
 /**
+ * dao to get project collaborators
+ * @param project_id
+ * @return {array[objects]} array of collaborators
+ */
+async function getProjectCollaborators(project_id) {
+    let url = config.home + config.projects + "/" + project_id + "/collaborators";
+    let res = await http.get(url);
+    return res;
+}
+
+/**
  * dao to post a new project
  * @param bodyData
  * @return {Object} project created
  */
 async function postProject(bodyData) {
     let url = config.home + config.projects;
+    return await http.post(url, bodyData);
+}
+
+/**
+ * dao to post a new collaborator
+ * @param project_id
+ * @param bodyData email of collaborator
+ * @return {String} empty string
+ */
+async function addProjectCollaborator(project_id, bodyData) {
+    let url = config.home + config.projects + "/" + project_id + "/collaborators";
     return await http.post(url, bodyData);
 }
 
@@ -58,6 +80,18 @@ async function deleteProject(project_id) {
     return res;
 }
 
+/**
+ * dao to remove collaborator
+ * @param project_id
+ * @param collaborator_id the mail of the collaborator
+ * @return {String} empty string
+ */
+async function removeProjectCollaborator(project_id, collaborator_id) {
+    let url = config.home + config.projects + "/" + project_id + "/collaborators/" + collaborator_id;
+    let res = await http.delete(url);
+    return res;
+}
+
 
 const projectsDao = {
     getProjectsList,
@@ -65,7 +99,10 @@ const projectsDao = {
     postProject,
     putProject,
     deleteProject,
-    "abortRequest": http.abortRequest
+    "abortRequest": http.abortRequest,
+    getProjectCollaborators,
+    removeProjectCollaborator,
+    addProjectCollaborator
 }
 
 
