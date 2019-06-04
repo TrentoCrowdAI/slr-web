@@ -211,10 +211,10 @@ div.project-description p.project-date-info{
 div.project-description p.project-date-info span.date{
   font-weight: 300;
 }
-div.hidden-form-description form button{
+div.hidden-form-description form.edit-project-description button{
   opacity: 0.0;
 }
-div.hidden-form-description:hover form button{
+div.hidden-form-description:hover form.edit-project-description button{
   opacity: 1.0;
 }
 div.project-description button.edit-button{
@@ -237,9 +237,70 @@ div.project-description form.edit-project-description textarea{
   word-wrap: normal;
 }
 
+div.project-description div.collaborator-wrapper{
+  display: flex;
+  justify-content: space-between;
+  height: 20px;
+}
+div.project-description div.collaborator-wrapper button.remove-btn{
+  height: 20px;
+  width: 20px;
+  opacity: 0.0;
+}
+div.project-description div.collaborator-wrapper:hover button.remove-btn{
+  opacity: 1.0;
+}
+div.project-description div.collaborator-wrapper button.remove-btn svg#remove-button{
+  height: 12px;
+  width: 12px;
+  margin: 4px;
+}
+
+div.project-description form.add-collaborator{
+  width: 100%;
+  position: relative;
+  margin-top: 6px;
+}
+div.project-description form.add-collaborator input[type=text]{
+  width: 100%;
+  line-height: 22px;
+  font-size: 17px;
+}
+div.project-description form.add-collaborator button.add-collaborator-button{
+  background-image: url('./../img/add.svg');
+  background-size: 65%;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  background-color: white;
+  right: 0px;
+  top: 0px;
+  height: 28px;
+  width: 29px;
+}
+div.project-description svg#loading-icon{
+  margin-top: 160px;
+  width: 60px;
+}
+
 div.project-description h2{
   margin: 15px 0px 10px 0px;
 }
 div.project-description h2:first-child{
   margin: 15px 0px 10px 0px;
+}
+
+/*forbidden page*/
+div.forbidden-wrapper{
+  text-align: center;
+  position: relative;
+  width: 600px;
+  margin: 50px auto 50px auto;
+}
+div.forbidden-wrapper svg#forbidden{
+  width: 300px;
+}
+div.forbidden-wrapper p{
+  font-size: 26px;
+  font-weight: lighter;
 }
