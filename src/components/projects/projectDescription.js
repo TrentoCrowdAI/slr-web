@@ -124,6 +124,7 @@ const ProjectDescription = function({project_id, description, update, date_last_
                 }
                 //if the component is still mounted and didn't get an error
                 else if (mounted && res) {
+                    setInput("");
                     setCollaborators([...collaborators, res]);
                 }
             }
@@ -173,7 +174,7 @@ const ProjectDescription = function({project_id, description, update, date_last_
                     </div>
                 )}
                 <form className="add-collaborator" onSubmit={addCollaborator}>
-                    <input type="text" id="edit-project-description-input" placeholder="add a collaborator"
+                    <input type="text" id="edit-project-description-input" placeholder="add a collaborator" value={input}
                         onChange={(e) => {setInput(e.target.value);}}
                     />
                     <button className="add-collaborator-button" disabled={(!input || input === "")}>

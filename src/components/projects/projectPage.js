@@ -96,7 +96,7 @@ const ProjectPage = (props) => {
             //set flag as unmounted
             mounted = false;
         };
-    }, [project_id]); //re-execute when these variables change
+    }, [project_id, appConsumer.user]); //re-execute when these variables change
     
 
     //function for updating the description and name

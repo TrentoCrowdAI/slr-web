@@ -41,9 +41,6 @@ const UsersLogin = function (props) {
             //and save the token as string in localStorage
             storage.setItem("userToken", response.tokenId);
 
-
-            //redirect to home page
-            history.push("/");
             
         }
     }
@@ -51,8 +48,7 @@ const UsersLogin = function (props) {
     //part of visualization-----------------------------
 
     //if there's no token or I'm not fetching an user
-    if ((!storage.getItem("userToken") && !appConsumer.userFetch) || (!appConsumer.userFetch && !appConsumer.user)) {
-
+    if (!appConsumer.userFetch && !appConsumer.user) {
         output = (
             <div className="login-holder">
                 <GoogleLogin
