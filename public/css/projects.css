@@ -129,7 +129,7 @@ form.add-project textarea{
 /*small navigation links*/ /*projectpage.js*/
 div.project-nav-link-wrapper{
   position: relative;
-  width: 300px;
+  width: 600px;
   margin: auto;
 }
 div.project-nav-link-wrapper div.nav-link{

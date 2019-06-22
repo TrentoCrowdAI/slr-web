@@ -173,17 +173,30 @@ const ProjectPage = (props) => {
                         return (<SearchForm project_id={project_id} {...props} />);
                     }}/>
 
+                    <Route exact path={props.match.url + "/filters"} render={function(props){
+                        setNotFound(false);
+                        return (<p>filters page</p>);
+                    }}/>
+
+                    <Route exact path={props.match.url + "/screening"} render={function(props){
+                        setNotFound(false);
+                        return (<p>screening page</p>);
+                    }}/>
+
                     <Route exact path={props.match.url + "/searchsimilar"} render={function(props){
                         setNotFound(false);
                         return (<SearchSimilarForm project_id={project_id} {...props} />);
                     }}/>
 
-                    <Route path = {props.match.url + "/addpaper"} render={() =>
-                        <>
-                            <Link className="back" to={props.match.url}>  </Link>
-                            <CustomPaperPage projectId={project.id} url={props.match.url} history={props.history}/>
-                        </>
-                    } />
+                    <Route path = {props.match.url + "/addpaper"} render={function(props){
+                        setNotFound(false);
+                        return (
+                            <>
+                                <Link className="back" to={props.match.url.substr(0, props.match.url.length - 9 )}>  </Link>
+                                <CustomPaperPage projectId={project.id} url={props.match.url} history={props.history}/>
+                            </>
+                        );
+                    }} />
                     <Route render={(props) => {setNotFound(true); return <PageNotFound/>}}/>
                 </Switch>
 
@@ -198,18 +211,47 @@ const ProjectPage = (props) => {
  * this is the local component to print head of project page
  */
 const ProjectPageHead = function ({match, notFound}) {
-    const lc = window.location.hash.substr(window.location.hash.length - 9);
-    const slider = ((("#" + match.url) === window.location.hash.split("?")[0]) || (lc === "/addpaper" || lc === "addpaper/"));
+    //hash  -> #/projects/6/search/ || #/projects/6/search/ 
+    const lc = window.location.hash.split("?")[0];
+    var slider = "hide";
+    switch (true) {
+        case /^#\/projects\/\d+\/?$/.test(lc): //papers tab
+            slider = "25px";
+            break;
+
+        case /^#\/projects\/\d+\/filters\/?$/.test(lc): //filters tab
+            slider = "175px";
+            break;
+    
+        case /#\/projects\/\d+\/search\/?/.test(lc): //search tab
+            slider = "325px";
+            break;
+
+        case /^#\/projects\/\d+\/screening\/?$/.test(lc): //screening tab
+            slider = "475px";
+            break;
+        
+        default:
+            console.log("no tab");
+            break;
+    }
+    console.log(slider);
     let output = (
         <>
-            <div className="project-nav-link-wrapper" style={{display: (notFound || (lc === "/addpaper" || lc === "addpaper/")) ? "none" : ""}}>
+            <div className="project-nav-link-wrapper" style={{display: (notFound || slider === "hide") ? "none" : ""}}>
                 <div className="nav-link">
                     <Link to={match.url}>papers</Link>
                 </div>
                 <div className="nav-link">
+                    <Link to={join(match.url, "/filters")}>filters</Link>
+                </div>
+                <div className="nav-link">
                     <Link to={join(match.url, "/search")}>search</Link>
                 </div>
-                <div className="underline" style={{left: slider ? "25px" : "175px"}}/>
+                <div className="nav-link">
+                    <Link to={join(match.url, "/screening")}>screening</Link>
+                </div>
+                <div className="underline" style={{left: slider}}/>
             </div>
         </>
     );
