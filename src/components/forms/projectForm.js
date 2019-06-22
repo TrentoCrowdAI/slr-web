@@ -58,7 +58,7 @@ function ProjectForm(props) {
                     style={{borderBottom : (errors.name && touched.name) ? "solid 1px #d81e1e" : ""}}
                     name="name"
                     type="text" 
-                    placeholder="Project Name"
+                    placeholder="Please enter a project title"
                     onChange={(e) => {handleChange(e); validateField('name')}}/>
                 <br/>
                 <br/>
@@ -66,7 +66,7 @@ function ProjectForm(props) {
                     style={{borderBottom : (errors.description && touched.description) ? "solid 1px #d81e1e" : ""}}
                     name="description"
                     component="textarea"
-                    placeholder="Project Description"/>
+                    placeholder="Please describe the topic and focus of this new project"/>
                 <br/>
                 <button type="submit" disabled={isSubmitting || 
                     ((errors.name && touched.name) ||
