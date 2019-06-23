@@ -395,14 +395,14 @@ const SearchForm = function ({project_id, location, match, history}) {
                         value={keywords}
                         onChange={handleOnInputChange}
                     />
-                    <button className="go-search" type="submit" value="Submit">
-                        <SearchButton/>
-                    </button>
                     <Link to={"/projects/" + project_id + "/searchsimilar"}>
                         <button className="go-similar" type="button">
                             <SearchSimilarButton/>
                         </button>
                     </Link>
+                    <button className="go-search" type="submit" value="Submit">
+                        <SearchButton/>
+                    </button>
                 </div>
 
                 <div className="option-holder">
