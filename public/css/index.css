@@ -295,11 +295,17 @@ svg#loading-icon path#loading-circle2{
 }
 
 /*buttons*/
-button.bottom-left-btn{
-  border-radius: 7px;
+div.bottom-right-button-holder{
   position: fixed;
   bottom: 20px;
   right: 40px;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  justify-content: right;
+}
+button.bottom-right-btn{
+  border-radius: 7px;
   display: flex;
   border: solid 1px #c4c4c4;
   height: 50px;
@@ -307,12 +313,15 @@ button.bottom-left-btn{
   background-color: #fcfcff;
   border-radius: 25px;
   box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+  max-width: 50px;
+  margin: 3px 0px 3px auto;
 }
-button.bottom-left-btn:hover, button.bottom-left-btn:focus{
+button.bottom-right-btn:hover, button.bottom-right-btn:focus{
   box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
   border-radius: 7px;
+  max-width: 360px;
 }
-button.bottom-left-btn div.btn-title{
+button.bottom-right-btn div.btn-title{
   line-height: 50px;
   vertical-align: middle;
   margin: 0 0px 0 0px;
@@ -322,11 +331,11 @@ button.bottom-left-btn div.btn-title{
   overflow: hidden;
   max-width: 0px;
 }
-button.bottom-left-btn:hover div.btn-title, button.bottom-left-btn:focus div.btn-title{
+button.bottom-right-btn:hover div.btn-title, button.bottom-right-btn:focus div.btn-title{
   margin: 0 0px 0 8px;
   max-width: 260px;
 }
-button.bottom-left-btn div.btn-icon{
+button.bottom-right-btn div.btn-icon{
   border-radius: 50%;
   height: 40px;
   width: 40px;
@@ -371,8 +380,11 @@ button.ti-btn div.btn-icon{
 }
 
 /*button for file upload*/
-div.file-input-container input[type=file]{
+input[type=file]{
   display: none;
+  width: 0px;
+  height: 0px;
+  margin: 0;
 }
 div.file-input-container button.browse-btn{
   position: relative;
@@ -422,6 +434,39 @@ div.arrow svg#arrow-select{
   margin: 10%;
 }
 .st-arrow-select{fill:none;stroke:#000000;stroke-width:88;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+/*floating form*/
+form.floating-form{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 10;
+  box-shadow: 0px 0px 16px -6px rgba(0, 0, 0, 0.75);
+  min-height: 200px;
+  transition: height 0.4s;
+}
+form.floating-form button{
+  border: solid 1px grey;
+  transition: box-shadow 0.3s;
+}
+form.floating-form button:hover{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
+}
+form.floating-form button.close-btn{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+form.floating-form svg#close-button{
+  width: 70%;
+  height: 70%;
+  margin: 15% auto;
+}
+
 
 /*side options for cards*/
 div.card-options{

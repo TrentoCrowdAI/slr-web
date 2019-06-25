@@ -49,7 +49,7 @@ function ProjectForm(props) {
         >
         {function ({ errors, touched, isSubmitting, setErrors, validateField, handleChange }) {
             let output = "";
-            output = (<Form className="modal add-project" style={{visibility: (!props.visibility) ? 'hidden' : '' }}>
+            output = (<Form className="modal floating-form add-project" style={{visibility: (!props.visibility) ? 'hidden' : '' }}>
                 <button type="button" className="close-btn" onClick={(e) => {
                     props.setVisibility(!props.visibility);
                 }}><CloseButton/></button>

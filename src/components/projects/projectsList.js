@@ -146,12 +146,14 @@ const ProjectsList = function (props) {
                 {/*print the input form to create/update the projects*/}
                 <ProjectForm visibility={toggleform} setVisibility={setToggleForm} history={props.history}/>
                 {/*button to show input form*/}
-                <button className="bottom-left-btn add-project-btn" type="button" value="toggle-insert-form" 
-                onClick={(e) => {
-                    setToggleForm(!toggleform);
-                }}>
-                    <div className="btn-title">Add Project</div><div className="btn-icon"> </div>
-                </button>
+                <div className="bottom-right-button-holder">
+                    <button className="bottom-right-btn add-project-btn" type="button" value="toggle-insert-form" 
+                    onClick={(e) => {
+                        setToggleForm(!toggleform);
+                    }}>
+                        <div className="btn-title">Add Project</div><div className="btn-icon"> </div>
+                    </button>
+                </div>
             </div>
         );
 

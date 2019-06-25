@@ -3,10 +3,8 @@ import {Route, Link, Switch} from 'react-router-dom';
 
 import SearchForm from 'components/forms/searchform';
 import SearchSimilarForm from 'components/forms/searchSimilarForm';
-import PapersList from 'components/papers/papersList';
 import CustomPaperPage from 'components/papers/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
-import ProjectDescription from 'components/projects/projectDescription';
 import ProjectName from 'components/projects/projectName';
 import {join} from 'utils/index';
 
@@ -15,6 +13,7 @@ import Forbidden from 'components/svg/forbidden';
 
 import {AppContext} from 'components/providers/appProvider'
 import PageNotFound from "components/modules/pageNotFound";
+import PapersTab from "./papersTab";
 
 
 /**
@@ -153,18 +152,7 @@ const ProjectPage = (props) => {
                 <Switch>
                     <Route exact  path={props.match.url} render={function(props){
                         setNotFound(false);
-                        return (
-                            <>
-                                <ProjectDescription project_id={project_id} description={project.data.description} update={updateProject} date_last_modified={project.date_last_modified} date_created={project.date_created} collaborators={collaborators} setCollaborators={setCollaborators}/>
-                                <PapersList project_id={project_id} location={props.location} match={props.match} history={props.history}/>
-                                <Link to={join(props.match.url,"/addpaper")}>
-                                    <button className="bottom-left-btn add-custompaper-btn">
-                                        <div className="btn-title">Add Custom Paper</div><div className="btn-icon"> </div>
-                                    </button>
-                                </Link>
-
-                            </>
-                        );
+                        return (<PapersTab project_id={project_id} project={project} collaborators={collaborators} setCollaborators={setCollaborators} updateProject={updateProject} {...props}/>);
                     }}/>
 
                     {/*route the form of search*/}

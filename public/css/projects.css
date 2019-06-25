@@ -68,21 +68,8 @@ button.add-project-btn div.btn-icon{
 form.add-project{
   font-size: 14px;
   padding: 20px 30px 10px 30px;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
   width: 400px;
   text-align: center;
-  z-index: 1;
-  box-shadow: 0px 0px 16px -6px rgba(0, 0, 0, 0.75);
-}
-form.add-project button{
-  border: solid 1px grey;
-  transition: box-shadow 0.3s;
-}
-form.add-project button:hover{
-  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
 }
 form.add-project input[type="text"] {
 	font-size: 21px;
@@ -94,20 +81,6 @@ form.add-project button[type=submit]{
   font-size: 18px;
   margin: 10px auto 10px auto;
   padding: 10px 10px 10px 10px;
-}
-form.add-project button.close-btn{
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-}
-form.add-project svg#close-button{
-  width: 70%;
-  height: 70%;
-  margin: 15% auto;
-
 }
 form.add-project input{
   margin-bottom: 15px;
@@ -123,6 +96,56 @@ form.add-project textarea{
   border-bottom: solid 1px black;
   color: black;
   resize: none;
+}
+
+/*add csv papers button*/ /*projectpage.js*/
+button.add-csv-papers-btn div.btn-icon{
+  background-image: url('./../img/papers.svg');
+  background-size: 75%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/*add csv papers form*/ /*projectpage.js*/
+form.add-csv-papers{
+  font-size: 14px;
+  padding: 20px 30px 10px 30px;
+  width: 650px;
+  height: 260px;
+}
+form.add-csv-papers h2{
+  margin: 0px auto 5px auto;
+  text-align: center;
+}
+form.add-csv-papers p{
+  font-size: 16px;
+}
+form.add-csv-papers p span{
+  font-weight: 100;
+  font-style: italic;
+}
+form.add-csv-papers div.field-input-row{
+  display: flex;
+  justify-content: space-between;
+}
+form.add-csv-papers div.field-input-row div.field-input-holder{
+  display: flex;
+  width: 48%;
+  justify-content: space-between;
+}
+form.add-csv-papers div.field-input-row div.field-input-holder label{
+  padding-top: 4px;
+} 
+form.add-csv-papers input[type="text"] {
+  width: 200px;
+  margin-bottom: 15px;
+  font-weight: lighter;
+}
+form.add-csv-papers button.file-input{
+  font-size: 18px;
+  margin: 10px auto 10px auto;
+  padding: 10px 10px 10px 10px;
+  display: inherit;
 }
 
 
