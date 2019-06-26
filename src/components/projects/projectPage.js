@@ -14,6 +14,8 @@ import Forbidden from 'components/svg/forbidden';
 import {AppContext} from 'components/providers/appProvider'
 import PageNotFound from "components/modules/pageNotFound";
 import PapersTab from "./papersTab";
+import FiltersTab from "./filtersTab";
+import SearchAutomatedForm from "components/forms/searchAutomatedForm";
 
 
 /**
@@ -163,12 +165,17 @@ const ProjectPage = (props) => {
 
                     <Route exact path={props.match.url + "/filters"} render={function(props){
                         setNotFound(false);
-                        return (<p>filters page</p>);
+                        return (<FiltersTab project_id={project_id} project={project} {...props}/>);
                     }}/>
 
                     <Route exact path={props.match.url + "/screening"} render={function(props){
                         setNotFound(false);
                         return (<p>screening page</p>);
+                    }}/>
+
+                    <Route exact path={props.match.url + "/searchautomated"} render={function(props){
+                        setNotFound(false);
+                        return (<SearchAutomatedForm project={project} {...props} />);
                     }}/>
 
                     <Route exact path={props.match.url + "/searchsimilar"} render={function(props){

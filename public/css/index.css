@@ -124,12 +124,23 @@ div.navigation-wrapper{
   top: 0px;
 }
 
-
+/*wrappers*/
 div.main-wrapper{
   position: relative;
   width: 1000px;
   margin: 0px auto 0px auto;
   min-height: 400px;
+}
+div.left-side-wrapper{
+  position: relative;
+  margin: 20px auto auto 0px;
+  width: 700px;
+  min-height: 300px;
+}
+div.right-side-wrapper{
+  width: 400px;
+  position: absolute;
+  right: 0px;
 }
 
 .modal{
@@ -198,6 +209,54 @@ input[type="number"] {
 }
 .de-warning{
   animation: de-danger 0.5s linear forwards;
+}
+
+/*generic cards*/
+div.generic-card{
+  position: relative;
+  width: 600px;
+  margin: 0px auto 20px 0px;
+}
+/*side options for cards*/
+div.card-options{
+  display: none;
+  position: absolute;
+  top: 7px;
+  right: 5px;
+  width: 20px;
+  z-index: 1;
+}
+div.generic-card:hover div.card-options {
+  display: block;
+}
+div.generic-card:focus-within div.card-options{
+  display: block;
+}
+div.card-options div.options-list{
+  background-color: white;
+  border-radius: 3px;
+  text-align: center;
+  width: 100px;
+  cursor: pointer;
+  transition: 0.3s all;
+}
+div.card-options div.retract-options{
+  border: solid 1px #6d6d6d00; 
+  font-size: 0px;
+}
+div.card-options div.expand-options{
+  border: solid 1px #6d6d6d; 
+  font-size: 12px;
+}
+div.card-options div.options-list div.option{
+  transition: 0.2s all;
+}
+div.card-options div.options-list div.option:hover{
+  background-color: #e0e0e0;
+}
+div.card-options button svg#options-button{
+  height: 20px;
+  width: 20px;
 }
 
 /*checkboxes*/
@@ -467,41 +526,6 @@ form.floating-form svg#close-button{
   margin: 15% auto;
 }
 
-
-/*side options for cards*/
-div.card-options{
-  position: absolute;
-  top: 7px;
-  right: 5px;
-  width: 20px;
-  z-index: 1;
-}
-div.card-options div.options-list{
-  background-color: white;
-  border-radius: 3px;
-  text-align: center;
-  width: 100px;
-  cursor: pointer;
-  transition: 0.3s all;
-}
-div.card-options div.retract-options{
-  border: solid 1px #6d6d6d00; 
-  font-size: 0px;
-}
-div.card-options div.expand-options{
-  border: solid 1px #6d6d6d; 
-  font-size: 12px;
-}
-div.card-options div.options-list div.option{
-  transition: 0.2s all;
-}
-div.card-options div.options-list div.option:hover{
-  background-color: #e0e0e0;
-}
-div.card-options button svg#options-button{
-  height: 20px;
-  width: 20px;
-}
 
 /*error wrapper*/
 div.error-wrapper{

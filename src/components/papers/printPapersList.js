@@ -87,9 +87,9 @@ const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, se
     }
 
     let output = papersList.map((element, index) =>
-        <div key={index} className="paper-card">
+        <div key={index} className="generic-card paper-card">
             <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
-            <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} data={element} cls="card-options paper-card-options"/>
+            <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} data={element} cls="card-options"/>
             <Link to={"#"}><h3>{element.title}</h3></Link>
             <div className="extra-info">
                 <p className="authors">{element.authors}</p>
@@ -164,8 +164,8 @@ const PrintPapersList_w = function ({papersList, location, history}) {
     else {
         output = (
             localPaperList.map((element) =>
-                <div key={element.id} className="paper-card">
-                    <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} data={element.data} cls="card-options paper-card-options"/>
+                <div key={element.id} className="generic-card paper-card">
+                    <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} data={element.data} cls="card-options"/>
                     <Link to={"#"}>
                         <h3>{element.data.title}</h3>
                     </Link>

@@ -135,14 +135,14 @@ const ProjectDescription = function({project_id, description, update, date_last_
 
     if(loadIconDisplay){
         output = (
-            <div className="project-description hidden-form-description">
+            <div className="right-side-wrapper project-description hidden-form-description">
                 <h2>Description:</h2>
                 <LoadIcon/>
             </div>
             );
     }else{
         output = (
-            <div className={(!editing) ? "project-description hidden-form-description" : "project-description"}>
+            <div className={(!editing) ? "right-side-wrapper project-description hidden-form-description" : "right-side-wrapper project-description"}>
                 <h2>Description:</h2>
                 <p style={{fontSize: (editing) ? "0px" : "15px"}}> {description}</p>
                 <form className="edit-project-description" style={{height:(editing) ? "" : "0px"}}>

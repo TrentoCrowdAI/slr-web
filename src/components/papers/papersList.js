@@ -158,7 +158,7 @@ const PapersList = ({project_id, location, match, history}) => {
     }
 
     output = (
-        <div className="papers-list">
+        <div className="left-side-wrapper">
             {output}
         </div>
     );
@@ -188,7 +188,6 @@ function createQueryData(query){
         sort = "DESC";
     }
 
-    //if "before" is defined by query then insert it in object, else insert "after" in object
     let queryData = {orderBy, sort, start, count };
     return queryData;
 

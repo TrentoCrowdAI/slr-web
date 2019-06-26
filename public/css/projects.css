@@ -199,29 +199,20 @@ div.paper-card-holder div.order button svg#order-arrow{
   height: 80%;
   margin: 10%;
 }
-div.papers-list{
-  position: relative;
-  margin: 20px auto auto 0px;
-  width: 700px;
-  min-height: 300px;
-}
 div.paper-card-holder{
   width: 700px;
   z-index: 10;
 }
 
 div.project-description{
-  width: 300px;
-  position: absolute;
-  right: 0px;
   text-align: justify;
   font-weight: 300;
-  overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
   color: #2f2f2f;
   display: flex;
   flex-flow: column;
+  width: 300px;
 }
 div.project-description p{
   margin: 0px;
@@ -326,4 +317,188 @@ div.forbidden-wrapper svg#forbidden{
 div.forbidden-wrapper p{
   font-size: 26px;
   font-weight: lighter;
+}
+
+/*filters page*/
+div.filters-wrapper{
+  margin-top: 25px;
+}
+div.form-filter-wrapper{
+  width: 350px;
+}
+
+div.filter-card{
+  margin-bottom: 20px; 
+}
+div.filter-card h3{
+  font-size: 25px;
+  margin: 0px 20px 5px 0px;
+}
+div.filter-card div.answer{
+  font-size: 17px;
+  margin: 1px 0px 1px 0px;
+  text-align: justify;
+  word-wrap: break-word;
+  hyphens: auto;
+  width: 96%;
+}
+div.filter-card div.answer > p{
+  display: inline-block;
+  font-weight: lighter;
+  margin: 0px;
+}
+div.filter-card div.answer > p > span{
+  display: inline-flex;
+  margin-right: 4px;
+  font-weight: normal;
+  justify-content: space-between;
+  width: 68px;
+}
+div.filter-card div.answer > p > span > span{
+  display: inline-block;
+}
+
+form.update-filter-card{
+  margin-top: 25px;
+  border: solid 1px #808080;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  padding: 20px 25px 20px 25px;
+  text-align: center;
+  transition: all 0.3s;
+}
+form.update-filter-card button.close-btn{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  transition: all 0.3s;
+}
+form.update-filter-card button.close-btn svg#close-button{
+  width: 70%;
+  height: 70%;
+  margin: 15% auto;
+}
+form.update-filter-card input[type=text]{
+  width: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  height: 30px;
+  transition: all 0.3s;
+  margin-bottom: 15px;
+  border-bottom: solid 1px black;
+}
+form.update-filter-card div.textareas-description-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 5px auto 5px auto;
+}
+form.update-filter-card div.textareas-description-wrapper div{
+  width: 48%;
+  text-align: left;
+  padding-left: 6px;
+  font-weight: normal;
+}
+form.update-filter-card div.textareas-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+form.update-filter-card textarea{
+  resize: none;
+  width: 48%;
+  font-size: 15px;
+  font-weight: lighter;
+  height: 100px;
+  transition: all 0.3s;
+  margin-bottom: 7px;
+  border-bottom: solid 1px black;
+}
+form.update-filter-card button[type=submit]{
+  margin-top: 12px;
+  border: solid 1px #acacac;
+  padding: 10px 25px 10px 25px;
+  font-size: 18px;
+  transition: all 0.3s;
+}
+form.update-filter-card button:hover{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+}
+
+form.add-filter{
+  margin-top: 25px;
+  border: solid 1px #acacac;
+  border-radius: 15px;
+  padding: 20px 25px 20px 25px;
+  text-align: center;
+  transition: all 0.3s;
+}
+form.add-filter:focus-within{
+  border: solid 1px #808080;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.3);
+}
+form.add-filter input[type=text]{
+  width: 100%;
+  font-size: 17px;
+  height: 30px;
+  transition: all 0.3s;
+  margin-bottom: 15px;
+  border-bottom: solid 1px #6c6c6c;
+}
+form.add-filter textarea{
+  resize: none;
+  width: 100%;
+  font-size: 16px;
+  height: 100px;
+  transition: all 0.3s;
+  margin-bottom: 7px;
+  border-bottom: solid 1px #6c6c6c;
+}
+form.add-filter:focus-within input[type=text], form.add-filter:focus-within textarea{
+  border-bottom: solid 1px black;
+}
+form.add-filter button{
+  margin-top: 12px;
+  border: solid 1px #c4c4c4;
+  padding: 10px 25px 10px 25px;
+  font-size: 18px;
+  transition: all 0.3s;
+}
+form.add-filter button:hover{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+}
+form.add-filter:focus-within button{
+  border: solid 1px #acacac;
+}
+
+/*search-automated*/
+div.search-automated-right-wrapper{
+  width: 280px;
+}
+div.search-automated-right-wrapper p.search-automated-description{
+  font-weight: 300;
+  font-size: 13px;
+  margin: 25px 0px 5px 0px;
+  padding: 5px 5px 5px 5px;
+  border-top: solid 1px #acacac;
+  border-bottom: solid 1px #acacac;
+  text-align: justify;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+div.search-automated-right-wrapper div.filters-holder h2{
+  margin: 15px 0px 5px 0px;
+}
+div.search-automated-right-wrapper div.filters-holder p.filter-predicate{
+  margin: 5px 0px 5px 0px;
+}
+div.search-automated-right-wrapper div.filters-holder a{
+  margin: 10px 0px 0px 0px;
+  width: 100%;
+  text-align: center;
+  text-decoration: underline;
+  font-weight: 300;
 }

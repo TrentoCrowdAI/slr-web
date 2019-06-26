@@ -200,11 +200,6 @@ div.search-loading-holder{
 }
 
 /*===PAPER-CARD_GENERIC===*/ /*projectpage.js & searchform.js*/
-div.paper-card{
-  position: relative;
-  width: 600px;
-  margin: 0px auto 20px 0px;
-}
 
 div.paper-card a{
   margin: 0px auto 0px 10px;
@@ -258,13 +253,13 @@ div.paper-card button{
 }
 
 /*paper-card for project papers*/
-div.paper-card:hover div.paper-card-options{
+div.paper-card:hover div.card-options{
   display: block;
 }
-div.paper-card:focus-within div.paper-card-options{
+div.paper-card:focus-within div.card-options{
   display: block;
 }
-div.paper-card div.paper-card-options{
+div.paper-card div.card-options{
   display: none;
 }
 button.add-custompaper-btn div.btn-icon{
@@ -382,9 +377,7 @@ div.paper-card-holder div.paper-card-holder-head div.select-all label.checkbox-c
 }
 form.search-results div.paper-card{
   width: 100%;
-  margin: 0px auto 20px 0px;
   z-index: 5;
-  position: relative;
 }
 form.search-results div.paper-card a{
   margin: 0px auto 0px 10px;
