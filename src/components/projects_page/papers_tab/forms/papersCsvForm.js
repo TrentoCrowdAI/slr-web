@@ -49,7 +49,7 @@ function PapersCsvForm(props) {
         //get the file object
         let file = inputElement.current.files[0];
         console.log(file.name);
-        //if this file exist
+        //if this file exists
         if(file){
 
             //check file extension

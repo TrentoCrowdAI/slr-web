@@ -8,7 +8,7 @@ import {projectPapersDao} from 'dao/projectPapers.dao'
 
 import CheckBox from "components/forms/checkbox";
 import RadioBox from "components/forms/radiobox";
-import {PrintScoupusSearchList} from 'components/papers/printPapersList';
+import {PrintScoupusSearchList} from 'components/modules/printPapersList';
 import Select from 'components/forms/select';
 import Pagination from "components/modules/pagination";
 

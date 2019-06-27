@@ -3,7 +3,7 @@ import {Route, Link, Switch} from 'react-router-dom';
 
 import SearchForm from 'components/forms/searchform';
 import SearchSimilarForm from 'components/forms/searchSimilarForm';
-import CustomPaperPage from 'components/papers/customPaperPage';
+import CustomPaperPage from 'components/projects_page/papers_tab/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
 import ProjectName from 'components/projects_page/projectName';
 import {join} from 'utils';
@@ -13,7 +13,7 @@ import Forbidden from 'components/svg/forbidden';
 
 import {AppContext} from 'components/providers/appProvider'
 import PageNotFound from "components/modules/pageNotFound";
-import PapersTab from "./papersTab";
+import PapersTab from "./papers_tab/papersTab";
 import FiltersTab from "./filters_tab/filtersTab";
 import SearchAutomatedForm from "components/forms/searchAutomatedForm";
 

@@ -107,7 +107,6 @@ const ProjectDescription = function({project_id, description, update, date_last_
     }
 
     //function for adding collaborator
-    //function for removing collaborators
     async function addCollaborator(){
         if(!collaborators.includes(input)){
             console.log("adding " + input);

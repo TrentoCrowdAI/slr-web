@@ -18,10 +18,9 @@ const paperType = [
  * this is the form for create or edit the paper
  * @param props.projectId  relative project where we will insert the paper
  */
-function PaperForm(props) {
+function CustomPaperForm(props) {
 
     let yup = require('yup');
-    const uuid = require("uuid");
 
     //validation schema for form
     const paperValidationSchema = yup.object().shape({
@@ -135,4 +134,4 @@ function PaperForm(props) {
 }
 
 
-export default PaperForm;
+export default CustomPaperForm;

@@ -1,13 +1,17 @@
 import React, {useState} from "react";
 import { Link } from 'react-router-dom';
 
-import PapersList from 'components/papers/papersList';
-import ProjectDescription from 'components/projects_page/projectDescription';
+import PapersList from 'components/projects_page/papers_tab/papersList';
+import ProjectDescription from 'components/projects_page/papers_tab/projectDescription';
 import {join} from 'utils';
 
 import Cover from "components/modules/cover";
-import PapersCsvForm from "components/forms/papersCsvForm";
+import PapersCsvForm from "components/projects_page/papers_tab/forms/papersCsvForm";
 
+
+/**
+ * this is the paper tab which will call the other components
+ */
 const PapersTab = function (props) {
 
     //bool to control visualization of form

@@ -1,5 +1,5 @@
 import React, {useState, useRef, useContext} from "react";
-import PaperForm from 'components/forms/custompaper';
+import CustomPaperForm from 'components/projects_page/papers_tab/forms/customPaperForm';
 import LoadIcon from "components/svg/loadIcon";
 
 import {updateFileDao} from "dao/updateFile.dao";
@@ -97,7 +97,7 @@ function CustomPaperPage({projectId, url, history}) {
         );
     }else{
         output = (
-            <PaperForm projectId={projectId} url={url} history={history} customPaper={paperData}/>
+            <CustomPaperForm projectId={projectId} url={url} history={history} customPaper={paperData}/>
         );
     }
 

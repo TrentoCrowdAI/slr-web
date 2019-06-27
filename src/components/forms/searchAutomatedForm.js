@@ -10,7 +10,7 @@ import {updateFileDao} from "dao/updateFile.dao";
 
 import CheckBox from "components/forms/checkbox";
 import RadioBox from "components/forms/radiobox";
-import {PrintSearchAutomatedList} from 'components/papers/printPapersList';
+import {PrintSearchAutomatedList} from 'components/modules/printPapersList';
 import Select from 'components/forms/select';
 import Pagination from "components/modules/pagination";
 import SearchSimilarPapers from "components/forms/searchSimilarPapers";
