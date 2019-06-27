@@ -270,7 +270,7 @@ button.add-custompaper-btn div.btn-icon{
 }
 
 /*===SEARCH_RESULTS===*/
-form.search-results{
+div.search-results{
   margin-top: 10px;
 }
 
@@ -375,11 +375,11 @@ div.paper-card-holder div.paper-card-holder-head{
 div.paper-card-holder div.paper-card-holder-head div.select-all label.checkbox-container span.name{
   margin-left: 9px;
 }
-form.search-results div.paper-card{
+div.search-results div.paper-card{
   width: 100%;
   z-index: 5;
 }
-form.search-results div.paper-card a{
+div.search-results div.paper-card a{
   margin: 0px auto 0px 10px;
 }
 div.paper-card label.checkbox-container{

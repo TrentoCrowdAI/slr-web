@@ -15,7 +15,7 @@ import {AppContext} from 'components/providers/appProvider'
 import PageNotFound from "components/modules/pageNotFound";
 import PapersTab from "./papers_tab/papersTab";
 import FiltersTab from "./filters_tab/filtersTab";
-import SearchAutomatedForm from "components/forms/searchAutomatedForm";
+import SearchAutomatedManager from "components/projects_page/search_tab/search_automated/searchAutomatedManager";
 
 
 /**
@@ -175,7 +175,7 @@ const ProjectPage = (props) => {
 
                     <Route exact path={props.match.url + "/searchautomated"} render={function(props){
                         setNotFound(false);
-                        return (<SearchAutomatedForm project={project} {...props} />);
+                        return (<SearchAutomatedManager project={project} {...props} />);
                     }}/>
 
                     <Route exact path={props.match.url + "/searchsimilar"} render={function(props){
