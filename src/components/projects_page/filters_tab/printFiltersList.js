@@ -1,16 +1,7 @@
-import React, {useContext, useState, useEffect} from "react";
-import ClampLines from 'react-clamp-lines';
-import {Link, withRouter} from 'react-router-dom';
-
-import CheckBox from "components/forms/checkbox";
-import SideOptions from 'components/modules/sideOptions';
-import {projectPapersDao} from 'dao/projectPapers.dao';
-import {AppContext} from 'components/providers/appProvider'
+import React from "react";
 
 import NoPapers from "components/svg/noPapers";
 
-import {join} from 'utils/index';
-import Pagination from "components/modules/pagination";
 import FilterCard from "./filterCard";
 
 const PrintFiltersList = function ({filtersList}) {

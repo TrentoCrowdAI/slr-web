@@ -1,18 +1,16 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useEffect} from "react";
 import { Formik, Form, Field } from "formik";
 
-import {projectsDao} from 'dao/projects.dao';
-import {AppContext} from 'components/providers/appProvider'
 
 
 /**
- * this is the description component for the project page
+ * this is the form for adding a new filter to a project
  */
 
 
 const InsertFilterForm = function(props){
 
-    //boolean flag for handling hooks
+    //boolean flag for handling mount status
     let mounted = true;
 
     let yup = require('yup');
@@ -23,6 +21,7 @@ const InsertFilterForm = function(props){
         shouldNot: yup.string().required('please enter the neagative answer')
     });
 
+    //effect for setting mount status to false when unmounting
     useEffect(() => {
         return () => {
             mounted = false;

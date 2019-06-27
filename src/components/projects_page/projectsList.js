@@ -7,7 +7,7 @@ import {projectsDao} from 'dao/projects.dao';
 import LoadIcon from 'components/svg/loadIcon';
 import ProjectForm from 'components/forms/projectForm';
 import Pagination from 'components/modules/pagination';
-import {join} from 'utils/index';
+import {join} from 'utils';
 import Cover from 'components/modules/cover';
 import SideOptions from 'components/modules/sideOptions';
 

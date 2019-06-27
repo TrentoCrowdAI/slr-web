@@ -1,12 +1,16 @@
 import React, {useState, useEffect} from "react";
 
-import queryString from "query-string";
+import {createQueryDataForFiltersTab} from 'utils/index';
 
-import InsertFilterForm from "components/forms/insertFilterForm";
+
+import InsertFilterForm from "components/projects_page/filters_tab/forms/insertFilterForm";
 import PrintFiltersList from "./printFiltersList";
 import Pagination from "components/modules/pagination";
 
 const FiltersTab = function (props) {
+
+    //boolean flag for handling mount status
+    let  mounted = true;
 
     //filters
     const [filtersList, setFiltersList] = useState([
@@ -18,16 +22,13 @@ const FiltersTab = function (props) {
     //filters fetch flag
     const [filtersFetch, setFiltersFetch] = useState(true);
 
-    //shows the pagination list
+    //total number of fetched results (useful for the pagination component)
     const [totalResults, setTotalResults] = useState(0);
 
     //set query params from url
-    const queryData = createQueryData(props.location.search);
+    const queryData = createQueryDataForFiltersTab(props.location.search);
 
     useEffect(() => {
-
-        //flag that represents the state of component
-        let  mounted = true;
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
@@ -72,10 +73,6 @@ const FiltersTab = function (props) {
         };
     }, [queryData.start, queryData.count, queryData.sort, queryData.orderBy]); //re-execute when these variables change
 
-    useEffect(() => {
-        console.log(filtersList);
-    }, [filtersList])
-
     return (
         <>
             <InsertFilterForm project_id={props.project_id} start={queryData.start} filtersList={filtersList} setFiltersList={setFiltersList}/>
@@ -87,28 +84,5 @@ const FiltersTab = function (props) {
     );
 }
 
-
-/**
- * internal function to prepare a object of queryData
- * @param query
- * @return object of queryData for the fetch
- */
-function createQueryData(query){
-
-    //set query params from queryString of url
-    let params = queryString.parse(query);
-    let count = params.count || 10;
-    let start = params.start || 0;
-    let orderBy = params.orderBy || "date_created";
-    let sort = params.sort || "ASC";
-
-    if(orderBy === "date_created"){
-        sort = "DESC";
-    }
-
-    let queryData = {orderBy, sort, start, count};
-    return queryData;
-
-}
 
 export default FiltersTab;

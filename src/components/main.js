@@ -4,8 +4,8 @@ import {Route, Switch} from "react-router-dom";
 import {AppContext} from 'components/providers/appProvider';
 
 import Home from 'components/home';
-import ProjectsList from 'components/projects/projectsList';
-import ProjectPage from 'components/projects/projectPage';
+import ProjectsList from 'components/projects_page/projectsList';
+import ProjectPage from 'components/projects_page/projectPage';
 import LoadIcon from 'components/svg/loadIcon';
 import PageNotFound from "./modules/pageNotFound";
 

@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import { Link } from 'react-router-dom';
 
 import PapersList from 'components/papers/papersList';
-import ProjectDescription from 'components/projects/projectDescription';
-import {join} from 'utils/index';
+import ProjectDescription from 'components/projects_page/projectDescription';
+import {join} from 'utils';
 
 import Cover from "components/modules/cover";
 import PapersCsvForm from "components/forms/papersCsvForm";

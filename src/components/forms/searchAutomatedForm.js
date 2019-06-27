@@ -23,7 +23,7 @@ import NoSearchResults from "components/svg/noSearchResults";
 import {AppContext} from 'components/providers/appProvider'
 
 import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
-import SearchAutomatedDescription from "components/projects/searchAutomatedDescription";
+import SearchAutomatedDescription from "components/projects_page/searchAutomatedDescription";
 import SearchButton from "components/svg/searchButton";
 
 

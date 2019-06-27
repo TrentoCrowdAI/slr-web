@@ -141,6 +141,28 @@ function getIndexOfObjectArrayByKeyAndValue(array, key, value) {
     return index;
 }
 
+/**
+ * internal function to prepare a object of queryData
+ * @param query
+ * @return object of queryData for the fetch
+ */
+function createQueryDataForFiltersTab(query){
+
+    //set query params from queryString of url
+    let params = queryString.parse(query);
+    let count = params.count || 10;
+    let start = params.start || 0;
+    let orderBy = params.orderBy || "date_created";
+    let sort = params.sort || "ASC";
+
+    if(orderBy === "date_created"){
+        sort = "DESC";
+    }
+
+    let queryData = {orderBy, sort, start, count};
+    return queryData;
+
+}
 
 export {
     arrayOfObjectsEquals,
@@ -149,5 +171,5 @@ export {
     join,
     createQueryStringFromObject,
     getIndexOfObjectArrayByKeyAndValue,
-
+    createQueryDataForFiltersTab
 };

@@ -5,8 +5,8 @@ import SearchForm from 'components/forms/searchform';
 import SearchSimilarForm from 'components/forms/searchSimilarForm';
 import CustomPaperPage from 'components/papers/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
-import ProjectName from 'components/projects/projectName';
-import {join} from 'utils/index';
+import ProjectName from 'components/projects_page/projectName';
+import {join} from 'utils';
 
 import LoadIcon from 'components/svg/loadIcon';
 import Forbidden from 'components/svg/forbidden';
@@ -14,7 +14,7 @@ import Forbidden from 'components/svg/forbidden';
 import {AppContext} from 'components/providers/appProvider'
 import PageNotFound from "components/modules/pageNotFound";
 import PapersTab from "./papersTab";
-import FiltersTab from "./filtersTab";
+import FiltersTab from "./filters_tab/filtersTab";
 import SearchAutomatedForm from "components/forms/searchAutomatedForm";
 
 
