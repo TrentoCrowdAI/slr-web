@@ -10,6 +10,7 @@ import {AppContext} from 'components/providers/appProvider'
 import NoPapers from "components/svg/noPapers";
 
 import {join} from 'utils/index';
+import PaperConfidence from "components/projects/paperConfidence";
 /**
  * prints the papers list of a local search on the fake database
  */
@@ -191,5 +192,32 @@ const PrintPapersList_w = function ({papersList, location, history}) {
 
 };
 
+const PrintSearchAutomatedList_w = function ({papersList, handlePaperSelection, selectedEidList}) {
+
+    let output = papersList.map((element, index) =>
+        <div key={index} className="generic-card paper-card">
+            <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
+            <PaperConfidence confidence={{value : 0.78, details : [{detail: "detail 1", percentage : "67%"},{detail: "detail 2", percentage : "64%"},{detail: "detail 3", percentage : "59%"}]}}/>
+            <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
+            <div className="extra-info">
+                <p className="authors">{element.authors}</p>
+                <p className="eid">{element.eid}</p>
+                <p className="date">{element.year}</p>
+            </div>
+            <ClampLines
+                text={element.abstract}
+                lines={4}
+                ellipsis="..."
+                className="paragraph"
+                moreText="more"
+                lessText="less"
+            />
+        </div>
+    );
+    return output;
+
+};
+
 export const PrintPapersList = PrintPapersList_w;
 export const PrintScoupusSearchList = withRouter(PrintScoupusSearchList_w);
+export const PrintSearchAutomatedList = withRouter(PrintSearchAutomatedList_w);

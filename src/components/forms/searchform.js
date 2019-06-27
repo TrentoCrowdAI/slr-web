@@ -518,6 +518,10 @@ const SearchForm = function ({project_id, location, match, history}) {
     let output = (
         <>
             {formPart}
+            <div className="search-automated-option" style={{display: (queryData.query === "") ? "block" : "none"}}>
+                <p><i>or</i><br/>let an algorithm provide search results for you</p>
+                <Link to={"/projects/" + project_id + "/searchautomated"}></Link>
+            </div>
             <form className="search-results" onSubmit={handleAddPapers}>
                 {resultPart}
             </form>
