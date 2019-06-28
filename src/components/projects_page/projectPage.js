@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import {Route, Link, Switch} from 'react-router-dom';
 
-import SearchForm from 'components/forms/searchform';
+import SearchStandardManager from 'components/projects_page/search_tab/search_standard/searchStandardManager';
 import SearchSimilarForm from 'components/forms/searchSimilarForm';
 import CustomPaperPage from 'components/projects_page/papers_tab/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
@@ -160,7 +160,7 @@ const ProjectPage = (props) => {
                     {/*route the form of search*/}
                     <Route exact path={props.match.url + "/search"} render={function(props){
                         setNotFound(false);
-                        return (<SearchForm project_id={project_id} {...props} />);
+                        return (<SearchStandardManager project_id={project_id} {...props} />);
                     }}/>
 
                     <Route exact path={props.match.url + "/filters"} render={function(props){

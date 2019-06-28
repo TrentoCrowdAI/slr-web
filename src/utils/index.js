@@ -185,6 +185,49 @@ function createQueryDataForAutomatedSearch(queryUrl) {
 
 }
 
+
+/**
+ * function to prepare a object of queryData
+ * @param queryUrl
+ * @return object of queryData for the fetch
+ */
+function createQueryDataForStandardSearch(queryUrl) {
+
+
+    //set query params from queryString of url
+    let params = queryString.parse(queryUrl);
+    let query = params.query || "";
+
+    let searchBy = params.searchBy || "all";
+    let orderBy = params.orderBy || "title";
+    let sort = params.sort || "ASC";
+    let start = params.start || 0;
+    let count = params.count || 10;
+
+
+    let scopus;
+    if (params.scopus === undefined) {
+        scopus = true;
+    }
+    else {
+        scopus = (params.scopus === "true");
+    }
+
+    let googleScholar = (params.googleScholar === "true" && !scopus);
+    let arXiv = (params.arXiv === "true" && !scopus && !googleScholar);
+
+    if(!scopus && !googleScholar && !arXiv){
+        scopus = true;
+    }
+
+    let year = params.year || "all";
+
+    let queryData = {query, searchBy, orderBy, sort, scopus, googleScholar, arXiv, year, start, count};
+
+    return queryData;
+
+}
+
 export {
     arrayOfObjectsEquals,
     arrayOfObjectsContains,
@@ -193,5 +236,7 @@ export {
     createQueryStringFromObject,
     getIndexOfObjectArrayByKeyAndValue,
     createQueryDataForFiltersTab,
-    createQueryDataForAutomatedSearch
+    createQueryDataForAutomatedSearch,
+    createQueryDataForStandardSearch
+
 };
