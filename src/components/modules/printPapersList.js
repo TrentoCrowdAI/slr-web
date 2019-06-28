@@ -10,7 +10,7 @@ import {AppContext} from 'components/providers/appProvider'
 import NoPapers from "components/svg/noPapers";
 
 import {join} from 'utils/index';
-import PaperConfidence from "components/projects_page/paperConfidence";
+import PaperConfidence from "components/projects_page/search_tab/search_automated/paperConfidence";
 /**
  * prints the papers list of a local search on the fake database
  */
