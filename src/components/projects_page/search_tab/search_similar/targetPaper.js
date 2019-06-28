@@ -9,7 +9,7 @@ import LoadIcon from "components/svg/loadIcon";
 /**
  * the search form component used for inserting the data relative to the paper we are searching for similar ones
  */
-const SearchSimilarPapers = ({close, //the setter for closing the form when it's visible(sets the visibility to false)
+const TargetPaper = ({close, //the setter for closing the form when it's visible(sets the visibility to false)
                                 style, //style of the component
                                 project_id,
                                 input, //the string input
@@ -106,4 +106,4 @@ const SearchSimilarPapers = ({close, //the setter for closing the form when it's
     return output;
 }
 
-export default SearchSimilarPapers;
+export default TargetPaper;

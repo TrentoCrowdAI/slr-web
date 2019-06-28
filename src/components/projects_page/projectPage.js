@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from "react";
 import {Route, Link, Switch} from 'react-router-dom';
 
 import SearchStandardManager from 'components/projects_page/search_tab/search_standard/searchStandardManager';
-import SearchSimilarForm from 'components/forms/searchSimilarForm';
+import SearchSimilarManager from 'components/projects_page/search_tab/search_similar/searchSimilarManager';
 import CustomPaperPage from 'components/projects_page/papers_tab/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
 import ProjectName from 'components/projects_page/projectName';
@@ -180,7 +180,7 @@ const ProjectPage = (props) => {
 
                     <Route exact path={props.match.url + "/searchsimilar"} render={function(props){
                         setNotFound(false);
-                        return (<SearchSimilarForm project_id={project_id} {...props} />);
+                        return (<SearchSimilarManager project_id={project_id} {...props} />);
                     }}/>
 
                     <Route path = {props.match.url + "/addpaper"} render={function(props){

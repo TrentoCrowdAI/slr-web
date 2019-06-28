@@ -228,6 +228,31 @@ function createQueryDataForStandardSearch(queryUrl) {
 
 }
 
+/**
+ * function to prepare a object of queryData
+ * @param queryUrl
+ * @return object of queryData for the fetch
+ */
+function createQueryDataForSimilarSearch(queryUrl) {
+
+
+    //set query params from queryString of url
+    let params = queryString.parse(queryUrl);
+    let query = params.query || "";
+
+    let orderBy = params.orderBy || "title";
+    let sort = params.sort || "ASC";
+    let start = params.start || 0;
+    let count = params.count || 10;
+
+    let year = params.year || "all";
+
+    let queryData = {query, orderBy, sort, year, start, count};
+
+    return queryData;
+
+}
+
 export {
     arrayOfObjectsEquals,
     arrayOfObjectsContains,
@@ -237,6 +262,7 @@ export {
     getIndexOfObjectArrayByKeyAndValue,
     createQueryDataForFiltersTab,
     createQueryDataForAutomatedSearch,
-    createQueryDataForStandardSearch
+    createQueryDataForStandardSearch,
+    createQueryDataForSimilarSearch
 
 };
