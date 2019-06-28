@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import {Link} from 'react-router-dom'
 
-import RadioBox from "components/forms/radiobox";
+import RadioBox from "components/forms_elements/radiobox";
 
 import SearchButton from 'components/svg/searchButton';
 import SearchSimilarButton from 'components/svg/searchSimilarButton';

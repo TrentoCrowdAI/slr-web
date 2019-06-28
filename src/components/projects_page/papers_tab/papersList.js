@@ -5,7 +5,7 @@ import {projectPapersDao} from 'dao/projectPapers.dao';
 
 import LoadIcon from 'components/svg/loadIcon';
 import {PrintPapersList} from 'components/modules/printPapersList';
-import Select from 'components/forms/select';
+import Select from 'components/forms_elements/select';
 import OrderArrow from 'components/svg/orderArrow';
 import Pagination from "components/modules/pagination";
 import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';

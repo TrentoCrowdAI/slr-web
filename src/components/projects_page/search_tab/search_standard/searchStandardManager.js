@@ -3,9 +3,9 @@ import {Link} from 'react-router-dom'
 
 import {paperDao} from 'dao/paper.dao';
 
-import CheckBox from "components/forms/checkbox";
+import CheckBox from "components/forms_elements/checkbox";
 import {PrintScoupusSearchList} from 'components/modules/printPapersList';
-import Select from 'components/forms/select';
+import Select from 'components/forms_elements/select';
 import Pagination from "components/modules/pagination";
 import SelectedPapersListBox from "components/projects_page/search_tab/selectedPapersListBox";
 

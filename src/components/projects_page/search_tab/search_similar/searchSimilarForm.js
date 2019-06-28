@@ -4,7 +4,7 @@ import React, {useState, useEffect, useContext} from "react";
 import {paperDao} from 'dao/paper.dao';
 import {updateFileDao} from "dao/updateFile.dao";
 
-import RadioBox from "components/forms/radiobox";
+import RadioBox from "components/forms_elements/radiobox";
 import TargetPaper from "components/projects_page/search_tab/search_similar/targetPaper";
 
 import {AppContext} from 'components/providers/appProvider'

@@ -5,7 +5,7 @@ import queryString from 'query-string';
 
 import {projectsDao} from 'dao/projects.dao';
 import LoadIcon from 'components/svg/loadIcon';
-import ProjectForm from 'components/forms/projectForm';
+import ProjectForm from 'components/projects_page/projectForm';
 import Pagination from 'components/modules/pagination';
 import {join} from 'utils';
 import Cover from 'components/modules/cover';

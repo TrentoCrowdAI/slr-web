@@ -3,7 +3,7 @@ import { Formik, Form, Field } from "formik";
 
 import {projectPapersDao} from 'dao/projectPapers.dao'
 
-import Select from 'components/forms/selectformik';
+import Select from 'components/forms_elements/selectformik';
 
 import { AppContext } from 'components/providers/appProvider'
 

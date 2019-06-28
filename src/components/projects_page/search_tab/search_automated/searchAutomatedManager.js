@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from "react";
 
 import {paperDao} from 'dao/paper.dao';
 
-import CheckBox from "components/forms/checkbox";
+import CheckBox from "components/forms_elements/checkbox";
 import {PrintSearchAutomatedList} from 'components/modules/printPapersList';
 import Pagination from "components/modules/pagination";
 import SelectedPapersListBox from "components/projects_page/search_tab/selectedPapersListBox";

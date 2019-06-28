@@ -7,7 +7,7 @@ import Main from 'components/main';
 
 import NavBar from 'components/navigation/navBar';
 import SideMenu from 'components/navigation/sideMenu';
-import BreadCrumbs from 'components/modules/breadCrumbs';
+import BreadCrumbs from 'components/navigation/breadCrumbs';
 
 import Notification from 'components/modules/notification';
 

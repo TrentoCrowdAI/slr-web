@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import ClampLines from 'react-clamp-lines';
 import {Link, withRouter} from 'react-router-dom';
 
-import CheckBox from "components/forms/checkbox";
+import CheckBox from "components/forms_elements/checkbox";
 import SideOptions from 'components/modules/sideOptions';
 import {projectPapersDao} from 'dao/projectPapers.dao';
 import {AppContext} from 'components/providers/appProvider'
