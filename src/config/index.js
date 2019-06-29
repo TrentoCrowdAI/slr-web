@@ -23,6 +23,7 @@ const config = {
     ],
     "max_total_number_for_results": 5000,
     "pdf_parse_server": "upload/pdf",
+    "csv_parse_server": "upload/csv",
     "google_login_client_id": "282160526683-84sdnoqh3bc1obojfpepcbonnfg3uks4.apps.googleusercontent.com",
 
 

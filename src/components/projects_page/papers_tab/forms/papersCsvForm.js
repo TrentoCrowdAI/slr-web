@@ -1,6 +1,6 @@
 import React, {useState, useContext, useRef, useEffect} from "react";
 
-import {projectsDao} from 'dao/projects.dao'
+import {updateFileDao} from "dao/updateFile.dao";
 
 import CloseButton from 'components/svg/closeButton';
 
@@ -26,6 +26,9 @@ function PapersCsvForm(props) {
 
     //author field
     const [authors, setAuthors] = useState("")
+
+    //id(eid, doi) field
+    const [id, setId] = useState("");
 
     //flag for csv upload
     const [csvUpload, setCsvUpload] = useState(false)
@@ -61,37 +64,54 @@ function PapersCsvForm(props) {
                 setCsvUpload(true);
 
                 const map = {
-                    "title" : (title && title !== "") ? title : "title",
-                    "year" : (year && year !== "") ? year : "year",
-                    "abstract" : (abstract && abstract !== "") ? abstract : "abstract",
-                    "authors" : (authors && authors !== "") ? authors : "authors",
+                    "authors" : (authors && authors !== "") ? authors : "Authors",
+                    "title" : (title && title !== "") ? title : "Title",
+                    "year" : (year && year !== "") ? year : "Year",
+                    "date" : "",
+                    "source_title" : "", //"Source title",
+                    "link" : "", //"Link",
+                    "abstract" : (abstract && abstract !== "") ? abstract : "Abstract",
+                    "document_type" : "", //"Document Type",
+                    "source" : "", //Source",
+                    "eid" : (id && (id === "eid" || id === "EID")) ? id : ((!id) ? "EID" : ""), //EID",
+                    "abstract_structured" : "", //abstract_structured",
+                    "filter_oa_include" : "", //filter_OA_include",
+                    "filter_study_include" : "", //filter_study_include",
+                    "notes" : "", //notes",
+                    "manual" : "", //manual",
+                    "doi" : (id && (id === "doi" || id === "DOI")) ? id : "", //doi"
+                    /*
+                    Authors,Title,Year,Source title,Link,Abstract,
+                    Document Type,Source,EID,abstract_structured,
+                    filter_OA_include,filter_study_include,notes
+                    */
                 }
 
                 //prepare the form data for post
                 let formData = new FormData();
                 formData.append('file', file);
-                formData.append('project_id', props.projectId);
-                formData.append('fields', map);
+                formData.append('project_id', props.project_id);
+                formData.append('fields', JSON.stringify(map));
 
-               /*
 
                 //call the dao
-               let res = await updateFileDao.updatePdf(formData);
+               let res = await updateFileDao.uploadCsv(formData);
+               console.log(res);
 
-               //if there is a error
+                
+                //if there is a error
                 if (mounted && res && res.message) {
                     //pass error object to global context
                     appConsumer.setNotificationMessage("Error during parsing file");
-                   
+                
                 }
                 else if(mounted){
                     //set paperdata
-                    setPaperData(res);
-                    //display the form
-                    setDisplayForm(true);
+                    //setPaperData(res);
+                    props.setForcePapersFetch(!props.forcePapersFetch);
+                    props.setVisibility(!props.visibility);
                 }
 
-                */
 
                setTimeout(() => {
                     //close flag of loading
@@ -160,6 +180,18 @@ function PapersCsvForm(props) {
                             placeholder="authors" 
                             value={authors}
                             onChange={(e) => {setAuthors(e.target.value)}}    
+                        />
+                    </div>
+                </div>
+                <div className="field-input-row">
+                    <div className="field-input-holder">
+                        <label>ID : </label>
+                        <input
+                            name="name"
+                            type="text" 
+                            placeholder="id, eid, doi, ..." 
+                            value={id}
+                            onChange={(e) => {setId(e.target.value)}}    
                         />
                     </div>
                 </div>

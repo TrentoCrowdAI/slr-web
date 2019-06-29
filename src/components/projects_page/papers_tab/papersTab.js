@@ -17,12 +17,19 @@ const PapersTab = function (props) {
     //bool to control visualization of form
     const [displayCsvForm, setDisplayCsvForm] = useState(false);
 
+    //paper fetch toggler (its value will be toggled and it will trigger the useEffect fetching papers)
+    const [forcePapersFetch, setForcePapersFetch] = useState(false);
+
     return (
         <>
             <Cover cls={displayCsvForm ? "full-screen" : ""} handler={setDisplayCsvForm}/>
-            <PapersCsvForm visibility={displayCsvForm} setVisibility={setDisplayCsvForm} projectId={props.project_id}/>
+            <PapersCsvForm visibility={displayCsvForm} setVisibility={setDisplayCsvForm} project_id={props.project_id}
+                forcePapersFetch={forcePapersFetch} setForcePapersFetch={setForcePapersFetch}
+            />
             <ProjectDescription project={props.project} setProject={props.setProject} collaborators={props.collaborators} setCollaborators={props.setCollaborators}/>
-            <PapersList project_id={props.project_id} location={props.location} match={props.match} history={props.history}/>
+            <PapersList project_id={props.project_id} location={props.location} match={props.match} history={props.history}
+                forcePapersFetch={forcePapersFetch}
+            />
             <div className="bottom-right-button-holder">
                 <div>
                     <button className="bottom-right-btn add-csv-papers-btn" type="button" value="toggle-insert-form" 

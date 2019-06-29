@@ -25,7 +25,7 @@ const orderByOptions = [
 /**
  * the local component that shows the papers list of a project
  */
-const PapersList = ({project_id, location, match, history}) => {
+const PapersList = ({project_id, location, match, history, forcePapersFetch}) => {
 
 
     //fetch data
@@ -94,7 +94,7 @@ const PapersList = ({project_id, location, match, history}) => {
             //set flag as unmounted
             mounted = false;
         };
-    }, [queryData.start, queryData.count, queryData.sort, queryData.orderBy]); //re-execute when these variables change
+    }, [queryData.start, queryData.count, queryData.sort, queryData.orderBy, forcePapersFetch]); //re-execute when these variables change
 
 
     //handler for sort selection

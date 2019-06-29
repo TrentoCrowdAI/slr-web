@@ -115,7 +115,7 @@ form.add-csv-papers{
   font-size: 14px;
   padding: 20px 30px 10px 30px;
   width: 650px;
-  height: 260px;
+  min-height: 300px;
 }
 form.add-csv-papers h2{
   margin: 0px auto 5px auto;
