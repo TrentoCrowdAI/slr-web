@@ -1,11 +1,11 @@
-import React, {useContext, useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 
 import SideOptions from 'components/modules/sideOptions';
-import {AppContext} from 'components/providers/appProvider';
 import UpdateFilterForm from "./forms/updateFilterForm";
 
 
-const FilterCard = function ({filter, yup}) {
+
+const FilterCard = function ({project_id, filter, callDelete, yup}) {
 
     //boolean flag for handling mount status
     let mounted = true;
@@ -13,14 +13,11 @@ const FilterCard = function ({filter, yup}) {
     //local copy of the filter to manage on the card and update form
     const [localFilter, setLocalFilter] = useState(filter)
 
-    //bool to display the card and remove it in case of successful delete
-    const [display, setDisplay] = useState(true);
+    //bool to disable card while doing delete call
+    const [disabled, setDisabled] = useState(false);
 
     //bool to display the edit form
     const [editing, setEditing] = useState(false);
-
-    //get data from global context
-    const appConsumer = useContext(AppContext);
 
     //side options
     let sideOptions= ["delete", "update"];
@@ -35,26 +32,8 @@ const FilterCard = function ({filter, yup}) {
     //handle for the side options
     async function handleSideOptions(id, name){
         if(name === "delete"){
-            console.log("deleting " + id);
-            //call the dao
-            //let res = await projectPapersDao.deletePaper(id);
-
-            /*
-            //error checking
-            //if is other error
-            if (mounted && res.message) {
-                //pass error object to global context
-                appConsumer.setError(res);
-            }
-            //if res isn't null
-            else if (mounted && res !== null) {
-
-                appConsumer.setNotificationMessage("Successfully deleted");
-                let newFiltersList = filtersList.filter((filter)=>filter.id !== id);
-                setFiltersList(newFiltersList);
-            }
-            */
-           setDisplay(false);
+            setDisabled(true);
+            await callDelete(id);
         }
         else if(name === "update"){
             setEditing(true);
@@ -63,22 +42,20 @@ const FilterCard = function ({filter, yup}) {
 
     let output;
 
-    if(display && editing){
+    if(editing){
         output = (
-            <UpdateFilterForm filter={localFilter} setFilter={setLocalFilter} yup={yup} setEditing={setEditing}/>
+            <UpdateFilterForm project_id={project_id} filter={localFilter} setFilter={setLocalFilter} yup={yup} setEditing={setEditing}/>
         );
     }
-    else if(display){
+    else{
         output = (
-            <>
+            <div className={(disabled) ? "disabled" : ""}>
                 <SideOptions options={sideOptions} handler={handleSideOptions} target={localFilter.id} cls="card-options"/>
-                <h3>{localFilter.id}) {localFilter.predicate}</h3>
-                <div className="answer"><p><span><span>Include</span><span>:</span></span> {localFilter.should}</p></div>
-                <div className="answer"><p><span><span>Exclude</span><span>:</span></span> {localFilter.shouldNot}</p></div>
-            </>
+                <h3>{localFilter.id}) {localFilter.data.predicate}</h3>
+                <div className="answer"><p><span><span>Include</span><span>:</span></span> {localFilter.data.inclusion_description}</p></div>
+                <div className="answer"><p><span><span>Exclude</span><span>:</span></span> {localFilter.data.exclusion_description}</p></div>
+            </div>
         );
-    }else{
-        output = <></>;
     }
 
     return output;

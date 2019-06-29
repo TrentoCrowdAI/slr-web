@@ -211,6 +211,12 @@ input[type="number"] {
   animation: de-danger 0.5s linear forwards;
 }
 
+.disabled{
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 /*generic cards*/
 div.generic-card{
   position: relative;

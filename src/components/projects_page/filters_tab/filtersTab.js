@@ -1,29 +1,32 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 
 import {createQueryDataForFiltersTab} from 'utils/index';
 
+import {projectFiltersDao} from 'dao/projectFilters.dao';
 
 import InsertFilterForm from "components/projects_page/filters_tab/forms/insertFilterForm";
 import PrintFiltersList from "./printFiltersList";
 import Pagination from "components/modules/pagination";
+
+import LoadIcon from 'components/svg/loadIcon';
+
+import {AppContext} from 'components/providers/appProvider'
 
 const FiltersTab = function (props) {
 
     //boolean flag for handling mount status
     let  mounted = true;
 
-    //filters
-    const [filtersList, setFiltersList] = useState([
-        {id: "1", predicate: "Tapping the main stream of geothermal energy?", should: "this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be", shouldNot: "this is what the answer should not be"},
-        {id: "2", predicate: "Luminescence kinetic in the blood ROS generation assay?", should: "this is what the answer should be", shouldNot: "this is what the answer should not be"},
-        {id: "3", predicate: "Fundamentals of chemical looping combustion and introduction to CLC reactordesign?", should: "this is what the answer should be", shouldNot: "this is what the answer should not be"}
-    ])
+    const [filtersList, setFiltersList] = useState([]);
 
     //filters fetch flag
     const [filtersFetch, setFiltersFetch] = useState(true);
 
     //total number of fetched results (useful for the pagination component)
     const [totalResults, setTotalResults] = useState(0);
+
+    //get data from global context
+    const appConsumer = useContext(AppContext);
 
     //set query params from url
     const queryData = createQueryDataForFiltersTab(props.location.search);
@@ -35,9 +38,10 @@ const FiltersTab = function (props) {
             //hide the page
             setFiltersFetch(true);
 
-            /*
             //call the dao
-            //let res = await projectPapersDao.getPapersList({project_id, ...queryData});
+            let res = await projectFiltersDao.getFiltersList({"project_id" : props.project_id, ...queryData});
+
+            console.log(res);
 
             //error checking
             //if the component is still mounted and  is 404 error
@@ -54,14 +58,12 @@ const FiltersTab = function (props) {
             }
             //if the component is still mounted and  res isn't null
             else if (mounted && res) {
-
                 //update state
                 setFiltersList(res.results);
                 setTotalResults(res.totalResults);
                 //show the page
                 setFiltersFetch(false);
             }
-            */
 
         };
         fetchData();
@@ -77,8 +79,17 @@ const FiltersTab = function (props) {
         <>
             <InsertFilterForm project_id={props.project_id} start={queryData.start} filtersList={filtersList} setFiltersList={setFiltersList}/>
             <div className="left-side-wrapper filters-wrapper">
-                <PrintFiltersList filtersList={filtersList}/>
-                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={props.match.url}/>
+                {(filtersFetch) ?
+                    (
+                        <LoadIcon class={"small"}/>
+                    ) :
+                    (
+                        <>
+                        <PrintFiltersList filtersList={filtersList} setFiltersList={setFiltersList} project_id={props.project_id}/>
+                        <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={props.match.url}/>
+                        </>
+                    )
+                }
             </div>
         </>
     );

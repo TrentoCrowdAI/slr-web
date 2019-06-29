@@ -1,11 +1,50 @@
-import React from "react";
+import React, {useEffect, useContext} from "react";
 
 import FilterCard from "./filterCard";
 import NoFilters from "components/svg/noFilters";
 
-const PrintFiltersList = function ({filtersList}) {
+import {AppContext} from 'components/providers/appProvider';
+import {projectFiltersDao} from 'dao/projectFilters.dao';
+
+const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
+
+    //boolean flag for handling mount status
+    let mounted = true;
+
+    //get data from global context
+    const appConsumer = useContext(AppContext);
 
     let yup = require('yup');
+
+    //effect for setting mount status to false when unmounting
+    useEffect(() => {
+        return () => {
+            mounted = false;
+        };
+    }, [])
+    
+    //function to delete filter and update the list
+    async function deleteFilter(id){
+        console.log("deleting " + id);
+            
+        //call the dao
+        let res = await projectFiltersDao.deleteFilter(id);
+
+        //error checking
+        //if is other error
+        if (mounted && res.message) {
+            //pass error object to global context
+            appConsumer.setError(res);
+        }
+        //if res isn't null
+        else if (mounted && res !== null) {
+
+            appConsumer.setNotificationMessage("Successfully deleted");
+            let newFiltersList = filtersList.filter((filter)=>filter.id !== id);
+            //update project list state
+            setFiltersList(newFiltersList);
+        }
+    }
 
     let output;
     //if list is empty, print a notice message
@@ -21,7 +60,7 @@ const PrintFiltersList = function ({filtersList}) {
             <>
             {filtersList.map((element) =>
                 <div key={element.id} className="generic-card filter-card">
-                    <FilterCard filter={element} yup={yup}/>
+                    <FilterCard project_id={project_id} filter={element} filtersList={filtersList} callDelete={deleteFilter} yup={yup}/>
                 </div>
             )}
             </>

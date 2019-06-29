@@ -4,8 +4,12 @@ import { Formik, Form, Field } from "formik";
 import CloseButton from 'components/svg/closeButton';
 import {AppContext} from 'components/providers/appProvider';
 
+import {projectFiltersDao} from 'dao/projectFilters.dao';
 
-const UpdateFilterForm = function ({filter, setFilter, yup, setEditing}) {
+
+const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditing}) {
+
+    console.log(filter.data);
 
     //boolean flag for handling mount status
     let mounted = true;
@@ -23,30 +27,30 @@ const UpdateFilterForm = function ({filter, setFilter, yup, setEditing}) {
     //validation schema
     const predicateValidationSchema = yup.object().shape({
         predicate: yup.string().required('please enter a question'),
-        should: yup.string().required('please enter the positive answer'),
-        shouldNot: yup.string().required('please enter the neagative answer')
+        inclusion_description: yup.string().required('please enter the positive answer'),
+        exclusion_description: yup.string().required('please enter the neagative answer')
     });
 
     return (
         <Formik
-            initialValues={{predicate: filter.predicate, should: filter.should, shouldNot: filter.shouldNot}}
+            initialValues={{predicate: filter.data.predicate, inclusion_description: filter.data.inclusion_description, exclusion_description: filter.data.exclusion_description}}
             validationSchema={predicateValidationSchema}
             onSubmit={async (values, { setSubmitting }) => {
-                let bodyData = {predicate: values.predicate, should: values.should, shouldNot: values.shouldNot};
-                setFilter({id: filter.id, ...bodyData});
-                console.log("submited")
+                let bodyData = {predicate: values.predicate, inclusion_description: values.inclusion_description, exclusion_description: values.exclusion_description};
                 
                 //call dao
-                //let res = await projectsDao.postProject(bodyData);
-                /*
+                let res = await projectFiltersDao.putFilter(filter.id, {project_id, ...bodyData});
+
+                //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
+                if (res === "") {
+                    setFilter({id: filter.id, data: {...bodyData}});
+                }
                 //error checking
-                if(mounted && res.message){
+                //if is other error
+                else if (res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
-                }else if(mounted){
-                    props.history.push("/projects/" + res.id);
                 }
-                */
                 setSubmitting(false);
                 setEditing(false);
             }}
@@ -75,20 +79,20 @@ const UpdateFilterForm = function ({filter, setFilter, yup, setEditing}) {
                 </div>
                 <div className="textareas-wrapper">
                     <Field
-                        style={{borderBottom : (errors.should && touched.should) ? "solid 1px #d81e1e" : ""}}
-                        name="should"
+                        style={{borderBottom : (errors.inclusion_description && touched.inclusion_description) ? "solid 1px #d81e1e" : ""}}
+                        name="inclusion_description"
                         component="textarea"
                         placeholder="Type what the answer should include"/>
                     <Field
-                        style={{borderBottom : (errors.shouldNot && touched.shouldNot) ? "solid 1px #d81e1e" : ""}}
-                        name="shouldNot"
+                        style={{borderBottom : (errors.exclusion_description && touched.exclusion_description) ? "solid 1px #d81e1e" : ""}}
+                        name="exclusion_description"
                         component="textarea"
                         placeholder="Type what the answer should not include"/>
                 </div>
                 <button type="submit" disabled={isSubmitting || 
                     ((errors.predicate && touched.predicate) ||
-                    (errors.should && touched.should)        ||
-                    (errors.shouldNot && touched.shouldNot))}>Update Filter</button>
+                    (errors.inclusion_description && touched.inclusion_description)        ||
+                    (errors.exclusion_description && touched.exclusion_description))}>Update Filter</button>
             </Form>
         );
         return output;
