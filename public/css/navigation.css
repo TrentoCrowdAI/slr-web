@@ -272,12 +272,20 @@ div.navigation-wrapper div.menu div.side-menu div.user{
   padding: 15px 15px 5px 15px;
   border-bottom: solid 1px black;
 }
-div.navigation-wrapper div.menu div.side-menu div.user img.face{
+div.navigation-wrapper div.menu div.side-menu div.user img.face, div.navigation-wrapper div.menu div.side-menu div.user div.no-face{
   float: left;
   margin: 10px 15px 0px 5px;
   height: 100px;
+  width: 100px;
   border-radius: 50%;
   border: solid 0.5px black;
+}
+div.navigation-wrapper div.menu div.side-menu div.user div.no-face{
+  background-color: white;
+}
+div.navigation-wrapper div.menu div.side-menu div.user div.no-face svg#no-image{
+  height: 103px;
+  width: 103px;
 }
 div.navigation-wrapper div.menu div.side-menu div.user div.user-info{
   margin:30px 10px 0px 0px;

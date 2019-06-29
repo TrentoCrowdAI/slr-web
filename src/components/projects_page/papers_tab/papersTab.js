@@ -21,7 +21,7 @@ const PapersTab = function (props) {
         <>
             <Cover cls={displayCsvForm ? "full-screen" : ""} handler={setDisplayCsvForm}/>
             <PapersCsvForm visibility={displayCsvForm} setVisibility={setDisplayCsvForm} projectId={props.project_id}/>
-            <ProjectDescription project_id={props.project_id} description={props.project.data.description} update={props.updateProject} date_last_modified={props.project.date_last_modified} date_created={props.project.date_created} collaborators={props.collaborators} setCollaborators={props.setCollaborators}/>
+            <ProjectDescription project={props.project} setProject={props.setProject} collaborators={props.collaborators} setCollaborators={props.setCollaborators}/>
             <PapersList project_id={props.project_id} location={props.location} match={props.match} history={props.history}/>
             <div className="bottom-right-button-holder">
                 <div>

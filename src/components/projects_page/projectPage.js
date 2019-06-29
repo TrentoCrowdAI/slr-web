@@ -11,7 +11,7 @@ import {join} from 'utils';
 import LoadIcon from 'components/svg/loadIcon';
 import Forbidden from 'components/svg/forbidden';
 
-import {AppContext} from 'components/providers/appProvider'
+import {AppContext} from 'components/providers/appProvider';
 import PageNotFound from "components/modules/pageNotFound";
 import PapersTab from "./papers_tab/papersTab";
 import FiltersTab from "./filters_tab/filtersTab";
@@ -45,14 +45,15 @@ const ProjectPage = (props) => {
 
     //set the project title
     useEffect(() => {
-        if(project.data.name === "loading..."){
+        console.log("porject name chanfge")
+        if(project.data.name === "loading..." || project.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS"){
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name}</h2> </div>);//I set the page title
         }else{
-            appConsumer.setTitle(<ProjectName name={project.data.name} update={updateProject}/>);
+            appConsumer.setTitle(<ProjectName project={project} setProject={setProject}/>);
             appConsumer.setProjectName(project.data.name);
         }
-    
-    }, [project]);
+
+    }, [project.data.name]);
 
     useEffect(() => {
 
@@ -98,36 +99,6 @@ const ProjectPage = (props) => {
             mounted = false;
         };
     }, [project_id, appConsumer.user]); //re-execute when these variables change
-    
-
-    //function for updating the description and name
-    async function updateProject(){
-
-        let new_name = document.getElementById("edit-project-name-input").value;
-        let new_desc = document.getElementById("edit-project-description-input").value;
-
-
-        //if the new name o description are difference from the old name o description
-        if(new_name !== project.data.name || new_desc !== project.data.description){
-
-            //call the dao
-            let res = await projectsDao.putProject(project_id, {name: new_name, description : new_desc});
-
-            //error checking
-            //if is other error
-            if (res && res.message) {
-                //pass error object to global context
-                appConsumer.setError(res);
-            }
-            //if res isn't null
-            else if (res && res !== null) {
-                console.log("UPDATED SUCCESSFULLY!");
-                window.location.reload();
-            }
-
-
-        }
-    }
 
 
     let output;
@@ -148,13 +119,23 @@ const ProjectPage = (props) => {
     else {
         output = (
             <div className="project-wrapper">
+                {/*<div>
+                    {JSON.stringify(project)}
+                    <button style={{marginLeft: "20px"}} onClick={() => {
+                        let newProject = project;
+                        newProject.data.name = "__°°__";
+                        //setProject(newProject);
+                        setProject({...newProject});
+                        console.log(project)
+                    }}>i</button>
+                </div>*/}
                 <ProjectPageHead match={props.match} notFound={notFound}/>
 
                 {/*route the papers list*/}
                 <Switch>
                     <Route exact  path={props.match.url} render={function(props){
                         setNotFound(false);
-                        return (<PapersTab project_id={project_id} project={project} collaborators={collaborators} setCollaborators={setCollaborators} updateProject={updateProject} {...props}/>);
+                        return (<PapersTab project_id={project_id} project={project} setProject={setProject} collaborators={collaborators} setCollaborators={setCollaborators} {...props}/>);
                     }}/>
 
                     {/*route the form of search*/}
@@ -206,7 +187,7 @@ const ProjectPage = (props) => {
  * this is the local component to print head of project page
  */
 const ProjectPageHead = function ({match, notFound}) {
-    //hash  -> #/projects/6/search/ || #/projects/6/search/ 
+    //hash  -> #/projects/6/search/ || #/projects/6/search/
     const lc = window.location.hash.split("?")[0];
     var slider = "hide";
     switch (true) {
@@ -217,7 +198,7 @@ const ProjectPageHead = function ({match, notFound}) {
         case /^#\/projects\/\d+\/filters\/?$/.test(lc): //filters tab
             slider = "175px";
             break;
-    
+
         case /#\/projects\/\d+\/search\/?/.test(lc): //search tab
             slider = "325px";
             break;
@@ -225,7 +206,7 @@ const ProjectPageHead = function ({match, notFound}) {
         case /^#\/projects\/\d+\/screening\/?$/.test(lc): //screening tab
             slider = "475px";
             break;
-        
+
         default:
             console.log("no tab");
             break;

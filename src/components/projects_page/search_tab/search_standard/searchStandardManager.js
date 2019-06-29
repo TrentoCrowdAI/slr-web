@@ -17,6 +17,7 @@ import {AppContext} from 'components/providers/appProvider'
 
 import {createQueryStringFromObject, createQueryDataForStandardSearch, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
 import SearchStandardForm from "./searchStandardForm";
+import Robot from "components/svg/robot";
 
 
 // Load the lodash build
@@ -312,7 +313,9 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
             />
             <div className="search-automated-option" style={{display: (queryData.query === "") ? "block" : "none"}}>
                 <p><i>or</i><br/>let an algorithm provide search results for you</p>
-                <Link to={"/projects/" + project_id + "/searchautomated"}></Link>
+                <Link to={"/projects/" + project_id + "/searchautomated"}>
+                    <Robot/>
+                </Link>
             </div>
             <div className="search-results">
                 {resultPart}

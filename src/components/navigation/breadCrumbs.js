@@ -58,8 +58,17 @@ const BreadCrumbs = function(props) {
                     case "searchsimilar":
                         link = (<Link key={i+1} to={href}>Search for similar papers</Link>);
                         break;
+                    case "searchautomated":
+                        link = (<Link key={i+1} to={href}>Intelligent papers search</Link>);
+                        break;
                     case "search":
                         link = (<Link key={i+1} to={href}>Search</Link>);
+                        break;
+                    case "filters":
+                        link = (<Link key={i+1} to={href}>Filters</Link>);
+                        break;
+                    case "screening":
+                        link = (<Link key={i+1} to={href}>Screening</Link>);
                         break;
                     default:
                         link = (<Link key={i+1} to={href}>{path[i]}</Link>);

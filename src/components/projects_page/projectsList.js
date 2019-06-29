@@ -107,20 +107,21 @@ const ProjectsList = function (props) {
         console.log("deleting " + id);
         //call the dao
         let res = await projectsDao.deleteProject(id);
-        //error checking
-        //if is other error
-        if (res && res.message) {
-            //pass error object to global context
-            appConsumer.setError(res);  
-        }
-        //if res isn't null
-        else if (res && res !== null) {
+
+        //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
+        if(res === ""){
             //create a new array without the project deleted
             let newProjectsList = projectsList.filter((project)=>project.id !== id);
             //update project list state
             setProjectsList(newProjectsList);
 
             appConsumer.setNotificationMessage("Successfully deleted");
+        }
+        //error checking
+        //if is other error
+        else if (res && res.message) {
+            //pass error object to global context
+            appConsumer.setError(res);  
         }
     }
 

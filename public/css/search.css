@@ -406,14 +406,20 @@ div.search-automated-option p{
   font-weight: 300;
   font-size: 13px;
   width: 100%;
-  margin: 12px 0px 15px 0px;
+  margin: 15px 0px 20px 0px;
 }
 div.search-automated-option a{
+  overflow: hidden;
   display: inline-block;
   height: 110px;
   width: 110px;
   border-radius: 50%;
-  border: solid 1px black;
+  border: solid 1px #363636;
+}
+div.search-automated-option a svg#robot{
+  width: 150px;
+  height: 150px;
+  transform: translate(5px,-15px);
 }
 form.search-automated-form textarea{
   float: left;

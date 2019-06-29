@@ -158,7 +158,7 @@ const PrintPapersList_w = function ({papersList, location, history}) {
     //if list is empty, print a notice message
     if (localPaperList.length === 0) {
         output = (
-            <div className="empty-project-wrapper"> <NoPapers/> <p className="empty-project-description"> There are no papers here, you can add new ones by searching </p></div>
+            <div className="empty-list-wrapper"> <NoPapers/> <p className="empty-list-description"> There are no papers here, you can add new ones by searching </p></div>
         );
     }
     //if list isn't empty, print list of papers

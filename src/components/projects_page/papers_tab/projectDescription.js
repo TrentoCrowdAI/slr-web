@@ -12,13 +12,16 @@ import LoadIcon from 'components/svg/loadIcon';
  */
 
 
-const ProjectDescription = function({project_id, description, update, date_last_modified, date_created, collaborators, setCollaborators}){
+const ProjectDescription = function({project, setProject, collaborators, setCollaborators}){
 
 
     //this is used as a toggle for checking if the user is trying to edit the name of the project
     const [editing, setEditing] = useState(false);
 
-    //form input
+    //state form project description
+    const [description, setDescription] = useState(project.data.description);
+
+    //state form input collaborator
     const [input, setInput] = useState("");
 
     //flag for collaborators loading
@@ -38,7 +41,7 @@ const ProjectDescription = function({project_id, description, update, date_last_
         const fetchData = async () => {
 
             //call the dao for getting collaborators
-            let res = await projectsDao.getProjectCollaborators(project_id);
+            let res = await projectsDao.getProjectCollaborators(project.id);
 
             //error checking
             //if the component is still mounted and there is some other errors
@@ -61,6 +64,35 @@ const ProjectDescription = function({project_id, description, update, date_last_
         };
     }, [])
 
+    //function for updating the description and name
+    async function updateProject(){
+
+        //if the new name o description are difference from the old name o description
+        if(description !== project.data.description){
+
+            //call the dao
+            let res = await projectsDao.putProject(project.id, {name: project.data.name, description : description});
+            console.log(res);
+
+            //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
+            if (res === "") {
+                console.log("scccc");
+                let newProject = project;
+                newProject.data.description = description;
+                setProject({...newProject});
+                console.log(project);
+            }
+            //error checking
+            //if is other error
+            else if (res && res.message) {
+                //pass error object to global context
+                appConsumer.setError(res);
+            }
+
+
+        }
+    }
+
     //handles the click on the edit/confirm button
     function handleEditRequest(e){
         console.log("CLICK");
@@ -73,7 +105,7 @@ const ProjectDescription = function({project_id, description, update, date_last_
             setEditing(true);
             console.log(editing)
         }else{//if the user was editing I submit its changes
-            update();
+            updateProject();
         }
     }
 
@@ -84,12 +116,12 @@ const ProjectDescription = function({project_id, description, update, date_last_
 
     //function for removing collaborators
     async function removeCollaborator(collaborator){
-        console.log("removing " + collaborator + " from " + project_id);
+        console.log("removing " + collaborator + " from " + project.id);
 
         const callApi = async () => {
 
             //call the dao for getting collaborators
-            let res = await projectsDao.removeProjectCollaborator(project_id, collaborator);
+            let res = await projectsDao.removeProjectCollaborator(project.id, collaborator);
             //error checking
             //if the component is still mounted and there is some other errors
             if (mounted && res && res.message) {
@@ -114,7 +146,7 @@ const ProjectDescription = function({project_id, description, update, date_last_
             const callApi = async () => {
 
                 //call the dao for getting collaborators
-                let res = await projectsDao.addProjectCollaborator(project_id, {"email": input});
+                let res = await projectsDao.addProjectCollaborator(project.id, {"email": input});
                 //error checking
                 //if the component is still mounted and there is some other errors
                 if (mounted && res && res.message) {
@@ -143,9 +175,10 @@ const ProjectDescription = function({project_id, description, update, date_last_
         output = (
             <div className={(!editing) ? "right-side-wrapper project-description hidden-form-description" : "right-side-wrapper project-description"}>
                 <h2>Description:</h2>
-                <p style={{fontSize: (editing) ? "0px" : "15px"}}> {description}</p>
+                <p style={{fontSize: (editing) ? "0px" : "15px"}}> {project.data.description}</p>
                 <form className="edit-project-description" style={{height:(editing) ? "" : "0px"}}>
-                        <textarea id="edit-project-description-input"  defaultValue={description} style={{width: (editing) ? "100%" : "0%", padding: (editing) ? "" : "0px", height:(editing) ? "" : "0px"}}
+                        <textarea id="edit-project-description-input"  value={description} style={{width: (editing) ? "100%" : "0%", padding: (editing) ? "" : "0px", height:(editing) ? "" : "0px"}}
+                        onChange={(e) => setDescription(e.target.value)}
                         onBlur={(e) => {
                                         console.log("blurring");
                                         setEditing(false);
@@ -156,8 +189,8 @@ const ProjectDescription = function({project_id, description, update, date_last_
                         </button>
                 </form>
                 <h2>Additional info:</h2>
-                <p className="project-date-info"> <span>Created</span> {formatDate(date_created)} </p>
-                <p className="project-date-info"> <span>Last edited</span> {formatDate(date_last_modified)} </p>
+                <p className="project-date-info"> <span>Created</span> {formatDate(project.date_created)} </p>
+                <p className="project-date-info"> <span>Last edited</span> {formatDate(project.date_last_modified)} </p>
                 <h2>Collaborators:</h2>
                 {(collaborators.length === 0) ? "You're not sharing this project with anyone" : ""}
                 {collaborators.map((element, index) =>
