@@ -42,7 +42,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
     }
 
     //boolean flag for handling mount status
-    let mounted = true;
+    const [mounted, setMounted] = useState(true);
 
     //list of result papers data
     const [papersList, setPapersList] = useState([]);
@@ -155,9 +155,9 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
         }
         //when the component will unmount
         return () => {
-            mounted = false;
+            setMounted(false);
         };
-    }, [targetPaperData, queryData.orderBy, queryData.sort, queryData.start, queryData.count])
+    }, [targetPaperData, queryData.orderBy, queryData.year, queryData.sort, queryData.start, queryData.count])
 
 
     let resultPart = "";
@@ -255,7 +255,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
     if (display === false) {
 
         resultPart = (
-            <div className="paper-card-holder">
+            <div className="paper-card-holder similar-holder">
                 <div className="paper-card-holder-head" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
                     <div className="select-all">
                     <CheckBox label="Select All" name="select_all" val="" isChecked={false} handler={selectAllPapers}/>

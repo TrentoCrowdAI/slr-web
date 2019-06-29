@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from "react";
+import React, {useEffect, useContext, useState} from "react";
 import { Formik, Form, Field } from "formik";
 
 import {projectFiltersDao} from 'dao/projectFilters.dao';
@@ -13,7 +13,7 @@ import {AppContext} from 'components/providers/appProvider'
 const InsertFilterForm = function(props){
 
     //boolean flag for handling mount status
-    let mounted = true;
+    const [mounted, setMounted] = useState(true);
 
     let yup = require('yup');
 
@@ -29,13 +29,16 @@ const InsertFilterForm = function(props){
     //effect for setting mount status to false when unmounting
     useEffect(() => {
         return () => {
-            mounted = false;
+            setMounted(false);
         };
     }, [])
 
-    return (
-        <div className="right-side-wrapper form-filter-wrapper">
-             <Formik
+    let output = "";
+
+    if(mounted){
+        output = (
+            <div className="right-side-wrapper form-filter-wrapper">
+                <Formik
                     initialValues={{predicate: '', inclusion_description: '', exclusion_description: ''}}
                     validationSchema={predicateValidationSchema}
                     onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -54,8 +57,10 @@ const InsertFilterForm = function(props){
                             props.setFiltersList([res, ...(props.filtersList)])
                         }
 
-                        setSubmitting(false);
-                        resetForm({predicate: '', inclusion_description: '', exclusion_description: ''});
+                        if(mounted){
+                            setSubmitting(false);
+                            resetForm({predicate: '', inclusion_description: '', exclusion_description: ''});
+                        }
                     }}
                     validateOnBlur={false}
                 >
@@ -90,7 +95,9 @@ const InsertFilterForm = function(props){
             </Formik>
 
         </div>
-    );
+        );
+    }
+    return output;
 }
 
 export default InsertFilterForm;

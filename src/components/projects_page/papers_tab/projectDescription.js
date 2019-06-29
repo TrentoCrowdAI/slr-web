@@ -33,7 +33,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
     let output = <></>;
 
     //boolean flag for handling hooks
-    let mounted = true;
+    const [mounted, setMounted] = useState(true);
 
     useEffect(() => {
 
@@ -60,7 +60,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
         fetchData();
 
         return () => {
-            mounted = false;
+            setMounted(false);
         };
     }, [])
 

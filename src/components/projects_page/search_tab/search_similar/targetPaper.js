@@ -94,7 +94,7 @@ const TargetPaper = ({close, //the setter for closing the form when it's visible
         );
     }else{
         topRightButton = (
-            <Link to={"/projects/"+ project_id + "/search"} ><button type="button" className={"close-btn"}><CloseButton/></button></Link>
+            <></>
         );
     }
     output = (

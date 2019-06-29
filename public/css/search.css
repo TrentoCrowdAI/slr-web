@@ -148,6 +148,30 @@ div.similar-search-paper-upload div.load-icon-similar-paper{
 div.similar-search-paper-upload div.load-icon-similar-paper svg#loading-icon{
   width: 60px;
 }
+div.search-similar-description-wrapper{
+  width: 280px;
+}
+div.search-similar-description-wrapper div.search-similar-description{
+  text-align: center;
+  font-weight: 300;
+  font-size: 14px;
+  margin: 25px 0px 5px 0px;
+  padding: 5px 5px 5px 5px;
+  border-top: solid 1px #acacac;
+  border-bottom: solid 1px #acacac;
+}
+div.search-similar-description-wrapper div.search-similar-description p{
+  text-align: justify;
+  word-wrap: break-word;
+  hyphens: auto;
+  margin: 0px 0px 5px 0px;
+}
+div.search-similar-description-wrapper div.search-similar-description a{
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+  border-bottom: 1px dotted #696969;
+}
 
 /*options*/
 div.option-holder label{
@@ -178,6 +202,9 @@ form.small{
   width: 680px;
   margin: 20px auto 20px 10px !important;
   min-height: 55px;
+}
+form.centered-form{
+  margin: 20px auto 20px auto !important;
 }
 form.small div.option-holder {
   margin: 10px 0% 0% 0%;

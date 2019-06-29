@@ -207,6 +207,9 @@ div.paper-card-holder{
   width: 700px;
   z-index: 10;
 }
+div.centerd-wrapper{
+  margin: 0 auto;
+}
 
 div.project-description{
   text-align: justify;
@@ -506,8 +509,15 @@ div.search-automated-right-wrapper div.search-automated-description a{
 div.search-automated-right-wrapper div.filters-holder h2{
   margin: 15px 0px 5px 0px;
 }
+div.search-automated-right-wrapper div.filters-holder div.side-filters-wrapper{
+  position: relative;
+  min-height: 50px;
+}
 div.search-automated-right-wrapper div.filters-holder p.filter-predicate{
   margin: 5px 0px 5px 0px;
+}
+div.search-automated-right-wrapper div.filters-holder p.filter-predicate i{
+  color:#696969;
 }
 div.search-automated-right-wrapper div.filters-holder a{
   margin: 10px 0px 0px 0px;

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
-
+import {Link} from 'react-router-dom';
 
 import {paperDao} from 'dao/paper.dao';
 import {updateFileDao} from "dao/updateFile.dao";
@@ -27,7 +27,8 @@ const yearOptions = ["all", ...(_.range(startYear, endYear).map(String))];
  */
 const SearchSimilarForm = function ({history, queryData, project_id, targetPaperData, setTargetPaperData}){
 
-    let mounted = true;
+    //bool to check mount status
+    const [mounted, setMounted] = useState(true);
 
     //state for 'similar papers search' form
     const [similarFormVisibility, setSimilarFormVisibility] = useState(false);
@@ -37,7 +38,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
 
     //state for the form
     const [keywords, setKeyWords] = useState(queryData.query);
-    const [year, setYear] = useState(queryData.year);
+    const [year, setYear] = useState(queryData.year); //this is not used right now
     const [similarPaperFile, setSimilarPaperFile] = useState(undefined); //the file of the paper to search similarities for
 
 
@@ -123,14 +124,15 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
 
         };
 
-
-        fetchMainPaper();
+        if(!targetPaperData){
+            fetchMainPaper();
+        }
 
         //when the component will unmount
         return () => {
             console.log("unmounting searchSimilar component")
             localStorage.removeItem("targetPaperData");
-            mounted = false;
+            setMounted(false);
         };
 
     }, [project_id, similarPaperFile, queryData.query, queryData.year]);  //re-execute when these variables change
@@ -217,7 +219,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                     setPaperFile={setSimilarPaperFile}
                     history={history}/>
                 
-                <div className="option-holder">
+                {/*<div className="option-holder">
 
                     <label>Year:</label><br/>
                     <div className="checkboxes-holder" >
@@ -228,8 +230,14 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                             )
                         }
                     </div>
-                </div>
+                </div>*/}
             </form>
+            <div className={(similarPaperFetch || targetPaperData) ? "top-right-side-wrapper search-similar-description-wrapper" : "center-side-wrapper search-similar-description-wrapper"}>
+                <div className="search-similar-description">
+                    <p>This searching mode leverages AI to find relevant papers based on the topic and focus of the given paper.</p>
+                    <Link to={"/projects/"+project_id+"/search"}>(Go back to a normal search)</Link>
+                </div>
+            </div>
         </>
     );
 

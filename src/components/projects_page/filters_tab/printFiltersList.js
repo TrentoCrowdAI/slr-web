@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from "react";
+import React, {useEffect, useContext, useState} from "react";
 
 import FilterCard from "./filterCard";
 import NoFilters from "components/svg/noFilters";
@@ -9,7 +9,7 @@ import {projectFiltersDao} from 'dao/projectFilters.dao';
 const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
 
     //boolean flag for handling mount status
-    let mounted = true;
+    const [mounted, setMounted] = useState(true);
 
     //get data from global context
     const appConsumer = useContext(AppContext);
@@ -19,7 +19,7 @@ const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
     //effect for setting mount status to false when unmounting
     useEffect(() => {
         return () => {
-            mounted = false;
+            setMounted(false);
         };
     }, [])
     
@@ -46,7 +46,7 @@ const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
         }
     }
 
-    let output;
+    let output = "";
     //if list is empty, print a notice message
     if (filtersList.length === 0) {
         output = (
@@ -55,7 +55,7 @@ const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
         );
     }
     //if list isn't empty, print list of papers
-    else {
+    else if(mounted){
         output = (
             <>
             {filtersList.map((element) =>

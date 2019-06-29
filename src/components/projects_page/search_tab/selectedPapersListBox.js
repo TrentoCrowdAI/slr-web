@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from "react";
+import React, {useEffect, useContext, useState} from "react";
 
 import {projectPapersDao} from 'dao/projectPapers.dao';
 
@@ -14,7 +14,7 @@ import {AppContext} from 'components/providers/appProvider'
 const SelectedPapersListBox = function ({project_id, selectedPapersList, setSelectedPapersList, handlePaperSelection}){
 
     //boolean flag for handling mount status
-    let mounted = true;
+    const [mounted, setMounted] = useState(true);
 
     //get the localStorage object (used for saving selected papers)
     const storage = window.localStorage;
@@ -30,7 +30,7 @@ const SelectedPapersListBox = function ({project_id, selectedPapersList, setSele
 
         //when the component will unmount
         return () => {
-            mounted = false;
+            setMounted(false);
         };
     }, [])
 

@@ -20,6 +20,8 @@ import EmptyFolder from "components/svg/emptyFolder";
 
 const ProjectsList = function (props) {
 
+    //bool representing the mount status
+    const [mounted, setMounted] = useState(true);
 
     //fetch data
     const [projectsList, setProjectsList] = useState([]);
@@ -48,9 +50,6 @@ const ProjectsList = function (props) {
     },[]); //run on component mount
 
     useEffect(() => {
-
-        //flag that represents the state of component
-        let mounted = true;
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
@@ -96,7 +95,7 @@ const ProjectsList = function (props) {
         //when the component will unmount
         return () => {
             //set flag as unmounted
-            mounted = false;
+            setMounted(false);
         };
     }, [queryData.start, queryData.count]); //re-execute when these variables change
 
@@ -109,7 +108,7 @@ const ProjectsList = function (props) {
         let res = await projectsDao.deleteProject(id);
 
         //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-        if(res === ""){
+        if(mounted && res === ""){
             //create a new array without the project deleted
             let newProjectsList = projectsList.filter((project)=>project.id !== id);
             //update project list state
@@ -119,7 +118,7 @@ const ProjectsList = function (props) {
         }
         //error checking
         //if is other error
-        else if (res && res.message) {
+        else if (mounted && res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);  
         }

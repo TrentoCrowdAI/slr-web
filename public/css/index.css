@@ -142,6 +142,15 @@ div.right-side-wrapper{
   position: absolute;
   right: 0px;
 }
+div.top-right-side-wrapper{
+  width: 400px;
+  position: absolute;
+  right: 0px;
+  top: 40px;
+}
+div.center-side-wrapper{
+  margin: 0 auto;
+}
 
 .modal{
   background-color: aliceblue;

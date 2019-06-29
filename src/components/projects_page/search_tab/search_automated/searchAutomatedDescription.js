@@ -1,22 +1,24 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {Link} from 'react-router-dom';
 import LoadIcon from "components/svg/loadIcon";
+
+import {projectFiltersDao} from 'dao/projectFilters.dao';
+
+import {AppContext} from 'components/providers/appProvider'
 
 const SearchAutomatedDescription = function ({project_id}) {
 
     //filters
-    const [filtersList, setFiltersList] = useState([
-        {id: "1", predicate: "Tapping the main stream of geothermal energy?", should: "this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be this is what the answer should be", shouldNot: "this is what the answer should not be"},
-        {id: "2", predicate: "Luminescence kinetic in the blood ROS generation assay?", should: "this is what the answer should be", shouldNot: "this is what the answer should not be"},
-        {id: "3", predicate: "Fundamentals of chemical looping combustion and introduction to CLC reactordesign?", should: "this is what the answer should be", shouldNot: "this is what the answer should not be"}
-    ])
-
+    const [filtersList, setFiltersList] = useState([]);
 
     //shows the number of results
     const [totalResults, setTotalResults] = useState(0);
 
     //filters fetch flag
     const [filtersFetch, setFiltersFetch] = useState(false)
+
+    //get data from global context
+    const appConsumer = useContext(AppContext);
 
     useEffect(() => {
 
@@ -25,9 +27,34 @@ const SearchAutomatedDescription = function ({project_id}) {
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
-            
+            setFiltersFetch(true);
+            //call the dao
+            let res = await projectFiltersDao.getFiltersList({"project_id" : project_id});
+
+            //error checking
+            //if the component is still mounted and  is 404 error
+            if (mounted && res && res.message === "Not Found") {
+                setFiltersList([]);
+                setTotalResults(0);
+                //show the page
+                setFiltersFetch(false);
+            }
+            //if the component is still mounted and  there are some other errors
+            else if (mounted && res && res.message) {
+                //pass error object to global context
+                appConsumer.setError(res);
+            }
+            //if the component is still mounted and  res isn't null
+            else if (mounted && res) {
+                //update state
+                setFiltersList(res.results);
+                setTotalResults(res.totalResults);
+                //show the page
+                setFiltersFetch(false);
+            }
 
         };
+
         fetchData();
 
         //when the component will unmount
@@ -39,16 +66,25 @@ const SearchAutomatedDescription = function ({project_id}) {
 
     let output = "";
     if(filtersFetch){
-        output = <LoadIcon/>
+        output = <LoadIcon class={'small'}/>
     }else{
-        output = (
-            <>
-            {filtersList.map((element) =>
-                <p key={element.id} className="filter-predicate">{element.predicate}</p>
-            )}
-            <Link to={"/projects/"+project_id+"/filters"}>Go to filters details</Link>
-            </>
-        );
+        if(totalResults !== 0){
+            output = (
+                <>
+                {filtersList.map((element) =>
+                    <p key={element.id} className="filter-predicate">{element.data.predicate}</p>
+                )}
+                <Link to={"/projects/"+project_id+"/filters"}>Go to filters details</Link>
+                </>
+            );
+        }else{
+            output = (
+                <>
+                    <p className="filter-predicate"><i>No filters yet in this project</i></p>
+                    <Link to={"/projects/"+project_id+"/filters"}>Add a new filter from filters tab</Link>
+                </>
+            );
+        }
     }
 
     return (
@@ -59,7 +95,9 @@ const SearchAutomatedDescription = function ({project_id}) {
             </div>
             <div className="filters-holder">
                 <h2>Filters:</h2>
-                {output}
+                <div className="side-filters-wrapper">
+                    {output}
+                </div>
             </div>
         </div>
     );

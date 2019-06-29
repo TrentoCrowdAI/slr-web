@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { Formik, Form, Field } from "formik";
 
 import CloseButton from 'components/svg/closeButton';
@@ -12,7 +12,7 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
     console.log(filter.data);
 
     //boolean flag for handling mount status
-    let mounted = true;
+    const [mounted, setMounted] = useState(true);
 
     //get data from global context
     const appConsumer = useContext(AppContext);
@@ -20,7 +20,7 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
     //effect for setting mount status to false when unmounting
     useEffect(() => {
         return () => {
-            mounted = false;
+            setMounted(false);
         };
     }, [])
 
@@ -42,17 +42,20 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
                 let res = await projectFiltersDao.putFilter(filter.id, {project_id, ...bodyData});
 
                 //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-                if (res === "") {
+                if (mounted && res === "") {
                     setFilter({id: filter.id, data: {...bodyData}});
                 }
                 //error checking
                 //if is other error
-                else if (res && res.message) {
+                else if (mounted && res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
                 }
-                setSubmitting(false);
-                setEditing(false);
+
+                if(mounted){
+                    setSubmitting(false);
+                    setEditing(false);
+                }
             }}
             validateOnBlur={false}
         >

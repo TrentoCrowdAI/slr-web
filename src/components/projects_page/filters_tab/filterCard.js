@@ -8,7 +8,7 @@ import UpdateFilterForm from "./forms/updateFilterForm";
 const FilterCard = function ({project_id, filter, callDelete, yup}) {
 
     //boolean flag for handling mount status
-    let mounted = true;
+    const [mounted, setMounted] = useState(true);
 
     //local copy of the filter to manage on the card and update form
     const [localFilter, setLocalFilter] = useState(filter)
@@ -25,7 +25,7 @@ const FilterCard = function ({project_id, filter, callDelete, yup}) {
     //effect for setting mount status to false when unmounting
     useEffect(() => {
         return () => {
-            mounted = false;
+            setMounted(false);
         };
     }, [])
 

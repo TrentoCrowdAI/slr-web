@@ -41,7 +41,7 @@ const PrintLocalSearchList = function ({papersList, handlePaperSelection}) {
 /**
  * prints the results of a search on scopus
  */
-const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, selectedEidList, history, match, setSimilarPaperData}) {
+const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, selectedEidList, history, match, setTargetPaperData}) {
 
     //side options
     let sideOptions= ["search similar"];
@@ -78,10 +78,10 @@ const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, se
                 goSimilar = path + "similar";
                 //I set the paper in the storage before switching page
                 const storage = window.localStorage;
-                storage.setItem("similarPaperData", JSON.stringify(data));
+                storage.setItem("targetPaperData", JSON.stringify(data));
                 history.push(goSimilar);
             }else{
-                setSimilarPaperData(data);
+                setTargetPaperData(data);
             }
 
         }
@@ -91,14 +91,14 @@ const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, se
         <div key={index} className="generic-card paper-card">
             <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
             <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} data={element} cls="card-options"/>
-            <Link to={"#"}><h3>{element.title}</h3></Link>
+            <Link to={"#"}><h3>{(element.title) ? element.title : "[MISSING TITLE]"}</h3></Link>
             <div className="extra-info">
-                <p className="authors">{element.authors}</p>
-                <p className="eid">{element.eid}</p>
-                <p className="date">{element.year}</p>
+                <p className="authors">{(element.authors) ? element.authors : "[MISSING AUTHORS]"}</p>
+                <p className="eid">{(element.eid) ? element.eid : "[MISSING EID]"}</p>
+                <p className="date">{(element.year) ? element.year : "[MISSING YEAR]"}</p>
             </div>
             <ClampLines
-                text={element.abstract}
+                text={(element.abstract) ? element.abstract : "[MISSING ABSTRACT]"}
                 lines={4}
                 ellipsis="..."
                 className="paragraph"
@@ -149,7 +149,7 @@ const PrintPapersList_w = function ({papersList, location, history}) {
             console.log(location);
 
             const storage = window.localStorage;
-            storage.setItem("similarPaperData", JSON.stringify(data));
+            storage.setItem("targetPaperData", JSON.stringify(data));
             history.push(join(location.pathname, "/searchsimilar"));
         }
     }
@@ -167,16 +167,14 @@ const PrintPapersList_w = function ({papersList, location, history}) {
             localPaperList.map((element) =>
                 <div key={element.id} className="generic-card paper-card">
                     <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} data={element.data} cls="card-options"/>
-                    <Link to={"#"}>
-                        <h3>{element.data.title}</h3>
-                    </Link>
+                    <Link to={"#"}><h3>{(element.data.title) ? element.data.title : "[MISSING TITLE]"}</h3></Link>
                     <div className="extra-info">
-                        <p className="authors">{element.data.authors}</p>
-                        <p className="eid">{element.data.eid || element.data.doi}</p>
-                        <p className="date">{element.data.year}</p>
+                        <p className="authors">{(element.data.authors) ? element.data.authors : "[MISSING AUTHORS]"}</p>
+                        <p className="eid">{(element.data.eid) ? element.data.eid : "[MISSING EID]"}</p>
+                        <p className="date">{(element.data.year) ? element.data.year : "[MISSING YEAR]"}</p>
                     </div>
                     <ClampLines
-                        text={element.data.abstract}
+                        text={(element.data.abstract) ? element.data.abstract : "[MISSING ABSTRACT]"}
                         lines={4}
                         ellipsis="..."
                         className="paragraph"

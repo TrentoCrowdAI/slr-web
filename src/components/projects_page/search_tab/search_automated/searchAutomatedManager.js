@@ -28,7 +28,7 @@ const _ = require('lodash');
 const SearchAutomatedManager = function ({project, location, match, history}) {
 
     //boolean flag for handling mount status
-    let mounted = true;
+    const [mounted, setMounted] = useState(true);
 
     //list of result papers data
     const [papersList, setPapersList] = useState([]);
@@ -104,7 +104,7 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
 
         //when the component will unmount
         return () => {
-            mounted = false;
+            setMounted(false)
         };
     }, [queryData.query, queryData.start, queryData.count])
 
