@@ -35,7 +35,7 @@ async function searchSimilar(bodyData){
     console.log(bodyData);
 
     const res = await http.post(url, bodyData);
-    
+
     
     return res;
 

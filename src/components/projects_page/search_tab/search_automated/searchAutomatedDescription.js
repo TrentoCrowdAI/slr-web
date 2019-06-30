@@ -23,7 +23,7 @@ const SearchAutomatedDescription = function ({project_id}) {
     useEffect(() => {
 
         //flag that represents the state of component
-        let  mounted = true;
+        let  mnt = true;
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
@@ -33,19 +33,19 @@ const SearchAutomatedDescription = function ({project_id}) {
 
             //error checking
             //if the component is still mounted and  is 404 error
-            if (mounted && res && res.message === "Not Found") {
+            if (mnt && res && res.message === "Not Found") {
                 setFiltersList([]);
                 setTotalResults(0);
                 //show the page
                 setFiltersFetch(false);
             }
             //if the component is still mounted and  there are some other errors
-            else if (mounted && res && res.message) {
+            else if (mnt && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if the component is still mounted and  res isn't null
-            else if (mounted && res) {
+            else if (mnt && res) {
                 //update state
                 setFiltersList(res.results);
                 setTotalResults(res.totalResults);
@@ -60,7 +60,7 @@ const SearchAutomatedDescription = function ({project_id}) {
         //when the component will unmount
         return () => {
             //set flag as unmounted
-            mounted = false;
+            mnt = false;
         };
     }, []);
 

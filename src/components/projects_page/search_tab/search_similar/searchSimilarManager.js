@@ -41,9 +41,6 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
         window.localStorage.removeItem("targetPaperData");
     }
 
-    //boolean flag for handling mount status
-    const [mounted, setMounted] = useState(true);
-
     //list of result papers data
     const [papersList, setPapersList] = useState([]);
 
@@ -104,6 +101,8 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
     //update local storage every time the similar paper data changes
     useEffect(() => {
 
+        let mnt = true;
+
         console.log("FETCHING RESULTS");
 
         //if the sorting parameter changes I update the status and trigger the SVG animation
@@ -124,28 +123,30 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
                 //I call the dao for searching for similar papers based on similarPaperString
                 //this will be the call for the similarity search
                 let resx = await paperDao.searchSimilar({"paperData" : targetPaperData, "start" : queryData.start, "count" : queryData.count, "scopus": true});
-                console.log(resx);
 
                 //error checking
                 //if is 404 error
-                if (mounted && resx && resx.message === "Not Found") {
+                if (mnt && resx && resx.message === "Not Found") {
                     setPapersList([]);
                     setTotalResults(0);
                     //show the page
                     setDisplay(true);
                 }
                 //if is other error
-                else if (mounted && resx && resx.message) {
+                else if (mnt && resx && resx.message) {
                     //pass error object to global context
                     appConsumer.setError(resx);
                 }
                 //if res isn't null
-                else if (mounted && (resx !== null)) {
+                else if (mnt && (resx !== null)) {
+                    console.log("SETTING RESULTS");
                     //update state
                     setPapersList(resx.results);
                     setTotalResults(resx.totalResults);
                     //show the page
                     setDisplay(true);
+                }else{
+                    console.log("can't set enything")
                 }
             }
 
@@ -153,10 +154,12 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
         }else{
             storage.removeItem("targetPaperData");
         }
-        //when the component will unmount
+
+        //execute on unmount and every time the useEffect ends
         return () => {
-            setMounted(false);
+            mnt = false;
         };
+
     }, [targetPaperData, queryData.orderBy, queryData.year, queryData.sort, queryData.start, queryData.count])
 
 
@@ -252,7 +255,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
     */
 
     //if is loading
-    if (display === false) {
+    if (display === false || (!targetPaperData && queryData.query !== "")) {
 
         resultPart = (
             <div className="paper-card-holder similar-holder">

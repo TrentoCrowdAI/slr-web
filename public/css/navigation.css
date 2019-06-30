@@ -135,11 +135,10 @@ div.navigation-wrapper nav div.nav-elements{
 div.navigation-wrapper nav.nav-title-to-left div.nav-elements{
   margin: 0px auto 0px 45px;
 }
-div.navigation-wrapper nav div.nav-elements h2.static-title{
-  cursor: auto;
-}
 div.navigation-wrapper nav div.nav-elements h2{
+  cursor: auto;
   margin: 0px;
+  font-size: 21px;
 }
 div.navigation-wrapper nav div.hidden-form:hover form{
   opacity: 1.0;

@@ -32,10 +32,8 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
 
     let output = <></>;
 
-    //boolean flag for handling hooks
-    const [mounted, setMounted] = useState(true);
-
     useEffect(() => {
+        let mnt = true;
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
@@ -45,12 +43,12 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
 
             //error checking
             //if the component is still mounted and there is some other errors
-            if (mounted && res && res.message) {
+            if (mnt && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if the component is still mounted and res isn't null
-            else if (mounted && res ) {
+            else if (mnt && res ) {
                 setCollaborators(res);
                 //show the page
                 setLoadIconDisplay(false);
@@ -60,7 +58,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
         fetchData();
 
         return () => {
-            setMounted(false);
+            mnt = false;
         };
     }, [])
 
@@ -123,13 +121,13 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
             //call the dao for getting collaborators
             let res = await projectsDao.removeProjectCollaborator(project.id, collaborator);
             //error checking
-            //if the component is still mounted and there is some other errors
-            if (mounted && res && res.message) {
+            //there is some other errors
+            if (res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
-            //if the component is still mounted and didn't get an error
-            else if (mounted) {
+            //didn't get an error
+            else{
                 let newCollabs = collaborators.filter(x => x.id !== collaborator);
                 console.log(newCollabs)
                 setCollaborators(newCollabs);
@@ -148,13 +146,13 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
                 //call the dao for getting collaborators
                 let res = await projectsDao.addProjectCollaborator(project.id, {"email": input});
                 //error checking
-                //if the component is still mounted and there is some other errors
-                if (mounted && res && res.message) {
+                //there is some other errors
+                if (res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
                 }
-                //if the component is still mounted and didn't get an error
-                else if (mounted && res) {
+                //didn't get an error
+                else if (res) {
                     setInput("");
                     setCollaborators([...collaborators, res]);
                 }

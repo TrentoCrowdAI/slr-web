@@ -11,18 +11,8 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
 
     console.log(filter.data);
 
-    //boolean flag for handling mount status
-    const [mounted, setMounted] = useState(true);
-
     //get data from global context
     const appConsumer = useContext(AppContext);
-
-    //effect for setting mount status to false when unmounting
-    useEffect(() => {
-        return () => {
-            setMounted(false);
-        };
-    }, [])
 
     //validation schema
     const predicateValidationSchema = yup.object().shape({
@@ -42,20 +32,18 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
                 let res = await projectFiltersDao.putFilter(filter.id, {project_id, ...bodyData});
 
                 //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-                if (mounted && res === "") {
+                if (res === "") {
                     setFilter({id: filter.id, data: {...bodyData}});
                 }
                 //error checking
                 //if is other error
-                else if (mounted && res && res.message) {
+                else if (res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
                 }
-
-                if(mounted){
-                    setSubmitting(false);
-                    setEditing(false);
-                }
+                
+                setSubmitting(false);
+                setEditing(false);
             }}
             validateOnBlur={false}
         >

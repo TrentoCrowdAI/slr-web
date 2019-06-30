@@ -156,7 +156,7 @@ form.add-csv-papers button.file-input{
 /*small navigation links*/ /*projectpage.js*/
 div.project-nav-link-wrapper{
   position: relative;
-  width: 600px;
+  width: 680px;
   margin: auto;
 }
 div.project-nav-link-wrapper div.nav-link{
@@ -166,7 +166,7 @@ div.project-nav-link-wrapper div.nav-link{
 }
 div.project-nav-link-wrapper div.nav-link a{
   display: inline-block;
-  width: 150px;
+  width: 170px;
   height: 40px;
   line-height: 40px;
   font-size: 20px;
@@ -175,11 +175,11 @@ div.project-nav-link-wrapper div.nav-link a{
 div.project-nav-link-wrapper div.underline{
   background-color: black;
   position: absolute;
-  width: 100px;
+  width: 130px;
   height: 2px;
   bottom: 0px;
   border-radius: 1px 1px 0px 0px;
-  left: 25px;
+  left: 20px;
   transition: all 0.4s ease-in-out;
 }
 

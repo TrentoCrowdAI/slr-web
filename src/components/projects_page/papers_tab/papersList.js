@@ -48,7 +48,7 @@ const PapersList = ({project_id, location, match, history, forcePapersFetch}) =>
     useEffect(() => {
 
         //flag that represents the state of component
-        let  mounted = true;
+        let  mnt = true;
 
         if(queryData.orderBy !== "date_created" && up !== queryData.sort){
             setUp(queryData.sort);
@@ -65,19 +65,19 @@ const PapersList = ({project_id, location, match, history, forcePapersFetch}) =>
 
             //error checking
             //if the component is still mounted and  is 404 error
-            if (mounted && res && res.message === "Not Found") {
+            if (mnt && res && res.message === "Not Found") {
                 setPapersList([]);
                 setTotalResults(0);
                 //show the page
                 setDisplay(true);
             }
             //if the component is still mounted and  there are some other errors
-            else if (mounted && res && res.message) {
+            else if (mnt && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if the component is still mounted and  res isn't null
-            else if (mounted && res) {
+            else if (mnt && res) {
 
                 //update state
                 setPapersList(res.results);
@@ -92,7 +92,7 @@ const PapersList = ({project_id, location, match, history, forcePapersFetch}) =>
         //when the component will unmount
         return () => {
             //set flag as unmounted
-            mounted = false;
+            mnt = false;
         };
     }, [queryData.start, queryData.count, queryData.sort, queryData.orderBy, forcePapersFetch]); //re-execute when these variables change
 

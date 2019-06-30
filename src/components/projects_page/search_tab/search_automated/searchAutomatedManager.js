@@ -27,9 +27,6 @@ const _ = require('lodash');
 
 const SearchAutomatedManager = function ({project, location, match, history}) {
 
-    //boolean flag for handling mount status
-    const [mounted, setMounted] = useState(true);
-
     //list of result papers data
     const [papersList, setPapersList] = useState([]);
 
@@ -60,6 +57,8 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
 
     useEffect(() => {
 
+        let mnt = true;
+
         const fetchPapers= async () => {
             
             setDisplay(false);
@@ -70,28 +69,28 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
             let resx = undefined;
             //if there's no query I search based on project metadata
             if(!queryData.query || queryData.query === ""){
-                resx = await paperDao.search({"query" : "woman", "arXiv" : "true"});
+                resx = await paperDao.search({"query" : "robot", "arXiv" : "true"});
             }
             //otherwise I use the query
             else{
-                resx = await paperDao.search({"query" : "man", "arXiv" : "true"});
+                resx = await paperDao.search({"query" : "ict", "arXiv" : "true"});
             }
 
             //error checking
             //if is 404 error
-            if (mounted && resx && resx.message === "Not Found") {
+            if (mnt && resx && resx.message === "Not Found") {
                 setPapersList([]);
                 setTotalResults(0);
                 //show the page
                 setDisplay(true);
             }
             //if is other error
-            else if (mounted && resx && resx.message) {
+            else if (mnt && resx && resx.message) {
                 //pass error object to global context
                 appConsumer.setError(resx);
             }
             //if res isn't null
-            else if (mounted && (resx !== null)) {
+            else if (mnt && (resx !== null)) {
                 //update state
                 setPapersList(resx.results);
                 setTotalResults(resx.totalResults);
@@ -102,9 +101,9 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
 
         fetchPapers();
 
-        //when the component will unmount
+        //execute when the component will unmount and everytime the useEffect will end
         return () => {
-            setMounted(false)
+            mnt = false;
         };
     }, [queryData.query, queryData.start, queryData.count])
 

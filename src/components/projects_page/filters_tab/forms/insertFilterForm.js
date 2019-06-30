@@ -12,9 +12,6 @@ import {AppContext} from 'components/providers/appProvider'
 
 const InsertFilterForm = function(props){
 
-    //boolean flag for handling mount status
-    const [mounted, setMounted] = useState(true);
-
     let yup = require('yup');
 
     const predicateValidationSchema = yup.object().shape({
@@ -26,77 +23,65 @@ const InsertFilterForm = function(props){
     //get data from global context
     const appConsumer = useContext(AppContext);
 
-    //effect for setting mount status to false when unmounting
-    useEffect(() => {
-        return () => {
-            setMounted(false);
-        };
-    }, [])
 
     let output = "";
+    output = (
+        <div className="right-side-wrapper form-filter-wrapper">
+            <Formik
+                initialValues={{predicate: '', inclusion_description: '', exclusion_description: ''}}
+                validationSchema={predicateValidationSchema}
+                onSubmit={async (values, { setSubmitting, resetForm }) => {
+                    let bodyData = {project_id: props.project_id, predicate: values.predicate, 
+                                    inclusion_description: values.inclusion_description, exclusion_description: values.exclusion_description};
 
-    if(mounted){
-        output = (
-            <div className="right-side-wrapper form-filter-wrapper">
-                <Formik
-                    initialValues={{predicate: '', inclusion_description: '', exclusion_description: ''}}
-                    validationSchema={predicateValidationSchema}
-                    onSubmit={async (values, { setSubmitting, resetForm }) => {
-                        let bodyData = {project_id: props.project_id, predicate: values.predicate, 
-                                        inclusion_description: values.inclusion_description, exclusion_description: values.exclusion_description};
+                    //call dao
+                    let res = await projectFiltersDao.postFilterIntoProject(bodyData);
 
-                        //call dao
-                        let res = await projectFiltersDao.postFilterIntoProject(bodyData);
+                    //error checking
+                    if(res.message){
+                        //pass error object to global context
+                        appConsumer.setError(res);
+                    }else if(res){
+                        console.log(res);
+                        props.setFiltersList([res, ...(props.filtersList)])
+                    }
+                    setSubmitting(false);
+                    resetForm({predicate: '', inclusion_description: '', exclusion_description: ''});
+                }}
+                validateOnBlur={false}
+            >
+            {function ({ errors, touched, isSubmitting, setErrors, validateField, handleChange }) {
+                let output = "";
+                output = (
+                <Form className="add-filter">
+                    <Field
+                        style={{borderBottom : (errors.predicate && touched.predicate) ? "solid 1px #d81e1e" : ""}}
+                        name="predicate"
+                        type="text" 
+                        placeholder="Type a question, predicate, ..."
+                        onChange={(e) => {handleChange(e); validateField('predicate')}}/>
+                    <Field
+                        style={{borderBottom : (errors.inclusion_description && touched.inclusion_description) ? "solid 1px #d81e1e" : ""}}
+                        name="inclusion_description"
+                        component="textarea"
+                        placeholder="Type what the answer should include"/>
+                    <Field
+                        style={{borderBottom : (errors.exclusion_description && touched.exclusion_description) ? "solid 1px #d81e1e" : ""}}
+                        name="exclusion_description"
+                        component="textarea"
+                        placeholder="Type what the answer should not include"/>
+                    <button type="submit" disabled={isSubmitting || 
+                        ((errors.predicate && touched.predicate) ||
+                        (errors.inclusion_description && touched.inclusion_description)        ||
+                        (errors.exclusion_description && touched.exclusion_description))}>Add Filter</button>
+                </Form>
+            );
+            return output;
+        }}
+        </Formik>
 
-                        //error checking
-                        if(mounted && res.message){
-                            //pass error object to global context
-                            appConsumer.setError(res);
-                        }else if(mounted && res){
-                            console.log(res);
-                            props.setFiltersList([res, ...(props.filtersList)])
-                        }
-
-                        if(mounted){
-                            setSubmitting(false);
-                            resetForm({predicate: '', inclusion_description: '', exclusion_description: ''});
-                        }
-                    }}
-                    validateOnBlur={false}
-                >
-                {function ({ errors, touched, isSubmitting, setErrors, validateField, handleChange }) {
-                    let output = "";
-                    output = (
-                    <Form className="add-filter">
-                        <Field
-                            style={{borderBottom : (errors.predicate && touched.predicate) ? "solid 1px #d81e1e" : ""}}
-                            name="predicate"
-                            type="text" 
-                            placeholder="Type a question, predicate, ..."
-                            onChange={(e) => {handleChange(e); validateField('predicate')}}/>
-                        <Field
-                            style={{borderBottom : (errors.inclusion_description && touched.inclusion_description) ? "solid 1px #d81e1e" : ""}}
-                            name="inclusion_description"
-                            component="textarea"
-                            placeholder="Type what the answer should include"/>
-                        <Field
-                            style={{borderBottom : (errors.exclusion_description && touched.exclusion_description) ? "solid 1px #d81e1e" : ""}}
-                            name="exclusion_description"
-                            component="textarea"
-                            placeholder="Type what the answer should not include"/>
-                        <button type="submit" disabled={isSubmitting || 
-                            ((errors.predicate && touched.predicate) ||
-                            (errors.inclusion_description && touched.inclusion_description)        ||
-                            (errors.exclusion_description && touched.exclusion_description))}>Add Filter</button>
-                    </Form>
-                );
-                return output;
-            }}
-            </Formik>
-
-        </div>
-        );
-    }
+    </div>
+    );
     return output;
 }
 

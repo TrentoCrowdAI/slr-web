@@ -14,9 +14,6 @@ import {AppContext} from 'components/providers/appProvider'
 
 const FiltersTab = function (props) {
 
-    //boolean flag for handling mount status
-    let  mounted = true;
-
     const [filtersList, setFiltersList] = useState([]);
 
     //filters fetch flag
@@ -32,6 +29,7 @@ const FiltersTab = function (props) {
     const queryData = createQueryDataForFiltersTab(props.location.search);
 
     useEffect(() => {
+        let mnt = true;
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
@@ -45,19 +43,19 @@ const FiltersTab = function (props) {
 
             //error checking
             //if the component is still mounted and  is 404 error
-            if (mounted && res && res.message === "Not Found") {
+            if (mnt && res && res.message === "Not Found") {
                 setFiltersList([]);
                 setTotalResults(0);
                 //show the page
                 setFiltersFetch(false);
             }
             //if the component is still mounted and  there are some other errors
-            else if (mounted && res && res.message) {
+            else if (mnt && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if the component is still mounted and  res isn't null
-            else if (mounted && res) {
+            else if (mnt && res) {
                 //update state
                 setFiltersList(res.results);
                 setTotalResults(res.totalResults);
@@ -71,7 +69,7 @@ const FiltersTab = function (props) {
         //when the component will unmount
         return () => {
             //set flag as unmounted
-            mounted = false;
+            mnt = false;
         };
     }, [queryData.start, queryData.count, queryData.sort, queryData.orderBy]); //re-execute when these variables change
 

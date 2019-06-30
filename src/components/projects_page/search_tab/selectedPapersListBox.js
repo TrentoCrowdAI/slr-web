@@ -13,9 +13,6 @@ import {AppContext} from 'components/providers/appProvider'
  */
 const SelectedPapersListBox = function ({project_id, selectedPapersList, setSelectedPapersList, handlePaperSelection}){
 
-    //boolean flag for handling mount status
-    const [mounted, setMounted] = useState(true);
-
     //get the localStorage object (used for saving selected papers)
     const storage = window.localStorage;
 
@@ -28,10 +25,6 @@ const SelectedPapersListBox = function ({project_id, selectedPapersList, setSele
             setSelectedPapersList(JSON.parse(storage.getItem("selectedPapersList")));
         } 
 
-        //when the component will unmount
-        return () => {
-            setMounted(false);
-        };
     }, [])
 
     /*function to post selected papers in the project*/
@@ -55,7 +48,7 @@ const SelectedPapersListBox = function ({project_id, selectedPapersList, setSele
         });
 
         //if there is the error
-        if (mounted && res && res.message) {
+        if (res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);
             return null;

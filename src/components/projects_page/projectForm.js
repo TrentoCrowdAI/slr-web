@@ -16,8 +16,6 @@ function ProjectForm(props) {
 
     let yup = require('yup');
 
-    const [touc, setTouc] = useState(false);
-
     const projectValidationSchema = yup.object().shape({
         name: yup.string().required('please enter a title'),
         description: yup.string().required('please enter a description')

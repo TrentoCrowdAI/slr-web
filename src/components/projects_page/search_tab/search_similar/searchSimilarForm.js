@@ -27,9 +27,6 @@ const yearOptions = ["all", ...(_.range(startYear, endYear).map(String))];
  */
 const SearchSimilarForm = function ({history, queryData, project_id, targetPaperData, setTargetPaperData}){
 
-    //bool to check mount status
-    const [mounted, setMounted] = useState(true);
-
     //state for 'similar papers search' form
     const [similarFormVisibility, setSimilarFormVisibility] = useState(false);
 
@@ -50,6 +47,8 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
 
     useEffect(() => {
 
+        let mnt = true;
+
         console.log("FETCHING TARGET PAPER")
 
         console.log(queryData);
@@ -57,9 +56,13 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
         //fetches data when searching for similarities
         const fetchMainPaper = async () => {
 
-            //standard options parameters
-            setKeyWords(queryData.query);
-            setYear(queryData.year);
+            if(mnt){
+
+                //standard options parameters
+                setKeyWords(queryData.query);
+                setYear(queryData.year);
+                setTargetPaperData(undefined);
+            }
 
             
             //if there's a file I can do an api call to parse it
@@ -84,12 +87,12 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                     let res = await updateFileDao.updatePdf(formData);
     
                     //if there is a error
-                    if (mounted && res && res.message) {
+                    if (mnt && res && res.message) {
                         //pass error object to global context
                         appConsumer.setNotificationMessage("Error during parsing file");
                         setSimilarPaperFetch(false);
                     }
-                    else if(mounted){
+                    else if(mnt){
                         console.log(res);
                         //set paperdata(which whill call the useEffect on the paperData)
                         setTargetPaperData(res);
@@ -106,13 +109,13 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                 //this will be the call to the service identifying a specific paper
                 let resx = await paperDao.search({"query" : queryData.query, "scopus": true});
 
-
                 //if there is a error
-                if (mounted && resx && resx.message) {
+                if (mnt && resx && resx.message) {
                     //pass error object to global context
                     appConsumer.setError(resx);
-                }else if(mounted){
+                }else if(mnt){
                     //set paperdata(which whill call the useEffect on the paperData)
+                    console.log("setting target paper data");
                     setTargetPaperData(resx.results[0]);
                     setSimilarPaperFetch(false);
 
@@ -124,19 +127,18 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
 
         };
 
-        if(!targetPaperData){
+        if(!targetPaperData || queryData.query !== keywords){
             fetchMainPaper();
         }
-
-        //when the component will unmount
+        
+        //execute on unmount and every time the useEffect ends
         return () => {
-            console.log("unmounting searchSimilar component")
-            localStorage.removeItem("targetPaperData");
-            setMounted(false);
+            mnt = false;
         };
 
     }, [project_id, similarPaperFile, queryData.query, queryData.year]);  //re-execute when these variables change
 
+    
     /**
      * effect to handle live update on year change
      */

@@ -20,9 +20,6 @@ import EmptyFolder from "components/svg/emptyFolder";
 
 const ProjectsList = function (props) {
 
-    //bool representing the mount status
-    const [mounted, setMounted] = useState(true);
-
     //fetch data
     const [projectsList, setProjectsList] = useState([]);
 
@@ -51,6 +48,8 @@ const ProjectsList = function (props) {
 
     useEffect(() => {
 
+        let mnt = true;
+
         //a wrapper function ask by react hook
         const fetchData = async () => {
 
@@ -62,19 +61,19 @@ const ProjectsList = function (props) {
 
             //error checking
             //if the component is still mounted and  is 404 error
-            if (mounted && res && res.message === "Not Found") {
+            if (mnt && res && res.message === "Not Found") {
                 setProjectsList([]);
                 setTotalResults(0);
                 //show the page
                 setDisplay(true);
             }
             //if the component is still mounted and  there are some other errors
-            else if (mounted && res && res.message) {
+            else if (mnt && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if the component is still mounted and  res isn't null
-            else if (mounted && res) {
+            else if (mnt && res) {
                 //update state
 
                 //I put even first and then odd ones so I can display 2 columns with left-right flow 
@@ -94,8 +93,7 @@ const ProjectsList = function (props) {
 
         //when the component will unmount
         return () => {
-            //set flag as unmounted
-            setMounted(false);
+            mnt = false;
         };
     }, [queryData.start, queryData.count]); //re-execute when these variables change
 
@@ -108,7 +106,7 @@ const ProjectsList = function (props) {
         let res = await projectsDao.deleteProject(id);
 
         //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-        if(mounted && res === ""){
+        if(res === ""){
             //create a new array without the project deleted
             let newProjectsList = projectsList.filter((project)=>project.id !== id);
             //update project list state
@@ -118,7 +116,7 @@ const ProjectsList = function (props) {
         }
         //error checking
         //if is other error
-        else if (mounted && res && res.message) {
+        else if (res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);  
         }

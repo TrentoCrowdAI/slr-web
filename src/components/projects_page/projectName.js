@@ -13,8 +13,13 @@ import EditButton from "components/svg/editButton";
 
 const ProjectName = function({project, setProject}){
 
+    let mnt = true;
+
     //get data from global context
     const appConsumer = useContext(AppContext);
+
+    //boolean flag for handling mount status
+    const [mounted, setMounted] = useState(true);
 
     //this is used as a toggle for checking if the user is trying to edit the name of the project
     const [editing, setEditing] = useState(false);
@@ -33,31 +38,54 @@ const ProjectName = function({project, setProject}){
 
     //function for updating the description and name
     async function updateProject(){
+        let lmnt = true;
 
         //if the new name o description are difference from the old name o description
         if(name !== project.data.name){
-
-            //call the dao
-            let res = await projectsDao.putProject(project.id, {name: name, description : project.data.description});
-            console.log(res);
-
-            //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-            if (res === "") {
-                console.log("scccc");
+            console.log("gonna update sooon.... ("+mounted+" | " +mnt+" | " +lmnt+")");
+            setTimeout(async () => {
+                console.log("updating... ("+mounted+" | " +mnt+" | " +lmnt+")");
+                //call the dao
                 let newProject = project;
-                newProject.data.name = name;
+                newProject.data.name = "named";
                 setProject({...newProject});
-            }
-            //error checking
-            //if is other error
-            else if (res && res.message) {
-                //pass error object to global context
-                appConsumer.setError(res);
-            }
+                //let res = await projectsDao.putProject(project.id, {name: name, description : project.data.description});
+                console.log("updated ("+mounted+" | " +mnt+" | " +lmnt+")");
 
+                /*
+                //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
+                if (mounted && res === "") {
+                    console.log("scccc");
+                    let newProject = project;
+                    newProject.data.name = name;
+                    setProject({...newProject});
+                }
+                //error checking
+                //if is other error
+                else if (mounted && res && res.message) {
+                    //pass error object to global context
+                    appConsumer.setError(res);
+                }
+                */
+            }, 4000);
 
         }
+
+        return () => {
+            console.log("finished or unmounted");
+            lmnt = false;
+        }
     }
+
+    useEffect(() => {
+        //execute only on unmount
+        return () => {
+            console.log("UNMOUNTING NAME FORM");
+            mnt = false;
+            setMounted(false);
+        };
+    },[]);
+
 
     //checks if the user wants to confirm the change
     function handleConfirm(e){

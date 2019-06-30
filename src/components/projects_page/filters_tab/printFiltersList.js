@@ -8,20 +8,10 @@ import {projectFiltersDao} from 'dao/projectFilters.dao';
 
 const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
 
-    //boolean flag for handling mount status
-    const [mounted, setMounted] = useState(true);
-
     //get data from global context
     const appConsumer = useContext(AppContext);
 
     let yup = require('yup');
-
-    //effect for setting mount status to false when unmounting
-    useEffect(() => {
-        return () => {
-            setMounted(false);
-        };
-    }, [])
     
     //function to delete filter and update the list
     async function deleteFilter(id){
@@ -32,12 +22,12 @@ const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
 
         //error checking
         //if is other error
-        if (mounted && res.message) {
+        if (res.message) {
             //pass error object to global context
             appConsumer.setError(res);
         }
         //if res isn't null
-        else if (mounted && res !== null) {
+        else if (res !== null) {
 
             appConsumer.setNotificationMessage("Successfully deleted");
             let newFiltersList = filtersList.filter((filter)=>filter.id !== id);
@@ -55,7 +45,7 @@ const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
         );
     }
     //if list isn't empty, print list of papers
-    else if(mounted){
+    else{
         output = (
             <>
             {filtersList.map((element) =>

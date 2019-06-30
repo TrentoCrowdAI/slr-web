@@ -36,16 +36,6 @@ function PapersCsvForm(props) {
     //reference for the input file field
     const inputElement = useRef(null);
 
-    //mounted flag for handling unmounting
-    const [mounted, setMounted] = useState(true);
-
-    //set mounted as false when the component is unmounted
-    useEffect(() => {
-        return () => {
-            setMounted(false);
-        };
-    }, [])
-
     //function to handle file submission
     async function handleSubmission(){
 
@@ -100,12 +90,12 @@ function PapersCsvForm(props) {
 
                 
                 //if there is a error
-                if (mounted && res && res.message) {
+                if (res && res.message) {
                     //pass error object to global context
                     appConsumer.setNotificationMessage("Error during parsing file");
                 
                 }
-                else if(mounted){
+                else{
                     //set paperdata
                     //setPaperData(res);
                     props.setForcePapersFetch(!props.forcePapersFetch);

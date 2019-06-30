@@ -45,7 +45,6 @@ const ProjectPage = (props) => {
 
     //set the project title
     useEffect(() => {
-        console.log("porject name chanfge")
         if(project.data.name === "loading..." || project.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS"){
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name}</h2> </div>);//I set the page title
         }else{
@@ -58,30 +57,29 @@ const ProjectPage = (props) => {
     useEffect(() => {
 
         //flag that represents the state of component
-        let mounted = true;
+        let mnt = true;
 
         setDisplay(false);
         //a wrapper function ask by react hook
         const fetchData = async () => {
-            console.log("fetch project page");
 
             //call the dao for main project data
             let res = await projectsDao.getProject(project_id);
 
             //error checking
             //if unauthorized user
-            if(mounted && res.payload && (res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
+            if(mnt && res.payload && (res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
                 setUnauthorized(true);
                 setDisplay(true);
                 setProject({data: {name: "UNAUTHORIZED OR INEXISTENT PROJECTS"}});
             }
             //if the component is still mounted and there is some other errors
-            else if (mounted && res && res.message) {
+            else if (mnt && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if the component is still mounted and res isn't null
-            else if (mounted && res ) {
+            else if (mnt && res ) {
                 setUnauthorized(false);
                 //update state
                 setProject(res);
@@ -96,7 +94,7 @@ const ProjectPage = (props) => {
         return () => {
 
             //set flag as unmounted
-            mounted = false;
+            mnt = false;
         };
     }, [project_id, appConsumer.user]); //re-execute when these variables change
 
@@ -192,26 +190,25 @@ const ProjectPageHead = function ({match, notFound}) {
     var slider = "hide";
     switch (true) {
         case /^#\/projects\/\d+\/?$/.test(lc): //papers tab
-            slider = "25px";
+            slider = "20px";
             break;
 
         case /^#\/projects\/\d+\/filters\/?$/.test(lc): //filters tab
-            slider = "175px";
+            slider = "190px";
             break;
 
         case /#\/projects\/\d+\/search\/?/.test(lc): //search tab
-            slider = "325px";
+            slider = "360px";
             break;
 
         case /^#\/projects\/\d+\/screening\/?$/.test(lc): //screening tab
-            slider = "475px";
+            slider = "530px";
             break;
 
         default:
             console.log("no tab");
             break;
     }
-    console.log(slider);
     let output = (
         <>
             <div className="project-nav-link-wrapper" style={{display: (notFound || slider === "hide") ? "none" : ""}}>

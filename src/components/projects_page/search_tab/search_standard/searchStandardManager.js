@@ -79,10 +79,10 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
     useEffect(() => {
 
         //flag that represents the state of component
-        let mounted = true;
+        let mnt = true;
 
         //if the sorting parameter changes I update the status and trigger the SVG animation
-        if (up !== queryData.sort) {
+        if (mnt && up !== queryData.sort) {
             setUp(queryData.sort);
             if(document.getElementById("ani-order-arrow")){
                 document.getElementById("ani-order-arrow").beginElement();
@@ -103,19 +103,19 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
 
                 //error checking
                 //if the component is still mounted and  is 404 error
-                if (mounted && res && res.message === "Not Found") {
+                if (mnt && res && res.message === "Not Found") {
                     setPapersList([]);
                     setTotalResults(0);
                     //show the page
                     setDisplay(true);
                 }
                 //if the component is still mounted and  there are some other errors
-                else if (mounted && res && res.message) {
+                else if (mnt && res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
                 }
                 //if the component is still mounted and  res isn't null
-                else if (mounted && res) {
+                else if (mnt && res) {
                     //update state
                     setPapersList(res.results);
                     setTotalResults(res.totalResults);
@@ -129,10 +129,10 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
         fetchData();
         
 
-        //when the component will unmount
+        //when the component will unmount or the useEffect will finish
         return () => {
             //set flag as unmounted
-            mounted = false;
+            mnt = false;
         };
 
     }, [project_id, queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv]);  //re-execute when these variables change
