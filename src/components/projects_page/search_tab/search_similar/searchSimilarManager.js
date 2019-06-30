@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useRef} from "react";
 
 
 import {paperDao} from 'dao/paper.dao';
@@ -35,6 +35,8 @@ const orderByOptions = [
  * */
 
 const SearchSimilarManager = function ({project_id, location, match, history}) {
+
+    const mountRef = useRef(false);
 
     //remove similar paper data once the page is
     window.onbeforeunload = function(e){
@@ -93,10 +95,13 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
     const [up, setUp] = useState(queryData.sort);
 
 
-    /*
-        END OF USEEFFECT FOR HANDLING QUERY PARAMETERS #######################################################
-    */
-
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
 
     //update local storage every time the similar paper data changes
     useEffect(() => {
@@ -303,7 +308,10 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
                         <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
                     </div>
                 </div>
-                <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}/>
+                <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} 
+                    setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
+                    mounted={mountRef}    
+                />
 
                 <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid} setTargetPaperData={setTargetPaperData}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>

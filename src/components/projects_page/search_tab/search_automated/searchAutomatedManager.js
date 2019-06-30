@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useRef} from "react";
 
 import {paperDao} from 'dao/paper.dao';
 
@@ -27,6 +27,8 @@ const _ = require('lodash');
 
 const SearchAutomatedManager = function ({project, location, match, history}) {
 
+    const mountRef = useRef(false);
+
     //list of result papers data
     const [papersList, setPapersList] = useState([]);
 
@@ -54,6 +56,13 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
     // list of selected papers
     const [selectedPapersList, setSelectedPapersList] = useState([]);
 
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
 
     useEffect(() => {
 
@@ -206,7 +215,10 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
                     <CheckBox label="Select All" name="select_all" val="" isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")} handler={selectAllPapers}/>
                     </div>
                 </div>
-                <SelectedPapersListBox project_id={project.id} selectedPapersList={selectedPapersList} setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}/>
+                <SelectedPapersListBox project_id={project.id} selectedPapersList={selectedPapersList} 
+                    setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
+                    mounted={mountRef}
+                />
                 
                 <PrintSearchAutomatedList papersList={papersList} handlePaperSelection={handlePaperSelection}
                                         selectedEidList={arrayEid}/>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useRef} from "react";
 import {Link} from 'react-router-dom'
 
 import {paperDao} from 'dao/paper.dao';
@@ -35,6 +35,7 @@ const orderByOptions = [
 
 const SearchStandardManager = function ({project_id, location, match, history}) {
 
+    const mountRef = useRef(false);
 
     //fetch data
     const [papersList, setPapersList] = useState([]);
@@ -72,6 +73,13 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
     //state for sorting arrow animation
     const [up, setUp] = useState(queryData.sort);
 
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
 
     //this will run on mount and every time the url params change
     useEffect(() => {
@@ -292,7 +300,8 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
                         </button>
                     </div>
                 </div>
-                <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}/>
+                <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} setSelectedPapersList={setSelectedPapersList} 
+                    handlePaperSelection={handlePaperSelection} mounted={mountRef}/>
 
 
                 <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection}

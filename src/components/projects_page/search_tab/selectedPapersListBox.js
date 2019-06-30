@@ -11,7 +11,7 @@ import {AppContext} from 'components/providers/appProvider'
 /**
  * component to print the box of list of selected paper
  */
-const SelectedPapersListBox = function ({project_id, selectedPapersList, setSelectedPapersList, handlePaperSelection}){
+const SelectedPapersListBox = function ({project_id, selectedPapersList, setSelectedPapersList, handlePaperSelection, mounted}){
 
     //get the localStorage object (used for saving selected papers)
     const storage = window.localStorage;
@@ -48,19 +48,21 @@ const SelectedPapersListBox = function ({project_id, selectedPapersList, setSele
         });
 
         //if there is the error
-        if (res && res.message) {
+        if (mounted.current && res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);
             return null;
         }
 
-        //empties the state
-        setSelectedPapersList([]);
+        if(mounted.current){
+            //empties the state
+            setSelectedPapersList([]);
 
-        //update the storage
-        storage.removeItem("selectedPapersList");
+            //update the storage
+            storage.removeItem("selectedPapersList");
 
-        appConsumer.setNotificationMessage("Insert completed");
+            appConsumer.setNotificationMessage("Insert completed");
+        }
 
     }
 
