@@ -9,6 +9,7 @@ const config = {
     "search": "search",
     "scopus_search": "search-scopus",
     "search_similar": "search/similar",
+    "search_automated": "search/automated",
     "projects": "projects",
     "papers": "papers",
     "customPapers": "customPapers",

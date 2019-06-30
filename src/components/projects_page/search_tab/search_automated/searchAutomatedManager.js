@@ -76,15 +76,11 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
 
             //I call the dao for the automated search
             let resx = undefined;
-            //if there's no query I search based on project metadata
-            if(!queryData.query || queryData.query === ""){
-                resx = await paperDao.search({"query" : "robot", "arXiv" : "true"});
-            }
-            //otherwise I use the query
-            else{
-                resx = await paperDao.search({"query" : "ict", "arXiv" : "true"});
-            }
 
+            resx = await paperDao.searchAutomated({"project_id" : project.id, "query" : queryData.query, 
+                                                    "start" : queryData.start, "count" : queryData.count});
+
+            console.log(resx);
             //error checking
             //if is 404 error
             if (mnt && resx && resx.message === "Not Found") {

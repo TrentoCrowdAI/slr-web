@@ -467,7 +467,8 @@ form.search-automated-form button{
   border-radius: 0px;
 }
 form.search-automated-form button svg{
-  width: 80%;
+  width: 30px;
+  margin-top: 3px;
 }
 a.back-from-search-automated{
   position: absolute;

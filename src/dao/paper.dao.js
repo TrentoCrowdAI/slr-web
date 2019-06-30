@@ -32,7 +32,20 @@ async function selectById(id){
 async function searchSimilar(bodyData){
     let url = config.home+config.search_similar;
 
-    console.log(bodyData);
+    const res = await http.post(url, bodyData);
+
+    
+    return res;
+
+}
+
+/**
+ * dao to automated search
+ * @param bodyData
+ * @return {array[objects]}
+ */
+async function searchAutomated(bodyData){
+    let url = config.home+config.search_automated;
 
     const res = await http.post(url, bodyData);
 
@@ -45,6 +58,7 @@ const paperDao = {
     search,
     selectById,
     searchSimilar,
+    searchAutomated,
     "abortRequest" : http.abortRequest
 }
 
