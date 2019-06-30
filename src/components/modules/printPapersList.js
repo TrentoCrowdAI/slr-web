@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useState, useEffect, useRef} from "react";
 import ClampLines from 'react-clamp-lines';
 import {Link, withRouter} from 'react-router-dom';
 
@@ -51,23 +51,7 @@ const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, se
 
     //handle for the side options
     async function handleSideOptions(id, name, data){
-        if(name === "delete"){
-            console.log("deleting " + id);
-            //call the dao
-            let res = await projectPapersDao.deletePaper(id);
-            //error checking
-            //if is other error
-            if (res.message) {
-                //pass error object to global context
-                appConsumer.setError(res);
-            }
-            //if res isn't null
-            else if (res !== null) {
-
-                appConsumer.setNotificationMessage("Successfully deleted!");
-
-            }
-        }else if(name === "search similar"){
+        if(name === "search similar"){
             console.log("here you want to search for a similar paper");
             console.log(data);
 
@@ -117,6 +101,8 @@ const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, se
 
 const PrintPapersList_w = function ({papersList, location, history}) {
 
+    const mountRef = useRef(false);
+
     const [localPaperList, setLocalPaperList] = useState(papersList);
 
     //get data from global context
@@ -124,6 +110,14 @@ const PrintPapersList_w = function ({papersList, location, history}) {
 
     //side options
     let sideOptions= ["delete", "search similar"];
+
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
 
     //handle for the side options
     async function handleSideOptions(id, name, data){
@@ -133,12 +127,12 @@ const PrintPapersList_w = function ({papersList, location, history}) {
             let res = await projectPapersDao.deletePaper(id);
             //error checking
             //if is other error
-            if (res.message) {
+            if (mountRef.current && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if res isn't null
-            else if (res !== null) {
+            else if (mountRef.current && res !== null) {
 
                 appConsumer.setNotificationMessage("Successfully deleted");
                 let newPapersList = localPaperList.filter((paper)=>paper.id !== id);

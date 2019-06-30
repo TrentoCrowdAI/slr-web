@@ -35,8 +35,6 @@ const orderByOptions = [
 
 const SearchStandardManager = function ({project_id, location, match, history}) {
 
-    console.log("FETCHING RESULTS")
-
 
     //fetch data
     const [papersList, setPapersList] = useState([]);

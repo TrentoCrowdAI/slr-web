@@ -17,7 +17,6 @@ const SearchAutomatedForm = function ({keywords, setKeyWords, history, queryData
     /*handles the submission of a search */
     function handleSendSearch(event) {
         
-        console.log("SUBMITTING SEARCH");
         event.preventDefault();
 
         //if query input is empty

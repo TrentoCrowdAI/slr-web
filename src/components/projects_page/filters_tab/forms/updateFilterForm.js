@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef} from "react";
 import { Formik, Form, Field } from "formik";
 
 import CloseButton from 'components/svg/closeButton';
@@ -9,10 +9,18 @@ import {projectFiltersDao} from 'dao/projectFilters.dao';
 
 const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditing}) {
 
-    console.log(filter.data);
+    const mountRef = useRef(false);
 
     //get data from global context
     const appConsumer = useContext(AppContext);
+
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
 
     //validation schema
     const predicateValidationSchema = yup.object().shape({
@@ -32,18 +40,19 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
                 let res = await projectFiltersDao.putFilter(filter.id, {project_id, ...bodyData});
 
                 //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-                if (res === "") {
+                if (mountRef.current && res === "") {
                     setFilter({id: filter.id, data: {...bodyData}});
                 }
                 //error checking
                 //if is other error
-                else if (res && res.message) {
+                else if (mountRef.current && res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
                 }
-                
-                setSubmitting(false);
-                setEditing(false);
+                if(mountRef.current){
+                    setSubmitting(false);
+                    setEditing(false);
+                }
             }}
             validateOnBlur={false}
         >
@@ -51,7 +60,7 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
             let output = "";
             output = (
             <Form className="update-filter-card">
-                <button type="button" className="close-btn" onClick={(e) => {
+                <button type="button" className="close-btn" disabled={isSubmitting} onClick={(e) => {
                     setEditing(false);
                 }}><CloseButton/></button>
                 <Field

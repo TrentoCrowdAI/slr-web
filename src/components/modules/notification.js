@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useRef} from "react";
 
 import { AppContext } from 'components/providers/appProvider'
 import CloseButton from 'components/svg/closeButton';
@@ -11,14 +11,21 @@ const Notification = function (props) {
     //get data from global context
     const appConsumer = useContext(AppContext);
 
+    const mountKeyRef = useRef("_");
+
     let output = <></>;
 
     //if there's a notification I sent it in input
     if(appConsumer.notificationMessage){
+        let key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+        mountKeyRef.current = key;
 
         //I automatically remove it after 5 seconds
         setTimeout(() => {
-            appConsumer.setNotificationMessage(undefined);
+            console.log((key === mountKeyRef.current));
+            if(appConsumer.notificationMessage && (key === mountKeyRef.current)){
+                appConsumer.setNotificationMessage(undefined);
+            }
         }, 5000);
 
         output = (

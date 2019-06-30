@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useRef} from "react";
 import { Formik, Form, Field } from "formik";
 
 import {projectPapersDao} from 'dao/projectPapers.dao'
@@ -20,7 +20,17 @@ const paperType = [
  */
 function CustomPaperForm(props) {
 
+    const mountRef = useRef(false);
+
     let yup = require('yup');
+
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
 
     //validation schema for form
     const paperValidationSchema = yup.object().shape({
@@ -69,13 +79,15 @@ function CustomPaperForm(props) {
                     paper: paperData, project_id: props.projectId
                 });
                 //error checking
-                if (res && res.message) {
+                if (mountRef.current && res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
-                }else{
+                }else if(mountRef.current){
                     props.history.push(props.url);
                 }
-                setSubmitting(false);
+                if(mountRef.current){
+                    setSubmitting(false);
+                }
             }}
             validateOnBlur={false}
         >

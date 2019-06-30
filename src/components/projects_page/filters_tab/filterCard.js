@@ -20,10 +20,10 @@ const FilterCard = function ({project_id, filter, callDelete, yup}) {
     let sideOptions= ["delete", "update"];
 
     //handle for the side options
-    async function handleSideOptions(id, name){
+    function handleSideOptions(id, name){
         if(name === "delete"){
             setDisabled(true);
-            await callDelete(id);
+            callDelete(id);
         }
         else if(name === "update"){
             setEditing(true);

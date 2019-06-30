@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useState} from "react";
+import React, {useEffect, useContext, useRef} from "react";
 
 import FilterCard from "./filterCard";
 import NoFilters from "components/svg/noFilters";
@@ -8,10 +8,20 @@ import {projectFiltersDao} from 'dao/projectFilters.dao';
 
 const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
 
+    const mountRef = useRef(false);
+
     //get data from global context
     const appConsumer = useContext(AppContext);
 
     let yup = require('yup');
+
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
     
     //function to delete filter and update the list
     async function deleteFilter(id){
@@ -22,12 +32,12 @@ const PrintFiltersList = function ({filtersList, setFiltersList, project_id}) {
 
         //error checking
         //if is other error
-        if (res.message) {
+        if (mountRef.current && res.message) {
             //pass error object to global context
             appConsumer.setError(res);
         }
         //if res isn't null
-        else if (res !== null) {
+        else if (mountRef.current && res !== null) {
 
             appConsumer.setNotificationMessage("Successfully deleted");
             let newFiltersList = filtersList.filter((filter)=>filter.id !== id);

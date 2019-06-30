@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useEffect, useContext, useRef} from "react";
 import { Formik, Form, Field } from "formik";
 
 import {projectsDao} from 'dao/projects.dao'
@@ -14,6 +14,8 @@ import { AppContext } from 'components/providers/appProvider'
  */
 function ProjectForm(props) {
 
+    const mountRef = useRef(false);
+    
     let yup = require('yup');
 
     const projectValidationSchema = yup.object().shape({
@@ -23,6 +25,14 @@ function ProjectForm(props) {
 
     //get data from global context
     const appConsumer = useContext(AppContext);
+
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
 
     return (
         <>
@@ -35,13 +45,15 @@ function ProjectForm(props) {
                 let res = await projectsDao.postProject(bodyData);
 
                 //error checking
-                if(res.message){
+                if(mountRef.current && res.message){
                     //pass error object to global context
                     appConsumer.setError(res);
-                }else{
+                }else if(mountRef.current){
                     props.history.push("/projects/" + res.id);
                 }
-                setSubmitting(false);
+                if(mountRef.current){
+                    setSubmitting(false);
+                }
             }}
             validateOnBlur={false}
         >

@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, useState} from "react";
+import React, {useEffect, useContext, useRef} from "react";
 import { Formik, Form, Field } from "formik";
 
 import {projectFiltersDao} from 'dao/projectFilters.dao';
@@ -12,6 +12,8 @@ import {AppContext} from 'components/providers/appProvider'
 
 const InsertFilterForm = function(props){
 
+    const mountRef = useRef(false);
+
     let yup = require('yup');
 
     const predicateValidationSchema = yup.object().shape({
@@ -23,6 +25,13 @@ const InsertFilterForm = function(props){
     //get data from global context
     const appConsumer = useContext(AppContext);
 
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
 
     let output = "";
     output = (
@@ -38,15 +47,17 @@ const InsertFilterForm = function(props){
                     let res = await projectFiltersDao.postFilterIntoProject(bodyData);
 
                     //error checking
-                    if(res.message){
+                    if(mountRef.current && res.message){
                         //pass error object to global context
                         appConsumer.setError(res);
-                    }else if(res){
+                    }else if(mountRef.current && res){
                         console.log(res);
                         props.setFiltersList([res, ...(props.filtersList)])
                     }
-                    setSubmitting(false);
-                    resetForm({predicate: '', inclusion_description: '', exclusion_description: ''});
+                    if(mountRef.current){
+                        setSubmitting(false);
+                        resetForm({predicate: '', inclusion_description: '', exclusion_description: ''});
+                    }
                 }}
                 validateOnBlur={false}
             >

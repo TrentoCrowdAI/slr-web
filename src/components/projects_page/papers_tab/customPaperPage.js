@@ -1,4 +1,4 @@
-import React, {useState, useRef, useContext} from "react";
+import React, {useEffect, useState, useRef, useContext} from "react";
 import CustomPaperForm from 'components/projects_page/papers_tab/forms/customPaperForm';
 import LoadIcon from "components/svg/loadIcon";
 
@@ -8,6 +8,7 @@ import {AppContext} from 'components/providers/appProvider';
 
 function CustomPaperPage({projectId, url, history}) {
 
+    const mountRef = useRef(false);
 
     const [paperDataFetch, setPaperDataFetch] = useState(false);
     const [paperData, setPaperData] = useState(undefined);
@@ -18,6 +19,14 @@ function CustomPaperPage({projectId, url, history}) {
 
     //get data from global context
     const appConsumer = useContext(AppContext);
+
+    useEffect(() => {
+        mountRef.current = true;
+        //execute only on unmount
+        return () => {
+            mountRef.current = false;
+        };
+    },[]);
 
     async function handleSubmission(){
 
@@ -42,20 +51,21 @@ function CustomPaperPage({projectId, url, history}) {
                let res = await updateFileDao.updatePdf(formData);
 
                //if there is a error
-                if (res && res.message) {
+                if (mountRef.current && res && res.message) {
                     //pass error object to global context
                     appConsumer.setNotificationMessage("Error during parsing file");
                    
                 }
-                else{
+                else if(mountRef.current){
                     //set paperdata
                     setPaperData(res);
                     //display the form
                     setDisplayForm(true);
                 }
-
-                //close flag of loading
-                setPaperDataFetch(false);
+                if(mountRef.current){
+                    //close flag of loading
+                    setPaperDataFetch(false);
+                }
 
             }
         }

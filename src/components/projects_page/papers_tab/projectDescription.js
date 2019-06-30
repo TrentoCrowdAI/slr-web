@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useContext, useEffect, useRef} from "react";
 
 import {projectsDao} from 'dao/projects.dao';
 import {AppContext} from 'components/providers/appProvider'
@@ -14,6 +14,7 @@ import LoadIcon from 'components/svg/loadIcon';
 
 const ProjectDescription = function({project, setProject, collaborators, setCollaborators}){
 
+    const mountRef = useRef(false); //in the future we should get ref from parent component because we also get to set its properties
 
     //this is used as a toggle for checking if the user is trying to edit the name of the project
     const [editing, setEditing] = useState(false);
@@ -33,7 +34,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
     let output = <></>;
 
     useEffect(() => {
-        let mnt = true;
+        mountRef.current = true;
 
         //a wrapper function ask by react hook
         const fetchData = async () => {
@@ -43,12 +44,12 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
 
             //error checking
             //if the component is still mounted and there is some other errors
-            if (mnt && res && res.message) {
+            if (mountRef.current && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if the component is still mounted and res isn't null
-            else if (mnt && res ) {
+            else if ( res ) {
                 setCollaborators(res);
                 //show the page
                 setLoadIconDisplay(false);
@@ -58,7 +59,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
         fetchData();
 
         return () => {
-            mnt = false;
+            mountRef.current = false;
         };
     }, [])
 
@@ -122,7 +123,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
             let res = await projectsDao.removeProjectCollaborator(project.id, collaborator);
             //error checking
             //there is some other errors
-            if (res && res.message) {
+            if (mountRef.current && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
@@ -147,7 +148,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
                 let res = await projectsDao.addProjectCollaborator(project.id, {"email": input});
                 //error checking
                 //there is some other errors
-                if (res && res.message) {
+                if (mountRef.current && res && res.message) {
                     //pass error object to global context
                     appConsumer.setError(res);
                 }

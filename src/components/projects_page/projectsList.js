@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useRef} from "react";
 import {Link} from 'react-router-dom';
 import queryString from 'query-string';
 
@@ -19,6 +19,8 @@ import EmptyFolder from "components/svg/emptyFolder";
  */
 
 const ProjectsList = function (props) {
+
+    const mountRef = useRef(false);
 
     //fetch data
     const [projectsList, setProjectsList] = useState([]);
@@ -41,9 +43,15 @@ const ProjectsList = function (props) {
 
     //set title when component mounts
     useEffect(() => {
+        mountRef.current = true;
+
         appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">PROJECTS</h2> </div>);
         //I remove any old project name that was previously saved
         appConsumer.setProjectName("");
+
+        return () => {
+            mountRef.current = false;
+        };
     },[]); //run on component mount
 
     useEffect(() => {
@@ -91,7 +99,7 @@ const ProjectsList = function (props) {
 
         fetchData();
 
-        //when the component will unmount
+        //when the component will unmount or this useEffect will stop
         return () => {
             mnt = false;
         };
@@ -106,7 +114,7 @@ const ProjectsList = function (props) {
         let res = await projectsDao.deleteProject(id);
 
         //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-        if(res === ""){
+        if(mountRef.current && res === ""){
             //create a new array without the project deleted
             let newProjectsList = projectsList.filter((project)=>project.id !== id);
             //update project list state
@@ -116,7 +124,7 @@ const ProjectsList = function (props) {
         }
         //error checking
         //if is other error
-        else if (res && res.message) {
+        else if (mountRef.current && res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);  
         }
