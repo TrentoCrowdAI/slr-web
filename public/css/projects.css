@@ -35,6 +35,7 @@ div.project-cards-holder div.project-card h3{
   text-align: center;
   font-size: 20px;
   margin: 10px auto 10px auto;
+  width: 370px;
 }
 div.project-cards-holder div.project-card p.description{
   margin: 0px auto 5px auto;
@@ -444,30 +445,33 @@ form.add-filter{
   padding: 20px 25px 20px 25px;
   text-align: center;
   transition: all 0.3s;
+  background-color: white;
 }
 form.add-filter:focus-within{
   border: solid 1px #808080;
   box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.3);
+  background-color: #fcfcff;
+}
+form.add-filter input, form.add-filter textarea{
+  color: #2f2f2f;
+  transition: all 0.3s;
+  width: 100%;
+  border-bottom: solid 1px #6c6c6c;
 }
 form.add-filter input[type=text]{
-  width: 100%;
   font-size: 17px;
   height: 30px;
-  transition: all 0.3s;
   margin-bottom: 15px;
-  border-bottom: solid 1px #6c6c6c;
 }
 form.add-filter textarea{
   resize: none;
-  width: 100%;
   font-size: 16px;
   height: 100px;
-  transition: all 0.3s;
   margin-bottom: 7px;
-  border-bottom: solid 1px #6c6c6c;
 }
 form.add-filter:focus-within input[type=text], form.add-filter:focus-within textarea{
   border-bottom: solid 1px black;
+  color: black;
 }
 form.add-filter button{
   margin-top: 12px;

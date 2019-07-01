@@ -253,7 +253,7 @@ div.card-options div.options-list{
   text-align: center;
   width: 100px;
   cursor: pointer;
-  transition: 0.3s all;
+  /*transition: 0.3s all;*/
 }
 div.card-options div.retract-options{
   border: solid 1px #6d6d6d00; 
