@@ -35,10 +35,13 @@ div.project-cards-holder div.project-card h3{
   text-align: center;
   font-size: 20px;
   margin: 10px auto 10px auto;
+  width: 370px;
 }
 div.project-cards-holder div.project-card p.description{
   margin: 0px auto 5px auto;
   padding: 0px 10px 0px 10px;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 div.project-cards-holder div.project-card div.project-dates{
   display: flex;
@@ -56,6 +59,10 @@ div.project-cards-holder div.project-card div.project-dates p i{
   font-size: 10px;
 }
 
+div.project-cards-holder div.project-card-options{
+  display: block;
+}
+
 /*add project button*/ /*projectslist.js*/
 button.add-project-btn div.btn-icon{
   background-image: url('./../img/add.svg');
@@ -68,21 +75,8 @@ button.add-project-btn div.btn-icon{
 form.add-project{
   font-size: 14px;
   padding: 20px 30px 10px 30px;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
   width: 400px;
   text-align: center;
-  z-index: 1;
-  box-shadow: 0px 0px 16px -6px rgba(0, 0, 0, 0.75);
-}
-form.add-project button{
-  border: solid 1px grey;
-  transition: box-shadow 0.3s;
-}
-form.add-project button:hover{
-  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.50);
 }
 form.add-project input[type="text"] {
 	font-size: 21px;
@@ -94,20 +88,6 @@ form.add-project button[type=submit]{
   font-size: 18px;
   margin: 10px auto 10px auto;
   padding: 10px 10px 10px 10px;
-}
-form.add-project button.close-btn{
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-}
-form.add-project svg#close-button{
-  width: 70%;
-  height: 70%;
-  margin: 15% auto;
-
 }
 form.add-project input{
   margin-bottom: 15px;
@@ -125,11 +105,61 @@ form.add-project textarea{
   resize: none;
 }
 
+/*add csv papers button*/ /*projectpage.js*/
+button.add-csv-papers-btn div.btn-icon{
+  background-image: url('./../img/papers.svg');
+  background-size: 75%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/*add csv papers form*/ /*projectpage.js*/
+form.add-csv-papers{
+  font-size: 14px;
+  padding: 20px 30px 10px 30px;
+  width: 650px;
+  min-height: 300px;
+}
+form.add-csv-papers h2{
+  margin: 0px auto 5px auto;
+  text-align: center;
+}
+form.add-csv-papers p{
+  font-size: 16px;
+}
+form.add-csv-papers p span{
+  font-weight: 100;
+  font-style: italic;
+}
+form.add-csv-papers div.field-input-row{
+  display: flex;
+  justify-content: space-between;
+}
+form.add-csv-papers div.field-input-row div.field-input-holder{
+  display: flex;
+  width: 48%;
+  justify-content: space-between;
+}
+form.add-csv-papers div.field-input-row div.field-input-holder label{
+  padding-top: 4px;
+} 
+form.add-csv-papers input[type="text"] {
+  width: 200px;
+  margin-bottom: 15px;
+  font-weight: lighter;
+}
+form.add-csv-papers button.file-input{
+  font-size: 18px;
+  margin: 10px auto 10px auto;
+  padding: 10px 10px 10px 10px;
+  display: inherit;
+}
+
 
 /*small navigation links*/ /*projectpage.js*/
 div.project-nav-link-wrapper{
   position: relative;
-  width: 300px;
+  width: 680px;
   margin: auto;
 }
 div.project-nav-link-wrapper div.nav-link{
@@ -139,7 +169,7 @@ div.project-nav-link-wrapper div.nav-link{
 }
 div.project-nav-link-wrapper div.nav-link a{
   display: inline-block;
-  width: 150px;
+  width: 170px;
   height: 40px;
   line-height: 40px;
   font-size: 20px;
@@ -148,11 +178,11 @@ div.project-nav-link-wrapper div.nav-link a{
 div.project-nav-link-wrapper div.underline{
   background-color: black;
   position: absolute;
-  width: 100px;
+  width: 130px;
   height: 2px;
   bottom: 0px;
   border-radius: 1px 1px 0px 0px;
-  left: 25px;
+  left: 20px;
   transition: all 0.4s ease-in-out;
 }
 
@@ -176,29 +206,23 @@ div.paper-card-holder div.order button svg#order-arrow{
   height: 80%;
   margin: 10%;
 }
-div.papers-list{
-  position: relative;
-  margin: 20px auto auto 0px;
-  width: 700px;
-  min-height: 300px;
-}
 div.paper-card-holder{
   width: 700px;
   z-index: 10;
 }
+div.centerd-wrapper{
+  margin: 0 auto;
+}
 
 div.project-description{
-  width: 300px;
-  position: absolute;
-  right: 0px;
   text-align: justify;
   font-weight: 300;
-  overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
   color: #2f2f2f;
   display: flex;
   flex-flow: column;
+  width: 300px;
 }
 div.project-description p{
   margin: 0px;
@@ -303,4 +327,208 @@ div.forbidden-wrapper svg#forbidden{
 div.forbidden-wrapper p{
   font-size: 26px;
   font-weight: lighter;
+}
+
+/*filters page*/
+div.filters-wrapper{
+  margin-top: 25px;
+}
+div.form-filter-wrapper{
+  width: 350px;
+}
+
+div.filter-card{
+  margin-bottom: 20px; 
+}
+div.filter-card h3{
+  font-size: 25px;
+  margin: 0px 20px 5px 0px;
+}
+div.filter-card div.answer{
+  font-size: 17px;
+  margin: 1px 0px 1px 0px;
+  text-align: justify;
+  word-wrap: break-word;
+  hyphens: auto;
+  width: 96%;
+}
+div.filter-card div.answer > p{
+  display: inline-block;
+  font-weight: lighter;
+  margin: 0px;
+}
+div.filter-card div.answer > p > span{
+  display: inline-flex;
+  margin-right: 4px;
+  font-weight: normal;
+  justify-content: space-between;
+  width: 68px;
+}
+div.filter-card div.answer > p > span > span{
+  display: inline-block;
+}
+
+form.update-filter-card{
+  margin-top: 25px;
+  border: solid 1px #808080;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  padding: 20px 25px 20px 25px;
+  text-align: center;
+  transition: all 0.3s;
+}
+form.update-filter-card button.close-btn{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  transition: all 0.3s;
+}
+form.update-filter-card button.close-btn svg#close-button{
+  width: 70%;
+  height: 70%;
+  margin: 15% auto;
+}
+form.update-filter-card input[type=text]{
+  width: 100%;
+  font-size: 20px;
+  font-weight: bold;
+  height: 30px;
+  transition: all 0.3s;
+  margin-bottom: 15px;
+  border-bottom: solid 1px black;
+}
+form.update-filter-card div.textareas-description-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 5px auto 5px auto;
+}
+form.update-filter-card div.textareas-description-wrapper div{
+  width: 48%;
+  text-align: left;
+  padding-left: 6px;
+  font-weight: normal;
+}
+form.update-filter-card div.textareas-wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+form.update-filter-card textarea{
+  resize: none;
+  width: 48%;
+  font-size: 15px;
+  font-weight: lighter;
+  height: 100px;
+  transition: all 0.3s;
+  margin-bottom: 7px;
+  border-bottom: solid 1px black;
+}
+form.update-filter-card button[type=submit]{
+  margin-top: 12px;
+  border: solid 1px #acacac;
+  padding: 10px 25px 10px 25px;
+  font-size: 18px;
+  transition: all 0.3s;
+}
+form.update-filter-card button:hover{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+}
+
+form.add-filter{
+  margin-top: 25px;
+  border: solid 1px #acacac;
+  border-radius: 15px;
+  padding: 20px 25px 20px 25px;
+  text-align: center;
+  transition: all 0.3s;
+  background-color: white;
+}
+form.add-filter:focus-within{
+  border: solid 1px #808080;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.3);
+  background-color: #fcfcff;
+}
+form.add-filter input, form.add-filter textarea{
+  color: #2f2f2f;
+  transition: all 0.3s;
+  width: 100%;
+  border-bottom: solid 1px #6c6c6c;
+}
+form.add-filter input[type=text]{
+  font-size: 17px;
+  height: 30px;
+  margin-bottom: 15px;
+}
+form.add-filter textarea{
+  resize: none;
+  font-size: 16px;
+  height: 100px;
+  margin-bottom: 7px;
+}
+form.add-filter:focus-within input[type=text], form.add-filter:focus-within textarea{
+  border-bottom: solid 1px black;
+  color: black;
+}
+form.add-filter button{
+  margin-top: 12px;
+  border: solid 1px #c4c4c4;
+  padding: 10px 25px 10px 25px;
+  font-size: 18px;
+  transition: all 0.3s;
+}
+form.add-filter button:hover{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+}
+form.add-filter:focus-within button{
+  border: solid 1px #acacac;
+}
+
+/*search-automated*/
+div.search-automated-right-wrapper{
+  width: 280px;
+}
+div.search-automated-right-wrapper div.search-automated-description{
+  text-align: center;
+  font-weight: 300;
+  font-size: 14px;
+  margin: 25px 0px 5px 0px;
+  padding: 5px 5px 5px 5px;
+  border-top: solid 1px #acacac;
+  border-bottom: solid 1px #acacac;
+}
+div.search-automated-right-wrapper div.search-automated-description p{
+  text-align: justify;
+  word-wrap: break-word;
+  hyphens: auto;
+  margin: 0px 0px 5px 0px;
+}
+div.search-automated-right-wrapper div.search-automated-description a{
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+  border-bottom: 1px dotted #696969;
+}
+div.search-automated-right-wrapper div.filters-holder h2{
+  margin: 15px 0px 5px 0px;
+}
+div.search-automated-right-wrapper div.filters-holder div.side-filters-wrapper{
+  position: relative;
+  min-height: 50px;
+}
+div.search-automated-right-wrapper div.filters-holder p.filter-predicate{
+  margin: 5px 0px 5px 0px;
+}
+div.search-automated-right-wrapper div.filters-holder p.filter-predicate i{
+  color:#696969;
+}
+div.search-automated-right-wrapper div.filters-holder a{
+  margin: 10px 0px 0px 0px;
+  width: 100%;
+  text-align: center;
+  text-decoration: underline;
+  font-weight: 300;
 }

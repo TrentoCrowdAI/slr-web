@@ -30,7 +30,7 @@ form.search-form button.go-search{
   width: 35px;
   height: 40px;
   top: 0px;
-  right: 0px;
+  right: 38px;
   border-bottom: solid 1px black;
   border-radius: 0px;
 }
@@ -54,7 +54,7 @@ form.search-form button.go-similar {
 	width: 40px;
 	height: 40px;
 	top: 0px;
-	right: 35px;
+	right: 0px;
 	border-bottom: solid 1px black;
 	border-radius: 0px;
 }
@@ -148,6 +148,30 @@ div.similar-search-paper-upload div.load-icon-similar-paper{
 div.similar-search-paper-upload div.load-icon-similar-paper svg#loading-icon{
   width: 60px;
 }
+div.search-similar-description-wrapper{
+  width: 280px;
+}
+div.search-similar-description-wrapper div.search-similar-description{
+  text-align: center;
+  font-weight: 300;
+  font-size: 14px;
+  margin: 25px 0px 5px 0px;
+  padding: 5px 5px 5px 5px;
+  border-top: solid 1px #acacac;
+  border-bottom: solid 1px #acacac;
+}
+div.search-similar-description-wrapper div.search-similar-description p{
+  text-align: justify;
+  word-wrap: break-word;
+  hyphens: auto;
+  margin: 0px 0px 5px 0px;
+}
+div.search-similar-description-wrapper div.search-similar-description a{
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+  border-bottom: 1px dotted #696969;
+}
 
 /*options*/
 div.option-holder label{
@@ -179,6 +203,9 @@ form.small{
   margin: 20px auto 20px 10px !important;
   min-height: 55px;
 }
+form.centered-form{
+  margin: 20px auto 20px auto !important;
+}
 form.small div.option-holder {
   margin: 10px 0% 0% 0%;
   width: 200px;
@@ -200,11 +227,6 @@ div.search-loading-holder{
 }
 
 /*===PAPER-CARD_GENERIC===*/ /*projectpage.js & searchform.js*/
-div.paper-card{
-  position: relative;
-  width: 600px;
-  margin: 0px auto 20px 0px;
-}
 
 div.paper-card a{
   margin: 0px auto 0px 10px;
@@ -258,13 +280,13 @@ div.paper-card button{
 }
 
 /*paper-card for project papers*/
-div.paper-card:hover div.paper-card-options{
+div.paper-card:hover div.card-options{
   display: block;
 }
-div.paper-card:focus-within div.paper-card-options{
+div.paper-card:focus-within div.card-options{
   display: block;
 }
-div.paper-card div.paper-card-options{
+div.paper-card div.card-options{
   display: none;
 }
 button.add-custompaper-btn div.btn-icon{
@@ -275,7 +297,7 @@ button.add-custompaper-btn div.btn-icon{
 }
 
 /*===SEARCH_RESULTS===*/
-form.search-results{
+div.search-results{
   margin-top: 10px;
 }
 
@@ -380,13 +402,11 @@ div.paper-card-holder div.paper-card-holder-head{
 div.paper-card-holder div.paper-card-holder-head div.select-all label.checkbox-container span.name{
   margin-left: 9px;
 }
-form.search-results div.paper-card{
+div.search-results div.paper-card{
   width: 100%;
-  margin: 0px auto 20px 0px;
   z-index: 5;
-  position: relative;
 }
-form.search-results div.paper-card a{
+div.search-results div.paper-card a{
   margin: 0px auto 0px 10px;
 }
 div.paper-card label.checkbox-container{
@@ -399,6 +419,133 @@ button.add-resultpaper-btn div.btn-icon{
   background-size: 75%;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/*===AUTOMATED_SEARCH===*/
+div.search-automated-option{
+  width: 350px;
+  height: 100px;
+  margin: 40px auto;
+  text-align: center;
+  border-top: solid 1px grey;
+}
+div.search-automated-option p{
+  font-weight: 300;
+  font-size: 13px;
+  width: 100%;
+  margin: 15px 0px 20px 0px;
+}
+div.search-automated-option a{
+  overflow: hidden;
+  display: inline-block;
+  height: 110px;
+  width: 110px;
+  border-radius: 50%;
+  border: solid 1px #363636;
+}
+div.search-automated-option a svg#robot{
+  width: 150px;
+  height: 150px;
+  transform: translate(5px,-15px);
+}
+form.search-automated-form textarea{
+  float: left;
+  width: 94%;
+  font-size: 20px;
+  resize: none;
+  border-bottom: none;
+  line-height: 29px;
+}
+form.search-automated-form{
+  width: 680px;
+  display: flex;
+  margin: 20px auto 20px 10px;
+  border-bottom: solid 1px black;
+}
+form.search-automated-form button{
+  width: 6%;
+  border-radius: 0px;
+}
+form.search-automated-form button svg{
+  width: 30px;
+  margin-top: 3px;
+}
+a.back-from-search-automated{
+  position: absolute;
+  left: -37px;
+  top: 63px;
+  height: 40px;
+  width: 40px;
+  background-image: url('./../img/back.svg');
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+div.paper-card h3.auto-paper-title{
+  margin: 10px 100px 2px 0px;
+}
+
+div.generic-card div.side-info-wrapper{
+  position: absolute;
+  top: 1px;
+  right: 95px;
+  height: 0px;
+  width: 0px;
+}
+div.generic-card div.side-info{
+  width: 100px;
+  z-index: 1;
+  position: relative;
+}
+div.generic-card div.side-info div.confidence{
+  float: left;
+  font-size: 28px;
+  font-weight: 300;
+  color: #898989;
+}
+div.generic-card div.side-info div.confidence-info{
+  /*position: absolute;
+  top: 8px;
+  height: 0px;
+  right: -100px;*/
+}
+div.generic-card div.side-info div.confidence-info button{
+  width: 20px;
+  height: 20px;
+  border: solid 1px #898989;
+  border-radius: 50%;
+  position: absolute;
+  left: 67px;
+  top: 8px;
+}
+div.generic-card div.side-info div.confidence-info button svg#info{
+  width: 90%;
+  margin: 5%;
+}
+div.generic-card div.side-info div.confidence-info div.confidence-details{
+  display: none;
+  z-index: 10;
+  border-radius: 5px;
+  border: 1px solid rgba(232, 232, 232);
+  padding: 10px 5px 10px 5px;
+  background-color: white;
+  top: 32px;
+  position: absolute;
+  left: 60px;
+}
+div.generic-card div.side-info div.confidence-info div.confidence-details p{
+  margin: 5px 5px 5px 5px;
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  color: #515151
+}
+div.generic-card div.side-info div.confidence-info div.confidence-details p span.side-detail{
+  border-left: solid 1px #515151;
+  padding-left: 10px;
+  margin-left: 10px;
 }
 
 /*===SVG_ELEMENTS===*/

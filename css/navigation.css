@@ -135,11 +135,10 @@ div.navigation-wrapper nav div.nav-elements{
 div.navigation-wrapper nav.nav-title-to-left div.nav-elements{
   margin: 0px auto 0px 45px;
 }
-div.navigation-wrapper nav div.nav-elements h2.static-title{
-  cursor: auto;
-}
 div.navigation-wrapper nav div.nav-elements h2{
+  cursor: auto;
   margin: 0px;
+  font-size: 21px;
 }
 div.navigation-wrapper nav div.hidden-form:hover form{
   opacity: 1.0;
@@ -272,12 +271,20 @@ div.navigation-wrapper div.menu div.side-menu div.user{
   padding: 15px 15px 5px 15px;
   border-bottom: solid 1px black;
 }
-div.navigation-wrapper div.menu div.side-menu div.user img.face{
+div.navigation-wrapper div.menu div.side-menu div.user img.face, div.navigation-wrapper div.menu div.side-menu div.user div.no-face{
   float: left;
   margin: 10px 15px 0px 5px;
   height: 100px;
+  width: 100px;
   border-radius: 50%;
   border: solid 0.5px black;
+}
+div.navigation-wrapper div.menu div.side-menu div.user div.no-face{
+  background-color: white;
+}
+div.navigation-wrapper div.menu div.side-menu div.user div.no-face svg#no-image{
+  height: 103px;
+  width: 103px;
 }
 div.navigation-wrapper div.menu div.side-menu div.user div.user-info{
   margin:30px 10px 0px 0px;
