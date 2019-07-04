@@ -6,10 +6,7 @@ import {projectFiltersDao} from 'dao/projectFilters.dao';
 
 import {AppContext} from 'components/providers/appProvider'
 
-const SearchAutomatedDescription = function ({project_id}) {
-
-    //filters
-    const [filtersList, setFiltersList] = useState([]);
+const SearchAutomatedDescription = function ({project_id, filtersList, setFiltersList}) {
 
     //shows the number of results
     const [totalResults, setTotalResults] = useState(0);

@@ -184,12 +184,13 @@ const PrintPapersList_w = function ({papersList, location, history}) {
 
 };
 
-const PrintSearchAutomatedList_w = function ({papersList, handlePaperSelection, selectedEidList}) {
+const PrintSearchAutomatedList_w = function ({papersList, filtersList, handlePaperSelection, selectedEidList}) {
 
     let output = papersList.map((element, index) =>
         <div key={index} className="generic-card paper-card">
             <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
-            <PaperConfidence confidence={{value : element.confidence, details : [{detail: "detail 1", percentage : "67%"},{detail: "detail 2", percentage : "64%"},{detail: "detail 3", percentage : "59%"}]}}/>
+            <PaperConfidence filtersList={filtersList}
+                confidence={{value : element.confidence, details : [{detail: "filter_label 1", percentage : "67%"},{detail: "filter_label 2", percentage : "64%"},{detail: "filter_label 3", percentage : "59%"}]}}/>
             <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
             <div className="extra-info">
                 <p className="authors">{element.authors}</p>

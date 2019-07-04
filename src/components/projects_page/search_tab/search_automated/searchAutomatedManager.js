@@ -32,11 +32,14 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
     //list of result papers data
     const [papersList, setPapersList] = useState([]);
 
-    //bool to control the visualization of the results when fetching results data
-    const [display, setDisplay] = useState(true);
-
     //bool to show the pagination list
     const [totalResults, setTotalResults] = useState(0);
+
+    //filters
+    const [filtersList, setFiltersList] = useState([]);
+
+    //bool to control the visualization of the results when fetching results data
+    const [display, setDisplay] = useState(true);
 
     //get data from global context
     const appConsumer = useContext(AppContext);
@@ -216,8 +219,8 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
                     mounted={mountRef}
                 />
                 
-                <PrintSearchAutomatedList papersList={papersList} handlePaperSelection={handlePaperSelection}
-                                        selectedEidList={arrayEid}/>
+                <PrintSearchAutomatedList papersList={papersList} filtersList={filtersList} 
+                                        handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
             </div>
         );
@@ -227,7 +230,7 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
     let output = (
         <>
             {/*<Link className="back-from-search-automated"></Link>*/}
-            <SearchAutomatedDescription project_id={project.id}/>
+            <SearchAutomatedDescription project_id={project.id} filtersList={filtersList} setFiltersList={setFiltersList}/>
             <SearchAutomatedForm {...{keywords, setKeyWords, history, queryData}} description={project.data.description}/>
             <div className="search-results">
                 {resultPart}
