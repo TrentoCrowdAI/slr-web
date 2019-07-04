@@ -57,7 +57,7 @@ function ProjectForm(props) {
             }}
             validateOnBlur={false}
         >
-        {function ({ errors, touched, isSubmitting, setErrors, validateField, handleChange }) {
+        {function ({ errors, touched, isSubmitting, isValid, setErrors, validateField, handleChange }) {
             let output = "";
             output = (<Form className="modal floating-form add-project" style={{visibility: (!props.visibility) ? 'hidden' : '' }}>
                 <button type="button" className="close-btn" onClick={(e) => {
@@ -78,9 +78,7 @@ function ProjectForm(props) {
                     component="textarea"
                     placeholder="Please describe the topic and focus of this new project"/>
                 <br/>
-                <button type="submit" disabled={isSubmitting || 
-                    ((errors.name && touched.name) ||
-                    (errors.description && touched.description))}>Add Project</button>
+                <button type="submit" disabled={isSubmitting || !isValid}>Add Project</button>
             </Form>
             );
             return output;

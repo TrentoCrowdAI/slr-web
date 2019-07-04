@@ -91,7 +91,7 @@ function CustomPaperForm(props) {
             }}
             validateOnBlur={false}
         >
-        {({ errors, touched, isSubmitting }) => (
+        {({ errors, touched, isValid, isSubmitting }) => (
             <Form className="new-paper-form">
                 <Field
                     style={{borderBottom: (errors.title && touched.title) ? "1px solid #d81e1e" : ""}}
@@ -130,12 +130,7 @@ function CustomPaperForm(props) {
                     name="abstract"
                     placeholder="Paper Abstract"
                     component="textarea"/>
-                <button type="submit" disabled={isSubmitting ||
-                    (errors.title && touched.title) ||
-                    (errors.authors && touched.authors) ||
-                    (errors.year && touched.year) ||
-                    (errors.abstract && touched.abstract)
-                }>Add paper</button>
+                <button type="submit" disabled={isSubmitting || !isValid}>Add paper</button>
             </Form>
         )}
         </Formik>

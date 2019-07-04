@@ -61,7 +61,7 @@ const InsertFilterForm = function(props){
                 }}
                 validateOnBlur={false}
             >
-            {function ({ errors, touched, isSubmitting, setErrors, validateField, handleChange }) {
+            {function ({ errors, touched, isSubmitting, isValid, setErrors, validateField, handleChange }) {
                 let output = "";
                 output = (
                 <Form className="add-filter">
@@ -81,10 +81,7 @@ const InsertFilterForm = function(props){
                         name="exclusion_description"
                         component="textarea"
                         placeholder="Type what the answer should not include"/>
-                    <button type="submit" disabled={isSubmitting || 
-                        ((errors.predicate && touched.predicate) ||
-                        (errors.inclusion_description && touched.inclusion_description)        ||
-                        (errors.exclusion_description && touched.exclusion_description))}>Add Filter</button>
+                    <button type="submit" disabled={isSubmitting || !isValid}>Add Filter</button>
                 </Form>
             );
             return output;

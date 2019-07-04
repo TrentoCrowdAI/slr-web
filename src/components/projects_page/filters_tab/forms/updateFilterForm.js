@@ -56,7 +56,7 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
             }}
             validateOnBlur={false}
         >
-        {function ({ errors, touched, isSubmitting, setErrors, validateField, handleChange }) {
+        {function ({ errors, touched, isSubmitting, isValid, setErrors, validateField, handleChange }) {
             let output = "";
             output = (
             <Form className="update-filter-card">
@@ -89,10 +89,7 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
                         component="textarea"
                         placeholder="Type what the answer should not include"/>
                 </div>
-                <button type="submit" disabled={isSubmitting || 
-                    ((errors.predicate && touched.predicate) ||
-                    (errors.inclusion_description && touched.inclusion_description)        ||
-                    (errors.exclusion_description && touched.exclusion_description))}>Update Filter</button>
+                <button type="submit" disabled={isSubmitting || !isValid}>Update Filter</button>
             </Form>
         );
         return output;
