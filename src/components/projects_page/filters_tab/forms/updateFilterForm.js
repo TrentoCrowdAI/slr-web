@@ -25,8 +25,8 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
     //validation schema
     const predicateValidationSchema = yup.object().shape({
         predicate: yup.string().required('please enter a question'),
-        inclusion_description: yup.string().required('please enter the positive answer'),
-        exclusion_description: yup.string().required('please enter the neagative answer')
+        inclusion_description: yup.string(),
+        exclusion_description: yup.string()
     });
 
     return (
@@ -34,7 +34,9 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
             initialValues={{predicate: filter.data.predicate, inclusion_description: filter.data.inclusion_description, exclusion_description: filter.data.exclusion_description}}
             validationSchema={predicateValidationSchema}
             onSubmit={async (values, { setSubmitting }) => {
-                let bodyData = {predicate: values.predicate, inclusion_description: values.inclusion_description, exclusion_description: values.exclusion_description};
+                let bodyData = {predicate: values.predicate, 
+                                //name: filter.data.name,
+                                inclusion_description: values.inclusion_description, exclusion_description: values.exclusion_description};
                 
                 //call dao
                 let res = await projectFiltersDao.putFilter(filter.id, {project_id, ...bodyData});

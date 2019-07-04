@@ -18,8 +18,8 @@ const InsertFilterForm = function(props){
 
     const predicateValidationSchema = yup.object().shape({
         predicate: yup.string().required('please enter a question'),
-        inclusion_description: yup.string().required('please enter the positive answer'),
-        exclusion_description: yup.string().required('please enter the neagative answer')
+        inclusion_description: yup.string(),
+        exclusion_description: yup.string()
     });
 
     //get data from global context
@@ -40,7 +40,9 @@ const InsertFilterForm = function(props){
                 initialValues={{predicate: '', inclusion_description: '', exclusion_description: ''}}
                 validationSchema={predicateValidationSchema}
                 onSubmit={async (values, { setSubmitting, resetForm }) => {
-                    let bodyData = {project_id: props.project_id, predicate: values.predicate, 
+                    let bodyData = {project_id: props.project_id, 
+                                    //name: "C" + (parseInt(props.filtersList[props.filtersList.length - 1].label.slice(1)) + 1),
+                                    predicate: values.predicate, 
                                     inclusion_description: values.inclusion_description, exclusion_description: values.exclusion_description};
 
                     //call dao
