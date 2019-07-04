@@ -7,7 +7,7 @@ import {createQueryStringFromObject} from 'utils/index';
 import SearchButton from "components/svg/searchButton";
 
 /**
- * automated search form component
+ * automated search form component (unused, we don't allow the user to insert a custom query)
  */
 const SearchAutomatedForm = function ({keywords, setKeyWords, history, queryData, description}){
 

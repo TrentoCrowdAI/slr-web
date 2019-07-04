@@ -4,6 +4,7 @@ import {paperDao} from 'dao/paper.dao';
 
 import CheckBox from "components/forms_elements/checkbox";
 import {PrintSearchAutomatedList} from 'components/modules/printPapersList';
+import Select from 'components/forms_elements/select';
 import Pagination from "components/modules/pagination";
 import SelectedPapersListBox from "components/projects_page/search_tab/selectedPapersListBox";
 
@@ -12,14 +13,32 @@ import NoSearchResults from "components/svg/noSearchResults";
 
 import {AppContext} from 'components/providers/appProvider'
 
-import {createQueryDataForAutomatedSearch, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
+import {createQueryStringFromObject, createQueryDataForAutomatedSearch, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
 import SearchAutomatedDescription from "components/projects_page/search_tab/search_automated/searchAutomatedDescription";
-import SearchAutomatedForm from "components/projects_page/search_tab/search_automated/searchAutomatedForm";
 
 
 // Load the lodash build
 const _ = require('lodash');
 
+//confidence value array
+const confidenceValues = [
+    {label : "0.00", value: 0.0},
+    {label : "0.10", value: 0.1},
+    {label : "0.20", value: 0.2},
+    {label : "0.30", value: 0.3},
+    {label : "0.40", value: 0.4},
+    {label : "0.50", value: 0.5},
+    {label : "0.60", value: 0.6},
+    {label : "0.70", value: 0.7},
+    {label : "0.80", value: 0.8},
+    {label : "0.90", value: 0.9},
+    {label : "1.00", value: 1.0},
+];
+
+//will keep valid minimum values
+var minConfidenceValues = [];
+//will keep valid maximum values
+var maxConfidenceValues = [];;
 
 /**
  * automated search component
@@ -47,9 +66,6 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
     //set query params from url
     let queryData = createQueryDataForAutomatedSearch(location.search);
 
-    //keyword hook
-    const [keywords, setKeyWords] = useState(project.data.description);
-
     //get the localStorage object (used for saving selected papers)
     const storage = window.localStorage;
     if (!window.localStorage) {
@@ -74,14 +90,19 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
         const fetchPapers= async () => {
             
             setDisplay(false);
-
-            setKeyWords(queryData.query || project.data.description);
-
+            
             //I call the dao for the automated search
             let resx = undefined;
 
-            resx = await paperDao.searchAutomated({"project_id" : project.id, "query" : queryData.query, 
-                                                    "start" : queryData.start, "count" : queryData.count});
+            console.log(queryData);
+
+            //max confidence that can be selected must be above the min value
+            maxConfidenceValues = confidenceValues.filter(c => c.value > parseFloat(queryData.min_confidence));
+            //min confidence that can be selected must be below the max value
+            minConfidenceValues = confidenceValues.filter(c => c.value < parseFloat(queryData.max_confidence));
+
+            resx = await paperDao.searchAutomated({"project_id" : project.id, "start" : queryData.start, "count" : queryData.count,
+                                                    "min_confidence": queryData.min_confidence, "max_confidence": queryData.max_confidence});
 
             console.log(resx);
             //error checking
@@ -113,7 +134,7 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
         return () => {
             mnt = false;
         };
-    }, [queryData.query, queryData.start, queryData.count])
+    }, [queryData.start, queryData.count, queryData.min_confidence, queryData.max_confidence])
 
     let resultPart = "";
 
@@ -121,6 +142,29 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
         START OF 'RESULT PAPERS HANDLING' ########################################################
     */
 
+    //handler for min confidence selection
+    function handleMinConfidenceSelection(e) {
+        //get index value
+        let index = parseInt(e.target.getAttribute('data-value'));
+        //get value by index
+        queryData.min_confidence = confidenceValues[index].value;
+        //update url
+        let queryString = createQueryStringFromObject(queryData);
+        history.push(queryString);
+
+    }
+
+    //handler for max confidence selection
+    function handleMaxConfidenceSelection(e) {
+        //get index value
+        let index = parseInt(e.target.getAttribute('data-value'));
+        //get value by index
+        queryData.max_confidence = maxConfidenceValues[index].value;
+        //update url
+        let queryString = createQueryStringFromObject(queryData);
+        history.push(queryString);
+
+    }
 
     /*function to insert and remove the paper id from selected list*/
     function handlePaperSelection(event) {
@@ -188,6 +232,23 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
                     <div className="select-all">
                     <CheckBox label="Select All" name="select_all" val="" isChecked={false} handler={selectAllPapers}/>
                     </div>
+                    <div className="order">
+                        <label>min confidence:</label>
+                        <Select options={minConfidenceValues}
+                                selected={getIndexOfObjectArrayByKeyAndValue(minConfidenceValues, "value", parseFloat(queryData.min_confidence))}
+                                handler={handleMinConfidenceSelection}
+                                //optional fields
+                                type={"mini"} //displays select menu with smaller width
+                                code={0} //you can put here a random number in case you have multiple selects on the same page
+                                         //this way you won't trigger the arrow animation for all the selects at the same time
+                                />
+                        <label>max confidence:</label>
+                        <Select options={maxConfidenceValues}
+                                selected={getIndexOfObjectArrayByKeyAndValue(maxConfidenceValues, "value", parseFloat(queryData.max_confidence))}
+                                handler={handleMaxConfidenceSelection}
+                                type={"mini"}
+                                code={1}/>
+                    </div>
                 </div>
                 <div className="search-loading-holder">
                     <LoadIcon class={"small"}/>
@@ -213,6 +274,23 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
                     <div className="select-all">
                     <CheckBox label="Select All" name="select_all" val="" isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")} handler={selectAllPapers}/>
                     </div>
+                    <div className="order">
+                        <label>min confidence:</label>
+                        <Select options={minConfidenceValues}
+                                selected={getIndexOfObjectArrayByKeyAndValue(minConfidenceValues, "value", parseFloat(queryData.min_confidence))}
+                                handler={handleMinConfidenceSelection}
+                                //optional fields
+                                type={"mini"} //displays select menu with smaller width
+                                code={0} //you can put here a random number in case you have multiple selects on the same page
+                                         //this way you won't trigger the arrow animation for all the selects at the same time
+                                />
+                        <label>max confidence:</label>
+                        <Select options={maxConfidenceValues}
+                                selected={getIndexOfObjectArrayByKeyAndValue(maxConfidenceValues, "value", parseFloat(queryData.max_confidence))}
+                                handler={handleMaxConfidenceSelection}
+                                type={"mini"}
+                                code={1}/>
+                    </div>
                 </div>
                 <SelectedPapersListBox project_id={project.id} selectedPapersList={selectedPapersList} 
                     setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
@@ -231,8 +309,7 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
         <>
             {/*<Link className="back-from-search-automated"></Link>*/}
             <SearchAutomatedDescription project_id={project.id} filtersList={filtersList} setFiltersList={setFiltersList}/>
-            <SearchAutomatedForm {...{keywords, setKeyWords, history, queryData}} description={project.data.description}/>
-            <div className="search-results">
+            <div className="search-results auto">
                 {resultPart}
             </div>
         </>

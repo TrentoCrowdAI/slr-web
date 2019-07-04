@@ -300,6 +300,9 @@ button.add-custompaper-btn div.btn-icon{
 div.search-results{
   margin-top: 10px;
 }
+div.search-results.auto{
+  margin-top: 35px;
+}
 
 /*selected papers list for search results*/ /*searchform.js*/
 div.selected-papers-list{

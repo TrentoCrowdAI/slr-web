@@ -195,7 +195,8 @@ div.paper-card-holder div.order{
 }
 div.paper-card-holder div.order label{
   font-weight: 300;
-  margin-right: 20px;
+  margin-right: 5px;
+  margin-left: 20px;
 }
 div.paper-card-holder div.order button{
   margin-left: 5px;
@@ -495,7 +496,7 @@ div.search-automated-right-wrapper div.search-automated-description{
   text-align: center;
   font-weight: 300;
   font-size: 14px;
-  margin: 25px 0px 5px 0px;
+  margin: 35px 0px 5px 0px;
   padding: 5px 5px 5px 5px;
   border-top: solid 1px #acacac;
   border-bottom: solid 1px #acacac;

@@ -479,6 +479,9 @@ div.custom-select {
   z-index: 1;
   cursor: pointer;
 }
+div.custom-select.mini {
+  width: 80px;
+}
 div.selected{
   display: flex;
   justify-content: space-between;
@@ -488,6 +491,8 @@ div.options-holder{
   border-top: none;
   border-radius: 0px 0px 5px 5px;
   background-color: white;
+  max-height: 100px;
+  overflow: auto;
 }
 div.options-holder div.option{
   padding: 2px;

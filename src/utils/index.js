@@ -174,12 +174,14 @@ function createQueryDataForAutomatedSearch(queryUrl) {
 
     //set query params from queryString of url
     let params = queryString.parse(queryUrl);
-    let query = params.query || undefined;
+    
+    let min_confidence = params.min_confidence || 0.0;
+    let max_confidence = params.max_confidence || 1.0;
 
     let start = params.start || 0;
     let count = params.count || 10;
 
-    let queryData = {query, start, count};
+    let queryData = {start, count, min_confidence, max_confidence};
 
     return queryData;
 
