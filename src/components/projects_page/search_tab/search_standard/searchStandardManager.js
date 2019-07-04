@@ -246,7 +246,7 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
     let resultPart = "";
 
     //if is loading
-    if (display === false) {
+    if (display === false && queryData.query !== "") {
 
         resultPart = (
             <div className="paper-card-holder">
