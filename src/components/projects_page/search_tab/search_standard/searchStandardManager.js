@@ -257,12 +257,14 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
                                   handler={selectAllPapers}/>
                     </div>
                     <div className="order">
-                        <label>sort by:</label>
-                        <Select options={orderByOptions}
-                                selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
-                                handler={handleSelection}/>
-                        <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/>
-                        </button>
+                        <div className="order-flex-item">
+                            <label>sort by:</label>
+                            <Select options={orderByOptions}
+                                    selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
+                                    handler={handleSelection}/>
+                            <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div className="search-loading-holder">
@@ -292,12 +294,14 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
                                   handler={selectAllPapers}/>
                     </div>
                     <div className="order">
-                        <label>sort by:</label>
-                        <Select options={orderByOptions}
-                                selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
-                                handler={handleSelection}/>
-                        <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/>
-                        </button>
+                        <div className="order-flex-item">
+                            <label>sort by:</label>
+                            <Select options={orderByOptions}
+                                    selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
+                                    handler={handleSelection}/>
+                            <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} setSelectedPapersList={setSelectedPapersList} 

@@ -233,21 +233,23 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
                     <CheckBox label="Select All" name="select_all" val="" isChecked={false} handler={selectAllPapers}/>
                     </div>
                     <div className="order">
-                        <label>min confidence:</label>
-                        <Select options={minConfidenceValues}
-                                selected={getIndexOfObjectArrayByKeyAndValue(minConfidenceValues, "value", parseFloat(queryData.min_confidence))}
-                                handler={handleMinConfidenceSelection}
-                                //optional fields
-                                type={"mini"} //displays select menu with smaller width
-                                code={0} //you can put here a random number in case you have multiple selects on the same page
-                                         //this way you won't trigger the arrow animation for all the selects at the same time
-                                />
-                        <label>max confidence:</label>
-                        <Select options={maxConfidenceValues}
-                                selected={getIndexOfObjectArrayByKeyAndValue(maxConfidenceValues, "value", parseFloat(queryData.max_confidence))}
-                                handler={handleMaxConfidenceSelection}
-                                type={"mini"}
-                                code={1}/>
+                        <div className="order-flex-item">
+                            <label>min confidence:</label>
+                            <Select options={minConfidenceValues}
+                                    selected={getIndexOfObjectArrayByKeyAndValue(minConfidenceValues, "value", parseFloat(queryData.min_confidence))}
+                                    handler={handleMinConfidenceSelection}
+                                    //optional fields
+                                    type={"mini"} //displays select menu with smaller width
+                                    code={0} //you can put here a random number in case you have multiple selects on the same page
+                                            //this way you won't trigger the arrow animation for all the selects at the same time
+                                    />
+                            <label>max confidence:</label>
+                            <Select options={maxConfidenceValues}
+                                    selected={getIndexOfObjectArrayByKeyAndValue(maxConfidenceValues, "value", parseFloat(queryData.max_confidence))}
+                                    handler={handleMaxConfidenceSelection}
+                                    type={"mini"}
+                                    code={1}/>
+                        </div>
                     </div>
                 </div>
                 <div className="search-loading-holder">

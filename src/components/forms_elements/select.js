@@ -15,7 +15,7 @@ const Select = ({ options, selected, handler, type, code }) => {
 
     function handleFocus(e){
         //handle arrow animation and focus of menu
-        document.getElementById((code) ? "ani-select-arrow" : "ani-select-arrow" + code).beginElement();//trigger svg animation
+        document.getElementById((isNaN(code)) ? "ani-select-arrow" : "ani-select-arrow" + code).beginElement();//trigger svg animation
         setFocused(!focused);
     }
 

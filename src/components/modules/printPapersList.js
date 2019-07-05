@@ -211,6 +211,33 @@ const PrintSearchAutomatedList_w = function ({papersList, filtersList, handlePap
 
 };
 
+const PrintBacklogPapersList_w = function ({papersList, filtersList}) {
+
+    let output = papersList.map((element, index) =>
+        <div key={index} className="generic-card paper-card">
+            <PaperConfidence filtersList={filtersList}
+                confidence={{value : "−.−−", details : [{detail: "filter_label 1", percentage : "67%"},{detail: "filter_label 2", percentage : "64%"},{detail: "filter_label 3", percentage : "59%"}]}}/>
+            <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
+            <div className="extra-info">
+                <p className="authors">{element.authors}</p>
+                <p className="eid">{element.eid}</p>
+                <p className="date">{element.year}</p>
+            </div>
+            <ClampLines
+                text={element.abstract}
+                lines={4}
+                ellipsis="..."
+                className="paragraph"
+                moreText="more"
+                lessText="less"
+            />
+        </div>
+    );
+    return output;
+
+};
+
 export const PrintPapersList = PrintPapersList_w;
 export const PrintScoupusSearchList = withRouter(PrintScoupusSearchList_w);
 export const PrintSearchAutomatedList = withRouter(PrintSearchAutomatedList_w);
+export const PrintBacklogPapersList = PrintBacklogPapersList_w;

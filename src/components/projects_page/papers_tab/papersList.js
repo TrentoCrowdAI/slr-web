@@ -135,9 +135,11 @@ const PapersList = ({project_id, location, match, history, forcePapersFetch}) =>
         output = (
             <div className="paper-card-holder">
                 <div className="order" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
-                    <label>sort by:</label>
-                    <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={up}/></button>
+                    <div className="order-flex-item">
+                        <label>sort by:</label>
+                        <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value",queryData.orderBy)} handler={handleSelection}/>
+                        <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={up}/></button>
+                    </div>
                 </div>
                 <LoadIcon class={"small"}/>
             </div> );
@@ -147,9 +149,11 @@ const PapersList = ({project_id, location, match, history, forcePapersFetch}) =>
         output = (
             <div className="paper-card-holder">
                 <div className="order">
-                    <label>sort by:</label>
-                    <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)} handler={handleSelection}/>
-                    <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={up}/></button>
+                    <div className="order-flex-item">
+                        <label>sort by:</label>
+                        <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)} handler={handleSelection}/>
+                        <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={up}/></button>
+                    </div>
                 </div>
                 <PrintPapersList papersList={papersList} location={location} history={history}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>

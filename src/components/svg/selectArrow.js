@@ -19,7 +19,7 @@ const SelectArrow= function ({focused, code}) {
     <svg version="1.1" id="arrow-select" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         viewBox="0 0 1000 1000">
             <polyline className="st-arrow-select" points={from}>
-            <animate attributeType="XML" id={(code) ? "ani-select-arrow" : "ani-select-arrow" + code} attributeName="points" from={from} to={to} begin="0s" dur="0.2s" repeatCount="1" fill="freeze" />
+            <animate attributeType="XML" id={(isNaN(code)) ? "ani-select-arrow" : "ani-select-arrow" + code} attributeName="points" from={from} to={to} begin="0s" dur="0.2s" repeatCount="1" fill="freeze" />
             </polyline>
         </svg>
     );
