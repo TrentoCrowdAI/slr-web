@@ -14,7 +14,7 @@ import SearchAutomatedManager from "components/projects_page/search_tab/search_a
 /**
  *this component will manage the screening sub tabs
  */
-const ScreeningTab = ({project_id, match}) => {
+const ScreeningTab = ({project_id, match, notFound, setNotFound}) => {
 
     //get data from global context
     const appConsumer = useContext(AppContext);
@@ -23,10 +23,7 @@ const ScreeningTab = ({project_id, match}) => {
 
     output = (
         <>
-            <ScreeningPageNavigation match={match}/>
-            <div className="left-side-wrapper">
-                {project_id}, {match.url}
-            </div>
+            <ScreeningPageNavigation notFound={notFound} match={match}/>
             <Switch>
                     <Route exact path={match.url} render={function(props){
                         return (<Redirect to={join(match.url, '/backlog')} />);
@@ -46,7 +43,7 @@ const ScreeningTab = ({project_id, match}) => {
                         return (<p>screened</p>);
                     }}/>
 
-                    <Route render={(props) => {return <p>404</p>}}/>
+                    <Route render={(props) => {setNotFound(true);return <PageNotFound/>}}/>
                 </Switch>
 
         </>
@@ -58,7 +55,7 @@ const ScreeningTab = ({project_id, match}) => {
 /**
  * this is the local component to print the navigation tabs of the screening page
  */
-const ScreeningPageNavigation = function ({match}) {
+const ScreeningPageNavigation = function ({notFound, match}) {
     //hash  -> #/projects/6/search/ || #/projects/6/search/
     const lc = window.location.hash.split("?")[0];
     var slider = "hide";
@@ -84,7 +81,7 @@ const ScreeningPageNavigation = function ({match}) {
     }
     let output = (
         <>
-            <div className="screening-nav-link-wrapper">
+            <div className="screening-nav-link-wrapper" style={{display: (notFound || slider === "hide") ? "none" : ""}}>
                 <div className="nav-link">
                     <Link to={join(match.url, "/backlog")}>backlog</Link>
                 </div>

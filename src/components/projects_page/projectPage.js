@@ -150,7 +150,7 @@ const ProjectPage = (props) => {
 
                     <Route path={props.match.url + "/screening"} render={function(props){
                         setNotFound(false);
-                        return (<ScreeningTab project_id={project_id}/>);
+                        return (<ScreeningTab project_id={project_id} notFound={notFound} setNotFound={setNotFound}/>);
                     }}/>
 
                     <Route exact path={props.match.url + "/searchautomated"} render={function(props){
@@ -172,7 +172,7 @@ const ProjectPage = (props) => {
                             </>
                         );
                     }} />
-                    <Route render={(props) => {setNotFound(true); console.log("nothing wsa found"); return <PageNotFound/>}}/>
+                    <Route render={(props) => {setNotFound(true); return <PageNotFound/>}}/>
                 </Switch>
 
             </div>
