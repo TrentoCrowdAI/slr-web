@@ -13,8 +13,9 @@ import Forbidden from 'components/svg/forbidden';
 
 import {AppContext} from 'components/providers/appProvider';
 import PageNotFound from "components/modules/pageNotFound";
-import PapersTab from "./papers_tab/papersTab";
-import FiltersTab from "./filters_tab/filtersTab";
+import PapersTab from "components/projects_page/papers_tab/papersTab";
+import FiltersTab from "components/projects_page/filters_tab/filtersTab";
+import ScreeningTab from "components/projects_page/screening_tab/screeningTab";
 import SearchAutomatedManager from "components/projects_page/search_tab/search_automated/searchAutomatedManager";
 
 
@@ -147,9 +148,9 @@ const ProjectPage = (props) => {
                         return (<FiltersTab project_id={project_id} project={project} {...props}/>);
                     }}/>
 
-                    <Route exact path={props.match.url + "/screening"} render={function(props){
+                    <Route path={props.match.url + "/screening"} render={function(props){
                         setNotFound(false);
-                        return (<p>screening page</p>);
+                        return (<ScreeningTab project_id={project_id}/>);
                     }}/>
 
                     <Route exact path={props.match.url + "/searchautomated"} render={function(props){
@@ -171,7 +172,7 @@ const ProjectPage = (props) => {
                             </>
                         );
                     }} />
-                    <Route render={(props) => {setNotFound(true); return <PageNotFound/>}}/>
+                    <Route render={(props) => {setNotFound(true); console.log("nothing wsa found"); return <PageNotFound/>}}/>
                 </Switch>
 
             </div>
@@ -201,7 +202,7 @@ const ProjectPageHead = function ({match, notFound}) {
             slider = "360px";
             break;
 
-        case /^#\/projects\/\d+\/screening\/?$/.test(lc): //screening tab
+        case /#\/projects\/\d+\/screening\/?/.test(lc): //screening tab
             slider = "530px";
             break;
 
@@ -222,7 +223,7 @@ const ProjectPageHead = function ({match, notFound}) {
                     <Link to={join(match.url, "/search")}>search</Link>
                 </div>
                 <div className="nav-link">
-                    <Link to={join(match.url, "/screening")}>screening</Link>
+                    <Link to={join(match.url, "/screening/backlog")}>screening</Link>
                 </div>
                 <div className="underline" style={{left: slider}}/>
             </div>

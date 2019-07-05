@@ -179,9 +179,9 @@ div.project-nav-link-wrapper div.underline{
   background-color: black;
   position: absolute;
   width: 130px;
-  height: 2px;
+  height: 3px;
   bottom: 0px;
-  border-radius: 1px 1px 0px 0px;
+  border-radius: 3px 3px 0px 0px;
   left: 20px;
   transition: all 0.4s ease-in-out;
 }
@@ -196,6 +196,8 @@ div.paper-card-holder div.order{
 div.paper-card-holder div.order label{
   font-weight: 300;
   margin-right: 5px;
+}
+div.search-results.auto div.paper-card-holder div.order label{
   margin-left: 20px;
 }
 div.paper-card-holder div.order button{
@@ -532,4 +534,31 @@ div.search-automated-right-wrapper div.filters-holder a{
   text-align: center;
   text-decoration: underline;
   font-weight: 300;
+}
+/*screening tab*/
+div.screening-nav-link-wrapper{
+  position: absolute;
+  top: 85px;
+  left: -150px;
+  width: 140px;
+}
+div.screening-nav-link-wrapper div.nav-link a {
+  font-size: 18px;
+  height: 22px;
+  width: 130px;
+  display: inline-block;
+  line-height: 22px;
+  text-align: right;
+  color: #2f2f2f;
+  margin: 1px 0px 1px 0px;
+}
+div.screening-nav-link-wrapper div.verline{
+  background-color: #2f2f2f;
+  position: absolute;
+  width: 2px;
+  height: 18px;
+  top: 4px;
+  border-radius: 2px 0px 0px 2px;
+  right: 0px;
+  transition: all 0.4s ease-in-out;
 }
