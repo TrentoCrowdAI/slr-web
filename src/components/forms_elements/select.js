@@ -21,7 +21,7 @@ const Select = ({ options, selected, handler, type, code }) => {
 
     var output = (
         <div className={(type) ? "custom-select " + type: "custom-select"}>
-            <div className="selected" tabIndex={-2} onBlur={handleFocus} onFocus={handleFocus}>{(options[selected]) ? options[selected].label : "[invalid selection]"} <div className="arrow">
+            <div className="selected" tabIndex={-2} onBlur={handleFocus} onFocus={handleFocus}>{(options[selected]) ? options[selected].label : "[!]"} <div className="arrow">
                 <SelectArrow focused={focused} code={code}/>
             </div></div>
             <div className="options-holder" style={{fontSize: (!focused) ? '0px' : '15px', borderBottom: (!focused) ? "0px solid #d7d7d7" : "1px solid #d7d7d7", borderLeft: (!focused) ? "0px solid #d7d7d7" : "1px solid #d7d7d7", borderRight: (!focused) ? "0px solid #d7d7d7" : "1px solid #d7d7d7", borderTop:"none"}}>

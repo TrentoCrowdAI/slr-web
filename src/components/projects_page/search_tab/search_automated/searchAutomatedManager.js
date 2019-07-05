@@ -147,7 +147,7 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
         //get index value
         let index = parseInt(e.target.getAttribute('data-value'));
         //get value by index
-        queryData.min_confidence = confidenceValues[index].value;
+        queryData.min_confidence = minConfidenceValues[index].value;
         //update url
         let queryString = createQueryStringFromObject(queryData);
         history.push(queryString);
