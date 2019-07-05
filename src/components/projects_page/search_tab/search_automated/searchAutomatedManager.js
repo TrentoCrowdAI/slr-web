@@ -13,7 +13,7 @@ import NoSearchResults from "components/svg/noSearchResults";
 
 import {AppContext} from 'components/providers/appProvider'
 
-import {createQueryStringFromObject, createQueryDataForAutomatedSearch, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
+import {createQueryStringFromObject, createQueryData, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
 import SearchAutomatedDescription from "components/projects_page/search_tab/search_automated/searchAutomatedDescription";
 
 
@@ -38,8 +38,14 @@ const confidenceValues = [
 //will keep valid minimum values
 var minConfidenceValues = [];
 //will keep valid maximum values
-var maxConfidenceValues = [];;
+var maxConfidenceValues = [];
 
+const queryParams = [
+    {label: "min_confidence", default: 0.0},
+    {label: "max_confidence", default: 1.0},
+    {label: "start", default: 0},
+    {label: "count", default: 10},
+];
 /**
  * automated search component
  * */
@@ -64,7 +70,7 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
     const appConsumer = useContext(AppContext);
 
     //set query params from url
-    let queryData = createQueryDataForAutomatedSearch(location.search);
+    let queryData = createQueryData(location.search, queryParams);
 
     //get the localStorage object (used for saving selected papers)
     const storage = window.localStorage;

@@ -14,6 +14,13 @@ import SideOptions from 'components/modules/sideOptions';
 import {AppContext} from "components/providers/appProvider";
 import EmptyFolder from "components/svg/emptyFolder";
 
+import {createQueryData} from 'utils/index';
+
+const queryParams = [
+    {label: "start", default: 0},
+    {label: "count", default: 10},
+]
+
 /**
  *this component will show a projects list page
  */
@@ -38,7 +45,7 @@ const ProjectsList = function (props) {
     const appConsumer = useContext(AppContext);
 
     //set query params from url
-    const queryData = createQueryData(props.location.search);
+    const queryData = createQueryData(props.location.search, queryParams);
 
 
     //set title when component mounts
@@ -63,7 +70,7 @@ const ProjectsList = function (props) {
 
             //hide the page
             setDisplay(false);
-
+            console.log(queryData);
             //call the dao
             const res = await projectsDao.getProjectsList({orderBy: "date_last_modified", ...queryData});
 
@@ -214,25 +221,6 @@ const PrintList = function ({projectsList, path, handleDelete}) {
     return output;
 
 };
-
-/**
- * internal function to prepare a object of queryData
- * @param query
- * @return object of queryData for the fetch
- */
-function createQueryData(query){
-
-    //set query params from queryString of url
-    let params = queryString.parse( query);
-    let count = params.count || 10;
-    let start = params.start || 0;
-
-    //if "before" is defined by query then insert it in object, else insert "after" in object
-    let queryData = {start, count};
-    return queryData;
-
-}
-
 
 
 

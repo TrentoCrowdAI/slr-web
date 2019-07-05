@@ -14,7 +14,7 @@ import NoSearchResults from "components/svg/noSearchResults";
 
 import {AppContext} from 'components/providers/appProvider'
 
-import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains, createQueryDataForSimilarSearch} from 'utils/index';
+import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains, createQueryData} from 'utils/index';
 import SelectedPapersListBox from "components/projects_page/search_tab/selectedPapersListBox";
 import SearchSimilarForm from "./searchSimilarForm";
 
@@ -29,6 +29,13 @@ const orderByOptions = [
     {label: 'Date', value: 'date'}
 ];
 
+const queryParams = [
+        {label: "query", default: ""},
+        {label: "orderBy", default: "title"},
+        {label: "sort", default: "ASC"},
+        {label: "start", default: 0},
+        {label: "count", default: 10},
+];
 
 /**
  * this is component form to search for the paper in project page
@@ -57,7 +64,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
 
 
     //set query params from url
-    let queryData = createQueryDataForSimilarSearch(location.search);
+    let queryData = createQueryData(location.search, queryParams);
     //console.log(queryData);
 
     //get the localStorage object
@@ -165,7 +172,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
             mnt = false;
         };
 
-    }, [targetPaperData, queryData.orderBy, queryData.year, queryData.sort, queryData.start, queryData.count])
+    }, [targetPaperData, queryData.orderBy, queryData.sort, queryData.start, queryData.count])
 
 
     let resultPart = "";

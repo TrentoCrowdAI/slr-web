@@ -42,6 +42,12 @@ const SearchStandardForm = function ({history, queryData, project_id}){
     //I update the state every time the query data changes
     useEffect(() => {
         setKeyWords(queryData.query);
+        //we can't allow multiple sources yet
+        if((queryData.scopus && queryData.arXiv && queryData.googleScholar) || !(queryData.scopus ^ queryData.arXiv ^ queryData.googleScholar)){
+            queryData.arXiv = false;
+            queryData.scopus = true;
+            queryData.googleScholar = false;
+        }
         setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
         setSearchBy(queryData.searchBy);
         setYear(queryData.year);

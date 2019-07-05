@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from "react";
 
-import {createQueryDataForFiltersTab} from 'utils/index';
+import {createQueryData} from 'utils/index';
 
 import {projectFiltersDao} from 'dao/projectFilters.dao';
 
@@ -10,7 +10,14 @@ import Pagination from "components/modules/pagination";
 
 import LoadIcon from 'components/svg/loadIcon';
 
-import {AppContext} from 'components/providers/appProvider'
+import {AppContext} from 'components/providers/appProvider';
+
+const queryParams = [
+    {label: "orderBy", default: "date_created"},
+    {label: "sort", default: "ASC"},
+    {label: "start", default: 0},
+    {label: "count", default: 10},
+];
 
 const FiltersTab = function (props) {
 
@@ -26,7 +33,7 @@ const FiltersTab = function (props) {
     const appConsumer = useContext(AppContext);
 
     //set query params from url
-    const queryData = createQueryDataForFiltersTab(props.location.search);
+    const queryData = createQueryData(props.location.search, queryParams);
 
     useEffect(() => {
         let mnt = true;

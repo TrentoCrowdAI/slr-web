@@ -143,140 +143,34 @@ function getIndexOfObjectArrayByKeyAndValue(array, key, value) {
 
 /**
  * function to prepare a object of queryData
- * @param query
- * @return object of queryData for the fetch
- */
-function createQueryDataForFiltersTab(query){
-
-    //set query params from queryString of url
-    let params = queryString.parse(query);
-    let count = params.count || 10;
-    let start = params.start || 0;
-    let orderBy = params.orderBy || "date_created";
-    let sort = params.sort || "ASC";
-
-    if(orderBy === "date_created"){
-        sort = "DESC";
-    }
-
-    let queryData = {orderBy, sort, start, count};
-    return queryData;
-
-}
-
-/**
- * function to prepare a object of queryData
  * @param queryUrl
+ * @param fields[] fields array
  * @return object of queryData for the fetch
  */
-function createQueryDataForAutomatedSearch(queryUrl) {
-
-
-    //set query params from queryString of url
-    let params = queryString.parse(queryUrl);
+function createQueryData(queryUrl, fields) {
     
-    let min_confidence = params.min_confidence || 0.0;
-    let max_confidence = params.max_confidence || 1.0;
-
-    let start = params.start || 0;
-    let count = params.count || 10;
-
-    let queryData = {start, count, min_confidence, max_confidence};
-
-    return queryData;
-
-}
-
-/**
- * function to prepare a object of queryData
- * @param queryUrl
- * @return object of queryData for the fetch
- */
-function createQueryDataForBacklog(queryUrl) {
-
-
     //set query params from queryString of url
     let params = queryString.parse(queryUrl);
+    let queryData = {};
+    for(let i = 0; i < fields.length; i++){
+        if(typeof fields[i].default === "boolean"){
+            if(params[fields[i].label] === "true"){
+                queryData[fields[i].label] = true;
+            }else if(params[fields[i].label] === "false"){
+                queryData[fields[i].label] = false;
+            }else{
+                queryData[fields[i].label] = fields[i].default;
+            }
+        }else{
+            queryData[fields[i].label] = params[fields[i].label] || fields[i].default;
+        }
+    };
+
+    //date_created is used for sorting the most recently added so it makes sense only DESC sort
+    if(queryData && queryData.orderBy === "date_created"){
+        queryData.sort = "DESC";
+    }
     
-    let orderBy = params.orderBy || "date_created";
-    let sort = params.sort || "ASC";
-
-    let min_confidence = params.min_confidence || 0.0;
-    let max_confidence = params.max_confidence || 1.0;
-
-    let start = params.start || 0;
-    let count = params.count || 10;
-
-    let queryData = {start, count, orderBy, sort, min_confidence, max_confidence};
-
-    return queryData;
-
-}
-
-
-/**
- * function to prepare a object of queryData
- * @param queryUrl
- * @return object of queryData for the fetch
- */
-function createQueryDataForStandardSearch(queryUrl) {
-
-
-    //set query params from queryString of url
-    let params = queryString.parse(queryUrl);
-    let query = params.query || "";
-
-    let searchBy = params.searchBy || "all";
-    let orderBy = params.orderBy || "title";
-    let sort = params.sort || "ASC";
-    let start = params.start || 0;
-    let count = params.count || 10;
-
-
-    let scopus;
-    if (params.scopus === undefined) {
-        scopus = true;
-    }
-    else {
-        scopus = (params.scopus === "true");
-    }
-
-    let googleScholar = (params.googleScholar === "true" && !scopus);
-    let arXiv = (params.arXiv === "true" && !scopus && !googleScholar);
-
-    if(!scopus && !googleScholar && !arXiv){
-        scopus = true;
-    }
-
-    let year = params.year || "all";
-
-    let queryData = {query, searchBy, orderBy, sort, scopus, googleScholar, arXiv, year, start, count};
-
-    return queryData;
-
-}
-
-/**
- * function to prepare a object of queryData
- * @param queryUrl
- * @return object of queryData for the fetch
- */
-function createQueryDataForSimilarSearch(queryUrl) {
-
-
-    //set query params from queryString of url
-    let params = queryString.parse(queryUrl);
-    let query = params.query || "";
-
-    let orderBy = params.orderBy || "title";
-    let sort = params.sort || "ASC";
-    let start = params.start || 0;
-    let count = params.count || 10;
-
-    let year = params.year || "all";
-
-    let queryData = {query, orderBy, sort, year, start, count};
-
     return queryData;
 
 }
@@ -288,10 +182,6 @@ export {
     join,
     createQueryStringFromObject,
     getIndexOfObjectArrayByKeyAndValue,
-    createQueryDataForFiltersTab,
-    createQueryDataForAutomatedSearch,
-    createQueryDataForStandardSearch,
-    createQueryDataForSimilarSearch,
-    createQueryDataForBacklog
+    createQueryData
 
 };

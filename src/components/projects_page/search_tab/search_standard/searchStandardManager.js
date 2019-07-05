@@ -15,7 +15,7 @@ import NoSearchResults from "components/svg/noSearchResults";
 
 import {AppContext} from 'components/providers/appProvider'
 
-import {createQueryStringFromObject, createQueryDataForStandardSearch, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
+import {createQueryStringFromObject, createQueryData, getIndexOfObjectArrayByKeyAndValue, arrayOfObjectsContains} from 'utils/index';
 import SearchStandardForm from "./searchStandardForm";
 import Robot from "components/svg/robot";
 
@@ -28,6 +28,19 @@ const orderByOptions = [
     {label: 'Title', value: 'title'},
     {label: 'Date', value: 'date'}
 ];
+
+const queryParams = [
+    {label: "arXiv", default: false},
+    {label: "googleScholar", default: false},
+    {label: "scopus", default: true},
+    {label: "query", default: ""},
+    {label: "searchBy", default: "all"},
+    {label: "orderBy", default: "title"},
+    {label: "sort", default: "ASC"},
+    {label: "year", default: "all"},
+    {label: "start", default: 0},
+    {label: "count", default: 10},
+]
 
 /**
  * this is component form to search for the paper in project page
@@ -50,7 +63,7 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
     const appConsumer = useContext(AppContext);
 
     //set query params from url
-    let queryData = createQueryDataForStandardSearch(location.search);
+    let queryData = createQueryData(location.search, queryParams);
 
     //get the localStorage object
     const storage = window.localStorage;
@@ -86,6 +99,12 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
 
         //flag that represents the state of component
         let mnt = true;
+        //we can't allow multiple sources yet
+        if((queryData.scopus && queryData.arXiv && queryData.googleScholar) || !(queryData.scopus ^ queryData.arXiv ^ queryData.googleScholar)){
+            queryData.arXiv = false;
+            queryData.scopus = true;
+            queryData.googleScholar = false;
+        }
 
         //if the sorting parameter changes I update the status and trigger the SVG animation
         if (mnt && up !== queryData.sort) {

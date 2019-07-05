@@ -9,7 +9,7 @@ import Select from 'components/forms_elements/select';
 import {PrintBacklogPapersList} from 'components/modules/printPapersList';
 import OrderArrow from 'components/svg/orderArrow';
 import Pagination from "components/modules/pagination";
-import {createQueryStringFromObject, createQueryDataForBacklog, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
+import {createQueryStringFromObject, createQueryData, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
 
 import {AppContext} from 'components/providers/appProvider'
 
@@ -39,6 +39,15 @@ const orderByOptions = [
     { value: 'title', label: 'Title' }
 ];
 
+const queryParams = [
+    {label: "orderBy", default: "date_created"},
+    {label: "min_confidence", default: 0.0},
+    {label: "max_confidence", default: 1.0},
+    {label: "sort", default: "ASC"},
+    {label: "start", default: 0},
+    {label: "count", default: 10},
+];
+
 /**
  * the local component that manages the papers in the backlog of a project
  */
@@ -61,7 +70,7 @@ const BacklogPapers = ({project_id, match, location, history}) => {
     const appConsumer = useContext(AppContext);
 
     //set query params from url
-    const queryData = createQueryDataForBacklog(location.search);
+    const queryData = createQueryData(location.search, queryParams);
 
     const [up, setUp] = useState(queryData.sort);
 
@@ -69,7 +78,7 @@ const BacklogPapers = ({project_id, match, location, history}) => {
 
         //flag that represents the state of component
         let  mnt = true;
-
+        console.log(queryData);
         if(queryData.orderBy !== "date_created" && up !== queryData.sort){
             setUp(queryData.sort);
             console.log("calling animation")

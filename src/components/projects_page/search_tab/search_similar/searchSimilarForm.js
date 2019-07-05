@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 import {paperDao} from 'dao/paper.dao';
 import {updateFileDao} from "dao/updateFile.dao";
 
-import RadioBox from "components/forms_elements/radiobox";
 import TargetPaper from "components/projects_page/search_tab/search_similar/targetPaper";
 
 import {AppContext} from 'components/providers/appProvider'
@@ -12,15 +11,6 @@ import {AppContext} from 'components/providers/appProvider'
 import {createQueryStringFromObject} from 'utils/index';
 
 
-
-// Load the lodash build
-const _ = require('lodash');
-
-//year options
-const startYear = 2017;
-const endYear = new Date().getFullYear() + 2;;
-//create a int array from startYear to endYear, then convert it to string array, after this concatenate with "all"
-const yearOptions = ["all", ...(_.range(startYear, endYear).map(String))];
 
 /**
  * standard search form component
@@ -35,7 +25,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
 
     //state for the form
     const [keywords, setKeyWords] = useState(queryData.query);
-    const [year, setYear] = useState(queryData.year); //this is not used right now
+    //const [year, setYear] = useState(queryData.year); //this is not used right now
     const [similarPaperFile, setSimilarPaperFile] = useState(undefined); //the file of the paper to search similarities for
 
 
@@ -60,7 +50,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
 
                 //standard options parameters
                 setKeyWords(queryData.query);
-                setYear(queryData.year);
+                //setYear(queryData.year);
                 setTargetPaperData(undefined);
             }
 
@@ -136,12 +126,13 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
             mnt = false;
         };
 
-    }, [project_id, similarPaperFile, queryData.query, queryData.year]);  //re-execute when these variables change
+    }, [project_id, similarPaperFile, queryData.query]);  //re-execute when these variables change
 
     
     /**
-     * effect to handle live update on year change
+     * effect to handle live update on year change(not used)
      */
+    /*
     useEffect(() => {
         queryData.year = year;
 
@@ -151,6 +142,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
         history.push(queryString);//this allows pushing the same data and refreshing the page with the hash router
         
     }, [year])
+    */
 
     /**
      *handle to update hook state by input change
@@ -162,7 +154,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                 setKeyWords(event.target.value);
                 break;
             case "year":
-                setYear(event.target.value);
+                //setYear(event.target.value); //not used
                 break;
             default:
                 break;
@@ -194,7 +186,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                 console.log("there's a file")
                 queryData.query = "";
             }
-            queryData.year = year;
+            //queryData.year = year; (not used)
 
             //send query url
             let queryString = createQueryStringFromObject(queryData);

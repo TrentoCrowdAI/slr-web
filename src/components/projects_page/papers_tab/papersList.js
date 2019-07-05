@@ -8,7 +8,7 @@ import {PrintPapersList} from 'components/modules/printPapersList';
 import Select from 'components/forms_elements/select';
 import OrderArrow from 'components/svg/orderArrow';
 import Pagination from "components/modules/pagination";
-import {createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
+import {createQueryData, createQueryStringFromObject, getIndexOfObjectArrayByKeyAndValue} from 'utils/index';
 
 import {AppContext} from 'components/providers/appProvider'
 
@@ -21,6 +21,13 @@ const orderByOptions = [
     { value: 'title', label: 'Title' },
     { value: 'authors', label: 'Authors' }
   ];
+
+const queryParams = [
+    {label: "orderBy", default: "date_created"},
+    {label: "sort", default: "ASC"},
+    {label: "start", default: 0},
+    {label: "count", default: 10},
+]
 
 /**
  * the local component that shows the papers list of a project
@@ -41,7 +48,7 @@ const PapersList = ({project_id, location, match, history, forcePapersFetch}) =>
     const appConsumer = useContext(AppContext);
 
     //set query params from url
-    const queryData = createQueryData(location.search);
+    const queryData = createQueryData(location.search, queryParams);
 
     const [up, setUp] = useState(queryData.sort);
 
@@ -49,7 +56,6 @@ const PapersList = ({project_id, location, match, history, forcePapersFetch}) =>
 
         //flag that represents the state of component
         let  mnt = true;
-
         if(queryData.orderBy !== "date_created" && up !== queryData.sort){
             setUp(queryData.sort);
             document.getElementById("ani-order-arrow").beginElement();
@@ -170,33 +176,6 @@ const PapersList = ({project_id, location, match, history, forcePapersFetch}) =>
     return output;
 
 };
-
-
-
-
-/**
- * internal function to prepare a object of queryData
- * @param query
- * @return object of queryData for the fetch
- */
-function createQueryData(query){
-
-    //set query params from queryString of url
-    let params = queryString.parse( query);
-    let count = params.count || 10;
-    let start = params.start || 0;
-    let orderBy = params.orderBy || "date_created";
-    let sort = params.sort || "ASC";
-
-    if(orderBy === "date_created"){
-        sort = "DESC";
-    }
-
-    let queryData = {orderBy, sort, start, count };
-    return queryData;
-
-}
-
 
 
 export default PapersList;
