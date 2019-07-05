@@ -479,8 +479,15 @@ div.custom-select {
   z-index: 1;
   cursor: pointer;
 }
+div.custom-select.medium {
+  width: 130px;
+}
+
 div.custom-select.mini {
   width: 80px;
+}
+div.custom-select.tiny {
+  width: 60px;
 }
 div.selected{
   display: flex;

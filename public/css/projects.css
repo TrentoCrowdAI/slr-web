@@ -192,13 +192,19 @@ div.paper-card-holder div.order{
   flex-direction: row;
   height: 20px;
   padding: 0px 0px 0px 10px;
+  margin-top: 5px;
+  justify-content: space-between;
+}
+div.paper-card-holder div.order div.order-flex-item{
+  display: flex;
 }
 div.paper-card-holder div.order label{
   font-weight: 300;
   margin-right: 5px;
-}
-div.search-results.auto div.paper-card-holder div.order label{
   margin-left: 20px;
+}
+div.paper-card-holder div.order label:first-child{
+  margin-left: 0px;
 }
 div.paper-card-holder div.order button{
   margin-left: 5px;
@@ -535,6 +541,7 @@ div.search-automated-right-wrapper div.filters-holder a{
   text-decoration: underline;
   font-weight: 300;
 }
+
 /*screening tab*/
 div.screening-nav-link-wrapper{
   position: absolute;
@@ -561,4 +568,61 @@ div.screening-nav-link-wrapper div.verline{
   border-radius: 2px 0px 0px 2px;
   right: 0px;
   transition: all 0.4s ease-in-out;
+}
+div.paper-card-holder.large div.generic-card{
+  width: 100%;
+}
+div.bottom-right-screening-strategy-box{
+  position: fixed;
+  padding: 15px 15px 0px 15px;
+  width: 300px;
+  bottom: 0px;
+  right: 40px;
+  text-align: center;
+  border: solid 1px #b7b7b7;
+  box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.25);
+  border-bottom: none;
+  border-radius: 30px 30px 0px 0px;
+  background-color: #fcfcff;
+  transition: all 0.3s;
+  z-index: 101;
+}
+div.bottom-right-screening-strategy-box h3 {
+	font-size: 19px;
+  margin: 0 auto 10px auto;
+  position: relative;
+  line-height: 16px;
+  border-bottom: solid 1px #e0e0e0;
+  padding: 0px 0px 10px 0px;
+  width: 230px;
+  color: #2f2f2f;
+  transition: all 0.3s;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons{
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  width: 210px;
+  padding-bottom: 10px;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.screening-strategy-btn{
+  border: solid 1px #c4c4c4;
+  height: 50px;
+  transition: all 0.3s;
+  background-color: #fcfcff;
+  border-radius: 25px;
+  width: 50px;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.screening-strategy-btn:hover{
+  border: solid 1px #696969;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+}
+div.bottom-right-screening-strategy-box:hover{
+  border: solid 1px #b7b7b7;
+  border-bottom: none;
+  box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.50);
+}
+div.bottom-right-screening-strategy-box:hover h3{
+  color: black;
+  border-bottom: solid 1px #c4c4c4;
 }

@@ -496,6 +496,7 @@ div.generic-card div.side-info-wrapper{
   right: 95px;
   height: 0px;
   width: 0px;
+  z-index: 0;
 }
 div.generic-card div.side-info{
   width: 100px;

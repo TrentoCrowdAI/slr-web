@@ -1,14 +1,11 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useContext} from "react";
 import {Route, Link, Switch, withRouter, Redirect} from 'react-router-dom';
 
-import SearchStandardManager from 'components/projects_page/search_tab/search_standard/searchStandardManager';
-import SearchSimilarManager from 'components/projects_page/search_tab/search_similar/searchSimilarManager';
-import CustomPaperPage from 'components/projects_page/papers_tab/customPaperPage';
 import {join} from 'utils';
 
 import {AppContext} from 'components/providers/appProvider';
 import PageNotFound from "components/modules/pageNotFound";
-import SearchAutomatedManager from "components/projects_page/search_tab/search_automated/searchAutomatedManager";
+import ScreeningBacklog from 'components/projects_page/screening_tab/backlog_subtab/screeningBacklog';
 
 
 /**
@@ -29,7 +26,7 @@ const ScreeningTab = ({project_id, match, notFound, setNotFound}) => {
                         return (<Redirect to={join(match.url, '/backlog')} />);
                     }}/>
                     <Route exact path={match.url + "/backlog"} render={function(props){
-                        return (<p>backlog</p>);
+                        return (<ScreeningBacklog project_id={project_id}/>);
                     }}/>
                     <Route exact path={match.url + "/manual"} render={function(props){
                         return (<p>manual</p>);

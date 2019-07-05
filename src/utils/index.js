@@ -187,6 +187,32 @@ function createQueryDataForAutomatedSearch(queryUrl) {
 
 }
 
+/**
+ * function to prepare a object of queryData
+ * @param queryUrl
+ * @return object of queryData for the fetch
+ */
+function createQueryDataForBacklog(queryUrl) {
+
+
+    //set query params from queryString of url
+    let params = queryString.parse(queryUrl);
+    
+    let orderBy = params.orderBy || "date_created";
+    let sort = params.sort || "ASC";
+
+    let min_confidence = params.min_confidence || 0.0;
+    let max_confidence = params.max_confidence || 1.0;
+
+    let start = params.start || 0;
+    let count = params.count || 10;
+
+    let queryData = {start, count, orderBy, sort, min_confidence, max_confidence};
+
+    return queryData;
+
+}
+
 
 /**
  * function to prepare a object of queryData
@@ -265,6 +291,7 @@ export {
     createQueryDataForFiltersTab,
     createQueryDataForAutomatedSearch,
     createQueryDataForStandardSearch,
-    createQueryDataForSimilarSearch
+    createQueryDataForSimilarSearch,
+    createQueryDataForBacklog
 
 };
