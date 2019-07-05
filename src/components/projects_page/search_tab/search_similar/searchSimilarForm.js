@@ -26,7 +26,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
     //state for the form
     const [keywords, setKeyWords] = useState(queryData.query);
     //const [year, setYear] = useState(queryData.year); //this is not used right now
-    const [similarPaperFile, setSimilarPaperFile] = useState(undefined); //the file of the paper to search similarities for
+    const [targetPaperFile, setTargetPaperFile] = useState(undefined); //the file of the paper to search similarities for
 
 
     //get the localStorage object
@@ -56,12 +56,12 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
 
             
             //if there's a file I can do an api call to parse it
-            if(similarPaperFile){
+            if(targetPaperFile && queryData.query === ""){
                 
-                console.log("FILE NAME : " + similarPaperFile.name);
+                console.log("FILE NAME : " + targetPaperFile.name);
 
                 //check file extension and its mine type
-                if(!/\.(pdf|PDF)$/.test(similarPaperFile.name) || similarPaperFile.type.indexOf("application/pdf") === -1){
+                if(!/\.(pdf|PDF)$/.test(targetPaperFile.name) || targetPaperFile.type.indexOf("application/pdf") === -1){
                     appConsumer.setNotificationMessage("The file must be a pdf!");
                 }
                 else{
@@ -70,7 +70,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                     console.log("FETCHING PARSE PDF")
                     //prepare the form data for post
                     let formData = new FormData();
-                    formData.append('file', similarPaperFile);
+                    formData.append('file', targetPaperFile);
 
                     //call the dao
                     console.log("CALLING THE PAPER PARSER SERVICE")
@@ -81,6 +81,8 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                         //pass error object to global context
                         appConsumer.setNotificationMessage("Error during parsing file");
                         setSimilarPaperFetch(false);
+                        setTargetPaperData(undefined);//I delete the similar paper info
+                        setTargetPaperFile(undefined);//I delete its file
                     }
                     else if(mnt){
                         console.log(res);
@@ -126,7 +128,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
             mnt = false;
         };
 
-    }, [project_id, similarPaperFile, queryData.query]);  //re-execute when these variables change
+    }, [project_id, targetPaperFile, queryData.query]);  //re-execute when these variables change
 
     
     /**
@@ -173,13 +175,13 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
 
         console.log("similarity search was called");
         //if query input is empty
-        if (keywords === "" && !similarPaperFile) {
+        if (keywords === "" && !targetPaperFile) {
             appConsumer.setNotificationMessage("Similar paper string is empty")
         }
         else {
             //synchronize the query data from react state hooks
             //if there isn't any file I search with the string
-            if(!similarPaperFile){
+            if(!targetPaperFile){
                 console.log("there isn't a file")
                 queryData.query = keywords;
             }else{
@@ -200,7 +202,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
 
     return (
         <>
-            <form className={(queryData.query === "" && !similarPaperFile && !targetPaperData) ? 'search-form' : 'search-form small'}
+            <form className={(queryData.query === "" && !targetPaperFile && !targetPaperData) ? 'search-form' : 'search-form small'}
                     style={{marginTop: (similarFormVisibility) ? "30px" : "60px"}}
                     onSubmit={handleSendSearch}>
                 {/*search form*/}
@@ -210,7 +212,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                     close={setSimilarFormVisibility} handler={handleOnInputChange} 
                     input={keywords} paperInfo={targetPaperData}
                     fetching={similarPaperFetch} setPaperInfo={setTargetPaperData}
-                    setPaperFile={setSimilarPaperFile}
+                    setPaperFile={setTargetPaperFile}
                     history={history}/>
                 
                 {/*<div className="option-holder">
