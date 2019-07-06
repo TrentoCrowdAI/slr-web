@@ -8,6 +8,7 @@ import {join} from 'utils';
 import BacklogPapers from 'components/projects_page/screening_tab/backlog_subtab/backlogPapers';
 
 import AutoScreeningForm from 'components/projects_page/screening_tab/backlog_subtab/forms/autoScreeningForm';
+import ManualScreeningForm from 'components/projects_page/screening_tab/backlog_subtab/forms/manualScreeningForm';
 import Cover from "components/modules/cover";
 
 
@@ -81,7 +82,10 @@ const ScreeningBacklog = function ({project_id}) {
 
     return (
         <>
+
             <Cover cls={displayManualForm ? "full-screen" : ""} handler={setDisplayManualForm}/>
+            <ManualScreeningForm visibility={displayManualForm} setVisibility={setDisplayManualForm} project_id={project_id}/>
+            
             <Cover cls={displayAutoForm ? "full-screen" : ""} handler={setDisplayAutoForm}/>
             <AutoScreeningForm visibility={displayAutoForm} setVisibility={setDisplayAutoForm} project_id={project_id} setAutoScreeningFlag={setAutoScreeningFlag}/>
             {/*
@@ -97,7 +101,7 @@ const ScreeningBacklog = function ({project_id}) {
                 <div className="screening-strategy-buttons">
                     <div className="screening-strategy-btn-holder">
                         <button className="screening-strategy-btn manual" type="button"
-                            onClick={() => {setDisplayAutoForm(true)}}
+                            onClick={() => {setDisplayManualForm(true)}}
                         > 
                         </button>
                     </div>

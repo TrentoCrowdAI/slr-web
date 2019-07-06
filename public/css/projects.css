@@ -656,9 +656,93 @@ form.start-auto-screening div.custom-select div.selected div.arrow{
 form.start-auto-screening div.custom-select div.options-holder{
   max-height: 70px;
 }
-form.start-auto-screening button.start-btn{
+form.start-auto-screening button.start-btn, form.start-manual-screening button.start-btn{
   font-size: 18px;
   margin: 20px auto 10px auto;
   padding: 10px 10px 10px 10px;
   display: inherit;
+}
+/*backlog > manualScreening form*/
+form.start-manual-screening{
+  padding: 20px 30px 10px 30px;
+  width: 550px;
+}
+form.start-manual-screening h2{
+  margin-bottom: 1px;
+}
+form.start-manual-screening p.tip{
+  margin: 0px 0 0px 0;
+  font-weight: 300;
+  text-align: center;
+  font-style: italic;
+}
+form.start-manual-screening div.users-list{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px 0 5px 0;
+  max-height: 300px;
+  overflow: auto;
+  padding: 5px 0 5px 0;
+  border-top: solid 1px #e0e0e0;
+  border-bottom: solid 1px #e0e0e0;
+  justify-content: space-between;
+}
+form.start-manual-screening div.users-list button.user-data{
+  border: none;
+  display: inline-flex;
+  width: 230px;
+  height: 50px;
+  margin: 0px 0px 5px 0px;
+}
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper{
+  height: 40px;
+  width: 40px;
+  margin: 5px 20px 5px 5px;
+  border-radius: 50%;
+  border: solid 1px grey;
+  position: relative;
+  overflow: hidden;
+}
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper div.img-wrapper-cover{
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  z-index: 0;
+  top: 0px;
+  left: 0px;
+  background-color: chartreuse;
+  transition: opacity 0.4s;
+  opacity: 0.0;
+}
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper img.user-data-image, 
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper div.user-data-image{
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  z-index: -1;
+  top: 0px;
+  left: 0px;
+}
+form.start-manual-screening div.users-list button.user-data p.user-data-names{
+  margin: 0px;
+  line-height: 26px;
+  height: 26px;
+  margin: 12px 0px 12px 0px;
+  width: 150px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+  vertical-align: middle;
+}
+form.start-manual-screening div.users-list button.user-data:hover p.user-data-names{
+  text-decoration: underline;
+}
+form.start-manual-screening div.screening-type{
+  text-align: center;
+}
+form.start-manual-screening div.screening-type label:first-child{
+  line-height: 32px;
+  vertical-align: middle;
+  font-weight: bold;
 }

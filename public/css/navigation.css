@@ -271,7 +271,7 @@ div.navigation-wrapper div.menu div.side-menu div.user{
   padding: 15px 15px 5px 15px;
   border-bottom: solid 1px black;
 }
-div.navigation-wrapper div.menu div.side-menu div.user img.face, div.navigation-wrapper div.menu div.side-menu div.user div.no-face{
+div.navigation-wrapper div.menu div.side-menu div.user img.face, div.navigation-wrapper div.menu div.side-menu div.user div.face{
   float: left;
   margin: 10px 15px 0px 5px;
   height: 100px;
