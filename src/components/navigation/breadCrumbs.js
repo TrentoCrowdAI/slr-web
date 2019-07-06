@@ -50,10 +50,16 @@ const BreadCrumbs = function(props) {
             if(path[i-1] && path[i-1] === "projects"){
                 //I retrieve the project title from the context
                 link = (<Link key={i+1} to={href}>{appConsumer.projectName}</Link>);
+            }else if(path[i-1] && path[i-1] === "screenings"){
+                //I retrieve the project title from the context
+                link = (<Link key={i+1} to={href}>{appConsumer.projectName} screening</Link>);
             }else{
                 switch (path[i]) {
                     case "projects":
                         link = (<Link key={i+1} to={href}>My Projects</Link>);
+                        break;
+                    case "screenings":
+                        link = (<Link key={i+1} to={href}>My Screenings</Link>);
                         break;
                     case "searchsimilar":
                         link = (<Link key={i+1} to={href}>Search for similar papers</Link>);

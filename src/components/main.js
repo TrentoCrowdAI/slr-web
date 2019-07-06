@@ -6,6 +6,8 @@ import {AppContext} from 'components/providers/appProvider';
 import Home from 'components/home';
 import ProjectsList from 'components/projects_page/projectsList';
 import ProjectPage from 'components/projects_page/projectPage';
+import ScreeningsList from 'components/screenings_page/screeningsList';
+import ScreeningPage from 'components/screenings_page/screeningPage';
 import LoadIcon from 'components/svg/loadIcon';
 import PageNotFound from "./modules/pageNotFound";
 
@@ -30,6 +32,8 @@ const Main = function(props){
                 <Route exact path="/" render={() => <Home/> }/>
                 <Route exact path="/projects" render={(props) => <ProjectsList {...props} />}/>
                 <Route path="/projects/:id" render={(props) => <ProjectPage {...props} />}/>
+                <Route exact path="/screenings" render={() => <ScreeningsList />}/>
+                <Route path="/screenings/:id" render={() => <ScreeningPage />}/>
                 <Route render={(props) => <PageNotFound/>}/>
             </Switch>
         );
