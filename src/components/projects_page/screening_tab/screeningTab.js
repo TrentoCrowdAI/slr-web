@@ -6,6 +6,7 @@ import {join} from 'utils';
 import {AppContext} from 'components/providers/appProvider';
 import PageNotFound from "components/modules/pageNotFound";
 import ScreeningBacklog from 'components/projects_page/screening_tab/backlog_subtab/screeningBacklog';
+import ScreenedPapers from 'components/projects_page/screening_tab/screened_subtab/screenedPapers';
 
 
 /**
@@ -37,7 +38,7 @@ const ScreeningTab = ({project_id, match, notFound, setNotFound}) => {
                     }}/>
 
                     <Route path={match.url + "/screened"} render={function(props){
-                        return (<p>screened</p>);
+                        return (<ScreenedPapers project_id={project_id}/>);
                     }}/>
 
                     <Route render={(props) => {setNotFound(true);return <PageNotFound/>}}/>

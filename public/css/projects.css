@@ -750,3 +750,46 @@ form.start-manual-screening div.screening-type label:first-child{
   vertical-align: middle;
   font-weight: bold;
 }
+/*screened papers tab*/
+div.paper-card.screened h3{
+  margin-right: 100px;
+}
+div.paper-card.screened div.screened-label{
+  position: absolute;
+  right: 0px;
+  top: 1px;
+  height: 30px;
+  display: flex;
+  border: solid 1px grey;
+  border-radius: 5px;
+  justify-content: space-between;
+}
+div.paper-card.screened div.screened-label div{
+  font-size: 14px;
+}
+div.paper-card.screened div.screened-label div.type{
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 28px;
+  vertical-align: middle;
+  margin: 0 4px 0 4px;
+}
+div.paper-card.screened div.screened-label div.in-out{
+  font-size: 16px;
+  padding-left: 5px;
+  text-align: center;
+  margin: 5px 5px 5px 0;
+  border-left: solid 1px gray;
+}
+div.right-side-wrapper.status{
+  width: 250px;
+}
+div.right-side-wrapper.status h2.screened-status{
+  color: #2f2f2f;
+  font-weight: lighter;
+  font-size: 20px;
+}
+div.right-side-wrapper.status h2.screened-status span{
+  color: black;
+  font-size: 23px;
+}

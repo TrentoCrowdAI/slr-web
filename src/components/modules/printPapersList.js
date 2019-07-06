@@ -184,6 +184,51 @@ const PrintPapersList_w = function ({papersList, location, history}) {
 
 };
 
+/**
+ * prints a list of screened papers
+ */
+
+const PrintScreenedPapersList_w = function ({papersList}) {
+    
+    let output;
+    //if list is empty, print a notice message
+    if (papersList.length === 0) {
+        output = (
+            <div className="empty-list-wrapper"> <NoPapers/> <p className="empty-list-description"> No papers  have been screened yet</p></div>
+        );
+    }
+    //if list isn't empty, print list of papers
+    else {
+        output = (
+            papersList.map((element) =>
+                <div key={element.id} className="generic-card paper-card screened">
+                    <Link to={"#"}><h3>{(element.data.title) ? element.data.title : "[MISSING TITLE]"}</h3></Link>
+                    <div className="screened-label">
+                        <div className="type">Manual</div>
+                        <div className="in-out">OUT</div>
+                    </div>
+                    <div className="extra-info">
+                        <p className="authors">{(element.data.authors) ? element.data.authors : "[MISSING AUTHORS]"}</p>
+                        <p className="eid">{(element.data.eid) ? element.data.eid : "[MISSING EID]"}</p>
+                        <p className="date">{(element.data.year) ? element.data.year : "[MISSING YEAR]"}</p>
+                    </div>
+                    <ClampLines
+                        text={(element.data.abstract) ? element.data.abstract : "[MISSING ABSTRACT]"}
+                        lines={4}
+                        ellipsis="..."
+                        className="paragraph"
+                        moreText="more"
+                        lessText="less"
+                    />
+                </div>
+            )
+        );
+    }
+    return output;
+
+
+};
+
 const PrintSearchAutomatedList_w = function ({papersList, filtersList, handlePaperSelection, selectedEidList}) {
 
     let output = papersList.map((element, index) =>
@@ -238,6 +283,7 @@ const PrintBacklogPapersList_w = function ({papersList, filtersList}) {
 };
 
 export const PrintPapersList = PrintPapersList_w;
+export const PrintScreenedPapersList = PrintScreenedPapersList_w;
 export const PrintScoupusSearchList = withRouter(PrintScoupusSearchList_w);
 export const PrintSearchAutomatedList = withRouter(PrintSearchAutomatedList_w);
 export const PrintBacklogPapersList = PrintBacklogPapersList_w;
