@@ -120,13 +120,6 @@ form.add-csv-papers{
   width: 650px;
   min-height: 300px;
 }
-form.add-csv-papers h2{
-  margin: 0px auto 5px auto;
-  text-align: center;
-}
-form.add-csv-papers p{
-  font-size: 16px;
-}
 form.add-csv-papers p span{
   font-weight: 100;
   font-style: italic;
@@ -585,7 +578,7 @@ div.bottom-right-screening-strategy-box{
   border-radius: 30px 30px 0px 0px;
   background-color: #fcfcff;
   transition: all 0.3s;
-  z-index: 101;
+  z-index: 0;
 }
 div.bottom-right-screening-strategy-box h3 {
 	font-size: 19px;
@@ -612,6 +605,7 @@ div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.sc
   background-color: #fcfcff;
   border-radius: 25px;
   width: 50px;
+  margin: 5px;
 }
 div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.screening-strategy-btn:hover{
   border: solid 1px #696969;
@@ -625,4 +619,46 @@ div.bottom-right-screening-strategy-box:hover{
 div.bottom-right-screening-strategy-box:hover h3{
   color: black;
   border-bottom: solid 1px #c4c4c4;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder{
+  width: 60px;
+  height: 60px;
+  position: relative;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder svg#circle-progress{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  pointer-events: none;
+  transform: rotate(-90deg);
+}
+/*backlog > autoScreening form*/
+form.start-auto-screening{
+  font-size: 14px;
+  padding: 20px 30px 10px 30px;
+  width: 450px;
+}
+form.start-auto-screening p{
+  font-weight: 300;
+  margin: 7px auto 15px auto;
+  text-align: center;
+}
+form.start-auto-screening div.custom-select{
+  margin: 7px auto 15px auto;
+  font-size: 20px;
+}
+form.start-auto-screening div.custom-select div.selected div.arrow{
+  height: 26px;
+  width: 26px;
+}
+form.start-auto-screening div.custom-select div.options-holder{
+  max-height: 70px;
+}
+form.start-auto-screening button.start-btn{
+  font-size: 18px;
+  margin: 20px auto 10px auto;
+  padding: 10px 10px 10px 10px;
+  display: inherit;
 }
