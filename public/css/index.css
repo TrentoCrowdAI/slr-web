@@ -368,6 +368,29 @@ svg#loading-icon path#loading-circle2{
   animation: complete-big 5s linear infinite, rotate-big 1s linear infinite;
 }
 
+/*right side description*/
+div.top-right-description{
+  margin: 25px 0px 5px 0px;
+  padding: 5px 5px 5px 5px;
+  border-top: solid 1px #acacac;
+  border-bottom: solid 1px #acacac;
+  font-weight: 300;
+  font-size: 14px;
+  text-align: center;
+}
+div.top-right-description p{
+  text-align: justify;
+  word-wrap: break-word;
+  hyphens: auto;
+  margin: 0px 0px 5px 0px;
+}
+div.top-right-description a{
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+  border-bottom: 1px dotted #696969;
+}
+
 /*buttons*/
 div.bottom-right-button-holder{
   position: fixed;

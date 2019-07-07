@@ -15,7 +15,7 @@ const Image = function({className, alt, src, style}){
     if(fetchError){
         img = <div className={className} alt="error loading image" style={style}><NoImage/></div>
     }else{
-        img = <img className={className} alt={alt} src={src} onError={() => {setFetchError(true)}} style={style}/>
+        img = <img className={className} alt={alt} title={alt} src={src} onError={() => {setFetchError(true)}} style={style}/>
     }
 
     return img;

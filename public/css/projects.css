@@ -497,27 +497,6 @@ form.add-filter:focus-within button{
 div.search-automated-right-wrapper{
   width: 280px;
 }
-div.search-automated-right-wrapper div.search-automated-description{
-  text-align: center;
-  font-weight: 300;
-  font-size: 14px;
-  margin: 35px 0px 5px 0px;
-  padding: 5px 5px 5px 5px;
-  border-top: solid 1px #acacac;
-  border-bottom: solid 1px #acacac;
-}
-div.search-automated-right-wrapper div.search-automated-description p{
-  text-align: justify;
-  word-wrap: break-word;
-  hyphens: auto;
-  margin: 0px 0px 5px 0px;
-}
-div.search-automated-right-wrapper div.search-automated-description a{
-  display: inline-block;
-  text-align: center;
-  line-height: 20px;
-  border-bottom: 1px dotted #696969;
-}
 div.search-automated-right-wrapper div.filters-holder h2{
   margin: 15px 0px 5px 0px;
 }
@@ -792,4 +771,33 @@ div.right-side-wrapper.status h2.screened-status{
 div.right-side-wrapper.status h2.screened-status span{
   color: black;
   font-size: 23px;
+}
+/*manually screened papers tab*/
+div.right-side-wrapper.manual{
+  width: 280px;
+}
+div.paper-card.manual div.users-votes{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+div.paper-card.manual div.users-votes div.votes{
+  display: flex;
+  max-width: 200px;
+  flex-wrap: wrap;
+}
+div.paper-card.manual div.users-votes div.votes div.user-vote-image{
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin: 0 2px 0 2px;
+}
+div.user-vote-image.in-vote{
+  border: solid 2px #0b8a42;
+}
+div.user-vote-image.out-vote{
+  border: solid 2px #c31f1f;
+}
+div.user-vote-image.und-no-vote{
+  border: solid 2px grey;
 }

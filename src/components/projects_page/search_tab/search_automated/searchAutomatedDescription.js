@@ -86,7 +86,7 @@ const SearchAutomatedDescription = function ({project_id, filtersList, setFilter
 
     return (
         <div className="right-side-wrapper search-automated-right-wrapper">
-            <div className="search-automated-description">
+            <div className="top-right-description">
                 <p>This searching mode leverages NLP models to find relevant papers based on the topic and focus of your project and also considers the inclusion and exclusion criteria you defined.</p>
                 <Link to={"/projects/"+project_id+"/search"}>(Go back to a normal search)</Link>
             </div>
