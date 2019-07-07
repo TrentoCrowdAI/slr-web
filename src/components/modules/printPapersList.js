@@ -6,6 +6,7 @@ import CheckBox from "components/forms_elements/checkbox";
 import SideOptions from 'components/modules/sideOptions';
 import {projectPapersDao} from 'dao/projectPapers.dao';
 import {AppContext} from 'components/providers/appProvider'
+import Image from 'components/modules/image';
 
 import NoPapers from "components/svg/noPapers";
 
@@ -229,6 +230,90 @@ const PrintScreenedPapersList_w = function ({papersList}) {
 
 };
 
+/**
+ * prints a list of partially manual screened paper
+ */
+
+const PrintManuallyScreenedPapersList_w = function ({papersList}) {
+    const usersVotes = [
+        {id: 0, email : "a", name : "Marco", surname : "Polo", image : ".", vote:"in"},
+        {id: 1, email : "a", name : "Marco", surname : "Polo", image : ".", vote:"out"},
+        {id: 2, email : "a", name : "John", surname : "Snow", image : ".", vote:"und"},
+        {id: 3, email : "a", name : "Augustus", surname : "Gaius", image : ".", vote:""},
+        {id: 4, email : "a", name : "John", surname : "Snow", image : ".", vote:"in"},
+        {id: 5, email : "a", name : "Augustus", surname : "Gaius", image : ".", vote:""},
+    ]
+    let output;
+    //if list is empty, print a notice message
+    if (papersList.length === 0) {
+        output = (
+            <div className="empty-list-wrapper"> <NoPapers/> <p className="empty-list-description"> No papers have been manually screened yet</p></div>
+        );
+    }
+    //if list isn't empty, print list of papers
+    else {
+        output = (
+            papersList.map((element) => {
+                let inV = [], outV = [], undV = [], noV = []; 
+                usersVotes.map((vote) => {
+                    switch (vote.vote) {
+                        case "in":
+                            inV.push(vote);
+                            break;
+                        case "out":
+                            outV.push(vote);
+                            break;
+                        case "und":
+                            undV.push(vote);
+                            break;
+                        default:
+                            noV.push(vote);
+                            break;
+                    }
+                });
+                return(
+                    <div key={element.id} className="generic-card paper-card manual">
+                        <Link to={"#"}><h3>{(element.data.title) ? element.data.title : "[MISSING TITLE]"}</h3></Link>
+                        <div className="extra-info">
+                            <p className="authors">{(element.data.authors) ? element.data.authors : "[MISSING AUTHORS]"}</p>
+                            <p className="eid">{(element.data.eid) ? element.data.eid : "[MISSING EID]"}</p>
+                            <p className="date">{(element.data.year) ? element.data.year : "[MISSING YEAR]"}</p>
+                        </div>
+                        <ClampLines
+                            text={(element.data.abstract) ? element.data.abstract : "[MISSING ABSTRACT]"}
+                            lines={4}
+                            ellipsis="..."
+                            className="paragraph"
+                            moreText="more"
+                            lessText="less"
+                        />
+                        <div className="users-votes">
+                            <div className="votes">
+                                {inV.map((user) => (
+                                    <Image className="user-vote-image in-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                ))}
+                            </div>
+                            <div className="votes">
+                                {inV.map((user) => (
+                                    <Image className="user-vote-image und-no-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                ))}
+                            </div>
+                            <div className="votes">
+                                {inV.map((user) => (
+                                    <Image className="user-vote-image out-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            })
+        );
+    }
+    return output;
+
+
+};
+
 const PrintSearchAutomatedList_w = function ({papersList, filtersList, handlePaperSelection, selectedEidList}) {
 
     let output = papersList.map((element, index) =>
@@ -284,6 +369,7 @@ const PrintBacklogPapersList_w = function ({papersList, filtersList}) {
 
 export const PrintPapersList = PrintPapersList_w;
 export const PrintScreenedPapersList = PrintScreenedPapersList_w;
+export const PrintManuallyScreenedPapersList = PrintManuallyScreenedPapersList_w;
 export const PrintScoupusSearchList = withRouter(PrintScoupusSearchList_w);
 export const PrintSearchAutomatedList = withRouter(PrintSearchAutomatedList_w);
 export const PrintBacklogPapersList = PrintBacklogPapersList_w;

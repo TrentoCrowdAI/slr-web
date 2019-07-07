@@ -6,6 +6,7 @@ import {join} from 'utils';
 import {AppContext} from 'components/providers/appProvider';
 import PageNotFound from "components/modules/pageNotFound";
 import ScreeningBacklog from 'components/projects_page/screening_tab/backlog_subtab/screeningBacklog';
+import ManualResults from 'components/projects_page/screening_tab/manual_subtab/manualResults';
 import ScreenedPapers from 'components/projects_page/screening_tab/screened_subtab/screenedPapers';
 
 
@@ -30,7 +31,7 @@ const ScreeningTab = ({project_id, match, notFound, setNotFound}) => {
                         return (<ScreeningBacklog project_id={project_id}/>);
                     }}/>
                     <Route exact path={match.url + "/manual"} render={function(props){
-                        return (<p>manual</p>);
+                        return (<ManualResults project_id={project_id}/>);
                     }}/>
 
                     <Route exact path={match.url + "/crowdsource"} render={function(props){
