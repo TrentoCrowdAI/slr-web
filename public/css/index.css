@@ -619,6 +619,9 @@ button.edit-button{
 /*remove button*/
 .rb{stroke:#c31f1f;stroke-width:88;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 
+/*plus(add) icon*/
+.st0-plus{fill:none;stroke:#1c1c1c;stroke-width:50;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
 /*go button*/
 .st0-go{fill:none;stroke:#000000;stroke-width:70;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 .st1-go{fill:none;stroke:#000000;stroke-width:50;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}

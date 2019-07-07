@@ -13,6 +13,7 @@
     "react-dom": "^16.8.4",
     "react-flip-toolkit": "^6.5.7",
     "react-google-login": "^5.0.4",
+    "react-keyboard-event-handler": "^1.5.1",
     "react-router-dom": "^5.0.0",
     "react-scripts": "^3.0.0",
     "react-textarea-autosize": "^7.1.0",

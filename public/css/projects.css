@@ -345,6 +345,7 @@ div.form-filter-wrapper{
 
 div.filter-card{
   margin-bottom: 20px; 
+  width: 600px;
 }
 div.filter-card h3{
   font-size: 25px;
