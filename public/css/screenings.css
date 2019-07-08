@@ -65,10 +65,27 @@ div.s-paper{
 }
 div.s-paper h2.paper-title{
   font-size: 26px;
-  margin: 5px 0px 15px 0px;
+  margin: 5px 0px 0px 0px;
 }
 div.s-paper div.paragraph{
   font-size: 18px;
+  position: relative;
+}
+div.paragraph div.paragraph-head{
+  display: block;
+  width: 100%;
+  text-align: right;
+  height: 18px;
+  line-height: 10px;
+}
+div.paragraph button{
+  text-decoration: underline;
+  opacity: 0.0;
+  transition: all 0.3s;
+  font-size: 13px;
+  line-height: 15px;
+  height: 15px;
+  margin: 0px 0px 5px 0px;
 }
 /*tags*/
 div.tags-wrapper{
@@ -258,4 +275,7 @@ div.m-p-screening-summary button{
   margin: 20px auto 10px auto;
   padding: 10px 10px 10px 10px;
   border: solid 1px grey;
+}
+span.highlighted{
+  background-color: #fcff48;
 }

@@ -14,6 +14,7 @@ import {createQueryData} from 'utils/index';
 
 import FiltersAccordion from "components/modules/filtersAccordion";
 import Tags from 'components/modules/paperTags';
+import HighLighter from 'components/modules/highlighter';
 
 const queryParams = [
     {label: "question_id", default: ""}
@@ -171,10 +172,8 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
                     <FiltersAccordion filtersList={filtersList}/>
                 </div>
                 <div className="left-side-wrapper s-paper">
-                   <h2 className="paper-title">{paperData.title}</h2>
-                   <div className="paragraph">
-                        {paperData.abstract}
-                    </div>
+                    <h2 className="paper-title">{paperData.title}</h2>
+                    <HighLighter data={paperData.abstract} className={"paragraph"}/>
                 </div>
                 <Tags question_id={queryData.question_id}/>
                 <form className="light-modal screening-outcome">
