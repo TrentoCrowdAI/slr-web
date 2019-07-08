@@ -110,15 +110,15 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
         console.log("key " + key);
 
         switch (key) {
-            case "left":
+            case "a":
                 console.log("NO");
                 setDecision("no");
                 break;
-            case "right":
+            case "d":
                 console.log("YES");
                 setDecision("yes");
                 break;
-            case "down":
+            case "s":
                 console.log("UND");
                 setDecision("und");
                 break;
@@ -161,36 +161,38 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
 
         resultPart = (
             <>
-                <KeyboardEventHandler handleKeys={['left', 'down', 'right']}  handleFocusableElements onKeyEvent={(key) => handleSubmission(key)} />
+                <KeyboardEventHandler handleKeys={['a', 's', 'd']}  handleFocusableElements onKeyEvent={(key) => handleSubmission(key)} />
                 <div className="right-side-wrapper filters">
                     <h2>Filters:</h2>
                     <FiltersAccordion filtersList={filtersList}/>
                 </div>
                 <div className="left-side-wrapper s-paper">
                    <h2 className="paper-title">{paperData.title}</h2>
-                   <ClampLines
-                        text={paperData.abstract}
-                        lines={10}
-                        ellipsis="..."
-                        className="paragraph"
-                        moreText="more"
-                        lessText="less"
-                    />
+                   <div className="paragraph">
+                        {paperData.abstract}
+                    </div>
                 </div>
                 <Tags/>
                 <form className="light-modal screening-outcome">
                     <h2 className="question">Is the paper relevant to the review?</h2>
+                    <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
                     <div className="screening-choice">
                         <div className="yes-no">
-                            <button className="no" style={{backgroundColor: (decision === "no") ? "grey" : ""}}>
+                            <button className="no" style={{backgroundColor: (decision === "no") ? "grey" : ""}}
+                                onClick={() => {handleSubmission("a")}}
+                            >
 
                             </button>
-                            <button className="yes" style={{backgroundColor: (decision === "yes") ? "grey" : ""}}>
+                            <button className="yes" style={{backgroundColor: (decision === "yes") ? "grey" : ""}}
+                                onClick={() => {handleSubmission("s")}}
+                            >
                                 
                             </button>
                         </div>
                         <div className="und">
-                            <button className="und" style={{backgroundColor: (decision === "und") ? "grey" : ""}}>
+                            <button className="und" style={{backgroundColor: (decision === "und") ? "grey" : ""}}
+                                onClick={() => {handleSubmission("d")}}
+                            >
 
                             </button>
                         </div>
