@@ -74,9 +74,7 @@ const FilterScreen = function({filter, filterVotes, setFilterVotes, mountRef}) {
         currentOutcome = filterVotes.filter((filterx) => (filterx.filter_id === filter.id))[0].outcome;
     }
 
-    async function handleSubmission(key){
-
-        console.log("key " + key);
+    async function sendSubmission(key){
 
         switch (key) {
             case "a":
@@ -121,13 +119,18 @@ const FilterScreen = function({filter, filterVotes, setFilterVotes, mountRef}) {
         }
         */
     }
+    function handleKey(key){
+        if(document.activeElement.type !== "text"){
+            sendSubmission(key);
+        }
+    }
 
     let output = ""
 
     if(filter.id){
         output = (
             <>
-                <KeyboardEventHandler handleKeys={['a', 's', 'd']}  handleFocusableElements onKeyEvent={(key) => handleSubmission(key)} />
+                <KeyboardEventHandler handleKeys={['a', 's', 'd']}  handleFocusableElements onKeyEvent={(key) => handleKey(key)} />
                 <div className="filter-data">
                     <h2 className="filter-title">
                         {filter.data.predicate}
@@ -150,19 +153,19 @@ const FilterScreen = function({filter, filterVotes, setFilterVotes, mountRef}) {
                     <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
                     <div className="yes-no">
                         <button className="no" style={{backgroundColor: (currentOutcome === "no") ? "grey" : ""}}
-                            onClick={() => {handleSubmission("a")}}
+                            onClick={() => {handleKey("a")}}
                         >
 
                         </button>
                         <button className="yes" style={{backgroundColor: (currentOutcome === "yes") ? "grey" : ""}}
-                            onClick={() => {handleSubmission("d")}}
+                            onClick={() => {handleKey("d")}}
                         >
                             
                         </button>
                     </div>
                     <div className="und">
                         <button className="und" style={{backgroundColor: (currentOutcome === "und") ? "grey" : ""}}
-                            onClick={() => {handleSubmission("s")}}
+                            onClick={() => {handleKey("s")}}
                         >
 
                         </button>

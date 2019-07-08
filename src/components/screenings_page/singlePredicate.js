@@ -105,10 +105,8 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
     }, [project_id, queryData.question_id]);  //re-execute when these variables change
 
 
-    async function handleSubmission(key){
-
-        console.log("key " + key);
-
+    async function sendSubmission(key) {
+        
         switch (key) {
             case "a":
                 console.log("NO");
@@ -145,8 +143,14 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
             appConsumer.setError(res);  
         }
         */
-       //history.push(match.url + "?question_id=" + "9");
+        //history.push(match.url + "?question_id=" + "9");
     }
+    function handleKey(key){
+        if(document.activeElement.type !== "text"){
+            sendSubmission(key);
+        }
+    }
+
     let resultPart = "";
 
     //if is loading
@@ -161,7 +165,7 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
 
         resultPart = (
             <>
-                <KeyboardEventHandler handleKeys={['a', 's', 'd']}  handleFocusableElements onKeyEvent={(key) => handleSubmission(key)} />
+                <KeyboardEventHandler handleKeys={['a', 's', 'd']}  handleFocusableElements onKeyEvent={(key) => handleKey(key)} />
                 <div className="right-side-wrapper filters">
                     <h2>Filters:</h2>
                     <FiltersAccordion filtersList={filtersList}/>
@@ -172,26 +176,26 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
                         {paperData.abstract}
                     </div>
                 </div>
-                <Tags/>
+                <Tags question_id={queryData.question_id}/>
                 <form className="light-modal screening-outcome">
                     <h2 className="question">Is the paper relevant to the review?</h2>
                     <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
                     <div className="screening-choice">
                         <div className="yes-no">
                             <button className="no" style={{backgroundColor: (decision === "no") ? "grey" : ""}}
-                                onClick={() => {handleSubmission("a")}}
+                                onClick={() => {handleKey("a")}}
                             >
 
                             </button>
                             <button className="yes" style={{backgroundColor: (decision === "yes") ? "grey" : ""}}
-                                onClick={() => {handleSubmission("s")}}
+                                onClick={() => {handleKey("s")}}
                             >
                                 
                             </button>
                         </div>
                         <div className="und">
                             <button className="und" style={{backgroundColor: (decision === "und") ? "grey" : ""}}
-                                onClick={() => {handleSubmission("d")}}
+                                onClick={() => {handleKey("d")}}
                             >
 
                             </button>

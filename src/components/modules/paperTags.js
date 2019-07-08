@@ -2,6 +2,8 @@ import React, {useState, useEffect, useContext, useRef} from "react";
 
 import {projectFiltersDao} from 'dao/projectFilters.dao';
 
+import RemoveButton from "components/svg/removeButton";
+
 import {AppContext} from 'components/providers/appProvider';
 
 const Tags = function (props) {
@@ -71,7 +73,7 @@ const Tags = function (props) {
 
                 //call the dao for getting collaborators
                 //let res = await projectsDao.addProjectCollaborator(project.id, {"email": input});
-                let res = "newTag";
+                let res = input;
                 //error checking
                 //there is some other errors
                 if (mountRef.current && res && res.message) {
@@ -88,38 +90,57 @@ const Tags = function (props) {
         }
     }
 
-    let output = <></>;
-    if(props.class === "right"){
-        output = (
-            <>
-                <div className="tags-wrapper to-right">
-                    {tagsList.map((tag, index)=>(
-                        <div key={index} className="tag">{tag}</div>
-                    ))}
-                </div>
-                <form className="add-tag" onSubmit={addTag}>
-                    <input type="text" id="tag-name" placeholder="add new tag..." value={input}
-                        onChange={(e) => {setInput(e.target.value);}}
-                    />
-                    <button className="add-tag-button" disabled={(!input || input === "")}/>
-                </form>
-            </>
-        );
-    }else{
-        output = (
-            <div className="tags-wrapper">
-                {tagsList.map((tag, index)=>(
-                    <div key={index} className="tag">{tag}</div>
-                ))}
-                <form className="add-tag" onSubmit={addTag}>
-                        <input type="text" id="tag-name" placeholder="add new tag..." value={input}
-                            onChange={(e) => {setInput(e.target.value);}}
-                        />
-                        <button className="add-tag-button" disabled={(!input || input === "")}/>
-                </form>
-            </div>
-        );
+    async function removeTag(tag){
+
+        console.log("deleting " + tag + " from " + props.question_id);
+
+        /*
+        //call the dao
+        let res = await projectsDao.deleteProject(id);
+
+        //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
+        if(mountRef.current && res === ""){
+            //create a new array without the project deleted
+            let newTagsList = tagsList.filter((tag)=>tag.id !== id);
+            //update project list state
+            setTagsList(newTagsList);
+
+            appConsumer.setNotificationMessage("Successfully deleted");
+        }
+        //error checking
+        //if is other error
+        else if (mountRef.current && res && res.message) {
+            //pass error object to global context
+            appConsumer.setError(res);  
+        }
+        */
+
+        setTagsList(tagsList.filter((tagx)=>tagx !== tag));
     }
+
+    let output = <></>;
+    output = (
+        <>
+            <div className={(props.class === "right") ? "tags-wrapper to-right" : "tags-wrapper"}>
+                {tagsList.map((tag, index)=>(
+                    <div key={index} className="tag">
+                        {tag}
+                        <button type="button" className="delete-tag"
+                            onClick={() => {removeTag(tag)}}
+                        >
+                            <RemoveButton/>
+                        </button>
+                    </div>
+                ))}
+            </div>
+            <form className="add-tag" onSubmit={addTag}>
+                <input type="text" id="tag-name" placeholder="add new tag..." value={input}
+                    onChange={(e) => {setInput(e.target.value);}}
+                />
+                <button className="add-tag-button" disabled={(!input || input === "")}/>
+            </form>
+        </>
+    );
     return output;
 }
 

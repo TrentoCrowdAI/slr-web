@@ -117,8 +117,8 @@ const MultiPredicateScreening = function ({project_id, filtersList, location, ma
 
         resultPart = (
             <>
-                <div className="right-side-wrapper tags-holder" style={{flexDirection: "row"}}>
-                    <Tags class="right"/>
+                <div className="right-side-wrapper tags-holder">
+                    <Tags class="right" question_id={queryData.question_id}/>
                 </div>
                 <div className="left-side-wrapper s-paper">
                    <h2 className="paper-title">{paperData.title}</h2>
