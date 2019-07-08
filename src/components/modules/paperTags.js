@@ -88,19 +88,39 @@ const Tags = function (props) {
         }
     }
 
-    return(
-        <div className="tags-wrapper">
-            {tagsList.map((tag, index)=>(
-                <div key={index} className="tag">{tag}</div>
-            ))}
-            <form className="add-tag" onSubmit={addTag}>
+    let output = <></>;
+    if(props.class === "right"){
+        output = (
+            <>
+                <div className="tags-wrapper to-right">
+                    {tagsList.map((tag, index)=>(
+                        <div key={index} className="tag">{tag}</div>
+                    ))}
+                </div>
+                <form className="add-tag" onSubmit={addTag}>
                     <input type="text" id="tag-name" placeholder="add new tag..." value={input}
                         onChange={(e) => {setInput(e.target.value);}}
                     />
                     <button className="add-tag-button" disabled={(!input || input === "")}/>
-            </form>
-        </div>
-    );
+                </form>
+            </>
+        );
+    }else{
+        output = (
+            <div className="tags-wrapper">
+                {tagsList.map((tag, index)=>(
+                    <div key={index} className="tag">{tag}</div>
+                ))}
+                <form className="add-tag" onSubmit={addTag}>
+                        <input type="text" id="tag-name" placeholder="add new tag..." value={input}
+                            onChange={(e) => {setInput(e.target.value);}}
+                        />
+                        <button className="add-tag-button" disabled={(!input || input === "")}/>
+                </form>
+            </div>
+        );
+    }
+    return output;
 }
 
 

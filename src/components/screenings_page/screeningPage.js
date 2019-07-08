@@ -19,6 +19,7 @@ import FiltersTab from "components/projects_page/filters_tab/filtersTab";
 import ScreeningTab from "components/projects_page/screening_tab/screeningTab";
 import SearchAutomatedManager from "components/projects_page/search_tab/search_automated/searchAutomatedManager";
 import SinglePredicateScreening from 'components/screenings_page/singlePredicate';
+import MultiPredicateScreening from 'components/screenings_page/multiPredicate';
 
 
 /**
@@ -140,7 +141,7 @@ const ScreeningPage = (props) => {
                     }}/>
 
                     <Route exact path={props.match.url + "/multi_predicate"} render={function(props){
-                        return (<p>multi predicate</p>);
+                        return (<MultiPredicateScreening project_id={project_id} filtersList={filtersList}/>);
                     }}/>
                 </Switch>
             </div>
