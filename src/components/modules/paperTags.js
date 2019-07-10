@@ -11,6 +11,12 @@ const Tags = function (props) {
     const mountRef = useRef(false);
 
     const [tagsList, setTagsList] = useState(["React", "Facebook", "Web"]);
+    
+    const availableTags = useRef(["older", "younger", "unnecessary"]);
+
+    const suggestionTimeout = useRef();
+
+    const [tagSuggestions, setTagSuggestions] = useState([]);
 
     const [input, setInput] = useState("");
 
@@ -65,15 +71,15 @@ const Tags = function (props) {
     }, []);
 
     //function for adding tag
-    async function addTag(){
-        if(!tagsList.includes(input)){
-            console.log("adding " + input);
+    async function addTag(tag){
+        if(!tagsList.includes(tag)){
+            console.log("adding " + tag);
 
             const callApi = async () => {
 
                 //call the dao for getting collaborators
                 //let res = await projectsDao.addProjectCollaborator(project.id, {"email": input});
-                let res = input;
+                let res = tag;
                 //error checking
                 //there is some other errors
                 if (mountRef.current && res && res.message) {
@@ -84,6 +90,8 @@ const Tags = function (props) {
                 else if (res) {
                     setInput("");
                     setTagsList([...tagsList, res]);
+                    availableTags.current = availableTags.current.filter((tagx) => tagx !== tag);
+                    setTagSuggestions([]);
                 }
             }
             callApi();
@@ -116,6 +124,28 @@ const Tags = function (props) {
         */
 
         setTagsList(tagsList.filter((tagx)=>tagx !== tag));
+        availableTags.current = [...availableTags.current, tag];
+    }
+
+    function handleInputChange(e){
+        clearTimeout(suggestionTimeout.current);
+        setInput(e.target.value);
+        var localInput = e.target.value.toLowerCase();
+        if(localInput){
+            suggestionTimeout.current = setTimeout(() => {
+                setTagSuggestions(availableTags.current.map((tagx) => {
+                    console.log("checking '" + tagx + "'");
+                    let index = tagx.toLowerCase().indexOf(localInput);
+                    if(index !== -1){
+                        return {content: tagx, index: index, selectionLength: localInput.length};
+                    }else{
+                        return -1;
+                    }
+                }).filter((tog) => tog !== -1));
+            }, 500);
+        }else{
+            setTagSuggestions([]);
+        }
     }
 
     let output = <></>;
@@ -132,11 +162,22 @@ const Tags = function (props) {
                         </button>
                     </div>
                 ))}
-                <form className="add-tag" onSubmit={addTag}>
+                <form className="add-tag" onSubmit={() => {addTag(input)}}>
                     <input type="text" id="tag-name" placeholder="add new tag..." value={input}
-                        onChange={(e) => {setInput(e.target.value);}}
+                        onChange={(e) => {handleInputChange(e)}}
                     />
                     <button className="add-tag-button" disabled={(!input || input === "")}/>
+                    <div className="tag-suggestions" style={{display: (tagSuggestions.length === 0) ? "none" : ""}}>
+                        {tagSuggestions.map((tag, index)=>(
+                            <button key={index} type="button" className="tag-suggestion"
+                                    onClick={() => {addTag(tag.content)}}
+                            >
+                                {tag.content.substring(0,tag.index)}
+                                <span class="match">{tag.content.substring(tag.index, tag.index+tag.selectionLength)}</span>
+                                {tag.content.substring(tag.index+tag.selectionLength, tag.content.length)}
+                            </button>
+                        ))}
+                    </div>
                 </form>
             </div>
         </>

@@ -93,6 +93,7 @@ div.tags-wrapper{
   display: flex;
   flex-wrap: wrap;
   margin: 20px 0px 0px 0px;
+  z-index: 100;
 }
 div.tags-wrapper.to-right{
   margin: 10px 0px 0px 0px;
@@ -139,7 +140,7 @@ form.add-tag input{
   height: 100%;
   font-size: 14px;
 }
-form.add-tag button{
+form.add-tag button.add-tag-button{
   background-image: url('./../img/add.svg');
   background-size: 65%;
   background-position: center;
@@ -151,13 +152,50 @@ form.add-tag button{
   height: 22px;
   width: 24px;
 }
+form.add-tag div.tag-suggestions{
+  position: absolute;
+  width: 100%;
+  z-index: 101;
+  border: solid 1px grey;
+  border-top: none;
+  overflow: hidden;
+  border-radius: 0px 0px 3px 3px;
+}
+form.add-tag div.tag-suggestions button.tag-suggestion{
+  width: 100%;
+  text-align: left;
+  padding: 0px 5px 2px 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background-color 0.2s;
+}
+form.add-tag div.tag-suggestions button.tag-suggestion:first-child{
+  padding-top: 2px;
+}
+form.add-tag div.tag-suggestions button.tag-suggestion{
+  width: 100%;
+  text-align: left;
+  padding: 0px 5px 2px 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  background-color: white;
+  border-radius: 0%;
+  font-weight: 300;
+}
+form.add-tag div.tag-suggestions button.tag-suggestion span.match{
+  font-weight: normal;
+}
+form.add-tag div.tag-suggestions button.tag-suggestion:hover{
+  background-color: #fcfcff;
+}
 /*single predicate form*/
 form.screening-outcome{
   width: 500px;
   margin: 40px auto;
   position: relative;
   background-color: #fcfcff;
-  z-index: 100;
 }
 form.screening-outcome h2.question{
   font-size: 22px;
