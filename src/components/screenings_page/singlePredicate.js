@@ -114,11 +114,11 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
                 console.log("NO");
                 setDecision("no");
                 break;
-            case "d":
+            case "s":
                 console.log("YES");
                 setDecision("yes");
                 break;
-            case "s":
+            case "d":
                 console.log("UND");
                 setDecision("und");
                 break;
@@ -187,25 +187,24 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
                     <h2 className="question">Is the paper relevant to the review?</h2>
                     <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
                     <div className="screening-choice">
-                        <div className="yes-no">
+                        <div className="yes-no-und">
                             <button className="no" style={{backgroundColor: (decision === "no") ? "grey" : ""}}
                                 onClick={() => {handleKey("a")}}
                             >
 
                             </button>
                             <button className="yes" style={{backgroundColor: (decision === "yes") ? "grey" : ""}}
-                                onClick={() => {handleKey("d")}}
+                                onClick={() => {handleKey("s")}}
                             >
                                 
                             </button>
-                        </div>
-                        <div className="und">
                             <button className="und" style={{backgroundColor: (decision === "und") ? "grey" : ""}}
                                 onClick={() => {handleKey("s")}}
                             >
 
                             </button>
                         </div>
+
                     </div>
                 </form>
             </>

@@ -203,34 +203,21 @@ form.screening-outcome h2.question{
   text-align: center;
 }
 div.screening-choice{
-  width: 200px;
+  width: 240px;
   margin: 20px auto 0px auto;
-  padding: 0px 0px 15px 0px;
+  padding: 0px 0px 20px 0px;
 }
-div.screening-choice div.yes-no{
+div.screening-choice div.yes-no-und{
   display: flex;
   width: 100%;
   justify-content: space-between;
   margin: 0 auto;
 }
-div.screening-choice div.yes-no button{
+div.screening-choice div.yes-no-und button{
   height: 60px;
   width: 60px;
   border: solid 1px black;
   border-radius: 50%;
-  transition: all 0.5s;
-}
-div.screening-choice div.und{
-  margin: 5px 0px 0px 0px;
-  display: flex;
-  width: 100%;
-  justify-content: center;
-}
-div.screening-choice div.und button{
-  height: 30px;
-  width: 70px;
-  border-radius: 5px;
-  border: solid 1px black;
   transition: all 0.5s;
 }
 p.hl-tip{
@@ -246,7 +233,7 @@ div.screening-choice.multi-predicate{
   flex-direction: column;
   justify-content: center;
 }
-div.screening-choice.multi-predicate div.yes-no{
+div.screening-choice.multi-predicate div.yes-no-und{
   width: 200px;
   margin: 15px auto 0px auto;
 }

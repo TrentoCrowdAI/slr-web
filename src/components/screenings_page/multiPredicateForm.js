@@ -83,13 +83,13 @@ const FilterScreen = function({filter, filterVotes, setFilterVotes, mountRef}) {
                     filterVotes.map((vote) => ((vote.filter_id === filter.id) ? {...vote, outcome : "no"} : vote))
                 )
                 break;
-            case "d":
+            case "s":
                 console.log("YES");
                 setFilterVotes(
                     filterVotes.map((vote) => ((vote.filter_id === filter.id) ? {...vote, outcome : "yes"} : vote))
                 )
                 break;
-            case "s":
+            case "d":
                 console.log("UND");
                 setFilterVotes(
                     filterVotes.map((vote) => ((vote.filter_id === filter.id) ? {...vote, outcome : "und"} : vote))
@@ -151,21 +151,20 @@ const FilterScreen = function({filter, filterVotes, setFilterVotes, mountRef}) {
                 <div className="screening-choice multi-predicate">
                     <h3 className="filter-question">Is the paper relevant for this eligibility criterion?</h3>
                     <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
-                    <div className="yes-no">
+                    
+                    <div className="yes-no-und">
                         <button className="no" style={{backgroundColor: (currentOutcome === "no") ? "grey" : ""}}
                             onClick={() => {handleKey("a")}}
                         >
 
                         </button>
                         <button className="yes" style={{backgroundColor: (currentOutcome === "yes") ? "grey" : ""}}
-                            onClick={() => {handleKey("d")}}
+                            onClick={() => {handleKey("s")}}
                         >
                             
                         </button>
-                    </div>
-                    <div className="und">
                         <button className="und" style={{backgroundColor: (currentOutcome === "und") ? "grey" : ""}}
-                            onClick={() => {handleKey("s")}}
+                            onClick={() => {handleKey("d")}}
                         >
 
                         </button>

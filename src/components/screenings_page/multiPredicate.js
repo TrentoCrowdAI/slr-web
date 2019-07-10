@@ -12,6 +12,7 @@ import {createQueryData} from 'utils/index';
 
 
 import MultiPredicateForm from "components/screenings_page/multiPredicateForm";
+import HighLighter from 'components/modules/highlighter';
 import Tags from 'components/modules/paperTags';
 
 const queryParams = [
@@ -122,9 +123,7 @@ const MultiPredicateScreening = function ({project_id, filtersList, location, ma
                 </div>
                 <div className="left-side-wrapper s-paper">
                    <h2 className="paper-title">{paperData.title}</h2>
-                   <div className="paragraph">
-                       {paperData.abstract}
-                   </div>
+                   <HighLighter data={paperData.abstract} className={"paragraph"}/>
                 </div>
                 {(filtersList.length === 0) ? 
                     <p className="empty-filters-description"> There are no filters here, add new filters before starting here</p>
