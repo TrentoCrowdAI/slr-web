@@ -15,6 +15,7 @@ import {createQueryData} from 'utils/index';
 import FiltersAccordion from "components/modules/filtersAccordion";
 import Tags from 'components/modules/paperTags';
 import HighLighter from 'components/modules/highlighter';
+import InfoTooltip from "components/modules/infoTooltip";
 
 const queryParams = [
     {label: "question_id", default: ""}
@@ -177,6 +178,12 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
                 </div>
                 <Tags question_id={queryData.question_id}/>
                 <form className="light-modal screening-outcome">
+                    <InfoTooltip className={"s-p-form"} content={(<>
+                        You can cast your vote by using the keyboard:<br/>
+                        <span>A : </span> no<br/>
+                        <span>D : </span> yes<br/>
+                        <span>S : </span> undecided<br/>
+                    </>)}/>
                     <h2 className="question">Is the paper relevant to the review?</h2>
                     <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
                     <div className="screening-choice">
@@ -187,14 +194,14 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
 
                             </button>
                             <button className="yes" style={{backgroundColor: (decision === "yes") ? "grey" : ""}}
-                                onClick={() => {handleKey("s")}}
+                                onClick={() => {handleKey("d")}}
                             >
                                 
                             </button>
                         </div>
                         <div className="und">
                             <button className="und" style={{backgroundColor: (decision === "und") ? "grey" : ""}}
-                                onClick={() => {handleKey("d")}}
+                                onClick={() => {handleKey("s")}}
                             >
 
                             </button>

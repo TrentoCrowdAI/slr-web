@@ -3,6 +3,7 @@ import PlusIcon from "components/svg/plusIcon";
 
 const FiltersAccordion = function ({filtersList}) {
 
+    const [isOpen, setIsOpen] = useState(filtersList.map((x) => (false)));
 
     let output = "";
     //if list is empty, print a notice message
@@ -15,9 +16,9 @@ const FiltersAccordion = function ({filtersList}) {
     else{
         output = (
             <div className="filters-list">
-                {filtersList.map((element) =>
+                {filtersList.map((element, index) =>
                     <div key={element.id} className="filter">
-                        <FilterElement filter={element.data} code={parseInt(element.id)}/>
+                        <FilterElement filter={element.data} code={parseInt(element.id)} isOpen={isOpen} setIsOpen={setIsOpen} index={index}/>
                     </div>
                 )}
             </div>
@@ -28,23 +29,25 @@ const FiltersAccordion = function ({filtersList}) {
 
 };
 
-const FilterElement = function({filter, code}) {
-
-    //state for showinf inclusion/exclusion criteria
-    const [isOpen, setIsOpen] = useState(false);
+const FilterElement = function({filter, code, isOpen, setIsOpen, index}) {
 
     function handleFocus(){
         //handle arrow animation and focus of menu
         document.getElementById((isNaN(code)) ? "ani-plus-icon-y1" : "ani-plus-icon-y1" + code).beginElement();//trigger svg animation
         document.getElementById((isNaN(code)) ? "ani-plus-icon-y2" : "ani-plus-icon-y2" + code).beginElement();//trigger svg animation
     }
-
+    function handleFilterClick(){
+        handleFocus();
+        let localOpen = isOpen.map((x) => false);
+        localOpen[index] = !isOpen[index];
+        setIsOpen([...localOpen]);
+    }
     return(
         <>
-            <button className="filter-title" onClick={() => {handleFocus();setIsOpen(!isOpen)}}>
-                <span>{filter.predicate}</span> <PlusIcon focused={isOpen} code={code}/>
+            <button className="filter-title" onClick={handleFilterClick}>
+                <span>{filter.predicate}</span> <PlusIcon focused={isOpen[index]} code={code}/>
             </button>
-            <div className="filter-data" style={{maxHeight: (isOpen) ? "300px" : "0px"}}>
+            <div className="filter-data" style={{maxHeight: (isOpen[index]) ? "300px" : "0px"}}>
                 <p className="criteria-type">
                     inclusion criteria:
                 </p>

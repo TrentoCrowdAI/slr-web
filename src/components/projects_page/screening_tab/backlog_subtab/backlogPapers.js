@@ -29,9 +29,9 @@ const confidenceValues = [
 ];
 
 //will keep valid minimum values
-var minConfidenceValues = [];
+var minConfidenceValues = [{label : "0.00", value: 0.0}];
 //will keep valid maximum values
-var maxConfidenceValues = [];
+var maxConfidenceValues = [{label : "1.00", value: 1.0}];
 
 //order options
 const orderByOptions = [
@@ -140,6 +140,7 @@ const BacklogPapers = ({project_id, match, location, history}) => {
                 //show the page
                 setDisplay(true);
             }
+            console.log(resx.results)
         }
 
         fetchData();

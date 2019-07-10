@@ -36,9 +36,9 @@ const confidenceValues = [
 ];
 
 //will keep valid minimum values
-var minConfidenceValues = [];
+var minConfidenceValues = [{label : "0.00", value: 0.0}];
 //will keep valid maximum values
-var maxConfidenceValues = [];
+var maxConfidenceValues = [{label : "1.00", value: 1.0}];
 
 const queryParams = [
     {label: "min_confidence", default: 0.0},

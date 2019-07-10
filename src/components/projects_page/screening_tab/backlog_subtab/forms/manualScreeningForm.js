@@ -44,7 +44,7 @@ function ManualScreeningForm(props) {
                 appConsumer.setError(res);
             }
             //if the component is still mounted and res isn't null
-            else if ( res ) {
+            else if (mountRef.current && res) {
                 //setCollaborators(res);
                 setCollaborators([
                     {id: 0, ...(appConsumer.user), name : "You", surname : ""},

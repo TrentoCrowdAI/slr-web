@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import InfoIcon from "components/svg/infoIcon";
+import InfoTooltip from "components/modules/infoTooltip";
 
 
 const PaperConfidence = function ({filtersList, confidence}) {
@@ -27,16 +27,14 @@ const PaperConfidence = function ({filtersList, confidence}) {
                 <div className="confidence">
                     {confidence.value}
                 </div>
-                <div className="confidence-info">
-                    <button type="button" onClick={(e) => {setDisplayDetails(!displayDetails)}}><InfoIcon></InfoIcon></button>
-                    <div className="confidence-details" style={{display: (displayDetails) ? "block" : "none"}}>
+                <InfoTooltip className={"filters-confidence"} content={(<>
                         {confidence.details.map((element, index) => 
                             <p key={index}>
                                 <span>{element.detail}</span> <span className="side-detail">{element.percentage}</span>
                             </p>
                         )}
-                    </div>
-                </div>
+                    </>)}/>
+                
             </div>
         </div>
     );

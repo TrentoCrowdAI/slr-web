@@ -586,6 +586,39 @@ form.floating-form svg#close-button{
   margin: 15% auto;
 }
 
+/*top-right info content + button*/
+div.top-right-anchor{
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  height: 0px;
+  width: 0px;
+}
+div.top-right-anchor div.information-holder{
+  /*background-color: hotpink;*/
+}
+div.top-right-anchor div.information-holder:hover div.information-content-wrapper{
+  width: 200px;
+  height: auto;
+}
+div.top-right-anchor div.information-holder div.info-button-icon{
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  border: solid 1px #B3B4B4;
+}
+div.top-right-anchor div.information-holder div.information-content-wrapper{
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
+  padding: 5px 0px 0px 0px;
+}
+div.top-right-anchor div.information-holder div.information-content-wrapper div.information-content{
+  padding: 5px 5px 5px 5px;
+  border: solid 1px #B3B4B4;
+  border-radius: 4px;
+  background-color: white;
+}
 
 /*error wrapper*/
 div.error-wrapper{

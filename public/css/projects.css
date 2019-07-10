@@ -777,10 +777,14 @@ div.right-side-wrapper.status h2.screened-status span{
 div.right-side-wrapper.manual{
   width: 280px;
 }
+div.paper-card.manual div.paragraph{
+  margin-bottom: 5px;
+}
 div.paper-card.manual div.users-votes{
-  width: 100%;
+  width: 690px;
   display: flex;
   justify-content: space-between;
+  margin: 0px 0px 0px 10px;
 }
 div.paper-card.manual div.users-votes div.votes{
   display: flex;

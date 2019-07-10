@@ -78,7 +78,7 @@ div.paragraph div.paragraph-head{
   height: 18px;
   line-height: 10px;
 }
-div.paragraph button{
+div.s-paper div.paragraph button{
   text-decoration: underline;
   opacity: 0.0;
   transition: all 0.3s;
@@ -155,6 +155,9 @@ form.add-tag button{
 form.screening-outcome{
   width: 500px;
   margin: 40px auto;
+  position: relative;
+  background-color: #fcfcff;
+  z-index: 100;
 }
 form.screening-outcome h2.question{
   font-size: 22px;

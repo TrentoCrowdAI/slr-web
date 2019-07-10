@@ -289,18 +289,18 @@ const PrintManuallyScreenedPapersList_w = function ({papersList}) {
                         />
                         <div className="users-votes">
                             <div className="votes">
-                                {inV.map((user) => (
-                                    <Image className="user-vote-image in-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                {inV.map((user, index) => (
+                                    <Image key={index} className="user-vote-image in-vote" alt={user.name + " " + user.surname} src={user.image}/>
                                 ))}
                             </div>
                             <div className="votes">
-                                {inV.map((user) => (
-                                    <Image className="user-vote-image und-no-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                {inV.map((user, index) => (
+                                    <Image key={index} className="user-vote-image und-no-vote" alt={user.name + " " + user.surname} src={user.image}/>
                                 ))}
                             </div>
                             <div className="votes">
-                                {inV.map((user) => (
-                                    <Image className="user-vote-image out-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                {inV.map((user, index) => (
+                                    <Image key={index} className="user-vote-image out-vote" alt={user.name + " " + user.surname} src={user.image}/>
                                 ))}
                             </div>
                         </div>

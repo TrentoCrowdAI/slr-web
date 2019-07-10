@@ -132,13 +132,13 @@ const Tags = function (props) {
                         </button>
                     </div>
                 ))}
+                <form className="add-tag" onSubmit={addTag}>
+                    <input type="text" id="tag-name" placeholder="add new tag..." value={input}
+                        onChange={(e) => {setInput(e.target.value);}}
+                    />
+                    <button className="add-tag-button" disabled={(!input || input === "")}/>
+                </form>
             </div>
-            <form className="add-tag" onSubmit={addTag}>
-                <input type="text" id="tag-name" placeholder="add new tag..." value={input}
-                    onChange={(e) => {setInput(e.target.value);}}
-                />
-                <button className="add-tag-button" disabled={(!input || input === "")}/>
-            </form>
         </>
     );
     return output;
