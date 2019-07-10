@@ -148,7 +148,7 @@ const HighLighter = function ({data, highlightedData, setHighlightedData, classN
     }
 
     const [localData, setLocalData] = useState([{data: data, start: 0, end: data.length-1, type:"not_highlighted"}]);
-    useEffect(() => {console.log("local data change"); console.log(localData)}, [localData])
+    //useEffect(() => {console.log("local data change"); console.log(localData)}, [localData])
     let output = (
         <div className={className}>
             <div className={className+"-head"}>

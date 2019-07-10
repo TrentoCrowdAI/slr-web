@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext, useRef} from "react";
 import {withRouter} from 'react-router-dom';
-import ClampLines from 'react-clamp-lines';
 import KeyboardEventHandler from 'react-keyboard-event-handler';
 
 import {paperDao} from 'dao/paper.dao';
@@ -25,12 +24,15 @@ const queryParams = [
  * this is component form to search for the paper in project page
  * */
 
-const SinglePredicateScreening = function ({project_id, filtersList, location, match, history}) {
+const SinglePredicateScreening = function ({project_id, filtersList, filtersFetch, location, match, history}) {
 
     const mountRef = useRef(false);
 
     //fetch data
     const [paperData, setPaperData] = useState(undefined);
+
+    //paper wrapper-height js animation
+    const [paperHeight, setPaperHeight] = useState(220)
 
     //bool to control the visualization of page
     const [display, setDisplay] = useState(false);
@@ -86,8 +88,7 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
                 //if the component is still mounted and  res isn't null
                 else if (mnt && res) {
                     //update state
-                    console.log(res.results[2])
-                    setPaperData(res.results[2]);
+                    setPaperData(res.results[queryData.question_id]);
                     //show the page
                     setDisplay(true);
                 }
@@ -106,6 +107,16 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
 
     }, [project_id, queryData.question_id]);  //re-execute when these variables change
 
+    useEffect(() =>{
+        console.log("_____H " + display);
+        if(!filtersFetch){
+            if(!display){
+                setPaperHeight(220);
+            }else{
+                setPaperHeight(document.getElementsByClassName('s-paper')[0].clientHeight+20);
+            }
+        }
+    }, [display, filtersFetch])
 
     async function sendSubmission(key) {
         
@@ -148,21 +159,34 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
         //history.push(match.url + "?question_id=" + "9");
     }
     function handleKey(key){
-        if(document.activeElement.type !== "text"){
+        if(document.activeElement.type !== "text" && display){
             sendSubmission(key);
         }
     }
 
     let resultPart = "";
+    let paperToDisplay = "";
+
+    if(display === false  && queryData.question_id !== ""){
+        paperToDisplay = <LoadIcon class="small"/>
+    }else{
+        paperToDisplay = (
+            <>
+                <h2 className="paper-title">{paperData.title}</h2>
+                <HighLighter data={paperData.abstract} className={"paragraph"}/>
+                <Tags question_id={queryData.question_id}/>
+            </>
+        )
+    }
 
     //if is loading
-    if (display === false && queryData.question_id !== "") {
+    if (filtersFetch) {
         resultPart = (
                 <LoadIcon/>
             );
     }
 
-    else if (display && queryData.question_id !== "") {
+    else {
 
 
         resultPart = (
@@ -172,11 +196,13 @@ const SinglePredicateScreening = function ({project_id, filtersList, location, m
                     <h2>Filters:</h2>
                     <FiltersAccordion filtersList={filtersList}/>
                 </div>
-                <div className="left-side-wrapper s-paper">
-                    <h2 className="paper-title">{paperData.title}</h2>
-                    <HighLighter data={paperData.abstract} className={"paragraph"}/>
+                {/*div wrapper to set height animation*/}
+                <div style={{height: paperHeight+"px",overflow:"hidden", transition: "all 0.7s linear"}}>
+                    {/*content of the animated div*/}
+                    <div className="left-side-wrapper s-paper">
+                        {paperToDisplay}
+                    </div>
                 </div>
-                <Tags question_id={queryData.question_id}/>
                 <form className="light-modal screening-outcome">
                     <InfoTooltip className={"s-p-form"} content={(<>
                         You can cast your vote by using the keyboard:<br/>

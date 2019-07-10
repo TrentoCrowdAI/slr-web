@@ -61,7 +61,7 @@ div.right-side-wrapper.tags-holder div.tags-wrapper{
 div.s-paper{
   width: 660px;
   margin-top: 15px;
-  min-height: 0px;
+  min-height: 200px;
 }
 div.s-paper h2.paper-title{
   font-size: 26px;

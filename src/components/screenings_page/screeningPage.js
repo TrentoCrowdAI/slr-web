@@ -41,6 +41,9 @@ const ScreeningPage = (props) => {
     //filters of the project
     const [filtersList, setFiltersList] = useState([]);
 
+    //filtersFetch flag
+    const [filtersFetch, setFiltersFetch] = useState(true);
+
     //set the project title
     useEffect(() => {
         if(project.data.name === "loading..." || project.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS"){
@@ -86,31 +89,30 @@ const ScreeningPage = (props) => {
             }
 
 
-        };
-
-        const fetchFiltersData = async () => {
             //call the dao
-            let res = await projectFiltersDao.getFiltersList({"project_id" : project_id});
+            let resx = await projectFiltersDao.getFiltersList({"project_id" : project_id});
+            console.log(resx);
 
             //error checking
             //if the component is still mounted and  is 404 error
-            if (mnt && res && res.message === "Not Found") {
+            if (mnt && resx && resx.message === "Not Found") {
                 setFiltersList([]);
             }
             //if the component is still mounted and  there are some other errors
-            else if (mnt && res && res.message) {
+            else if (mnt && resx && resx.message) {
                 //pass error object to global context
-                appConsumer.setError(res);
+                appConsumer.setError(resx);
             }
             //if the component is still mounted and  res isn't null
-            else if (mnt && res) {
+            else if (mnt && resx) {
                 //update state
-                setFiltersList(res.results);
+                setFiltersList([...resx.results]);
             }
-
+            setFiltersFetch(false);
+            
         };
 
-        fetchProjectData(); fetchFiltersData();
+        fetchProjectData();
         //when the component will unmount
         return () => {
 
@@ -137,11 +139,11 @@ const ScreeningPage = (props) => {
                <Switch>
                     {/*route the form of search*/}
                     <Route exact path={props.match.url + "/single_predicate"} render={function(props){
-                        return (<SinglePredicateScreening project_id={project_id} filtersList={filtersList}/>);
+                        return (<SinglePredicateScreening project_id={project_id} filtersList={filtersList} filtersFetch={filtersFetch}/>);
                     }}/>
 
                     <Route exact path={props.match.url + "/multi_predicate"} render={function(props){
-                        return (<MultiPredicateScreening project_id={project_id} filtersList={filtersList}/>);
+                        return (<MultiPredicateScreening project_id={project_id} filtersList={filtersList} filtersFetch={filtersFetch}/>);
                     }}/>
                 </Switch>
             </div>

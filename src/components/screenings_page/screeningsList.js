@@ -154,7 +154,7 @@ const PrintList = function ({screeningsList, path}) {
     else {
         maps = (screeningsList.map((element, index) =>
                 <div key={element.id} className="light-modal project-card for-screening">
-                    <Link to={join(path, "/" + element.id)}>
+                    <Link to={join(path, "/" + element.id) + "/single_predicate?question_id=3"}>
                         <h3>{element.data.name}</h3>
                         <p className="description">{element.data.description}</p>
                     </Link>
