@@ -308,10 +308,13 @@ form.m-p-form{
   width: 700px;
   margin: 40px auto;
   padding: 15px 20px 5px 20px;
+  background-color: #fcfcff;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.5);
 }
 form.m-p-form div.filters-nav{
   position: relative;
   font-size: 15px;
+  height: 24px;
 }
 form.m-p-form div.filters-nav button.filter-btn{
   width: 30px;
@@ -320,15 +323,21 @@ form.m-p-form div.filters-nav button.filter-btn{
 form.m-p-form div.filters-nav div.underline{
   height: 2px;
   width: 26px;
-  background: black;
+  background: #3e3e3e;
   position: absolute;
   transition: all 0.2s;
+  bottom: 0px;
+  border-radius: 2px 2px 0px 0px;
 }
 form.m-p-form div.filter-data{
   margin: 15px 0px 15px 5px;
+  font-size: 14px;
+  color: #3e3e3e;
 }
 form.m-p-form div.filter-data h2.filter-title{
   margin: 0px 0px 7px 0px;
+  font-size: 20px;
+  color: #2f2f2f;
 }
 form.m-p-form div.filter-data p.criteria-type{
   margin: 0px 0px 1px 0px;
@@ -339,8 +348,11 @@ form.m-p-form div.filter-data p.criteria-description{
 }
 form.m-p-form div.screening-choice.multi-predicate h3.filter-question{
   margin: 0px 0px 0px 0px;
-  font-size: 20px;
+  font-size: 27px;
   text-align: center;
+}
+form.m-p-form div.screening-choice.multi-predicate p.hl-tip{
+  width: 450px;
 }
 div.m-p-screening-summary{
   text-align: center;
@@ -350,20 +362,25 @@ div.m-p-screening-summary div.filter-vote-summary{
   display: flex;
   justify-content: space-between;
   font-size: 16px;
-  padding: 0px 5px 0px 5px;
-  border-bottom: solid 1px grey;
+  padding: 5px 5px 5px 5px;
+  border-bottom: solid 1px #acacac;
 }
 div.m-p-screening-summary div.filter-vote-summary:first-child{
-  border-top: solid 1px grey;
+  border-top: solid 1px #acacac;
 }
 div.m-p-screening-summary div.filter-vote-summary p{
-  margin: 0px 0px 5px 0px;
+  margin: 0px 0px 0px 0px;
+  color: #232323;
 }
 div.m-p-screening-summary button{
   font-size: 18px;
   margin: 20px auto 10px auto;
   padding: 10px 10px 10px 10px;
-  border: solid 1px grey;
+  border: solid 1px #a7a7a7;
+  translate: all 0.3s;
+}
+div.m-p-screening-summary button:hover{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
 }
 /*highlighter*/
 span.highlighted{

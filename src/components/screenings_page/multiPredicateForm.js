@@ -210,7 +210,9 @@ const FilterScreen = function({ filter, display,
         output = (
             <div className="m-p-screening-summary">
                 {filterVotes.map((vote, index)=>(
-                    <div key={index} className="filter-vote-summary"><p>{vote.filter_predicate}</p> <div className="outcome-result">{vote.outcome}</div></div>
+                    <div key={index} className="filter-vote-summary"><p>{vote.filter_predicate}</p> <div className="outcome-result">
+                        {(vote.outcome === "und") ? "undecided" : vote.outcome}
+                    </div></div>
                 ))}
                 <button type="sumbit" className="outcomes-submission" disabled={(filterVotes.findIndex((vote) => (vote.outcome === "")) !== -1)}>
                     Submit your outcomes
