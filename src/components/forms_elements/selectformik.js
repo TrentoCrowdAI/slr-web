@@ -26,15 +26,20 @@ const Select = ({ options, form, name, type, code }) => {
         form.setFieldValue(name, options[selected].value);
     }, [selected])
 
-    function handleFocus(e){
+    function handleFocus(type){
         //handle arrow animation and focus of menu
-        document.getElementById((isNaN(code)) ? "ani-select-arrow" : "ani-select-arrow" + code).beginElement();//trigger svg animation
-        setFocused(!focused);
+        if(type === "click"){
+            document.getElementById((isNaN(code)) ? "ani-select-arrow" : "ani-select-arrow" + code).beginElement();//trigger svg animation
+            setFocused(!focused);
+        }else if(focused){
+            document.getElementById((isNaN(code)) ? "ani-select-arrow" : "ani-select-arrow" + code).beginElement();//trigger svg animation
+            setFocused(false);
+        }
     }
 
     var output = (
         <div className={(type) ? "custom-select " + type: "custom-select"}>
-            <div className="selected" tabIndex={-2} onBlur={handleFocus} onFocus={handleFocus}>{options[selected].label} <div className="arrow">
+            <div className="selected" tabIndex={-2} onBlur={() => {handleFocus("blur")}} onClick={() => {handleFocus("click")}}>{options[selected].label} <div className="arrow">
                 <SelectArrow focused={focused} code={code}/>
             </div></div>
             <div className="options-holder" style={{fontSize: (!focused) ? '0px' : '15px', borderBottom: (!focused) ? "0px solid #d7d7d7" : "1px solid #d7d7d7", borderLeft: (!focused) ? "0px solid #d7d7d7" : "1px solid #d7d7d7", borderRight: (!focused) ? "0px solid #d7d7d7" : "1px solid #d7d7d7", borderTop:"none"}}>
