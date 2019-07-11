@@ -12,7 +12,7 @@ const Tags = function (props) {
 
     const [tagsList, setTagsList] = useState(["React", "Facebook", "Web"]);
     
-    const availableTags = useRef(["older", "younger", "unnecessary"]);
+    const availableTags = useRef(["older", "younger", "unnecessary", "meaningful", "yanked"]);
 
     const suggestionTimeout = useRef();
 
@@ -69,6 +69,8 @@ const Tags = function (props) {
             mnt = false;
         };
     }, []);
+
+    useEffect(() => {props.setTagsData(tagsList)}, [tagsList])
 
     //function for adding tag
     async function addTag(tag){
@@ -151,7 +153,9 @@ const Tags = function (props) {
     let output = <></>;
     output = (
         <>
-            <div className={(props.class === "right") ? "tags-wrapper to-right" : "tags-wrapper"}>
+            <div className={(props.class === "right") ? "tags-wrapper to-right" : "tags-wrapper"}
+                style={{opacity: (props.display) ? "1.0" : "0.0"}}
+            >
                 {tagsList.map((tag, index)=>(
                     <div key={index} className="tag">
                         {tag}
@@ -173,7 +177,7 @@ const Tags = function (props) {
                                     onClick={() => {addTag(tag.content)}}
                             >
                                 {tag.content.substring(0,tag.index)}
-                                <span class="match">{tag.content.substring(tag.index, tag.index+tag.selectionLength)}</span>
+                                <span className="match">{tag.content.substring(tag.index, tag.index+tag.selectionLength)}</span>
                                 {tag.content.substring(tag.index+tag.selectionLength, tag.content.length)}
                             </button>
                         ))}

@@ -23,12 +23,13 @@ const queryParams = [
  * this is component form to search for the paper in project page
  * */
 
-const HighLighter = function ({data, highlightedData, setHighlightedData, className}) {
+const HighLighter = function ({data, setHighlightedData, className}) {
 
     const startingBlock = useRef(0);
     const endingBlock = useRef(0);
     const selectingInterval = useRef();
-
+    const [localData, setLocalData] = useState([{data: data, start: 0, end: data.length-1, type:"not_highlighted"}]);
+    useEffect(() => {setHighlightedData(localData)}, [localData]);
     function selectingFunction(){
         selectingInterval.current = setTimeout(() => {
             const selection = document.getSelection();
@@ -147,7 +148,6 @@ const HighLighter = function ({data, highlightedData, setHighlightedData, classN
         },10);
     }
 
-    const [localData, setLocalData] = useState([{data: data, start: 0, end: data.length-1, type:"not_highlighted"}]);
     //useEffect(() => {console.log("local data change"); console.log(localData)}, [localData])
     let output = (
         <div className={className}>

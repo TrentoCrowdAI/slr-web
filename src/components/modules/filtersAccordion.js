@@ -9,7 +9,7 @@ const FiltersAccordion = function ({filtersList}) {
     //if list is empty, print a notice message
     if (filtersList.length === 0) {
         output = (
-            <p className="empty-list-description"> There are no filters here, you can add new ones by filling the form to the right</p>
+            <p className="empty-filters-list-description"> There are no filters in this project</p>
         );
     }
     //if list isn't empty, print list of papers

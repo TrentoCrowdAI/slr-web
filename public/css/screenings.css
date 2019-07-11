@@ -1,22 +1,32 @@
+div.single-predicate-screening-wrapper{
+  padding-bottom: 20px;
+}
 /*right side filters*/
 div.right-side-wrapper.filters{
   width: 280px;
+  color: #2f2f2f;
 }
 div.right-side-wrapper.filters h2{
-  font-size: 22px;
-  margin: 5px 0px 5px 0px;
+  font-size: 25px;
+  margin: 15px 0px 5px 0px;
 }
 div.right-side-wrapper.filters div.filters-list{
-  border: solid 1px #2f2f2f;
+  border: solid 1px #a7a7a7;
   border-radius: 5px;
   overflow: hidden;
+}
+div.right-side-wrapper.filters p.empty-filters-list-description{
+  font-size: 15px;
+  margin: 5px 0px 5px 0px;
+  font-weight: 300;
+  color: #626262;
 }
 div.filters-list button{
   width: 100%;
   padding: 5px 3px 5px 5px;
   text-align: left;
-  font-size: 18px;
-  border-top: solid 1px #808080;
+  font-size: 17px;
+  border-top: solid 1px #cfcfcf;
   border-radius: 0px;
   display: flex;
   justify-content: space-between;
@@ -27,11 +37,14 @@ div.filters-list button span{
 div.filters-list button svg#plus-icon{
   width: 19px;
 }
+div.filters-list button svg#plus-icon line.st0-plus{
+  stroke: #3e3e3e;
+}
 div.filters-list div.filter:first-child button{
   border: none;
 }
 div.filters-list div.filter-data{
-  font-size: 12px;
+  font-size: 13px;
   padding: 0px;
   overflow: hidden;
   transition: all 0.3s linear;
@@ -42,7 +55,7 @@ div.filters-list div.filter-data p.criteria-type{
 }
 div.filters-list div.filter-data p.criteria-type:first-child{
   padding-top: 4px;
-  border-top: solid 1px #acacac;
+  border-top: solid 1px #e0e0ee;
 }
 div.filters-list div.filter-data p.criteria-description{
   font-weight: 300;
@@ -64,12 +77,14 @@ div.s-paper{
   min-height: 200px;
 }
 div.s-paper h2.paper-title{
-  font-size: 26px;
+  font-size: 28px;
   margin: 5px 0px 0px 0px;
 }
 div.s-paper div.paragraph{
   font-size: 18px;
   position: relative;
+  color: #2f2f2f;
+  text-align: justify;
 }
 div.paragraph div.paragraph-head{
   display: block;
@@ -94,19 +109,24 @@ div.tags-wrapper{
   flex-wrap: wrap;
   margin: 20px 0px 0px 0px;
   z-index: 100;
+  transition: all 0.1s;
+  transition-delay: 0.1s;
+  height: 33px;
 }
 div.tags-wrapper.to-right{
   margin: 10px 0px 0px 0px;
 }
 div.tags-wrapper div.tag{
   position: relative;
-  font-size: 12px;
+  font-size: 13px;
   margin: 0px 8px 10px 0px;
   padding: 2px 6px 2px 6px;
-  border: solid 1px grey;
+  border: solid 1px #acacac;
   height: 23px;
   border-radius: 3px;
   transition: all 0.2s;
+  color: #3e3e3e;
+  background-color: #fdfdff;
 }
 div.tags-wrapper div.tag button.delete-tag{
   opacity: 0.0;
@@ -139,6 +159,9 @@ form.add-tag input{
   width: 100%;
   height: 100%;
   font-size: 14px;
+  color: #3e3e3e;
+  border-bottom: solid 1px #3e3e3e;
+  padding-bottom: 4px;
 }
 form.add-tag button.add-tag-button{
   background-image: url('./../img/add.svg');
@@ -156,10 +179,12 @@ form.add-tag div.tag-suggestions{
   position: absolute;
   width: 100%;
   z-index: 101;
-  border: solid 1px grey;
+  border: solid 1px #acacac;
   border-top: none;
   overflow: hidden;
   border-radius: 0px 0px 3px 3px;
+  color: #3e3e3e;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
 }
 form.add-tag div.tag-suggestions button.tag-suggestion{
   width: 100%;
@@ -188,17 +213,18 @@ form.add-tag div.tag-suggestions button.tag-suggestion span.match{
   font-weight: normal;
 }
 form.add-tag div.tag-suggestions button.tag-suggestion:hover{
-  background-color: #fcfcff;
+  background-color: #f2f3f3;
 }
 /*single predicate form*/
 form.screening-outcome{
-  width: 500px;
-  margin: 40px auto;
+  width: 510px;
+  margin: 40px auto 20px 85px;
   position: relative;
   background-color: #fcfcff;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.5);
 }
 form.screening-outcome h2.question{
-  font-size: 22px;
+  font-size: 27px;
   margin: 10px 0px 0px 0px;
   text-align: center;
 }
@@ -216,13 +242,47 @@ div.screening-choice div.yes-no-und{
 div.screening-choice div.yes-no-und button{
   height: 60px;
   width: 60px;
-  border: solid 1px black;
+  border: solid 1px #696969;
   border-radius: 50%;
   transition: all 0.5s;
 }
 p.hl-tip{
   text-align: center;
-  margin: 2px 0px 0px 0px;
+  margin: 2px auto 0px auto;
+  color: #3e3e3e;
+  font-weight: 300;
+  font-size: 15px;
+  width: 350px;
+}
+div.top-right-anchor.s-p-form{
+  right: 30px;
+}
+div.top-right-anchor.s-p-form div.information-holder div.info-button-icon{
+  height: 20px;
+  width: 20px;
+}
+div.top-right-anchor.s-p-form div.information-holder div.info-button-icon svg#info circle.st1-info{
+  fill: #696969;
+}
+div.top-right-anchor.s-p-form div.information-holder div.info-button-icon svg#info line.st0-info{
+  stroke: #696969;
+}
+div.information-content-wrapper.s-p-form{
+  font-weight: 300;
+  font-size: 13px;
+}
+div.information-content-wrapper.s-p-form b{
+  margin: 0px 0px 0px 3px;
+}
+div.top-right-anchor div.information-holder:hover div.info-button-icon{
+  border: solid 1px #a7a7a7;
+}
+div.top-right-anchor div.information-holder:hover div.information-content-wrapper.s-p-form{
+  width: 170px;
+}
+div.information-content-wrapper.s-p-form div.information-content{
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+  color: #3e3e3e;
 }
 /*multi predicate form*/
 div.screening-choice.multi-predicate{

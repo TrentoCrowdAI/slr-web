@@ -40,6 +40,12 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
     //decision variable
     const [decision, setDecision] = useState("");
 
+    //highlighted data
+    const [highlightedData, setHighlightedData] = useState(undefined);
+
+    //tags data
+    const [tagsData, setTagsData] = useState([]);
+
     //get data from global context
     const appConsumer = useContext(AppContext);
 
@@ -89,6 +95,7 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
                 else if (mnt && res) {
                     //update state
                     setPaperData(res.results[queryData.question_id]);
+                    //setHighlightedData([{data: res.results[queryData.question_id].abstract, start: 0, end: res.results[queryData.question_id].abstract.length-1, type:"not_highlighted"}]);
                     //show the page
                     setDisplay(true);
                 }
@@ -108,34 +115,35 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
     }, [project_id, queryData.question_id]);  //re-execute when these variables change
 
     useEffect(() =>{
-        console.log("_____H " + display);
-        if(!filtersFetch){
-            if(!display){
-                setPaperHeight(220);
-            }else{
-                setPaperHeight(document.getElementsByClassName('s-paper')[0].clientHeight+20);
-            }
+        if(!filtersFetch && display){
+            setPaperHeight(document.getElementsByClassName('s-paper')[0].clientHeight+20);
         }
     }, [display, filtersFetch])
 
     async function sendSubmission(key) {
-        
+        let screeningData = {outcome: "", highlights: highlightedData, tags: tagsData};
+
         switch (key) {
             case "a":
                 console.log("NO");
                 setDecision("no");
+                screeningData.outcome = "no";
                 break;
             case "s":
                 console.log("YES");
                 setDecision("yes");
+                screeningData.outcome = "yes";
                 break;
             case "d":
                 console.log("UND");
                 setDecision("und");
+                screeningData.outcome = "und";
                 break;
             default:
                 break;
         }
+        console.log("data to send _> ");
+        console.log(screeningData)
         /*
         //call the dao
         let res = await projectsDao.deleteProject(id);
@@ -169,12 +177,13 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
 
     if(display === false  && queryData.question_id !== ""){
         paperToDisplay = <LoadIcon class="small"/>
-    }else{
+    }else if(paperData){
         paperToDisplay = (
             <>
                 <h2 className="paper-title">{paperData.title}</h2>
-                <HighLighter data={paperData.abstract} className={"paragraph"}/>
-                <Tags question_id={queryData.question_id}/>
+                <HighLighter data={paperData.abstract} className={"paragraph"} 
+                    setHighlightedData={setHighlightedData}
+                />
             </>
         )
     }
@@ -197,18 +206,21 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
                     <FiltersAccordion filtersList={filtersList}/>
                 </div>
                 {/*div wrapper to set height animation*/}
-                <div style={{height: paperHeight+"px",overflow:"hidden", transition: "all 0.7s linear"}}>
+                <div style={{height: paperHeight+"px",overflow:"hidden", transition: "all 0.5s linear"}}>
                     {/*content of the animated div*/}
                     <div className="left-side-wrapper s-paper">
                         {paperToDisplay}
                     </div>
                 </div>
+                <Tags question_id={queryData.question_id} display={display}
+                    setTagsData={setTagsData}
+                />
                 <form className="light-modal screening-outcome">
                     <InfoTooltip className={"s-p-form"} content={(<>
                         You can cast your vote by using the keyboard:<br/>
-                        <span>A : </span> no<br/>
-                        <span>D : </span> yes<br/>
-                        <span>S : </span> undecided<br/>
+                        <b>A : </b> <i>no</i><br/>
+                        <b>S : </b> <i>yes</i><br/>
+                        <b>D : </b> <i>undecided</i><br/>
                     </>)}/>
                     <h2 className="question">Is the paper relevant to the review?</h2>
                     <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
@@ -225,7 +237,7 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
                                 
                             </button>
                             <button className="und" style={{backgroundColor: (decision === "und") ? "grey" : ""}}
-                                onClick={() => {handleKey("s")}}
+                                onClick={() => {handleKey("d")}}
                             >
 
                             </button>
