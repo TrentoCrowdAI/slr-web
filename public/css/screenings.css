@@ -364,6 +364,10 @@ div.m-p-screening-summary button{
   padding: 10px 10px 10px 10px;
   border: solid 1px grey;
 }
+/*highlighter*/
 span.highlighted{
   background-color: #fcff48;
+}
+div.paragraph span:last-child{
+  padding-right: 10px;
 }

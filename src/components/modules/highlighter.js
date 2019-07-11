@@ -9,8 +9,9 @@ const HighLighter = function ({data, highlightedData, setHighlightedData, classN
     const startingBlock = useRef(0);
     const endingBlock = useRef(0);
     const selectingInterval = useRef();
+    const clicking = useRef(false);
 
-    function selectingFunction(){
+    function selectingFunction(onEnd){
         selectingInterval.current = setTimeout(() => {
             const selection = document.getSelection();
             //console.log(selection);
@@ -21,6 +22,9 @@ const HighLighter = function ({data, highlightedData, setHighlightedData, classN
                 var selectionStart = selection.anchorOffset;
                 //end of the selection
                 var selectionEnd = selection.focusOffset;
+                if(onEnd){
+                    selectionEnd = highlightedData[highlightedData.length-1].end;
+                }
 
 
                 if(startingBlock.current == endingBlock.current && selectionStart > selectionEnd){
@@ -37,11 +41,11 @@ const HighLighter = function ({data, highlightedData, setHighlightedData, classN
                     selectionEnd = tmp;
                 }
 
-                
-                //console.log("startingBlock   > " + startingBlock.current + " | " + localData[startingBlock.current].type);
-                //console.log("selection start   > " + selectionStart);
-                //console.log("endingBlock     > " + endingBlock.current + " | " + localData[endingBlock.current].type);
-                //console.log("selection end     > " + selectionEnd);
+                console.log(selection);
+                console.log("startingBlock   > " + startingBlock.current + " | " + highlightedData[startingBlock.current].type);
+                console.log("selection start   > " + selectionStart);
+                console.log("endingBlock     > " + endingBlock.current + " | " + highlightedData[endingBlock.current].type);
+                console.log("selection end     > " + selectionEnd);
                 
                 if(startingBlock.current === endingBlock.current && highlightedData[startingBlock.current].type === "not_highlighted"){
                     var firstSubBlock = {
@@ -130,7 +134,17 @@ const HighLighter = function ({data, highlightedData, setHighlightedData, classN
 
     //useEffect(() => {console.log("local data change"); console.log(localData)}, [localData])
     let output = (
-        <div className={className}>
+        <div className={className}
+            onMouseDown={() => {
+                clicking.current = true;
+            }}
+            onMouseUp={() => {
+                clicking.current = false;
+            }}
+            onMouseLeave={() => {
+                clicking.current = false;
+            }}
+        >
             <div className={className+"-head"}>
                 <button className="clear-highlight" onClick={()=>{
                         setHighlightedData([{data: data, start: 0, end: data.length-1, type:"not_highlighted"}]);
@@ -149,14 +163,26 @@ const HighLighter = function ({data, highlightedData, setHighlightedData, classN
                 }else{
                     return (
                         <span className={dataChunk.type} key={index}
-                            onMouseDown={() => {startingBlock.current = index;clearTimeout(selectingInterval.current)}}
+                            onMouseDown={() => {
+                                startingBlock.current = index;
+                                clearTimeout(selectingInterval.current)
+                            }}
+                            onMouseEnter={() => {
+                                if(!clicking.current){
+                                    console.log("casual enter on -> " + index)
+                                    clicking.current = true;
+                                    startingBlock.current = index;
+                                    clearTimeout(selectingInterval.current);
+                                }
+                            }}
                             onDoubleClick={(e) => {
                                 //console.log("double");
                                 clearTimeout(selectingInterval.current);
                                 document.getSelection().empty();}
                             }
                             onMouseUp={() => {
-                                endingBlock.current=index; selectingFunction();
+                                endingBlock.current=index; 
+                                selectingFunction();
                             }}
                         >{dataChunk.data}</span>
                     );
