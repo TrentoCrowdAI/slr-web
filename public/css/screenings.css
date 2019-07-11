@@ -304,6 +304,7 @@ p.empty-filters-description{
   font-size: 18px;
 }
 form.m-p-form{
+  position: relative;
   width: 700px;
   margin: 40px auto;
   padding: 15px 20px 5px 20px;

@@ -217,12 +217,12 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
                     setTagsData={setTagsData}
                 />
                 <form className="light-modal screening-outcome">
-                    <InfoTooltip className={"s-p-form"} content={(<>
+                    <InfoTooltip className={"s-p-form"}>
                         You can cast your vote by using the keyboard:<br/>
                         <b>A : </b> <i>no</i><br/>
                         <b>S : </b> <i>yes</i><br/>
                         <b>D : </b> <i>undecided</i><br/>
-                    </>)}/>
+                    </InfoTooltip>
                     <h2 className="question">Is the paper relevant to the review?</h2>
                     <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
                     <div className="screening-choice">

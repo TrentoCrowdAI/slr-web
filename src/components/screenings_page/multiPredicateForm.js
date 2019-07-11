@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import KeyboardEventHandler from 'react-keyboard-event-handler';
+import InfoTooltip from "components/modules/infoTooltip";
 
 const MultiPredicateForm = function ({filtersList, clearHighlights, highlightedData, setHighlightedData, display, mountRef}) {
 
@@ -73,6 +74,12 @@ const MultiPredicateForm = function ({filtersList, clearHighlights, highlightedD
 
     let output = (
         <form className="light-modal m-p-form" onSubmit={sendResults}>
+            <InfoTooltip className={"s-p-form"}>
+                You can cast your vote by using the keyboard:<br/>
+                <b>A : </b> <i>no</i><br/>
+                <b>S : </b> <i>yes</i><br/>
+                <b>D : </b> <i>undecided</i><br/>
+            </InfoTooltip>
             <div className="filters-nav">
             {filtersList.map((element) =>
                 <button key={element.id} type="button" className="filter-btn" onClick={() => {setDisplayedFilter(element)}}>
