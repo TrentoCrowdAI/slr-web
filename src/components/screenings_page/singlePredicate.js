@@ -95,6 +95,7 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
                 else if (mnt && res) {
                     //update state
                     setPaperData(res.results[queryData.question_id]);
+                    setHighlightedData([{data: res.results[queryData.question_id].abstract, start: 0, end: res.results[queryData.question_id].abstract.length-1, type:"not_highlighted"}])
                     //setHighlightedData([{data: res.results[queryData.question_id].abstract, start: 0, end: res.results[queryData.question_id].abstract.length-1, type:"not_highlighted"}]);
                     //show the page
                     setDisplay(true);
@@ -182,7 +183,7 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
             <>
                 <h2 className="paper-title">{paperData.title}</h2>
                 <HighLighter data={paperData.abstract} className={"paragraph"} 
-                    setHighlightedData={setHighlightedData}
+                    highlightedData={highlightedData} setHighlightedData={setHighlightedData}
                 />
             </>
         )

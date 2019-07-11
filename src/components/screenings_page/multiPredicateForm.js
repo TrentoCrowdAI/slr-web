@@ -1,18 +1,26 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import KeyboardEventHandler from 'react-keyboard-event-handler';
 
-const MultiPredicateForm = function ({filtersList, mountRef}) {
+const MultiPredicateForm = function ({filtersList, clearHighlights, highlightedData, setHighlightedData, display, mountRef}) {
 
     const [displayedFilter, setDisplayedFilter] = useState(filtersList[0]);
     
     const [filterVotes, setFilterVotes] = useState(filtersList.map((filter) => ({filter_id: filter.id, filter_predicate: filter.data.predicate, outcome: ""})));
 
+    const [filterHighlights, setFilterHighlights] = useState(undefined);
+
     const [underlineOffset, setUnderlineOffset] = useState(0);
 
     useEffect(() => {
-        console.log("going nex predicate");
+        if(display){
+            setDisplayedFilter(filtersList[0]);
+            setFilterVotes(filtersList.map((filter) => ({filter_id: filter.id, filter_predicate: filter.data.predicate, outcome: ""})));
+            setFilterHighlights(filtersList.map(() => []));
+        }
+    }, [display])
+    
+    useEffect(() => {
         let index = filterVotes.findIndex((vote) => (vote.outcome === ""));
-        console.log(index);
         if(index >= 0){
             setTimeout(() => {
                 if(mountRef.current){
@@ -21,7 +29,6 @@ const MultiPredicateForm = function ({filtersList, mountRef}) {
             }, 400);
             
         }else{
-            console.log("we're done here");
             setTimeout(() => {
                 if(mountRef.current){
                     setDisplayedFilter("summary");
@@ -33,15 +40,34 @@ const MultiPredicateForm = function ({filtersList, mountRef}) {
     useEffect(() => {
         let index = filtersList.findIndex((filter) => (filter.id === displayedFilter.id));
         if(index >= 0){
+            console.log("GOING NEXT FILTER");
             setUnderlineOffset(index * 30 + 2);
+            if(filterHighlights && filterHighlights[index].length !== 0){
+                console.log("__settting highligerhe data");
+                console.log(filterHighlights[index]);
+                setHighlightedData(filterHighlights[index]);
+            }else{
+                console.log("__clearing highligerhe data")
+                clearHighlights();
+            }
         }else{
+            console.log("___summary tab")
+            clearHighlights("disabled");
             setUnderlineOffset(filterVotes.length * 30 + 2);
         }
     }, [displayedFilter])
 
     async function sendResults(){
-        if(filterVotes.findIndex((vote) => (vote.outcome === "")) !== -1){
-            console.log(filterVotes);
+        let dataToSend = filterVotes.map((filterVote, index) => {
+            if(filterHighlights[index].length === 1 && filterHighlights[index][0].type === "not_highlighted"){
+                return {...filterVote, highlights: []};
+            }else{
+                return {...filterVote, highlights: filterHighlights[index]};
+            }
+        });
+        console.log(dataToSend);
+        if(filterVotes.findIndex((vote) => (vote.outcome === "")) === -1){
+            console.log("sening")
         }
     }
 
@@ -49,16 +75,20 @@ const MultiPredicateForm = function ({filtersList, mountRef}) {
         <form className="light-modal m-p-form" onSubmit={sendResults}>
             <div className="filters-nav">
             {filtersList.map((element) =>
-                <button key={element.id} className="filter-btn" onClick={() => {setDisplayedFilter(element)}}>
+                <button key={element.id} type="button" className="filter-btn" onClick={() => {setDisplayedFilter(element)}}>
                     {element.data.name || "[!]"}
                 </button>
             )}
-            <button className="filter-btn summary" onClick={() => {setDisplayedFilter("summary")}}>
+            <button className="filter-btn summary" type="button" onClick={() => {setDisplayedFilter("summary")}}>
                 {"[V]"}
             </button>
             <div className="underline" style={{left: underlineOffset + "px"}}></div>
             </div>
-            <FilterScreen filter={displayedFilter} filterVotes={filterVotes} setFilterVotes={setFilterVotes} mountRef={mountRef}/>
+            <FilterScreen filter={displayedFilter} display={display} 
+                filterHighlights={filterHighlights} setFilterHighlights={setFilterHighlights}
+                filterVotes={filterVotes} setFilterVotes={setFilterVotes} 
+                highlightedData={highlightedData} setHighlightedData={setHighlightedData}
+            mountRef={mountRef}/>
         </form>
     );
 
@@ -67,60 +97,57 @@ const MultiPredicateForm = function ({filtersList, mountRef}) {
 
 };
 
-const FilterScreen = function({filter, filterVotes, setFilterVotes, mountRef}) {
+const FilterScreen = function({ filter, display, 
+                                filterHighlights, setFilterHighlights,
+                                filterVotes, setFilterVotes, 
+                                highlightedData, setHighlightedData, mountRef}) {
 
-    let currentOutcome = "";
-    if(filter.id){
-        currentOutcome = filterVotes.filter((filterx) => (filterx.filter_id === filter.id))[0].outcome;
-    }
+
+    const [currentOutcome, setCurrentOutcome] = useState("");
+    const currentIndex = useRef(filterVotes.findIndex((filterx) => (filterx.filter_id === filter.id)));
+
+    useEffect(() => {
+        if(filter.id){
+            currentIndex.current = filterVotes.findIndex((filterx) => (filterx.filter_id === filter.id));
+            setCurrentOutcome(filterVotes[currentIndex.current].outcome);
+        }
+    }, [filter])
+
+    useEffect(() => {
+        if(filter.id && filterHighlights && highlightedData !== filterHighlights[currentIndex.current]){
+            console.log("updating highlight of tab : " + currentIndex.current);
+            let localHighlight = filterHighlights;
+            localHighlight[currentIndex.current] = highlightedData;
+            setFilterHighlights([...localHighlight]);
+        }
+    }, [highlightedData])
 
     async function sendSubmission(key){
 
+        let localOutcome = "";
+        
         switch (key) {
             case "a":
-                console.log("NO");
-                setFilterVotes(
-                    filterVotes.map((vote) => ((vote.filter_id === filter.id) ? {...vote, outcome : "no"} : vote))
-                )
+                setCurrentOutcome("no");
+                localOutcome = "no";
                 break;
             case "s":
-                console.log("YES");
-                setFilterVotes(
-                    filterVotes.map((vote) => ((vote.filter_id === filter.id) ? {...vote, outcome : "yes"} : vote))
-                )
+                setCurrentOutcome("yes");
+                localOutcome = "yes";
                 break;
             case "d":
-                console.log("UND");
-                setFilterVotes(
-                    filterVotes.map((vote) => ((vote.filter_id === filter.id) ? {...vote, outcome : "und"} : vote))
-                )
+                setCurrentOutcome("und");
+                localOutcome = "und";
                 break;
             default:
                 break;
         }
-        /*
-        //call the dao
-        let res = await projectsDao.deleteProject(id);
-
-        //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-        if(mountRef.current && res === ""){
-            //create a new array without the project deleted
-            let newProjectsList = projectsList.filter((project)=>project.id !== id);
-            //update project list state
-            setProjectsList(newProjectsList);
-
-            appConsumer.setNotificationMessage("Successfully deleted");
-        }
-        //error checking
-        //if is other error
-        else if (mountRef.current && res && res.message) {
-            //pass error object to global context
-            appConsumer.setError(res);  
-        }
-        */
+        setFilterVotes(
+            filterVotes.map((vote) => ((vote.filter_id === filter.id) ? {...vote, outcome : localOutcome} : vote))
+        );
     }
     function handleKey(key){
-        if(document.activeElement.type !== "text"){
+        if(document.activeElement.type !== "text" && display){
             sendSubmission(key);
         }
     }
@@ -153,17 +180,17 @@ const FilterScreen = function({filter, filterVotes, setFilterVotes, mountRef}) {
                     <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
                     
                     <div className="yes-no-und">
-                        <button className="no" style={{backgroundColor: (currentOutcome === "no") ? "grey" : ""}}
+                        <button className="no" type="button" style={{backgroundColor: (currentOutcome === "no") ? "grey" : ""}}
                             onClick={() => {handleKey("a")}}
                         >
 
                         </button>
-                        <button className="yes" style={{backgroundColor: (currentOutcome === "yes") ? "grey" : ""}}
+                        <button className="yes" type="button" style={{backgroundColor: (currentOutcome === "yes") ? "grey" : ""}}
                             onClick={() => {handleKey("s")}}
                         >
                             
                         </button>
-                        <button className="und" style={{backgroundColor: (currentOutcome === "und") ? "grey" : ""}}
+                        <button className="und" type="button" style={{backgroundColor: (currentOutcome=== "und") ? "grey" : ""}}
                             onClick={() => {handleKey("d")}}
                         >
 

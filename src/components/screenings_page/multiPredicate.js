@@ -23,7 +23,7 @@ const queryParams = [
  * this is component form to search for the paper in project page
  * */
 
-const MultiPredicateScreening = function ({project_id, filtersList, location, match, history}) {
+const MultiPredicateScreening = function ({project_id, filtersList, filtersFetch, location, match, history}) {
 
     const mountRef = useRef(false);
 
@@ -33,8 +33,14 @@ const MultiPredicateScreening = function ({project_id, filtersList, location, ma
     //bool to control the visualization of page
     const [display, setDisplay] = useState(false);
 
-    //decision variable
-    const [decision, setDecision] = useState("");
+    //paper wrapper-height js animation
+    const [paperHeight, setPaperHeight] = useState(220)
+
+    //highlighted data
+    const [highlightedData, setHighlightedData] = useState([]);
+
+    //tags data
+    const [tagsData, setTagsData] = useState([]);
 
     //get data from global context
     const appConsumer = useContext(AppContext);
@@ -50,6 +56,12 @@ const MultiPredicateScreening = function ({project_id, filtersList, location, ma
             mountRef.current = false;
         };
     },[]);
+
+    useEffect(() =>{
+        if(!filtersFetch && display){
+            setPaperHeight(document.getElementsByClassName('s-paper')[0].clientHeight+20);
+        }
+    }, [display, filtersFetch])
 
     //this will run on mount and every time the url params change
     useEffect(() => {
@@ -84,8 +96,9 @@ const MultiPredicateScreening = function ({project_id, filtersList, location, ma
                 //if the component is still mounted and  res isn't null
                 else if (mnt && res) {
                     //update state
-                    console.log(res.results[2])
-                    setPaperData(res.results[2]);
+                    //console.log(res.results[2])
+                    setPaperData(res.results[queryData.question_id]);
+                    setHighlightedData([{data: res.results[queryData.question_id].abstract, start: 0, end: res.results[queryData.question_id].abstract.length-1, type:"not_highlighted"}])
                     //show the page
                     setDisplay(true);
                 }
@@ -104,32 +117,60 @@ const MultiPredicateScreening = function ({project_id, filtersList, location, ma
 
     }, [project_id, queryData.question_id]);  //re-execute when these variables change
 
+    function clearHighlights(type = "not_highlighted"){
+        if(highlightedData && paperData){
+            setHighlightedData([{data: paperData.abstract, start: 0, end: paperData.abstract.length-1, type: type}]);
+        }
+    }
     let resultPart = "";
+    let paperToDisplay = "";
 
-    //if is loading
-    if (display === false && queryData.question_id !== "") {
+    //if I don't have paper to display yet
+    if(display === false  && queryData.question_id !== ""){
+        paperToDisplay = <LoadIcon class="small"/>
+    }else if(paperData){
+        paperToDisplay = (
+            <>
+                <h2 className="paper-title">{paperData.title}</h2>
+                <HighLighter data={paperData.abstract} className={"paragraph"} 
+                    highlightedData={highlightedData} setHighlightedData={setHighlightedData}
+                />
+            </>
+        )
+    }
+
+    //if is loading filters
+    if (filtersFetch) {
         resultPart = (
                 <LoadIcon/>
             );
     }
 
-    else if (display && queryData.question_id !== "") {
+    else{
 
 
         resultPart = (
             <>
                 <div className="right-side-wrapper tags-holder">
-                    <Tags class="right" question_id={queryData.question_id}/>
+                    <Tags class="right" question_id={queryData.question_id} display={display}
+                        setTagsData={setTagsData}
+                    />
                 </div>
-                <div className="left-side-wrapper s-paper">
-                   <h2 className="paper-title">{paperData.title}</h2>
-                   <HighLighter data={paperData.abstract} className={"paragraph"}/>
+                {/*div wrapper to set height animation*/}
+                <div style={{height: paperHeight+"px",overflow:"hidden", transition: "all 0.5s linear"}}>
+                    {/*content of the animated div*/}
+                    <div className="left-side-wrapper s-paper">
+                    {paperToDisplay}
+                    </div>
                 </div>
                 {(filtersList.length === 0) ? 
                     <p className="empty-filters-description"> There are no filters here, add new filters before starting here</p>
                     :
                     <>
-                    <MultiPredicateForm filtersList={filtersList} mountRef={mountRef}/>
+                    <MultiPredicateForm filtersList={filtersList} display={display} mountRef={mountRef}
+                        clearHighlights={clearHighlights}
+                        highlightedData={highlightedData} setHighlightedData={setHighlightedData}
+                    />
                     </>
                 }
             </>
