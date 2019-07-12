@@ -166,14 +166,23 @@ const ManualResults = ({project_id, match, location, history}) => {
                 <div className="top-right-description">
                     <p className="manual-description"> 
                     Here you can see the status of the manual
-                    screening process. 
+                    screening process. <br/>
+                    <span className="color-code red-color">RED </span> voted no<br/>
+                    <span className="color-code green-color">GREEN </span> voted yes<br/>
+                    <span className="color-code blue-color">BLUE </span> voted undecided<br/>
+                    <span className="color-code grey-color">GREY </span> did not vote yet<br/>
                     </p>
                     <Link to={"/screenings/"+project_id+"/"}>(start your manual screening session)</Link>
                 </div>
             </div>
             <div className="left-side-wrapper">
                 <div className="paper-card-holder large">
-                    <div className="order">
+                    <div className="order"
+                    style={{
+                        pointerEvents: (!display || papersList.length === 0) ? "none" : "",
+                        opacity: (papersList.length === 0) ? "0.0" : "1.0"
+                    }}
+                    >
                         <div className="order-flex-item">
                             <label>sort by:</label>
                             <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)} 
@@ -181,7 +190,9 @@ const ManualResults = ({project_id, match, location, history}) => {
                                 type={"medium"}
                                 code={0}
                                 />
-                            <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={up}/></button>
+                            <button type="button" onClick={handelOrder} style={{display: (queryData.orderBy === "date_created") ? "none" : ""}}>
+                                <OrderArrow up={up}/>
+                            </button>
                         </div>
                     </div>
                     {output}

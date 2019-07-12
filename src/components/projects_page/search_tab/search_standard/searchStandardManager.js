@@ -147,6 +147,9 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
                     //show the page
                     setDisplay(true);
                 }
+            }else{
+                setPapersList([]);
+                setTotalResults(0);
             }
         };
 
@@ -268,35 +271,25 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
     if (display === false && queryData.query !== "") {
 
         resultPart = (
-            <div className="paper-card-holder">
-                <div className="paper-card-holder-head"
-                     style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
-                    <div className="select-all">
-                        <CheckBox label="Select All" name="select_all" val="" isChecked={false}
-                                  handler={selectAllPapers}/>
-                    </div>
-                    <div className="order">
-                        <div className="order-flex-item">
-                            <label>sort by:</label>
-                            <Select options={orderByOptions}
-                                    selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
-                                    handler={handleSelection}/>
-                            <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <>
+                <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} setSelectedPapersList={setSelectedPapersList} 
+                    handlePaperSelection={handlePaperSelection} mounted={mountRef}/>
                 <div className="search-loading-holder">
                     <LoadIcon class={"small"}/>
                 </div>
-            </div>);
+            </>
+        );
     }
 
     //if the search results list is empty
     else if (papersList.length === 0 && queryData.query !== "") {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
-            <div className="no-results"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
+            <>
+                <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} setSelectedPapersList={setSelectedPapersList} 
+                    handlePaperSelection={handlePaperSelection} mounted={mountRef}/>
+                <div className="no-results"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
+            </>
         );
     }
     else if (papersList.length > 0 && queryData.query !== "") {
@@ -305,33 +298,15 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
         let arrayEid = selectedPapersList.map(element => element.eid);
 
         resultPart = (
-            <div className="paper-card-holder">
-                <div className="paper-card-holder-head">
-                    <div className="select-all">
-                        <CheckBox label="Select All" name="select_all" val=""
-                                  isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")}
-                                  handler={selectAllPapers}/>
-                    </div>
-                    <div className="order">
-                        <div className="order-flex-item">
-                            <label>sort by:</label>
-                            <Select options={orderByOptions}
-                                    selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
-                                    handler={handleSelection}/>
-                            <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <>
                 <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} setSelectedPapersList={setSelectedPapersList} 
                     handlePaperSelection={handlePaperSelection} mounted={mountRef}/>
-
-
+                    
                 <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection}
                                         selectedEidList={arrayEid}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults}
                             path={match.url}/>
-            </div>
+            </>
         );
     }
 
@@ -341,14 +316,40 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
             <SearchStandardForm
                 {...{history, queryData, project_id}}
             />
-            <div className="search-automated-option" style={{display: (queryData.query === "") ? "block" : "none"}}>
+            <div className="search-automated-option" 
+                style={{display: (queryData.query === "") ? "block" : "none"}}
+                >
                 <p><i>or</i><br/>let an algorithm provide search results for you</p>
                 <Link to={"/projects/" + project_id + "/searchautomated"}>
                     <Robot/>
                 </Link>
             </div>
             <div className="search-results">
+                <div className="paper-card-holder">
+                    <div className="paper-card-holder-head"
+                        style={{
+                            pointerEvents: (!display || papersList.length === 0) ? "none" : "",
+                            opacity: (papersList.length === 0) ? "0.0" : "1.0"
+                        }}
+                        >
+                        <div className="select-all">
+                            <CheckBox label="Select All" name="select_all" val=""
+                                    isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")}
+                                    handler={selectAllPapers}/>
+                        </div>
+                        <div className="order">
+                            <div className="order-flex-item">
+                                <label>sort by:</label>
+                                <Select options={orderByOptions}
+                                        selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
+                                        handler={handleSelection}/>
+                                <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 {resultPart}
+                </div>
             </div>
         </>
     );

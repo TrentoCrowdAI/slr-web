@@ -320,6 +320,25 @@ div.selected-papers-list{
   transition: all 0.3s;
   z-index: 101;
 }
+div.top-right-anchor.selected-papers{
+  right: 25px;
+  top: 6px;
+  z-index: 11;
+}
+div.top-right-anchor.selected-papers div.info-button-icon{
+  height: 19px !important;
+  width: 19px !important;
+}
+div.information-content-wrapper.selected-papers p{
+  margin: 0px;
+  font-size: 14px;
+  font-weight: 300;
+}
+div.information-content-wrapper.selected-papers{
+  position: absolute;
+  z-index: 10;
+  right: -16px;
+}
 div.selected-papers-list h3 {
 	font-size: 16px;
 	margin: 0 auto 9px auto;

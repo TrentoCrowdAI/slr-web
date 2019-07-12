@@ -11,10 +11,6 @@ const Select = ({ options, selected, handler, type, code }) => {
     //this is useful for the animation
     const [focused, setFocused] = useState(false);
 
-    if(type === "mini")
-        console.log(options); console.log(selected);
-
-
 
     function handleFocus(type){
         //handle arrow animation and focus of menu

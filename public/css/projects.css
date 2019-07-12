@@ -216,6 +216,9 @@ div.paper-card-holder{
   width: 700px;
   z-index: 10;
 }
+div.center-side-wrapper div.paper-card-holder{
+  margin: auto;
+}
 div.centerd-wrapper{
   margin: 0 auto;
 }
@@ -730,6 +733,22 @@ form.start-manual-screening div.screening-type label:first-child{
   vertical-align: middle;
   font-weight: bold;
 }
+p.manual-description span.color-code{
+  margin: 2px 0px 0px 0px;
+  display: inline-block;
+}
+p.manual-description span.color-code.green-color{
+  color: #0b8a42;
+}
+p.manual-description span.color-code.red-color{
+  color: #c31f1f;
+}
+p.manual-description span.color-code.grey-color{
+  color:  grey;
+}
+p.manual-description span.color-code.blue-color{
+  color: #4242e1;
+}
 /*screened papers tab*/
 div.paper-card.screened h3{
   margin-right: 100px;
@@ -791,18 +810,21 @@ div.paper-card.manual div.users-votes div.votes{
   max-width: 200px;
   flex-wrap: wrap;
 }
-div.paper-card.manual div.users-votes div.votes div.user-vote-image{
+div.paper-card.manual div.users-votes div.votes div.user-vote-image, img.user-vote-image{
   width: 36px;
   height: 36px;
   border-radius: 50%;
   margin: 0 2px 0 2px;
 }
-div.user-vote-image.in-vote{
+div.user-vote-image.in-vote, img.user-vote-image.in-vote{
   border: solid 2px #0b8a42;
 }
-div.user-vote-image.out-vote{
+div.user-vote-image.out-vote, img.user-vote-image.out-vote{
   border: solid 2px #c31f1f;
 }
-div.user-vote-image.und-no-vote{
+div.user-vote-image.no-vote, img.user-vote-image.no-vote{
   border: solid 2px grey;
+}
+div.user-vote-image.und-vote, img.user-vote-image.und-vote{
+  border: solid 2px #4242e1;
 }

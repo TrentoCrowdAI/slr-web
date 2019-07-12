@@ -150,6 +150,7 @@ div.top-right-side-wrapper{
 }
 div.center-side-wrapper{
   margin: 0 auto;
+  text-align: center;
 }
 
 .modal{
@@ -221,7 +222,7 @@ input[type="number"] {
 }
 
 .disabled{
-  opacity: 0.3;
+  opacity: 0.4;
   pointer-events: none;
   cursor: not-allowed;
 }

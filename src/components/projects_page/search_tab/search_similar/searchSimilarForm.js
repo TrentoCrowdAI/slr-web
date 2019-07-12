@@ -102,7 +102,13 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
                 let resx = await paperDao.search({"query" : queryData.query, "scopus": true});
 
                 //if there is a error
-                if (mnt && resx && resx.message) {
+                //if is 404 error
+                if (mnt && resx && resx.message === "Not Found") {
+                    setTargetPaperData({title:"unable to retrieve paper"});
+                    //show the page
+                    setSimilarPaperFetch(false);
+                }
+                else if (mnt && resx && resx.message) {
                     //pass error object to global context
                     appConsumer.setError(resx);
                 }else if(mnt){
@@ -115,6 +121,7 @@ const SearchSimilarForm = function ({history, queryData, project_id, targetPaper
             }
             else{
                 console.log("no file (& no similarPaperString)");
+                setSimilarPaperFetch(false);
             }
 
         };

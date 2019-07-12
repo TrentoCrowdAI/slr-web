@@ -3,6 +3,7 @@ import React, {useEffect, useContext, useState} from "react";
 import {projectPapersDao} from 'dao/projectPapers.dao';
 
 import RemoveButton from 'components/svg/removeButton';
+import InfoTooltip from "components/modules/infoTooltip";
 
 import {AppContext} from 'components/providers/appProvider'
 
@@ -69,8 +70,11 @@ const SelectedPapersListBox = function ({project_id, selectedPapersList, setSele
     let output = "";
     output = (
         <div className="selected-papers-list" style={{opacity: (selectedPapersList.length>0) ? "1.0" : "0.0", pointerEvents: (selectedPapersList.length>0) ? "auto" : "none"}}>
+            <InfoTooltip className={"selected-papers"}>
+                <p>this box contains the complete list of papers you currently selected in this browser</p>
+            </InfoTooltip>
             <h3>
-                {"SELECTED PAPERS"} <br/><span>(total : {selectedPapersList.length})</span>
+                SELECTED PAPERS <br/><span>(total : {selectedPapersList.length})</span>
             </h3>
             <div className="submission-wrapper">
                 <div className="papers-wrapper" style={{border: (selectedPapersList.length>0) ? "" : "0px"}}>

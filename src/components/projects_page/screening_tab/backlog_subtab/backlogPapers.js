@@ -51,14 +51,11 @@ const queryParams = [
 /**
  * the local component that manages the papers in the backlog of a project
  */
-const BacklogPapers = ({project_id, match, location, history}) => {
+const BacklogPapers = ({project_id, totalResults, setTotalResults, match, location, history}) => {
 
 
     //fetch data
     const [papersList, setPapersList] = useState([]);
-
-    //bool to show the pagination list
-    const [totalResults, setTotalResults] = useState(0);
 
     //filters
     const [filtersList, setFiltersList] = useState([]);
@@ -217,10 +214,11 @@ const BacklogPapers = ({project_id, match, location, history}) => {
 
 
     let output;
+    let resultOutput;
     //if the page is loading
     if (display === false) {
         //print loading image
-        output = (
+        resultOutput = (
             <>
                 <LoadIcon class={"small"}/>
             </>
@@ -228,7 +226,7 @@ const BacklogPapers = ({project_id, match, location, history}) => {
     }
     else {
         //print results
-        output = (
+        resultOutput = (
             <>
                 <PrintBacklogPapersList papersList={papersList} filtersList={filtersList}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
@@ -237,9 +235,12 @@ const BacklogPapers = ({project_id, match, location, history}) => {
     }
 
     output = (
-        <div className="left-side-wrapper">
+        <div className={(papersList.length === 0) ? "center-side-wrapper" :"left-side-wrapper"}>
             <div className="paper-card-holder large">
-                <div className="order">
+                <div className="order" style={{
+                        pointerEvents: (!display || papersList.length === 0) ? "none" : "",
+                        opacity: (papersList.length === 0) ? "0.0" : "1.0"
+                    }}>
                     <div className="order-flex-item">
                         <label>sort by:</label>
                         <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)} 
@@ -247,7 +248,9 @@ const BacklogPapers = ({project_id, match, location, history}) => {
                             type={"medium"}
                             code={0}
                             />
-                        <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={up}/></button>
+                        <button type="button" onClick={handelOrder} style={{display: (queryData.orderBy === "date_created") ? "none" : ""}}>
+                            <OrderArrow up={up}/>
+                        </button>
                     </div>
                     <div className="order-flex-item">
                         <label>min confidence:</label>
@@ -267,7 +270,7 @@ const BacklogPapers = ({project_id, match, location, history}) => {
                                 code={2}/>
                     </div>
                 </div>
-                {output}
+                {resultOutput}
             </div>
         </div>
     );

@@ -49,7 +49,7 @@ const TargetPaper = ({close, //the setter for closing the form when it's visible
             <>
             <h3 className="similar-paper-title">{paperInfo.title}</h3>
             <ClampLines
-                text={paperInfo.abstract}
+                text={paperInfo.abstract || ""}
                 lines={4}
                 ellipsis="..."
                 className="similar-paper-paragraph"

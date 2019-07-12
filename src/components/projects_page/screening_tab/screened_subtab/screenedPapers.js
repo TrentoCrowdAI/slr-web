@@ -168,7 +168,12 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
             </div>
             <div className="left-side-wrapper">
                 <div className="paper-card-holder large">
-                    <div className="order">
+                    <div className="order"
+                        style={{
+                            pointerEvents: (!display || papersList.length === 0) ? "none" : "",
+                            opacity: (papersList.length === 0) ? "0.0" : "1.0"
+                        }}
+                        >
                         <div className="order-flex-item">
                             <label>sort by:</label>
                             <Select options={orderByOptions} selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)} 
@@ -176,7 +181,9 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
                                 type={"medium"}
                                 code={0}
                                 />
-                            <button type="button" onClick={handelOrder}><OrderArrow display={queryData.orderBy !== "date_created"} up={up}/></button>
+                            <button type="button" onClick={handelOrder} style={{display: (queryData.orderBy === "date_created") ? "none" : ""}}>
+                                <OrderArrow up={up}/>
+                            </button>
                         </div>
                     </div>
                     {output}

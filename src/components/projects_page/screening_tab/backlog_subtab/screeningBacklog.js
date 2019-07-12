@@ -29,6 +29,9 @@ const ScreeningBacklog = function ({project_id}) {
     //autoScreeningStatus
     const [autoScreeningStatus, setAutoScreeningStatus] = useState(3016);
 
+    //number of papers hooks, used to check if there are papers
+    const [totalResults, setTotalResults] = useState(0);
+
     useEffect(() => {
         let mnt = true;
         /*
@@ -80,20 +83,9 @@ const ScreeningBacklog = function ({project_id}) {
         };
     },[autoScreeningFlag]);
 
-    return (
-        <>
-
-            <Cover cls={displayManualForm ? "full-screen" : ""} handler={setDisplayManualForm}/>
-            <ManualScreeningForm visibility={displayManualForm} setVisibility={setDisplayManualForm} project_id={project_id}/>
-            
-            <Cover cls={displayAutoForm ? "full-screen" : ""} handler={setDisplayAutoForm}/>
-            <AutoScreeningForm visibility={displayAutoForm} setVisibility={setDisplayAutoForm} project_id={project_id} setAutoScreeningFlag={setAutoScreeningFlag}/>
-            {/*
-            <PapersCsvForm visibility={displayCsvForm} setVisibility={setDisplayCsvForm} project_id={props.project_id}
-                forcePapersFetch={forcePapersFetch} setForcePapersFetch={setForcePapersFetch}
-            />
-            */}
-            <BacklogPapers project_id={project_id}/>
+    let screeningStrategy = <></>;
+    if(totalResults !== 0){
+        screeningStrategy = (
             <div className="bottom-right-screening-strategy-box">
                 <h3>
                     Screening strategy
@@ -124,6 +116,21 @@ const ScreeningBacklog = function ({project_id}) {
                     </div>
                 </div>
             </div>
+        );
+    }
+    return (
+        <>
+
+            <Cover cls={displayManualForm ? "full-screen" : ""} handler={setDisplayManualForm}/>
+            <ManualScreeningForm visibility={displayManualForm} setVisibility={setDisplayManualForm} project_id={project_id}/>
+            
+            <Cover cls={displayAutoForm ? "full-screen" : ""} handler={setDisplayAutoForm}/>
+            <AutoScreeningForm visibility={displayAutoForm} setVisibility={setDisplayAutoForm} project_id={project_id} setAutoScreeningFlag={setAutoScreeningFlag}/>
+
+            <BacklogPapers project_id={project_id}
+                totalResults={totalResults} setTotalResults={setTotalResults} //I pass this hook so I will know how much papers are ther
+            />
+            {screeningStrategy}
         </>
     );
 }

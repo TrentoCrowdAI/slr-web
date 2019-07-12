@@ -233,13 +233,66 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
     if (display === false) {
 
         resultPart = (
-            <div className="paper-card-holder">
-                <div className="paper-card-holder-head" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
-                    <div className="select-all">
-                    <CheckBox label="Select All" name="select_all" val="" isChecked={false} handler={selectAllPapers}/>
-                    </div>
-                    <div className="order">
-                        <div className="order-flex-item">
+            <>
+                <SelectedPapersListBox project_id={project.id} selectedPapersList={selectedPapersList} 
+                        setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
+                        mounted={mountRef}
+                    />
+                <div className="search-loading-holder">
+                    <LoadIcon class={"small"}/>
+                </div>
+            </>
+        );
+    }
+
+    //if the search results list is empty
+    else if (papersList.length === 0) {
+        //the 'no-results' class is used only to workaround a small bug that display not found just as the search start before the loading icon
+        resultPart = (
+            <>
+                <SelectedPapersListBox project_id={project.id} selectedPapersList={selectedPapersList} 
+                    setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
+                    mounted={mountRef}
+                />
+                <div className="no-results"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
+            </>
+        );
+    }
+    else if (papersList.length > 0) {
+
+        //create a eidList from the list of selected paper
+        let arrayEid = selectedPapersList.map(element => element.eid);
+
+        resultPart = (
+            <>
+                <SelectedPapersListBox project_id={project.id} selectedPapersList={selectedPapersList} 
+                    setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
+                    mounted={mountRef}
+                />
+                
+                <PrintSearchAutomatedList papersList={papersList} filtersList={filtersList} 
+                                        handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid}/>
+                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
+            </>
+        );
+    }
+
+
+    let output = (
+        <>
+            <SearchAutomatedDescription project_id={project.id} filtersList={filtersList} setFiltersList={setFiltersList}/>
+            <div className="search-results auto">
+                <div className="paper-card-holder">
+                    <div className="paper-card-holder-head"
+                        style={{
+                            pointerEvents: (!display || papersList.length === 0) ? "none" : "",
+                            opacity: (papersList.length === 0) ? "0.0" : "1.0"
+                        }}
+                        >
+                        <div className="select-all">
+                        <CheckBox label="Select All" name="select_all" val="" isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")} handler={selectAllPapers}/>
+                        </div>
+                        <div className="order">
                             <label>min confidence:</label>
                             <Select options={minConfidenceValues}
                                     selected={getIndexOfObjectArrayByKeyAndValue(minConfidenceValues, "value", parseFloat(queryData.min_confidence))}
@@ -257,68 +310,8 @@ const SearchAutomatedManager = function ({project, location, match, history}) {
                                     code={1}/>
                         </div>
                     </div>
+                    {resultPart}
                 </div>
-                <div className="search-loading-holder">
-                    <LoadIcon class={"small"}/>
-                </div>
-            </div>);
-    }
-
-    //if the search results list is empty
-    else if (papersList.length === 0) {
-        //the 'no-results' class is used only to workaround a small bug that display not found just as the search start before the loading icon
-        resultPart = (
-            <div className="no-results"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
-        );
-    }
-    else if (papersList.length > 0) {
-
-        //create a eidList from the list of selected paper
-        let arrayEid = selectedPapersList.map(element => element.eid);
-
-        resultPart = (
-            <div className="paper-card-holder">
-                <div className="paper-card-holder-head">
-                    <div className="select-all">
-                    <CheckBox label="Select All" name="select_all" val="" isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")} handler={selectAllPapers}/>
-                    </div>
-                    <div className="order">
-                        <label>min confidence:</label>
-                        <Select options={minConfidenceValues}
-                                selected={getIndexOfObjectArrayByKeyAndValue(minConfidenceValues, "value", parseFloat(queryData.min_confidence))}
-                                handler={handleMinConfidenceSelection}
-                                //optional fields
-                                type={"mini"} //displays select menu with smaller width
-                                code={0} //you can put here a random number in case you have multiple selects on the same page
-                                         //this way you won't trigger the arrow animation for all the selects at the same time
-                                />
-                        <label>max confidence:</label>
-                        <Select options={maxConfidenceValues}
-                                selected={getIndexOfObjectArrayByKeyAndValue(maxConfidenceValues, "value", parseFloat(queryData.max_confidence))}
-                                handler={handleMaxConfidenceSelection}
-                                type={"mini"}
-                                code={1}/>
-                    </div>
-                </div>
-                <SelectedPapersListBox project_id={project.id} selectedPapersList={selectedPapersList} 
-                    setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
-                    mounted={mountRef}
-                />
-                
-                <PrintSearchAutomatedList papersList={papersList} filtersList={filtersList} 
-                                        handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid}/>
-                <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
-            </div>
-        );
-    }
-
-
-    let output = (
-        <>
-            {/*<Link className="back-from-search-automated"></Link>*/}
-            <SearchAutomatedDescription project_id={project.id} filtersList={filtersList} setFiltersList={setFiltersList}/>
-            <div className="search-results auto">
-                {resultPart}
             </div>
         </>
     );

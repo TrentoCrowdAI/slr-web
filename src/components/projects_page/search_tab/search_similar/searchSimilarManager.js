@@ -116,6 +116,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
         let mnt = true;
 
         console.log("FETCHING RESULTS");
+        console.log(targetPaperData);
 
         //if the sorting parameter changes I update the status and trigger the SVG animation
         if (up !== queryData.sort) {
@@ -125,7 +126,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
             }
         }
 
-        if(targetPaperData){
+        if(targetPaperData && targetPaperData.title !== "unable to retrieve paper"){
             //fetches for similar papers
             const fetchSimilarPapers= async () => {
                 
@@ -158,12 +159,14 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
                     //show the page
                     setDisplay(true);
                 }else{
-                    console.log("can't set enything")
+                    console.log("can't set enything");
                 }
             }
 
             fetchSimilarPapers();
         }else{
+            setPapersList([]);
+            setTotalResults(0);
             storage.removeItem("targetPaperData");
         }
 
@@ -267,35 +270,32 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
     */
 
     //if is loading
-    if (display === false || (!targetPaperData && queryData.query !== "")) {
+    if (display === false && queryData.query !== "") {
 
         resultPart = (
-            <div className="paper-card-holder similar-holder">
-                <div className="paper-card-holder-head" style={{pointerEvents: "none"}}>{/* this way the user cannot sort while loading the results */}
-                    <div className="select-all">
-                    <CheckBox label="Select All" name="select_all" val="" isChecked={false} handler={selectAllPapers}/>
-                    </div>
-                    <div className="order">
-                        <div className="order-flex-item">
-                            <label>sort by:</label>
-                            <Select options={orderByOptions}
-                                    selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
-                                    handler={handleSelection}/>
-                            <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
-                        </div>
-                    </div>
-                </div>
+            <>
+                <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} 
+                    setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
+                    mounted={mountRef}    
+                />
                 <div className="search-loading-holder">
                     <LoadIcon class={"small"}/>
                 </div>
-            </div>);
+            </>
+        );
     }
 
     //if the search results list is empty
     else if (papersList.length === 0 && targetPaperData) {
         //the class is used only to workaround a small bug that display not found just as the search start before the loading icon
         resultPart = (
-            <div className="no-results"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
+            <>
+                <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} 
+                    setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
+                    mounted={mountRef}    
+                />
+                <div className="no-results"> <NoSearchResults/> <p className="not-found-description"> Nothing was found </p> </div>
+            </>
         );
     }
     else if (papersList.length > 0 && targetPaperData) {
@@ -304,21 +304,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
         let arrayEid = selectedPapersList.map(element => element.eid);
 
         resultPart = (
-            <div className="paper-card-holder">
-                <div className="paper-card-holder-head">
-                    <div className="select-all">
-                    <CheckBox label="Select All" name="select_all" val="" isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")} handler={selectAllPapers}/>
-                    </div>
-                    <div className="order">
-                        <div className="order-flex-item">
-                            <label>sort by:</label>
-                            <Select options={orderByOptions}
-                                    selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
-                                    handler={handleSelection}/>
-                            <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
-                        </div>
-                    </div>
-                </div>
+            <>
                 <SelectedPapersListBox project_id={project_id} selectedPapersList={selectedPapersList} 
                     setSelectedPapersList={setSelectedPapersList} handlePaperSelection={handlePaperSelection}
                     mounted={mountRef}    
@@ -326,7 +312,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
 
                 <PrintScoupusSearchList papersList={papersList} handlePaperSelection={handlePaperSelection} selectedEidList={arrayEid} setTargetPaperData={setTargetPaperData}/>
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={match.url}/>
-            </div>
+            </>
         );
     }
 
@@ -335,7 +321,30 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
         <>
             <SearchSimilarForm {...{history, queryData, project_id, targetPaperData, setTargetPaperData}}/>
             <div className="search-results">
-                {resultPart}
+                <div className="paper-card-holder similar-holder">
+                    <div className="paper-card-holder-head" 
+                        style={{
+                            pointerEvents: (!display || papersList.length === 0) ? "none" : "",
+                            opacity: (!targetPaperData || papersList.length === 0) ? "0.0" : "1.0"
+                        }}
+                        >
+                        <div className="select-all">
+                        <CheckBox label="Select All" name="select_all" val="" 
+                            isChecked={arrayOfObjectsContains(selectedPapersList, papersList, "eid")} handler={selectAllPapers}
+                            />
+                        </div>
+                        <div className="order">
+                            <div className="order-flex-item">
+                                <label>sort by:</label>
+                                <Select options={orderByOptions}
+                                        selected={getIndexOfObjectArrayByKeyAndValue(orderByOptions, "value", queryData.orderBy)}
+                                        handler={handleSelection}/>
+                                <button type="button" onClick={handelOrder}><OrderArrow display={true} up={(queryData.sort)}/></button>
+                            </div>
+                        </div>
+                    </div>
+                    {resultPart}
+                </div>
             </div>
         </>
     );

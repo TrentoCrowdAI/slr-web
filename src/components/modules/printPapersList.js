@@ -7,7 +7,6 @@ import SideOptions from 'components/modules/sideOptions';
 import {projectPapersDao} from 'dao/projectPapers.dao';
 import {AppContext} from 'components/providers/appProvider'
 import Image from 'components/modules/image';
-
 import NoPapers from "components/svg/noPapers";
 
 import {join} from 'utils/index';
@@ -236,12 +235,12 @@ const PrintScreenedPapersList_w = function ({papersList}) {
 
 const PrintManuallyScreenedPapersList_w = function ({papersList}) {
     const usersVotes = [
-        {id: 0, email : "a", name : "Marco", surname : "Polo", image : ".", vote:"in"},
-        {id: 1, email : "a", name : "Marco", surname : "Polo", image : ".", vote:"out"},
-        {id: 2, email : "a", name : "John", surname : "Snow", image : ".", vote:"und"},
-        {id: 3, email : "a", name : "Augustus", surname : "Gaius", image : ".", vote:""},
-        {id: 4, email : "a", name : "John", surname : "Snow", image : ".", vote:"in"},
-        {id: 5, email : "a", name : "Augustus", surname : "Gaius", image : ".", vote:""},
+        {id: 0, email : "a", name : "Marco", surname : "1", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:"in"},
+        {id: 1, email : "a", name : "Marco", surname : "2", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:"out"},
+        {id: 2, email : "a", name : "John", surname : "3", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:"und"},
+        {id: 3, email : "a", name : "Augustus", surname : "4", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:""},
+        {id: 4, email : "a", name : "John", surname : "5", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:"in"},
+        {id: 5, email : "a", name : "Augustus", surname : "6", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:""},
     ]
     let output;
     //if list is empty, print a notice message
@@ -294,12 +293,15 @@ const PrintManuallyScreenedPapersList_w = function ({papersList}) {
                                 ))}
                             </div>
                             <div className="votes">
-                                {inV.map((user, index) => (
-                                    <Image key={index} className="user-vote-image und-no-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                {noV.map((user, index) => (
+                                    <Image key={index} className="user-vote-image no-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                ))}
+                                {undV.map((user, index) => (
+                                    <Image key={index} className="user-vote-image und-vote" alt={user.name + " " + user.surname} src={user.image}/>
                                 ))}
                             </div>
                             <div className="votes">
-                                {inV.map((user, index) => (
+                                {outV.map((user, index) => (
                                     <Image key={index} className="user-vote-image out-vote" alt={user.name + " " + user.surname} src={user.image}/>
                                 ))}
                             </div>
@@ -316,53 +318,73 @@ const PrintManuallyScreenedPapersList_w = function ({papersList}) {
 
 const PrintSearchAutomatedList_w = function ({papersList, filtersList, handlePaperSelection, selectedEidList}) {
 
-    let output = papersList.map((element, index) =>
-        <div key={index} className="generic-card paper-card">
-            <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
-            <PaperConfidence filtersList={filtersList}
-                confidence={{value : element.confidence, details : [{detail: "filter_label 1", percentage : "67%"},{detail: "filter_label 2", percentage : "64%"},{detail: "filter_label 3", percentage : "59%"}]}}/>
-            <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
-            <div className="extra-info">
-                <p className="authors">{element.authors}</p>
-                <p className="eid">{element.eid}</p>
-                <p className="date">{element.year}</p>
+    let output = "";
+    //if list is empty, print a notice message
+    if (papersList.length === 0) {
+        output = (
+            <div className="empty-list-wrapper"> <NoPapers/> <p className="empty-list-description"> There are no papers here</p></div>
+        );
+    }
+    //if list isn't empty, print list of papers
+    else {
+        output = papersList.map((element, index) =>
+            <div key={index} className="generic-card paper-card">
+                <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
+                <PaperConfidence filtersList={filtersList}
+                    confidence={{value : element.confidence, details : [{detail: "filter_label 1", percentage : "67%"},{detail: "filter_label 2", percentage : "64%"},{detail: "filter_label 3", percentage : "59%"}]}}/>
+                <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
+                <div className="extra-info">
+                    <p className="authors">{element.authors}</p>
+                    <p className="eid">{element.eid}</p>
+                    <p className="date">{element.year}</p>
+                </div>
+                <ClampLines
+                    text={element.abstract}
+                    lines={4}
+                    ellipsis="..."
+                    className="paragraph"
+                    moreText="more"
+                    lessText="less"
+                />
             </div>
-            <ClampLines
-                text={element.abstract}
-                lines={4}
-                ellipsis="..."
-                className="paragraph"
-                moreText="more"
-                lessText="less"
-            />
-        </div>
-    );
+        );
+    }
     return output;
 
 };
 
 const PrintBacklogPapersList_w = function ({papersList, filtersList}) {
 
-    let output = papersList.map((element, index) =>
-        <div key={index} className="generic-card paper-card">
-            <PaperConfidence filtersList={filtersList}
-                confidence={{value : "−.−−", details : [{detail: "filter_label 1", percentage : "67%"},{detail: "filter_label 2", percentage : "64%"},{detail: "filter_label 3", percentage : "59%"}]}}/>
-            <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
-            <div className="extra-info">
-                <p className="authors">{element.authors}</p>
-                <p className="eid">{element.eid}</p>
-                <p className="date">{element.year}</p>
+    let output = "";
+    //if list is empty, print a notice message
+    if (papersList.length === 0) {
+        output = (
+            <div className="empty-list-wrapper"> <NoPapers/> <p className="empty-list-description"> There are no papers here</p></div>
+        );
+    }
+    //if list isn't empty, print list of papers
+    else {
+        output = papersList.map((element, index) =>
+            <div key={index} className="generic-card paper-card">
+                <PaperConfidence filtersList={filtersList}
+                    confidence={{value : "−.−−", details : [{detail: "filter_label 1", percentage : "67%"},{detail: "filter_label 2", percentage : "64%"},{detail: "filter_label 3", percentage : "59%"}]}}/>
+                <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
+                <div className="extra-info">
+                    <p className="authors">{element.authors}</p>
+                    <p className="eid">{element.eid}</p>
+                    <p className="date">{element.year}</p>
+                </div>
+                <ClampLines
+                    text={element.abstract}
+                    lines={4}
+                    ellipsis="..."
+                    className="paragraph"
+                    moreText="more"
+                    lessText="less"
+                />
             </div>
-            <ClampLines
-                text={element.abstract}
-                lines={4}
-                ellipsis="..."
-                className="paragraph"
-                moreText="more"
-                lessText="less"
-            />
-        </div>
-    );
+        );
+    }
     return output;
 
 };

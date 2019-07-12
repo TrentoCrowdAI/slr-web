@@ -4,7 +4,6 @@ import InfoTooltip from "components/modules/infoTooltip";
 
 const PaperConfidence = function ({filtersList, confidence}) {
 
-    const [displayDetails, setDisplayDetails] = useState(false)
 
     //I combine two arrays in an array of pairs: from [a,b,c] and [1,2,3] to [{a,1}, {b,2}, {c,3}]
     function pairCoupleArray(confArray,filterArray){
@@ -27,13 +26,13 @@ const PaperConfidence = function ({filtersList, confidence}) {
                 <div className="confidence">
                     {confidence.value}
                 </div>
-                <InfoTooltip className={"filters-confidence"} content={(<>
-                        {confidence.details.map((element, index) => 
-                            <p key={index}>
-                                <span>{element.detail}</span> <span className="side-detail">{element.percentage}</span>
-                            </p>
-                        )}
-                    </>)}/>
+                <InfoTooltip className={"filters-confidence"}>
+                    {confidence.details.map((element, index) => 
+                        <p key={index}>
+                            <span>{element.detail}</span> <span className="side-detail">{element.percentage}</span>
+                        </p>
+                    )}
+                </InfoTooltip>
                 
             </div>
         </div>
