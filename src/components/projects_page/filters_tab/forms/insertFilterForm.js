@@ -77,12 +77,12 @@ const InsertFilterForm = function(props){
                         style={{borderBottom : (errors.inclusion_description && touched.inclusion_description) ? "solid 1px #d81e1e" : ""}}
                         name="inclusion_description"
                         component="textarea"
-                        placeholder="Type what the answer should include"/>
+                        placeholder="Type what the answer should include (optional)"/>
                     <Field
                         style={{borderBottom : (errors.exclusion_description && touched.exclusion_description) ? "solid 1px #d81e1e" : ""}}
                         name="exclusion_description"
                         component="textarea"
-                        placeholder="Type what the answer should not include"/>
+                        placeholder="Type what the answer should not include (optional)"/>
                     <button type="submit" disabled={isSubmitting || !isValid}>Add Filter</button>
                 </Form>
             );

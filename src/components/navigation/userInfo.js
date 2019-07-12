@@ -26,9 +26,8 @@ const UserInfo = function(props){
             <div className="user" >
                 <Image className="face" alt="profile picture" src={appConsumer.user.image}/>
                 <div className="user-info">
-                    {appConsumer.user.name}
-                    <br/>
-                    {appConsumer.user.surname}
+                    <span className="name">{appConsumer.user.name}</span>
+                    <span className="surname">{appConsumer.user.surname}</span>
                 </div>
             </div>
         );
