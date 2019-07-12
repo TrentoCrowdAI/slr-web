@@ -82,18 +82,18 @@ const ScreeningPageNavigation = function ({notFound, match}) {
         <>
             <div className="screening-nav-link-wrapper" style={{display: (notFound || slider === "hide") ? "none" : ""}}>
                 <div className="nav-link">
-                    <Link to={join(match.url, "/backlog")}>backlog</Link>
+                    <Link to={join(match.url, "/backlog")} style={{paddingRight: (slider === "4px") ? "0px" : "", color: (slider === "4px") ? "black" : ""}}>backlog</Link>
                 </div>
                 <div className="nav-link">
-                    <Link to={join(match.url, "/manual")}>manual</Link>
+                    <Link to={join(match.url, "/manual")} style={{paddingRight: (slider === "28px") ? "0px" : "", color: (slider === "28px") ? "black" : ""}}>manual</Link>
                 </div>
                 <div className="nav-link">
-                    <Link to={join(match.url, "/crowdsource")}>crowdsourcing</Link>
+                    <Link to={join(match.url, "/crowdsource")} style={{paddingRight: (slider === "52px") ? "0px" : "", color: (slider === "52px") ? "black" : ""}}>crowdsourcing</Link>
                 </div>
                 <div className="nav-link">
-                    <Link to={join(match.url, "/screened")}>screened</Link>
+                    <Link to={join(match.url, "/screened")} style={{paddingRight: (slider === "76px") ? "0px" : "", color: (slider === "76px") ? "black" : ""}}>screened</Link>
                 </div>
-                <div className="verline" style={{top: slider}}/>
+                {/*<div className="verline" style={{top: slider}}/>*/}
             </div>
         </>
     );

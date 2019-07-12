@@ -530,14 +530,16 @@ div.screening-nav-link-wrapper{
   width: 140px;
 }
 div.screening-nav-link-wrapper div.nav-link a {
+  padding-right: 10px;
   font-size: 18px;
   height: 22px;
   width: 130px;
   display: inline-block;
   line-height: 22px;
   text-align: right;
-  color: #2f2f2f;
+  color: #4a545d;
   margin: 1px 0px 1px 0px;
+  transition: all 0.3s;
 }
 div.screening-nav-link-wrapper div.verline{
   background-color: #2f2f2f;
