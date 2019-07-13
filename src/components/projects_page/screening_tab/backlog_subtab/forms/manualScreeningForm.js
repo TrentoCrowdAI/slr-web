@@ -2,10 +2,10 @@ import React, {useEffect, useContext, useRef, useState} from "react";
 import { Formik, Form, Field } from "formik";
 
 import {projectsDao} from 'dao/projects.dao'
+import {projectFiltersDao} from 'dao/projectFilters.dao'
 
 import RadioBox from "components/forms_elements/radioboxFormik";
 import UserCheckbox from 'components/projects_page/screening_tab/backlog_subtab/forms/userCheckboxFormik';
-import Image from 'components/modules/image';
 
 import LoadIcon from 'components/svg/loadIcon';
 import CloseButton from 'components/svg/closeButton';
@@ -27,6 +27,9 @@ function ManualScreeningForm(props) {
 
     //collaborators list
     const [collaborators, setCollaborators] = useState([]);
+
+    //bool for multi predicate option availability
+    const [isMpAvailable, setIsMpAvailable] = useState(false);
 
     useEffect(() => {
         mountRef.current = true;
@@ -52,6 +55,24 @@ function ManualScreeningForm(props) {
                     {id: 2, email : "a", name : "John", surname : "Snow", image : "."},
                     {id: 3, email : "a", name : "Augustus", surname : "Gaius", image : "."},
                 ]);
+
+                //call the dao for getting the filters(this way I know if the user can start multi predicate screening)
+                let resx = await projectFiltersDao.getFiltersList({"project_id" : props.project_id});
+                //error checking
+                //if the component is still mounted and  is 404 error
+                if (mountRef.current && resx && resx.message === "Not Found") {
+                    setIsMpAvailable(false);
+                }
+                //if the component is still mounted and  there are some other errors
+                else if (mountRef.current && resx && resx.message) {
+                    //pass error object to global context
+                    appConsumer.setError(resx);
+                }
+                //if the component is still mounted and  res isn't null
+                else if (mountRef.current && resx) {
+                    //update state
+                    setIsMpAvailable(true);
+                }
                 //show the list
                 setCollaboratorsFetch(false);
             }
@@ -124,7 +145,7 @@ function ManualScreeningForm(props) {
                                 <>
                                     <RadioBox label={"single-predicate"} {...field} val={"single-predicate"} form={form}
                                             isChecked={(values.screening_mode === "single-predicate")} />
-                                    <RadioBox label={"multi-predicate"} {...field} val={"multi-predicate"} form={form}
+                                    <RadioBox className={(isMpAvailable) ? "" : "disabled"} label={"multi-predicate"} {...field} val={"multi-predicate"} form={form}
                                             isChecked={(values.screening_mode === "multi-predicate")}/>
                                 </>
                             )}

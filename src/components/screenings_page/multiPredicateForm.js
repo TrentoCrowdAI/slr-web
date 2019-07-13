@@ -13,11 +13,9 @@ const MultiPredicateForm = function ({filtersList, clearHighlights, highlightedD
     const [underlineOffset, setUnderlineOffset] = useState(0);
 
     useEffect(() => {
-        if(display){
-            setDisplayedFilter(filtersList[0]);
-            setFilterVotes(filtersList.map((filter) => ({filter_id: filter.id, filter_predicate: filter.data.predicate, outcome: ""})));
-            setFilterHighlights(filtersList.map(() => []));
-        }
+        setDisplayedFilter(filtersList[0]);
+        setFilterVotes(filtersList.map((filter) => ({filter_id: filter.id, filter_predicate: filter.data.predicate, outcome: ""})));
+        setFilterHighlights(filtersList.map(() => []));
     }, [display])
     
     useEffect(() => {

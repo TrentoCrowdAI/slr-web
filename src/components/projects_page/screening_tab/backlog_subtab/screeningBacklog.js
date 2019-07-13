@@ -33,35 +33,6 @@ const ScreeningBacklog = function ({project_id}) {
     const [totalResults, setTotalResults] = useState(0);
 
     useEffect(() => {
-        let mnt = true;
-        /*
-        //call the dao for getting the filters
-        let res = await projectFiltersDao.getFiltersList({"project_id" : project_id});
-
-        //error checking
-        //if the component is still mounted and  is 404 error
-        if (mnt && res && res.message === "Not Active") {
-            //setAutoScreeningFlag(false);
-        }
-        //if the component is still mounted and  there are some other errors
-        else if (mnt && res && res.message) {
-            //pass error object to global context
-            appConsumer.setError(res);
-        }
-        //if the component is still mounted and  res isn't null
-        else if (mnt && res) {
-            //update state
-            setAutoScreeningFlag(true);
-        }
-        */
-        
-        return () => {
-            console.log("clearing main");
-            mnt = false;
-        };
-    },[]);
-
-    useEffect(() => {
         let res = 0;
         let mnt = true;
         let poll = undefined;

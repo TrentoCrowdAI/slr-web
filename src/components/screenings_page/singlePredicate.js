@@ -75,6 +75,7 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
             if (queryData.question_id !== "") {
 
                 setDisplay(false);
+                setDecision("");
 
                 //always call the dao to search on scopus
                 let res = await paperDao.search({"arXiv":"true","googleScholar":"false","scopus":"false","query":"a","searchBy":"all","orderBy":"title","sort":"ASC","year":"all","start":"0","count":"10"});

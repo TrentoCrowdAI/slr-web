@@ -647,7 +647,7 @@ form.start-auto-screening div.custom-select div.options-holder{
 }
 form.start-auto-screening button.start-btn, form.start-manual-screening button.start-btn{
   font-size: 18px;
-  margin: 20px auto 10px auto;
+  margin: 10px auto 10px auto;
   padding: 10px 10px 10px 10px;
   display: inherit;
 }
