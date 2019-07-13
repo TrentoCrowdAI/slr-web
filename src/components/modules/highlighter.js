@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useContext, useRef} from "react";
+import RemoveHighlights from "components/svg/removeHighlights";
 
 /**
  * this is component form to search for the paper in project page
@@ -152,7 +153,7 @@ const HighLighter = function ({data, highlightedData, setHighlightedData, classN
                     style={{opacity: (highlightedData.length === 1 && (highlightedData[0].type === "not_highlighted" || highlightedData[0].type === "disabled")) ? "0.0" : "1.0",
                             pointerEvents: (highlightedData.length === 1 && highlightedData[0].type === "not_highlighted") ? "none" : ""}}
                 >
-                    clear selection 
+                    <RemoveHighlights/> 
                 </button>
             </div>
             {highlightedData.map((dataChunk, index) => {

@@ -584,8 +584,9 @@ div.bottom-right-screening-strategy-box div.screening-strategy-buttons{
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  width: 210px;
-  padding-bottom: 10px;
+  width: 240px;
+  padding-bottom: 5px;
+  font-size: 12px
 }
 div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.screening-strategy-btn{
   border: solid 1px #c4c4c4;
@@ -594,11 +595,26 @@ div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.sc
   background-color: #fcfcff;
   border-radius: 25px;
   width: 50px;
-  margin: 5px;
+  margin: 5px 5px 0px 5px;
 }
-div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.screening-strategy-btn:hover{
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.screening-strategy-btn svg{
+  width: 60%;
+  height: 60%;
+  margin: 20%;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder:hover button.screening-strategy-btn{
   border: solid 1px #696969;
   box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+}
+div.bottom-right-screening-strategy-box div.strategy-tooltip{
+  opacity: 0.0;
+  height: 10px;
+  line-height: 10px;
+  color: #3e3e3e;
+  transition-delay: 0.1s;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder:hover div.strategy-tooltip{
+  opacity: 1.0;
 }
 div.bottom-right-screening-strategy-box:hover{
   border: solid 1px #b7b7b7;
@@ -610,8 +626,7 @@ div.bottom-right-screening-strategy-box:hover h3{
   border-bottom: solid 1px #c4c4c4;
 }
 div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder{
-  width: 60px;
-  height: 60px;
+  width: 80px;
   position: relative;
 }
 div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder svg#circle-progress{
@@ -700,8 +715,13 @@ form.start-manual-screening div.users-list button.user-data div.user-data-image-
   top: 0px;
   left: 0px;
   background-color: chartreuse;
-  transition: opacity 0.4s;
+  transition: opacity 0.1s;
   opacity: 0.0;
+}
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper div.img-wrapper-cover svg#select-tick{
+  width: 60%;
+  height: 60%;
+  margin: 20%;
 }
 form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper img.user-data-image, 
 form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper div.user-data-image{

@@ -10,6 +10,9 @@ import BacklogPapers from 'components/projects_page/screening_tab/backlog_subtab
 import AutoScreeningForm from 'components/projects_page/screening_tab/backlog_subtab/forms/autoScreeningForm';
 import ManualScreeningForm from 'components/projects_page/screening_tab/backlog_subtab/forms/manualScreeningForm';
 import Cover from "components/modules/cover";
+import ManualScreeningIcon from "components/svg/manualScreningIcon";
+import AutoScreeningIcon from "components/svg/autoScreeningIcon";
+import CrowdScreeningIcon from "components/svg/crowdScreeningIcon";
 
 
 /**
@@ -66,7 +69,11 @@ const ScreeningBacklog = function ({project_id}) {
                         <button className="screening-strategy-btn manual" type="button"
                             onClick={() => {setDisplayManualForm(true)}}
                         > 
+                        <ManualScreeningIcon/>
                         </button>
+                        <div className="strategy-tooltip">
+                            manual
+                        </div>
                     </div>
                     <div className="screening-strategy-btn-holder">
                         <svg id="circle-progress"
@@ -79,11 +86,19 @@ const ScreeningBacklog = function ({project_id}) {
                         <button className="screening-strategy-btn auto" type="button"
                             onClick={() => {setDisplayAutoForm(true)}}
                         > 
+                        <AutoScreeningIcon/>
                         </button>
+                        <div className="strategy-tooltip">
+                            automatic
+                        </div>
                     </div>
                     <div className="screening-strategy-btn-holder">
                         <button className="screening-strategy-btn crowdsource" type="button"> 
+                        <CrowdScreeningIcon/>
                         </button>
+                        <div className="strategy-tooltip">
+                            crowdsourced
+                        </div>
                     </div>
                 </div>
             </div>

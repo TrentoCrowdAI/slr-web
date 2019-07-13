@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 
 import Image from 'components/modules/image';
+import SelectTick from 'components/svg/selectTick';
 
 /**
  * userCheckBox for Formik
@@ -20,7 +21,9 @@ const UserCheckbox = ({ selected, user, form, name }) => {
             onClick={selectHandler}
         >   
         <div className="user-data-image-wrapper">
-            <div className="img-wrapper-cover" style={{opacity: (selected) ? "0.5" : "0.0"}}/>
+            <div className="img-wrapper-cover" style={{opacity: (selected) ? "0.9" : "0.0"}}>
+                <SelectTick color={"white"}/>
+            </div>
             <Image className="user-data-image" alt={"profile image"} src={user.image}/>
         </div>
         <p className="user-data-names">{user.name} {user.surname}</p>

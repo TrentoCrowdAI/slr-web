@@ -15,6 +15,9 @@ import FiltersAccordion from "components/modules/filtersAccordion";
 import Tags from 'components/modules/paperTags';
 import HighLighter from 'components/modules/highlighter';
 import InfoTooltip from "components/modules/infoTooltip";
+import PositiveAnswer from 'components/svg/positiveAnswer';
+import NegativeAnswer from 'components/svg/negativeAnswer';
+import UndecidedAnswer from 'components/svg/undecidedAnswer';
 
 const queryParams = [
     {label: "question_id", default: ""}
@@ -126,12 +129,12 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
         let screeningData = {outcome: "", highlights: highlightedData, tags: tagsData};
 
         switch (key) {
-            case "a":
+            case "s":
                 console.log("NO");
                 setDecision("no");
                 screeningData.outcome = "no";
                 break;
-            case "s":
+            case "a":
                 console.log("YES");
                 setDecision("yes");
                 screeningData.outcome = "yes";
@@ -220,29 +223,38 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
                 <form className="light-modal screening-outcome">
                     <InfoTooltip className={"s-p-form"}>
                         You can cast your vote by using the keyboard:<br/>
-                        <b>A : </b> <i>no</i><br/>
-                        <b>S : </b> <i>yes</i><br/>
+                        <b>A : </b> <i>yes</i><br/>
+                        <b>S : </b> <i>no</i><br/>
                         <b>D : </b> <i>undecided</i><br/>
                     </InfoTooltip>
                     <h2 className="question">Is the paper relevant to the review?</h2>
                     <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
                     <div className="screening-choice">
                         <div className="yes-no-und">
-                            <button className="no" style={{backgroundColor: (decision === "no") ? "grey" : ""}}
-                                onClick={() => {handleKey("a")}}
-                            >
-
-                            </button>
-                            <button className="yes" style={{backgroundColor: (decision === "yes") ? "grey" : ""}}
-                                onClick={() => {handleKey("s")}}
-                            >
-                                
-                            </button>
-                            <button className="und" style={{backgroundColor: (decision === "und") ? "grey" : ""}}
-                                onClick={() => {handleKey("d")}}
-                            >
-
-                            </button>
+                            <div className="btn-decision-holder">
+                                <button className="yes" style={{backgroundColor: (decision === "yes") ? "#0b8a42" : ""}}
+                                    onClick={() => {handleKey("a")}}
+                                >
+                                    <PositiveAnswer color={(decision === "yes") ? "white" : "#696969"}/>
+                                </button>
+                                <div className="decision-tooltip">yes</div>
+                            </div>
+                            <div className="btn-decision-holder">
+                                <button className="no" style={{backgroundColor: (decision === "no") ? "#c31f1f" : ""}}
+                                    onClick={() => {handleKey("s")}}
+                                >
+                                    <NegativeAnswer color={(decision === "no") ? "white" : "#696969"}/>
+                                </button>
+                                <div className="decision-tooltip">no</div>
+                            </div>
+                            <div className="btn-decision-holder">
+                                <button className="und" style={{backgroundColor: (decision === "und") ? "#4242e1" : ""}}
+                                    onClick={() => {handleKey("d")}}
+                                >
+                                    <UndecidedAnswer color={(decision === "und") ? "white" : "#696969"}/>
+                                </button>
+                                <div className="decision-tooltip">undecided</div>
+                            </div>
                         </div>
 
                     </div>
