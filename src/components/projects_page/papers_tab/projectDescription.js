@@ -49,7 +49,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
                 appConsumer.setError(res);
             }
             //if the component is still mounted and res isn't null
-            else if ( res ) {
+            else if (mountRef.current &&  res) {
                 setCollaborators(res);
                 //show the page
                 setLoadIconDisplay(false);
@@ -74,7 +74,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
             console.log(res);
 
             //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-            if (res === "") {
+            if (mountRef.current && res === "") {
                 console.log("scccc");
                 let newProject = project;
                 newProject.data.description = description;
@@ -83,7 +83,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
             }
             //error checking
             //if is other error
-            else if (res && res.message) {
+            else if (mountRef.current && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
