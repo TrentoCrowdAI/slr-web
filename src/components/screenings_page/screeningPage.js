@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useRef} from "react";
 import {Route, Link, Switch, withRouter} from 'react-router-dom';
 
 import SearchStandardManager from 'components/projects_page/search_tab/search_standard/searchStandardManager';
@@ -27,6 +27,8 @@ import MultiPredicateScreening from 'components/screenings_page/multiPredicate';
  */
 const ScreeningPage = (props) => {
 
+    const mountRef = useRef(false); 
+
     //project object of page
     const [project, setProject] = useState({data: {name: "loading..."}});
 
@@ -46,9 +48,9 @@ const ScreeningPage = (props) => {
 
     //set the project title
     useEffect(() => {
-        if(project.data.name === "loading..." || project.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS"){
+        if(mountRef.current && project.data.name === "loading..." || project.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS"){
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name}</h2> </div>);//I set the page title
-        }else{
+        }else if(mountRef.current){
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name} screening</h2> </div>);//I set the page title
             appConsumer.setProjectName(project.data.name);
         }
@@ -57,8 +59,7 @@ const ScreeningPage = (props) => {
 
     useEffect(() => {
 
-        //flag that represents the state of component
-        let mnt = true;
+        mountRef.current = true;
 
         //setDisplay(false);
         //a wrapper function ask by react hook
@@ -69,18 +70,18 @@ const ScreeningPage = (props) => {
 
             //error checking
             //if unauthorized user
-            if(mnt && res.payload && (res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
+            if(mountRef.current && res.payload && (res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
                 setUnauthorized(true);
                 //setDisplay(true);
                 setProject({data: {name: "UNAUTHORIZED OR INEXISTENT PROJECTS"}});
             }
             //if the component is still mounted and there is some other errors
-            else if (mnt && res && res.message) {
+            else if (mountRef.current && res && res.message) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
             //if the component is still mounted and res isn't null
-            else if (mnt && res ) {
+            else if (mountRef.current && res ) {
                 setUnauthorized(false);
                 //update state
                 setProject(res);
@@ -95,16 +96,16 @@ const ScreeningPage = (props) => {
 
             //error checking
             //if the component is still mounted and  is 404 error
-            if (mnt && resx && resx.message === "Not Found") {
+            if (mountRef.current && resx && resx.message === "Not Found") {
                 setFiltersList([]);
             }
             //if the component is still mounted and  there are some other errors
-            else if (mnt && resx && resx.message) {
+            else if (mountRef.current && resx && resx.message) {
                 //pass error object to global context
                 appConsumer.setError(resx);
             }
             //if the component is still mounted and  res isn't null
-            else if (mnt && resx) {
+            else if (mountRef.current && resx) {
                 //update state
                 setFiltersList([...resx.results]);
             }
@@ -115,9 +116,7 @@ const ScreeningPage = (props) => {
         fetchProjectData();
         //when the component will unmount
         return () => {
-
-            //set flag as unmounted
-            mnt = false;
+            mountRef.current = false;
         };
     }, [project_id, appConsumer.user]); //re-execute when these variables change
 
