@@ -324,7 +324,9 @@ const SearchStandardManager = function ({project_id, location, match, history}) 
                     <Robot/>
                 </Link>
             </div>
-            <div className="search-results">
+            <div className="search-results"
+                style={{display: (queryData.query !== "") ? "block" : "none"}}
+            >
                 <div className="paper-card-holder">
                     <div className="paper-card-holder-head"
                         style={{
