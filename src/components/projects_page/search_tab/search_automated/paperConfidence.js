@@ -24,7 +24,7 @@ const PaperConfidence = function ({filtersList, confidence}) {
         <div className="side-info-wrapper">
         <div className="side-info">
                 <div className="confidence">
-                    {confidence.value}
+                    {parseFloat(confidence.value).toFixed(2)}
                 </div>
                 <InfoTooltip className={"filters-confidence"}>
                     {confidence.details.map((element, index) => 

@@ -506,19 +506,19 @@ a.back-from-search-automated{
 }
 
 div.paper-card h3.auto-paper-title{
-  margin: 10px 100px 2px 0px;
+  margin: 10px 90px 2px 0px;
 }
 
 div.generic-card div.side-info-wrapper{
   position: absolute;
   top: 1px;
-  right: 95px;
+  right: 85px;
   height: 0px;
   width: 0px;
   z-index: 0;
 }
 div.generic-card div.side-info{
-  width: 100px;
+  width: 85px;
   z-index: 1;
   position: relative;
 }
@@ -548,7 +548,7 @@ div.generic-card div.side-info div.confidence-info button svg#info{
   margin: 5%;
 }
 div.top-right-anchor.filters-confidence{
-  top: 10px;
+  top: 8px;
 }
 div.top-right-anchor.filters-confidence div.information-holder div.information-content-wrapper{
   position: absolute;
