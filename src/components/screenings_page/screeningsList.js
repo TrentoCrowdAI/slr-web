@@ -4,11 +4,8 @@ import {Link, withRouter} from 'react-router-dom';
 
 import {projectsDao} from 'dao/projects.dao';
 import LoadIcon from 'components/svg/loadIcon';
-import ProjectForm from 'components/projects_page/projectForm';
 import Pagination from 'components/modules/pagination';
 import {join} from 'utils';
-import Cover from 'components/modules/cover';
-import SideOptions from 'components/modules/sideOptions';
 
 import {AppContext} from "components/providers/appProvider";
 import EmptyFolder from "components/svg/emptyFolder";

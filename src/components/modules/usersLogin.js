@@ -18,9 +18,6 @@ const UsersLogin = function (props) {
     //get the localStorage object
     const storage = window.localStorage;
 
-    //get history element from router
-    const { history } = props;
-
     //get data from global context
     const appConsumer = useContext(AppContext);
 
@@ -65,4 +62,4 @@ const UsersLogin = function (props) {
 
 }
 
-export default withRouter(UsersLogin); //I export passing router components
+export default UsersLogin;

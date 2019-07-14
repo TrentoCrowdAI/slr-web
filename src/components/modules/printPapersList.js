@@ -46,9 +46,6 @@ const PrintScoupusSearchList_w = function ({papersList, handlePaperSelection, se
     //side options
     let sideOptions= ["search similar"];
 
-    //get data from global context
-    const appConsumer = useContext(AppContext);
-
     //handle for the side options
     async function handleSideOptions(id, name, data){
         if(name === "search similar"){

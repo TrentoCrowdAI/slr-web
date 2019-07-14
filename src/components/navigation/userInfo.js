@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext} from "react";
 import { AppContext } from 'components/providers/appProvider'
 
 import Image from 'components/modules/image';
@@ -9,9 +9,6 @@ const UserInfo = function(props){
 
     //get data from global context
     const appConsumer = useContext(AppContext);
-
-    //profile image fetch error
-    const [fetchError, setFetchError] = useState(false);
 
     //not logged in as default
     let output = (

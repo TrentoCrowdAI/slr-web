@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 
 import Image from 'components/modules/image';
 import SelectTick from 'components/svg/selectTick';

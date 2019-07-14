@@ -1,8 +1,6 @@
 import React, {useEffect, useContext, useRef} from "react";
 import { Formik, Form, Field } from "formik";
 
-import {projectsDao} from 'dao/projects.dao'
-
 import Select from 'components/forms_elements/selectformik';
 
 import CloseButton from 'components/svg/closeButton';

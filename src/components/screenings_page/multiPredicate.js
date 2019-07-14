@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext, useRef} from "react";
 import {withRouter} from 'react-router-dom';
-import ClampLines from 'react-clamp-lines';
 
 import {paperDao} from 'dao/paper.dao';
 

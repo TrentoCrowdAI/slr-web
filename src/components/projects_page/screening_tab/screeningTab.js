@@ -1,9 +1,8 @@
-import React, {useContext} from "react";
+import React from "react";
 import {Route, Link, Switch, withRouter, Redirect} from 'react-router-dom';
 
 import {join} from 'utils';
 
-import {AppContext} from 'components/providers/appProvider';
 import PageNotFound from "components/modules/pageNotFound";
 import ScreeningBacklog from 'components/projects_page/screening_tab/backlog_subtab/screeningBacklog';
 import ManualResults from 'components/projects_page/screening_tab/manual_subtab/manualResults';
@@ -14,9 +13,6 @@ import ScreenedPapers from 'components/projects_page/screening_tab/screened_subt
  *this component will manage the screening sub tabs
  */
 const ScreeningTab = ({project_id, match, notFound, setNotFound}) => {
-
-    //get data from global context
-    const appConsumer = useContext(AppContext);
 
     let output;
 

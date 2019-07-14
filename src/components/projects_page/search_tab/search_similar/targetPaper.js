@@ -1,6 +1,5 @@
 import React, {useRef} from "react";
 import ClampLines from 'react-clamp-lines';
-import {Link} from 'react-router-dom';
 
 import CloseButton from 'components/svg/closeButton';
 import GoButton from "components/svg/goButton";

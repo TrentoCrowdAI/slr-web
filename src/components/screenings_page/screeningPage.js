@@ -1,23 +1,11 @@
 import React, {useState, useEffect, useContext, useRef} from "react";
-import {Route, Link, Switch, withRouter} from 'react-router-dom';
+import {Route, Switch, withRouter} from 'react-router-dom';
 
-import SearchStandardManager from 'components/projects_page/search_tab/search_standard/searchStandardManager';
-import SearchSimilarManager from 'components/projects_page/search_tab/search_similar/searchSimilarManager';
-import CustomPaperPage from 'components/projects_page/papers_tab/customPaperPage';
 import {projectsDao} from 'dao/projects.dao';
 import {projectFiltersDao} from 'dao/projectFilters.dao';
-import ProjectName from 'components/projects_page/projectName';
-import {join} from 'utils';
-
-import LoadIcon from 'components/svg/loadIcon';
 import Forbidden from 'components/svg/forbidden';
 
 import {AppContext} from 'components/providers/appProvider';
-import PageNotFound from "components/modules/pageNotFound";
-import PapersTab from "components/projects_page/papers_tab/papersTab";
-import FiltersTab from "components/projects_page/filters_tab/filtersTab";
-import ScreeningTab from "components/projects_page/screening_tab/screeningTab";
-import SearchAutomatedManager from "components/projects_page/search_tab/search_automated/searchAutomatedManager";
 import SinglePredicateScreening from 'components/screenings_page/singlePredicate';
 import MultiPredicateScreening from 'components/screenings_page/multiPredicate';
 
@@ -48,7 +36,7 @@ const ScreeningPage = (props) => {
 
     //set the project title
     useEffect(() => {
-        if(mountRef.current && project.data.name === "loading..." || project.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS"){
+        if(mountRef.current && (project.data.name === "loading..." || project.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS")){
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name}</h2> </div>);//I set the page title
         }else if(mountRef.current){
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name} screening</h2> </div>);//I set the page title
