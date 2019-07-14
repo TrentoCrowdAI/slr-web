@@ -10,14 +10,31 @@ const PaperConfidence = function ({filtersList, confidence}) {
         let pairArray = [];
         for(let i = 0; i < confArray.length; i++){
             //in case the 2 array filters are in the same order
-            if(confArray[i].detail === filterArray[i].data.name){
-                pairArray.push({"label" : confArray[i].detail, "tooltip" : filterArray[i].data.predicate});
+            if(confArray[i].id === filterArray[i].id){
+                pairArray.push({"label" : filterArray[i].data.name, "tooltip" : filterArray[i].data.predicate, "value" : confArray[i].filterValue});
             }
             //otherwise I need to search for the correct pair
             else{
-                pairArray.push({"label" : confArray[i].detail, "tooltip" : filterArray.find(filter => filter.data.predicate === confArray[i].detail)});
+                let correctFilter = filterArray.find(filter => filter.id === confArray[i].id);
+                pairArray.push({"label" : correctFilter.data.name, "tooltip" : correctFilter.data.predicate, "value" : confArray[i].filterValue});
             }
         }
+        return pairArray;
+    }
+
+    let output = <p>add filters in order to check partial confidence of each filter</p>;
+
+    if(filtersList.length !== 0){
+        let localConfidenceArray = pairCoupleArray(confidence.filters, filtersList);
+        output = (
+            <>
+                {localConfidenceArray.map((element, index) => 
+                    <p key={index} title={element.tooltip}>
+                        <span>{element.label}</span> <span className="side-detail">{(element.value) ? element.value.toFixed(2) : "−.−−"}</span>
+                    </p>
+                )}
+            </>
+        );
     }
 
     return (
@@ -27,11 +44,7 @@ const PaperConfidence = function ({filtersList, confidence}) {
                     {parseFloat(confidence.value).toFixed(2)}
                 </div>
                 <InfoTooltip className={"filters-confidence"}>
-                    {confidence.details.map((element, index) => 
-                        <p key={index}>
-                            <span>{element.detail}</span> <span className="side-detail">{element.percentage}</span>
-                        </p>
-                    )}
+                    {output}
                 </InfoTooltip>
                 
             </div>

@@ -331,7 +331,7 @@ const PrintSearchAutomatedList_w = function ({papersList, filtersList, handlePap
             <div key={index} className="generic-card paper-card">
                 <CheckBox name={element.title} label={""} val={element.eid}  isChecked ={selectedEidList.includes(element.eid)} handler={handlePaperSelection}/>
                 <PaperConfidence filtersList={filtersList}
-                    confidence={{value : element.confidence, details : [{detail: "filter_label 1", percentage : "67%"},{detail: "filter_label 2", percentage : "64%"},{detail: "filter_label 3", percentage : "59%"}]}}/>
+                    confidence={element.metadata.automatedSearch}/>
                 <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
                 <div className="extra-info">
                     <p className="authors">{element.authors}</p>
@@ -367,7 +367,7 @@ const PrintBacklogPapersList_w = function ({papersList, filtersList}) {
         output = papersList.map((element, index) =>
             <div key={index} className="generic-card paper-card">
                 <PaperConfidence filtersList={filtersList}
-                    confidence={{value : "−.−−", details : [{detail: "filter_label 1", percentage : "67%"},{detail: "filter_label 2", percentage : "64%"},{detail: "filter_label 3", percentage : "59%"}]}}/>
+                    confidence={element.metadata.automatedSearch}/>
                 <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
                 <div className="extra-info">
                     <p className="authors">{element.authors}</p>
