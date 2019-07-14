@@ -41,9 +41,9 @@ const FilterCard = function ({project_id, filter, callDelete, yup}) {
         output = (
             <div className={(disabled) ? "disabled" : ""}>
                 <SideOptions options={sideOptions} handler={handleSideOptions} target={localFilter.id} cls="card-options"/>
-                <h3>{localFilter.id}) {localFilter.data.predicate}</h3>
-                <div className="answer"><p><span><span>Include</span><span>:</span></span> {localFilter.data.inclusion_description}</p></div>
-                <div className="answer"><p><span><span>Exclude</span><span>:</span></span> {localFilter.data.exclusion_description}</p></div>
+                <h3><span className="filter-label">{localFilter.data.name}</span> {localFilter.data.predicate}</h3>
+                <div className="answer"><p><span><span>Include</span><span>:</span></span> {localFilter.data.inclusion_description || <i>empty criterion</i>}</p></div>
+                <div className="answer"><p><span><span>Exclude</span><span>:</span></span> {localFilter.data.exclusion_description || <i>empty criterion</i>}</p></div>
             </div>
         );
     }

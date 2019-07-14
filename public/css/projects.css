@@ -354,6 +354,14 @@ div.filter-card h3{
   font-size: 25px;
   margin: 0px 20px 5px 0px;
 }
+div.filter-card h3 span{
+  margin: 0px 2px 0px 0px;
+  padding: 0px 4px;
+  border-radius: 4px;
+  border: solid 1px #5f5f5f;
+  font-size: 20px;
+  color: #1c1c1c;
+}
 div.filter-card div.answer{
   font-size: 17px;
   margin: 1px 0px 1px 0px;

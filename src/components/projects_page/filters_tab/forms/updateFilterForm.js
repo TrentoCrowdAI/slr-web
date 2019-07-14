@@ -35,7 +35,7 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
             validationSchema={predicateValidationSchema}
             onSubmit={async (values, { setSubmitting }) => {
                 let bodyData = {predicate: values.predicate, 
-                                //name: filter.data.name,
+                                name: filter.data.name,
                                 inclusion_description: values.inclusion_description, exclusion_description: values.exclusion_description};
                 
                 //call dao
@@ -84,12 +84,12 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
                         style={{borderBottom : (errors.inclusion_description && touched.inclusion_description) ? "solid 1px #d81e1e" : ""}}
                         name="inclusion_description"
                         component="textarea"
-                        placeholder="Type what the answer should include"/>
+                        placeholder="Type what the answer should include (optional)"/>
                     <Field
                         style={{borderBottom : (errors.exclusion_description && touched.exclusion_description) ? "solid 1px #d81e1e" : ""}}
                         name="exclusion_description"
                         component="textarea"
-                        placeholder="Type what the answer should not include"/>
+                        placeholder="Type what the answer should not include (optional)"/>
                 </div>
                 <button type="submit" disabled={isSubmitting || !isValid}>Update Filter</button>
             </Form>
