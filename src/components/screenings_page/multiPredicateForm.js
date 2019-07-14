@@ -175,13 +175,13 @@ const FilterScreen = function({ filter, display,
                         inclusion criteria:
                     </p>
                     <p className="criteria-description">
-                        {filter.data.inclusion_description}
+                        {filter.data.inclusion_description || <i>empty criterion</i>}
                     </p>
                     <p className="criteria-type">
                         exclusion criteria:
                     </p>
                     <p className="criteria-description">
-                        {filter.data.exclusion_description}
+                        {filter.data.exclusion_description || <i>empty criterion</i>}
                     </p>
                 </div>
                 <div className="screening-choice multi-predicate">

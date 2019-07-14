@@ -52,13 +52,13 @@ const FilterElement = function({filter, code, isOpen, setIsOpen, index}) {
                     inclusion criteria:
                 </p>
                 <p className="criteria-description">
-                    {filter.inclusion_description}
+                    {filter.inclusion_description || <i>empty criterion</i>}
                 </p>
                 <p className="criteria-type">
                     exclusion criteria:
                 </p>
                 <p className="criteria-description">
-                    {filter.exclusion_description}
+                    {filter.exclusion_description || <i>empty criterion</i>}
                 </p>
             </div>
         </>

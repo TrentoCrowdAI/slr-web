@@ -81,6 +81,7 @@ const MultiPredicateScreening = function ({project_id, filtersList, filtersFetch
                 //always call the dao to search on scopus
                 let res = await paperDao.search({"arXiv":"true","googleScholar":"false","scopus":"false","query":"a","searchBy":"all","orderBy":"title","sort":"ASC","year":"all","start":"0","count":"10"});
 
+                console.log(res);
                 //error checking
                 //if the component is still mounted and  is 404 error
                 if (mnt && res && res.message === "Not Found") {
