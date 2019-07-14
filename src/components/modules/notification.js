@@ -11,21 +11,16 @@ const Notification = function (props) {
     //get data from global context
     const appConsumer = useContext(AppContext);
 
-    const mountKeyRef = useRef("_");
+    const notificationTimeout = useRef();
 
     let output = <></>;
 
     //if there's a notification I sent it in input
     if(appConsumer.notificationMessage){
-        let key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-        mountKeyRef.current = key;
 
         //I automatically remove it after 5 seconds
-        setTimeout(() => {
-            console.log((key === mountKeyRef.current));
-            if(appConsumer.notificationMessage && (key === mountKeyRef.current)){
-                appConsumer.setNotificationMessage(undefined);
-            }
+        notificationTimeout.current = setTimeout(() => {
+            appConsumer.setNotificationMessage(undefined);
         }, 5000);
 
         output = (
@@ -33,7 +28,11 @@ const Notification = function (props) {
                 <div className="message-content">
                     {appConsumer.notificationMessage}
                 </div>
-                <button type="button" className="close-notification-btn" onClick={(e) => {appConsumer.setNotificationMessage(undefined)}}>
+                <button type="button" className="close-notification-btn" 
+                    onClick={(e) => {
+                        appConsumer.setNotificationMessage(undefined);
+                        clearTimeout(notificationTimeout.current);
+                    }}>
                     <CloseButton/>
                 </button>
             </div>

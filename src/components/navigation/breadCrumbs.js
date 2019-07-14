@@ -52,7 +52,7 @@ const BreadCrumbs = function(props) {
                 link = (<Link key={i+1} to={href}>{appConsumer.projectName}</Link>);
             }else if(path[i-1] && path[i-1] === "screenings"){
                 //I retrieve the project title from the context
-                link = (<Link key={i+1} to={href}>{appConsumer.projectName} screening</Link>);
+                link = (<span key={i+1}>{appConsumer.projectName} screening</span>);
             }else{
                 switch (path[i]) {
                     case "projects":
@@ -67,17 +67,17 @@ const BreadCrumbs = function(props) {
                     case "searchautomated":
                         link = (<Link key={i+1} to={href}>Intelligent papers search</Link>);
                         break;
-                    case "search":
-                        link = (<Link key={i+1} to={href}>Search</Link>);
+                    case "single_predicate":
+                        link = (<Link key={i+1} to={href}>Single predicate Mode</Link>);
                         break;
-                    case "filters":
-                        link = (<Link key={i+1} to={href}>Filters</Link>);
+                    case "multi_predicate":
+                        link = (<Link key={i+1} to={href}>Multi predicate Mode</Link>);
                         break;
                     case "screening":
-                        link = (<Link key={i+1} to={href}>Screening</Link>);
+                        link = (<span key={i+1}>Screening</span>);
                         break;
                     default:
-                        link = (<Link key={i+1} to={href}>{path[i]}</Link>);
+                        link = (<Link key={i+1} to={href}>{path[i].charAt(0).toUpperCase() + path[i].slice(1)}</Link>);
                         break;
                 }
             }
