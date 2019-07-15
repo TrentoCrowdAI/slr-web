@@ -41,11 +41,6 @@ const InsertFilterForm = function(props){
                 validationSchema={predicateValidationSchema}
                 onSubmit={async (values, { setSubmitting, resetForm }) => {
                     let bodyData = {project_id: props.project_id, 
-                                    name: "C" + ((props.filtersList.length !== 0) ?
-                                                    parseInt(props.filtersList[0].data.name.slice(1)) + 1
-                                                :
-                                                    "1"
-                                                ),
                                     predicate: values.predicate, 
                                     inclusion_description: values.inclusion_description, 
                                     exclusion_description: values.exclusion_description

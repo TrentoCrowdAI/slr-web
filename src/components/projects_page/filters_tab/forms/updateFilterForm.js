@@ -35,7 +35,6 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
             validationSchema={predicateValidationSchema}
             onSubmit={async (values, { setSubmitting }) => {
                 let bodyData = {predicate: values.predicate, 
-                                name: filter.data.name,
                                 inclusion_description: values.inclusion_description, exclusion_description: values.exclusion_description};
                 
                 //call dao
@@ -43,7 +42,7 @@ const UpdateFilterForm = function ({project_id, filter, setFilter, yup, setEditi
 
                 //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
                 if (mountRef.current && res === "") {
-                    setFilter({id: filter.id, data: {...bodyData}});
+                    setFilter({id: filter.id, data: {name: filter.data.name, ...bodyData}});
                 }
                 //error checking
                 //if is other error
