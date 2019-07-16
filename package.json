@@ -6,7 +6,8 @@
   "dependencies": {
     "formik": "^1.5.2",
     "gh-pages": "^2.0.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
+    "nock": "^10.0.6",
     "query-string": "^6.4.2",
     "react": "^16.8.4",
     "react-clamp-lines": "^2.2.0",
@@ -35,5 +36,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@testing-library/react": "^8.0.5"
+  }
 }

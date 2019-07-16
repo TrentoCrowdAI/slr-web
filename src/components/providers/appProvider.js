@@ -69,6 +69,13 @@ const AppProvider = function (props) {
                 setUserFetch(false);
             }
             getUserData();
+        }else if(props.testing){ //data setup for testing
+            let user = {"email": "gmail@gmail", 
+                        "name": "bob", 
+                        "surname": "man", 
+                        "image": "invalid"};
+            setUser(user);
+            setUserFetch(false);
         }else{
             setUserFetch(false);
         }

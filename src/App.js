@@ -1,7 +1,4 @@
-import React from 'react';
-import {HashRouter as Router} from "react-router-dom";
-
-
+import React, {useEffect} from 'react';
 
 import Main from 'components/main';
 
@@ -25,11 +22,10 @@ const App = function(props) {
 
 
         return (
-            <Router>
                 <div className="app">
 
                     {/*mount a root context object*/}
-                    <AppProvider>
+                    <AppProvider testing={props.testing}>
 
                         <NavBar>
                             {/*component menu*/}
@@ -46,7 +42,6 @@ const App = function(props) {
 
                     </AppProvider>
                 </div>
-            </Router>
         );
 
 }
