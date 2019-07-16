@@ -270,7 +270,7 @@ const SearchSimilarManager = function ({project_id, location, match, history}) {
     */
 
     //if is loading
-    if (display === false && queryData.query !== "") {
+    if (display === false && targetPaperData) {
 
         resultPart = (
             <>

@@ -1,20 +1,16 @@
 import React, {useState, useEffect, useContext, useRef} from "react";
-import {Link} from 'react-router-dom';
-import queryString from 'query-string';
-
 
 import {projectsDao} from 'dao/projects.dao';
 import LoadIcon from 'components/svg/loadIcon';
 import ProjectForm from 'components/projects_page/projectForm';
 import Pagination from 'components/modules/pagination';
-import {join} from 'utils';
 import Cover from 'components/modules/cover';
-import SideOptions from 'components/modules/sideOptions';
 
 import {AppContext} from "components/providers/appProvider";
 import EmptyFolder from "components/svg/emptyFolder";
 
 import {createQueryData} from 'utils/index';
+import ProjectCard from "./projectCard";
 
 const queryParams = [
     {label: "start", default: 0},
@@ -186,8 +182,6 @@ const ProjectsList = function (props) {
  * */
 const PrintList = function ({projectsList, path, handleDelete}) {
 
-    let sideOptions= ["delete"];
-
     let maps;
     //if list is empty, print a notice message
     if (projectsList.length === 0) {
@@ -199,15 +193,7 @@ const PrintList = function ({projectsList, path, handleDelete}) {
     else {
         maps = (projectsList.map((element, index) =>
                 <div key={element.id} className="light-modal project-card">
-                    <SideOptions options={sideOptions} handler={handleDelete} target={element.id} cls="card-options project-card-options"/>
-                    <Link to={join(path, "/" + element.id)}>
-                        <h3>{element.data.name}</h3>
-                        <p className="description">{element.data.description}</p>
-                        <div className="project-dates">
-                            <p>{/*created on <i>{element.date_created.slice(0, 10)}</i>*/}</p>
-                            <p>last modified on <i>{element.date_last_modified.slice(0, 10)}</i></p> 
-                        </div>
-                    </Link>
+                    <ProjectCard callDelete={handleDelete} path={path} project={element}/>
                 </div>
         ));
     }
@@ -221,8 +207,5 @@ const PrintList = function ({projectsList, path, handleDelete}) {
     return output;
 
 };
-
-
-
 
 export default ProjectsList;

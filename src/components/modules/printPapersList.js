@@ -11,6 +11,7 @@ import NoPapers from "components/svg/noPapers";
 
 import {join} from 'utils/index';
 import PaperConfidence from "components/projects_page/search_tab/search_automated/paperConfidence";
+import ProjectPaperCard from "components/projects_page/papers_tab/projectPaperCard";
 /**
  * prints the papers list of a local search on the fake database
  */
@@ -157,21 +158,7 @@ const PrintPapersList_w = function ({papersList, location, history}) {
         output = (
             localPaperList.map((element) =>
                 <div key={element.id} className="generic-card paper-card">
-                    <SideOptions options={sideOptions} handler={handleSideOptions} target={element.id} data={element.data} cls="card-options"/>
-                    <Link to={"#"}><h3>{(element.data.title) ? element.data.title : "[MISSING TITLE]"}</h3></Link>
-                    <div className="extra-info">
-                        <p className="authors">{(element.data.authors) ? element.data.authors : "[MISSING AUTHORS]"}</p>
-                        <p className="eid">{(element.data.eid) ? element.data.eid : "[MISSING EID]"}</p>
-                        <p className="date">{(element.data.year) ? element.data.year : "[MISSING YEAR]"}</p>
-                    </div>
-                    <ClampLines
-                        text={(element.data.abstract) ? element.data.abstract : "[MISSING ABSTRACT]"}
-                        lines={4}
-                        ellipsis="..."
-                        className="paragraph"
-                        moreText="more"
-                        lessText="less"
-                    />
+                    <ProjectPaperCard callOptions={handleSideOptions} paper={element}/>
                 </div>
             )
         );

@@ -737,6 +737,10 @@ button.edit-button{
 .st0-info{fill:none;stroke:#515151;stroke-width:88;;}
 .st1-info{fill:#515151;stroke:none;stroke-width:88;;}
 
+/*undecided icon*/
+.st0-und{fill:none;stroke:#3b3b3b;stroke-width:120;}
+.st1-und{fill:#3b3b3b};
+
 /*image error*/
 .st0-image-error{fill:none;stroke:#DD1F2B;stroke-width:11.2947;;}
 .st1-image-error{fill:none;stroke:#8C6949;stroke-width:5.6474;;}
