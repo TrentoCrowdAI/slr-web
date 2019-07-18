@@ -1,9 +1,10 @@
 import React from 'react';
-import { render, waitForElement, getAllByText, cleanup } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { render, waitForElement, getAllByText, cleanup, act } from '@testing-library/react';
 
-import {nockOptions, nockGet} from 'utils/testUtils';
-import App from 'App';
+import {nockOptions, nockGet, testWrap} from 'utils/testUtils';
+
+import ProjectsList from 'components/projects_page/projectsList';
+
 
 const getProjectsRes = 
 {"results":[
@@ -31,19 +32,12 @@ describe('projects page', () => {
         
         //will intercept the GET request
         const scope = nockGet("/projects", projectsPaginationQuery, getProjectsRes);
-        
-        //app to render with a specific url
-        const tree = (
-            <MemoryRouter initialEntries={["/projects"]}>
-                <App testing={true}/>
-            </MemoryRouter>
-        );
-        
-        //I render the app and extract its DOM
-        const {container} = render(tree);
 
-        //check title on navbar
-        expect(container.getElementsByClassName("static-title")[0].innerHTML).toBe("PROJECTS");
+        //I render the app and extract its DOM
+        const {container} = render(
+            //you put the component you want to test as a testWrap argument
+            testWrap(<ProjectsList location={{search: ""}} match={{url: ""}}/>)
+        );
 
         //wait for projects list to appear
         await waitForElement(
