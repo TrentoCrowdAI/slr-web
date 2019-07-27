@@ -187,9 +187,14 @@ const PrintScreenedPapersList_w = function ({papersList}) {
             papersList.map((element) =>
                 <div key={element.id} className="generic-card paper-card screened">
                     <Link to={"#"}><h3>{(element.data.title) ? element.data.title : "[MISSING TITLE]"}</h3></Link>
-                    <div className="screened-label">
-                        <div className="type">Manual</div>
-                        <div className="in-out">OUT</div>
+                    <div className="screened-label" 
+                        title={(element.data.metadata.automatedScreening) ? element.data.metadata.automatedScreening.value : undefined}>
+                        <div className="type">
+                            {(element.data.metadata.screening.source === "automated screening") ? "Auto" : element.data.metadata.screening.source}
+                        </div>
+                        <div className="in-out">
+                            {(element.data.metadata.screening.result === 1) ? "IN" : "OUT"}
+                        </div>
                     </div>
                     <div className="extra-info">
                         <p className="authors">{(element.data.authors) ? element.data.authors : "[MISSING AUTHORS]"}</p>
@@ -351,15 +356,15 @@ const PrintBacklogPapersList_w = function ({papersList, filtersList}) {
         output = papersList.map((element, index) =>
             <div key={index} className="generic-card paper-card">
                 <PaperConfidence filtersList={filtersList}
-                    confidence={element.metadata.automatedSearch}/>
-                <Link to={"#"}><h3 className="auto-paper-title">{element.title}</h3></Link>
+                    confidence={element.data.metadata && element.data.metadata.automatedScreening}/>
+                <Link to={"#"}><h3 className="auto-paper-title">{element.data.title}</h3></Link>
                 <div className="extra-info">
-                    <p className="authors">{element.authors}</p>
-                    <p className="eid">{element.eid}</p>
-                    <p className="date">{element.year}</p>
+                    <p className="authors">{element.data.authors}</p>
+                    <p className="eid">{element.data.eid}</p>
+                    <p className="date">{element.data.year}</p>
                 </div>
                 <ClampLines
-                    text={element.abstract}
+                    text={element.data.abstract}
                     lines={4}
                     ellipsis="..."
                     className="paragraph"

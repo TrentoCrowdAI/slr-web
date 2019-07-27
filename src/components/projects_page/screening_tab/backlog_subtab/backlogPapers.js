@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import {withRouter} from "react-router-dom";
 
-import {paperDao} from 'dao/paper.dao';
+import {projectPapersDao} from 'dao/projectPapers.dao';
 import {projectFiltersDao} from 'dao/projectFilters.dao';
 
 import LoadIcon from 'components/svg/loadIcon';
@@ -112,8 +112,7 @@ const BacklogPapers = ({project_id, totalResults, setTotalResults, match, locati
             }
 
             //call the dao for getting the papers
-            let resx = await paperDao.searchAutomated({"project_id" : project_id, "start" : queryData.start, "count" : queryData.count,
-                                                    "min_confidence": queryData.min_confidence, "max_confidence": queryData.max_confidence});
+            let resx = await projectPapersDao.getPapersList({project_id, type: "backlog", ...queryData});
 
             console.log(resx);
             //error checking

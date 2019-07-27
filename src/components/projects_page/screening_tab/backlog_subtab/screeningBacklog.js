@@ -13,6 +13,8 @@ import Cover from "components/modules/cover";
 import ManualScreeningIcon from "components/svg/manualScreningIcon";
 import AutoScreeningIcon from "components/svg/autoScreeningIcon";
 import CrowdScreeningIcon from "components/svg/crowdScreeningIcon";
+import { projectPapersDao } from "dao/projectPapers.dao";
+import { projectScreeningDao } from "dao/projectScreening.dao";
 
 
 /**
@@ -36,16 +38,35 @@ const ScreeningBacklog = function ({project_id}) {
     const [totalResults, setTotalResults] = useState(0);
 
     useEffect(() => {
-        let res = 0;
+        let mnt = true;
+        
+        async function checkStatus() {
+            let res = await projectScreeningDao.getAutoScreeningStatus({project_id});
+            if(res !== 0){
+                setAutoScreeningFlag(true);
+            }
+        }
+
+        //this is the first check we do when the component mounts
+        checkStatus();
+
+        return () => {
+            mnt = false;
+        };
+    },[]);
+
+    useEffect(() => {
         let mnt = true;
         let poll = undefined;
-        console.log("checking if need to poll")
-        
+
         if(autoScreeningFlag){
-            poll = setInterval(() => {
-                console.log("POLLING....");
-                setAutoScreeningStatus(3016-3016*res/100)
-                res++;
+            clearInterval(poll);
+            poll = setInterval(async () => {
+                let resx = await projectScreeningDao.getAutoScreeningStatus({project_id});
+                setAutoScreeningStatus(3016 - 3016*resx/100)
+                if(resx === 100){
+                    setAutoScreeningFlag(false);
+                }
 
             }, 1000);
         }
@@ -84,6 +105,7 @@ const ScreeningBacklog = function ({project_id}) {
                             />
                         </svg>
                         <button className="screening-strategy-btn auto" type="button"
+                            disabled={autoScreeningStatus !== 3016}
                             onClick={() => {setDisplayAutoForm(true)}}
                         > 
                         <AutoScreeningIcon/>
@@ -114,7 +136,7 @@ const ScreeningBacklog = function ({project_id}) {
             <AutoScreeningForm visibility={displayAutoForm} setVisibility={setDisplayAutoForm} project_id={project_id} setAutoScreeningFlag={setAutoScreeningFlag}/>
 
             <BacklogPapers project_id={project_id}
-                totalResults={totalResults} setTotalResults={setTotalResults} //I pass this hook so I will know how much papers are ther
+                totalResults={totalResults} setTotalResults={setTotalResults} //I pass this hook so I will know how much papers are there
             />
             {screeningStrategy}
         </>

@@ -25,23 +25,30 @@ const PaperConfidence = function ({filtersList, confidence}) {
     let output = <p>add filters in order to check partial confidence of each filter</p>;
 
     if(filtersList.length !== 0){
-        let localConfidenceArray = pairCoupleArray(confidence.filters, filtersList);
-        output = (
-            <>
-                {localConfidenceArray.map((element, index) => 
-                    <p key={index} title={element.tooltip}>
-                        <span>{element.label}</span> <span className="side-detail">{(element.value) ? element.value.toFixed(2) : "−.−−"}</span>
-                    </p>
-                )}
-            </>
-        );
+        //let localConfidenceArray = pairCoupleArray(metadata.confidence.filters, filtersList);
+        console.log(confidence)
+        if(confidence !== undefined){
+            console.log("the paper has confidence")
+            let localConfidenceArray = pairCoupleArray(confidence.filters, filtersList);
+            output = (
+                <>
+                    {localConfidenceArray.map((element, index) => 
+                        <p key={index} title={element.tooltip}>
+                            <span>{element.label}</span> <span className="side-detail">{(element.value) ? element.value.toFixed(2) : "−.−−"}</span>
+                        </p>
+                    )}
+                </>
+            );
+        }else{
+            output = (<>This paper has not received any confidence score yet</>);
+        }
     }
 
     return (
         <div className="side-info-wrapper">
         <div className="side-info">
                 <div className="confidence">
-                    {parseFloat(confidence.value).toFixed(2)}
+                    {(confidence) ? parseFloat(confidence.value).toFixed(2) : "−.−−"}
                 </div>
                 <InfoTooltip className={"filters-confidence"}>
                     {output}

@@ -5,6 +5,8 @@ import Select from 'components/forms_elements/selectformik';
 
 import CloseButton from 'components/svg/closeButton';
 
+import {projectScreeningDao} from 'dao/projectScreening.dao';
+
 import { AppContext } from 'components/providers/appProvider'
 
 //confidence value array
@@ -44,17 +46,15 @@ function AutoScreeningForm(props) {
             initialValues={{threshold: 0.9}}
             onSubmit={async (values, { setSubmitting }) => {
                 let bodyData = {project_id: props.project_id, threshold: values.threshold};
-                console.log(bodyData);
-                /*
+
                 //call dao
-                let res = await projectsDao.postProject(bodyData);
+                let res = await projectScreeningDao.startAutoScreening(bodyData);
 
                 //error checking
                 if(mountRef.current && res.message){
                     //pass error object to global context
                     appConsumer.setError(res);
                 }else 
-                */
                 if(mountRef.current){
                     setSubmitting(false);
                     props.setVisibility(!props.visibility);

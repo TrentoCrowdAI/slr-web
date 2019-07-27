@@ -63,14 +63,12 @@ function ProjectForm(props) {
                 <button type="button" className="close-btn" onClick={(e) => {
                     props.setVisibility(!props.visibility);
                 }}><CloseButton/></button>
-                <br/>
                 <Field
                     style={{borderBottom : (errors.name && touched.name) ? "solid 1px #d81e1e" : ""}}
                     name="name"
                     type="text" 
                     placeholder="Please enter a project title"
                     onChange={(e) => {handleChange(e); validateField('name')}}/>
-                <br/>
                 <br/>
                 <Field
                     style={{borderBottom : (errors.description && touched.description) ? "solid 1px #d81e1e" : ""}}

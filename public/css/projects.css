@@ -94,12 +94,12 @@ form.add-project button[type=submit]{
   padding: 10px 10px 10px 10px;
 }
 form.add-project input{
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   width: 100%;
 }
 form.add-project textarea{
   margin-bottom: 15px;
-  height: 100px;
+  height: 120px;
   width: 100%;
   font-family: inherit;
   background-color: transparent;
@@ -640,7 +640,7 @@ div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.scree
 div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder svg#circle-progress{
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 60px;
   top: 0px;
   left: 0px;
   pointer-events: none;

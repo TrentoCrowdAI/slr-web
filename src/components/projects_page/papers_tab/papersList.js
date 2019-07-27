@@ -67,7 +67,7 @@ const PapersList = ({project_id, location, match, history, forcePapersFetch}) =>
             setDisplay(false);
 
             //call the dao
-            let res = await projectPapersDao.getPapersList({project_id, ...queryData});
+            let res = await projectPapersDao.getPapersList({project_id, type: "all", ...queryData});
 
             //error checking
             //if the component is still mounted and  is 404 error

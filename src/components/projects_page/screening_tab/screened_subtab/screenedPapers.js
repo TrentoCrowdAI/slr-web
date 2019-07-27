@@ -38,6 +38,9 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
     //bool to show the pagination list
     const [totalResults, setTotalResults] = useState(0);
 
+    //number of total papers in the project
+    const [totalPapers, setTotalPapers] = useState(undefined);
+
     //bool to control the visualization of page
     const [display, setDisplay] = useState(false);
 
@@ -66,7 +69,8 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
             setDisplay(false);
 
             //call the dao for getting the papers
-            let resx = await projectPapersDao.getPapersList({project_id, ...queryData});
+            let resx = await projectPapersDao.getPapersList({project_id, type: "screened", ...queryData});
+            console.log(resx);
 
             console.log(resx);
             //error checking
@@ -74,6 +78,7 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
             if (mnt && resx && resx.message === "Not Found") {
                 setPapersList([]);
                 setTotalResults(0);
+                setTotalPapers(undefined);
                 //show the page
                 setDisplay(true);
             }
@@ -87,6 +92,7 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
                 //update state
                 setPapersList(resx.results);
                 setTotalResults(resx.totalResults);
+                setTotalPapers(resx.totalPapers);
                 //show the page
                 setDisplay(true);
             }
@@ -164,7 +170,13 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
     output = (
         <>
             <div className="right-side-wrapper status">
-                <h2 className="screened-status"><span className="partial">30</span> out of <span className="total">150</span> papers were screened</h2>
+                <h2 className="screened-status"><span className="partial">{totalResults} </span> 
+                    {(totalPapers) ? 
+                        <>out of <span className="total">{totalPapers}</span> </>
+                       :
+                        <></>
+                    }
+                papers were screened</h2>
             </div>
             <div className="left-side-wrapper">
                 <div className="paper-card-holder large">
