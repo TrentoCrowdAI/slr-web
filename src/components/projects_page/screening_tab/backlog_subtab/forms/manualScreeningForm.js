@@ -39,7 +39,7 @@ function ManualScreeningForm(props) {
 
             //call the dao for getting collaborators
             let res = await projectsDao.getProjectCollaborators(props.project_id);
-
+            console.log(res);
             //error checking
             //if the component is still mounted and there is some other errors
             if (mountRef.current && res && res.message) {
@@ -49,12 +49,7 @@ function ManualScreeningForm(props) {
             //if the component is still mounted and res isn't null
             else if (mountRef.current && res) {
                 //setCollaborators(res);
-                setCollaborators([
-                    {id: 0, ...(appConsumer.user), name : "You", surname : ""},
-                    {id: 1, email : "a", name : "Marco", surname : "Polo", image : "."},
-                    {id: 2, email : "a", name : "John", surname : "Snow", image : "."},
-                    {id: 3, email : "a", name : "Augustus", surname : "Gaius", image : "."},
-                ]);
+                setCollaborators(res);
 
                 //call the dao for getting the filters(this way I know if the user can start multi predicate screening)
                 let resx = await projectFiltersDao.getFiltersList({"project_id" : props.project_id});
@@ -128,11 +123,19 @@ function ManualScreeningForm(props) {
                             name="screeners"
                             render={({ field, form }) => (
                                 <>
-                                    {collaborators.map((user) => (
-                                        <div key={user.id}>
-                                            <UserCheckbox selected={values.screeners.includes(user.id)} user={user} {...field} form={form}/>
-                                        </div>
-                                    ))}
+                                    <div>
+                                        <UserCheckbox selected={values.screeners.includes(-1)} 
+                                            user={{id: -1, ...(appConsumer.user), name:"you", surname: ""}} {...field} form={form}/>
+                                    </div>
+                                    {collaborators.map(function (user) {
+                                        if(user.data.name !== ""){
+                                            return (
+                                                <div key={user.id}>
+                                                    <UserCheckbox user={user.data} {...field} form={form}/>
+                                                </div>
+                                            );
+                                        }
+                                    })}
                                 </>
                             )}
                         />

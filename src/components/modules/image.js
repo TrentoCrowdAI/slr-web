@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import NoImage from "components/svg/noImage";
 
 /*
@@ -9,6 +9,15 @@ const Image = function({className, alt, src, style}){
     //profile image fetch error
     const [fetchError, setFetchError] = useState(false);
 
+    useEffect(() => {
+        let mount = true;
+        if(mount && !src){
+            setFetchError(true);
+        }
+        return () => {
+            mount = false;
+        };
+    }, [])
 
     let img = <></>;
 

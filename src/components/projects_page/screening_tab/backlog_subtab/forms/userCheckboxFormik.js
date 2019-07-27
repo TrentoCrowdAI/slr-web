@@ -6,7 +6,7 @@ import SelectTick from 'components/svg/selectTick';
 /**
  * userCheckBox for Formik
  */
-const UserCheckbox = ({ selected, user, form, name }) => {
+const UserCheckbox = ({ user, form, name }) => {
 
     function selectHandler() {
         if(form.values.screeners.includes(user.id)){
@@ -21,10 +21,10 @@ const UserCheckbox = ({ selected, user, form, name }) => {
             onClick={selectHandler}
         >   
         <div className="user-data-image-wrapper">
-            <div className="img-wrapper-cover" style={{opacity: (selected) ? "0.9" : "0.0"}}>
+            <div className="img-wrapper-cover" style={{opacity: (form.values.screeners.includes(user.id)) ? "0.9" : "0.0"}}>
                 <SelectTick color={"white"}/>
             </div>
-            <Image className="user-data-image" alt={"profile image"} src={user.image}/>
+            <Image className="user-data-image" alt={"profile image"} src={user.picture || user.image}/>
         </div>
         <p className="user-data-names">{user.name} {user.surname}</p>
         </button>

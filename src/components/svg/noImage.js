@@ -9,10 +9,10 @@ const NoImage = function (props) {
         <svg version="1.1" id="no-image" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	    viewBox="0 0 1000 1000">
             <g>
-                <path className="st0-image-error" d="M276.4,541.4c0-20.6,83.9-32.6,187.4-32.6s187.4,12,187.4,32.6"/>
+                <path className="st5-image-error" d="M276.4,541.4c0-20.6,83.9-32.6,187.4-32.6s187.4,12,187.4,32.6"/>
                 <path className="st1-image-error" d="M339.2,554.9c32.4-5.1,76.5-7.9,125.1-7.9c48.2,0,92,2.7,124.3,7.7"/>
-                <path className="st0-image-error" d="M651.9,560.8v52.8l-0.7,0.1c0,20.6-83.9,31-187.4,31s-187.4-10.5-187.4-31l-0.6-0.1v-52.8"/>
-                <path className="st0-image-error" d="M290.4,643.2l43,257.2l0.4-0.2c0,13.7,56,20.7,125.1,20.7s125.1-7,125.1-20.7l53.5-257.1"/>
+                <path className="st5-image-error" d="M651.9,560.8v52.8l-0.7,0.1c0,20.6-83.9,31-187.4,31s-187.4-10.5-187.4-31l-0.6-0.1v-52.8"/>
+                <path className="st5-image-error" d="M290.4,643.2l43,257.2l0.4-0.2c0,13.7,56,20.7,125.1,20.7s125.1-7,125.1-20.7l53.5-257.1"/>
                 <g>
                     <path className="st2-image-error" d="M473.9,527.7c-8-4.4,135.3-110.1,166.8-164.5C560.3,392.4,503.6,455.5,473.9,527.7"/>
                     <path className="st2-image-error" d="M570.5,245.9C545.3,276,474.1,487.5,464.9,574"/>
@@ -25,7 +25,7 @@ const NoImage = function (props) {
                         l6.7-38.5c6-1.5,11.9-3.6,17.5-6.4l29.6,25.2c9.8-6.5,18.9-14.6,26.8-24.2c7.9-9.6,14.2-20,18.9-30.9L684.6,229.2z"/>
                     <ellipse className="st4-image-error" cx="600.4" cy="204.5" rx="41.9" ry="42.4"/>
                 </g>
-                <path className="st0-image-error" d="M651.2,541.4c0,20.6-83.9,31-187.4,31s-187.4-10.5-187.4-31"/>
+                <path className="st5-image-error" d="M651.2,541.4c0,20.6-83.9,31-187.4,31s-187.4-10.5-187.4-31"/>
             </g>
         </svg>
     );
