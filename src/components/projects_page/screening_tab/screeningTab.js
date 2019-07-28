@@ -12,7 +12,7 @@ import ScreenedPapers from 'components/projects_page/screening_tab/screened_subt
 /**
  *this component will manage the screening sub tabs
  */
-const ScreeningTab = ({project_id, match, notFound, setNotFound}) => {
+const ScreeningTab = ({project_id, project, match, notFound, setNotFound}) => {
 
     let output;
 
@@ -24,7 +24,7 @@ const ScreeningTab = ({project_id, match, notFound, setNotFound}) => {
                         return (<Redirect to={join(match.url, '/backlog')} />);
                     }}/>
                     <Route exact path={match.url + "/backlog"} render={function(props){
-                        return (<ScreeningBacklog project_id={project_id}/>);
+                        return (<ScreeningBacklog project_id={project_id} project={project}/>);
                     }}/>
                     <Route exact path={match.url + "/manual"} render={function(props){
                         return (<ManualResults project_id={project_id}/>);
@@ -93,28 +93,7 @@ const ScreeningPageNavigation = function ({notFound, match}) {
             </div>
         </>
     );
-    /*
-    let output = (
-        <>
-            <div className="project-nav-link-wrapper" style={{display: (notFound || slider === "hide") ? "none" : ""}}>
-                <div className="nav-link">
-                    <Link to={match.url}>papers</Link>
-                </div>
-                <div className="nav-link">
-                    <Link to={join(match.url, "/filters")}>filters</Link>
-                </div>
-                <div className="nav-link">
-                    <Link to={join(match.url, "/search")}>search</Link>
-                </div>
-                <div className="nav-link">
-                    <Link to={join(match.url, "/screening")}>screening</Link>
-                </div>
-                <div className="underline" style={{left: slider}}/>
-            </div>
-        </>
-    );
-    return output;
-    */
+
    return output;
 
 };

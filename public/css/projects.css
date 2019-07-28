@@ -832,13 +832,11 @@ div.paper-card.manual div.paragraph{
 div.paper-card.manual div.users-votes{
   width: 690px;
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   margin: 0px 0px 0px 10px;
 }
 div.paper-card.manual div.users-votes div.votes{
-  display: flex;
-  max-width: 200px;
-  flex-wrap: wrap;
+  display: inline-flex;
 }
 div.paper-card.manual div.users-votes div.votes div.user-vote-image, img.user-vote-image{
   width: 36px;
@@ -857,4 +855,7 @@ div.user-vote-image.no-vote, img.user-vote-image.no-vote{
 }
 div.user-vote-image.und-vote, img.user-vote-image.und-vote{
   border: solid 2px #4242e1;
+}
+div.user-vote-image.empty-slot, img.user-vote-image.empty-slot{
+  border: dashed 2px #b7b7b7;
 }

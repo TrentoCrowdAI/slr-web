@@ -66,7 +66,7 @@ const ManualResults = ({project_id, match, location, history}) => {
             setDisplay(false);
 
             //call the dao for getting the papers
-            let resx = await projectPapersDao.getPapersList({project_id, ...queryData});
+            let resx = await projectPapersDao.getPapersList({project_id, type:"manual", ...queryData});
 
             //error checking
             //if is 404 error
@@ -166,11 +166,10 @@ const ManualResults = ({project_id, match, location, history}) => {
                 <div className="top-right-description">
                     <p className="manual-description"> 
                     Here you can see the status of the manual
-                    screening process. <br/>
+                    screening process. Below each paper you can see the votes related to it<br/>
                     <span className="color-code red-color">RED </span> voted no<br/>
                     <span className="color-code green-color">GREEN </span> voted yes<br/>
                     <span className="color-code blue-color">BLUE </span> voted undecided<br/>
-                    <span className="color-code grey-color">GREY </span> did not vote yet<br/>
                     </p>
                     <Link to={"/screenings/"+project_id+"/"}>(start your manual screening session)</Link>
                 </div>

@@ -1,14 +1,12 @@
 import React, {useState, useEffect, useContext, useRef} from "react";
-import {withRouter} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
 import KeyboardEventHandler from 'react-keyboard-event-handler';
 
-import {paperDao} from 'dao/paper.dao';
+import {projectScreeningDao} from 'dao/projectScreening.dao';
 
 import LoadIcon from 'components/svg/loadIcon';
 
 import {AppContext} from 'components/providers/appProvider'
-
-import {createQueryData} from 'utils/index';
 
 
 import FiltersAccordion from "components/modules/filtersAccordion";
@@ -19,9 +17,6 @@ import PositiveAnswer from 'components/svg/positiveAnswer';
 import NegativeAnswer from 'components/svg/negativeAnswer';
 import UndecidedAnswer from 'components/svg/undecidedAnswer';
 
-const queryParams = [
-    {label: "question_id", default: ""}
-]
 
 /**
  * this is component form to search for the paper in project page
@@ -52,9 +47,8 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
     //get data from global context
     const appConsumer = useContext(AppContext);
 
-    //set query params from url
-    let queryData = createQueryData(location.search, queryParams);
-
+    //bool to trigger next paper fetch
+    const [nextPaper, setNextPaper] = useState(false);
 
     useEffect(() => {
         mountRef.current = true;
@@ -73,38 +67,37 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
         //a wrapper function ask by react hook
         const fetchData = async () => {
 
+            setDisplay(false);
+            setDecision("");
 
-            //if there is queryString from URL
-            if (queryData.question_id !== "") {
-
-                setDisplay(false);
-                setDecision("");
-
-                //always call the dao to search on scopus
-                let res = await paperDao.search({"arXiv":"true","googleScholar":"false","scopus":"false","query":"rs","searchBy":"all","orderBy":"title","sort":"ASC","year":"all","start":"0","count":"10"});
-                
-                console.log(res);
-                //error checking
-                //if the component is still mounted and  is 404 error
-                if (mnt && res && res.message === "Not Found") {
-                    setPaperData({title:"nothing here"});
-                    //show the page
-                    setDisplay(true);
-                }
-                //if the component is still mounted and  there are some other errors
-                else if (mnt && res && res.message) {
-                    //pass error object to global context
-                    appConsumer.setError(res);
-                }
-                //if the component is still mounted and  res isn't null
-                else if (mnt && res) {
-                    //update state
-                    setPaperData(res.results[queryData.question_id]);
-                    setHighlightedData([{data: res.results[queryData.question_id].abstract, start: 0, end: res.results[queryData.question_id].abstract.length-1, type:"not_highlighted"}])
-                    //setHighlightedData([{data: res.results[queryData.question_id].abstract, start: 0, end: res.results[queryData.question_id].abstract.length-1, type:"not_highlighted"}]);
-                    //show the page
-                    setDisplay(true);
-                }
+            //always call the dao to search on scopus
+            let res = await projectScreeningDao.getProjectPaperToScreen(project_id);
+            console.log(res);
+            //error checking
+            //if the component is still mounted and  is 404 error
+            if (mnt && res && res.message === "Not Found") {
+                setPaperData({data: {title:"Finished!", 
+                    abstract:(
+                        <>There are no more papers to screen in this project<br/>
+                            <Link to={"/screenings"}>Go back to screenings list</Link>
+                        </>
+                        )}});
+                //show the page
+                setDisplay(true);
+            }
+            //if the component is still mounted and  there are some other errors
+            else if (mnt && res && res.message) {
+                //pass error object to global context
+                appConsumer.setError(res);
+            }
+            //if the component is still mounted and  res isn't null
+            else if (mnt && res) {
+                //update state
+                setPaperData(res);
+                setHighlightedData([{data: res.data.abstract, start: 0, end: res.data.abstract.length-1, type:"not_highlighted"}])
+                //setHighlightedData([{data: res.results[queryData.question_id].abstract, start: 0, end: res.results[queryData.question_id].abstract.length-1, type:"not_highlighted"}]);
+                //show the page
+                setDisplay(true);
             }
         };
 
@@ -118,7 +111,7 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
             mnt = false;
         };
 
-    }, [project_id, queryData.question_id]);  //re-execute when these variables change
+    }, [project_id, nextPaper]);  //re-execute when these variables change
 
     useEffect(() =>{
         if(!filtersFetch && display){
@@ -127,51 +120,51 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
     }, [display, filtersFetch])
 
     async function sendSubmission(key) {
-        let screeningData = {outcome: "", highlights: highlightedData, tags: tagsData};
+        let screeningData = {
+            project_paper_id: paperData.id,
+            vote:{
+                answer: "0",
+                metadata: {type: "single-predicate", highlights: highlightedData, tags: tagsData}
+            }
+        };
 
         switch (key) {
             case "s":
                 console.log("NO");
                 setDecision("no");
-                screeningData.outcome = "no";
                 break;
             case "a":
                 console.log("YES");
                 setDecision("yes");
-                screeningData.outcome = "yes";
+                screeningData.vote.answer = "1";
                 break;
             case "d":
                 console.log("UND");
                 setDecision("und");
-                screeningData.outcome = "und";
+                screeningData.vote.answer = "2";
                 break;
             default:
                 break;
         }
         console.log("data to send _> ");
         console.log(screeningData)
-        /*
+        
         //call the dao
-        let res = await projectsDao.deleteProject(id);
-
-        //empty string is the response from the dao layer in case of success(rember that empty string is a falsy value)
-        if(mountRef.current && res === ""){
-            //create a new array without the project deleted
-            let newProjectsList = projectsList.filter((project)=>project.id !== id);
-            //update project list state
-            setProjectsList(newProjectsList);
-
-            appConsumer.setNotificationMessage("Successfully deleted");
-        }
+        let res = await projectScreeningDao.submitVote(screeningData);
+        
+        if(mountRef.current && res.data){
+            //I trigger the effect to get a new paper
+            setNextPaper(!nextPaper);
+        }   
         //error checking
         //if is other error
         else if (mountRef.current && res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);  
         }
-        */
-        //history.push(match.url + "?question_id=" + "9");
+        
     }
+    
     function handleKey(key){
         if(document.activeElement.type !== "text" && display){
             sendSubmission(key);
@@ -181,13 +174,13 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
     let resultPart = "";
     let paperToDisplay = "";
 
-    if(display === false  && queryData.question_id !== ""){
+    if(display === false){
         paperToDisplay = <LoadIcon class="small"/>
-    }else if(paperData){
+    }else if(paperData.data){
         paperToDisplay = (
             <>
-                <h2 className="paper-title">{paperData.title}</h2>
-                <HighLighter data={paperData.abstract} className={"paragraph"} 
+                <h2 className="paper-title">{paperData.data.title}</h2>
+                <HighLighter data={paperData.data.abstract} disabled={paperData.data.title==="Finished!"} className={"paragraph"} 
                     highlightedData={highlightedData} setHighlightedData={setHighlightedData}
                 />
             </>
@@ -202,25 +195,9 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
     }
 
     else {
-
-
-        resultPart = (
-            <>
-                <KeyboardEventHandler handleKeys={['a', 's', 'd']}  handleFocusableElements onKeyEvent={(key) => handleKey(key)} />
-                <div className="right-side-wrapper filters">
-                    <h2>Filters:</h2>
-                    <FiltersAccordion filtersList={filtersList}/>
-                </div>
-                {/*div wrapper to set height animation*/}
-                <div style={{height: paperHeight+"px",overflow:"hidden", transition: "all 0.5s linear"}}>
-                    {/*content of the animated div*/}
-                    <div className="left-side-wrapper s-paper">
-                        {paperToDisplay}
-                    </div>
-                </div>
-                <Tags question_id={queryData.question_id} display={display}
-                    setTagsData={setTagsData}
-                />
+        let formPart = <></>;
+        if(paperData.data.title !== "Finished!"){
+            formPart = (
                 <form className="light-modal screening-outcome">
                     <InfoTooltip className={"s-p-form"}>
                         You can cast your vote by using the keyboard:<br/>
@@ -260,6 +237,28 @@ const SinglePredicateScreening = function ({project_id, filtersList, filtersFetc
 
                     </div>
                 </form>
+            );
+        }
+        resultPart = (
+            <>
+                <KeyboardEventHandler handleKeys={['a', 's', 'd']}  handleFocusableElements onKeyEvent={(key) => handleKey(key)} />
+                <div className="right-side-wrapper filters">
+                    <h2>Filters:</h2>
+                    <FiltersAccordion filtersList={filtersList}/>
+                </div>
+                {/*div wrapper to set height animation*/}
+                <div style={{height: paperHeight+"px",overflow:"hidden", transition: "all 0.5s linear"}}>
+                    {/*content of the animated div*/}
+                    <div className="left-side-wrapper s-paper">
+                        {paperToDisplay}
+                    </div>
+                </div>
+                <div style={{display: (paperData.data.title==="Finished!") ? "none" : ""}}>
+                    <Tags question_id={1} display={display}
+                        setTagsData={setTagsData}
+                    />
+                </div>
+                {formPart}
             </>
         );
     }

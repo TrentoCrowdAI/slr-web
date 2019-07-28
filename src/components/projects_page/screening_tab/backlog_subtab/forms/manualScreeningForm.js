@@ -101,6 +101,7 @@ function ManualScreeningForm(props) {
                     }else if(mountRef.current){
                         setSubmitting(false);
                         props.setVisibility(!props.visibility);
+                        props.setManualStarted(true);
                     }
                 }
 

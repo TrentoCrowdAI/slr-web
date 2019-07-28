@@ -190,7 +190,8 @@ const PrintScreenedPapersList_w = function ({papersList}) {
                     <div className="screened-label" 
                         title={(element.data.metadata.automatedScreening) ? element.data.metadata.automatedScreening.value : undefined}>
                         <div className="type">
-                            {(element.data.metadata.screening.source === "automated screening") ? "Auto" : element.data.metadata.screening.source}
+                            {(element.data.metadata.screening.source === "automated screening") ? "Auto" : 
+                              (element.data.metadata.screening.source === "manual screening") ? "Manual" : "Crowd"}
                         </div>
                         <div className="in-out">
                             {(element.data.metadata.screening.result === 1) ? "IN" : "OUT"}
@@ -223,14 +224,6 @@ const PrintScreenedPapersList_w = function ({papersList}) {
  */
 
 const PrintManuallyScreenedPapersList_w = function ({papersList}) {
-    const usersVotes = [
-        {id: 0, email : "a", name : "Marco", surname : "1", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:"in"},
-        {id: 1, email : "a", name : "Marco", surname : "2", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:"out"},
-        {id: 2, email : "a", name : "John", surname : "3", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:"und"},
-        {id: 3, email : "a", name : "Augustus", surname : "4", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:""},
-        {id: 4, email : "a", name : "John", surname : "5", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:"in"},
-        {id: 5, email : "a", name : "Augustus", surname : "6", image : "https://lh3.googleusercontent.com/-k-0nkmO5xRs/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfRlr3gWchtN52uj4RtONg4hcl_-A/s96-c/photo.jpg", vote:""},
-    ]
     let output;
     //if list is empty, print a notice message
     if (papersList.length === 0) {
@@ -242,23 +235,6 @@ const PrintManuallyScreenedPapersList_w = function ({papersList}) {
     else {
         output = (
             papersList.map((element) => {
-                let inV = [], outV = [], undV = [], noV = []; 
-                usersVotes.map((vote) => {
-                    switch (vote.vote) {
-                        case "in":
-                            inV.push(vote);
-                            break;
-                        case "out":
-                            outV.push(vote);
-                            break;
-                        case "und":
-                            undV.push(vote);
-                            break;
-                        default:
-                            noV.push(vote);
-                            break;
-                    }
-                });
                 return(
                     <div key={element.id} className="generic-card paper-card manual">
                         <Link to={"#"}><h3>{(element.data.title) ? element.data.title : "[MISSING TITLE]"}</h3></Link>
@@ -277,21 +253,18 @@ const PrintManuallyScreenedPapersList_w = function ({papersList}) {
                         />
                         <div className="users-votes">
                             <div className="votes">
-                                {inV.map((user, index) => (
-                                    <Image key={index} className="user-vote-image in-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                {element.data.metadata.votes.filter(v => v.answer === "1").map((elementx, index) => (
+                                    <Image key={index} className="user-vote-image in-vote" alt={elementx.user.name + " voted: in"} src={elementx.user.picture}/>
                                 ))}
                             </div>
                             <div className="votes">
-                                {noV.map((user, index) => (
-                                    <Image key={index} className="user-vote-image no-vote" alt={user.name + " " + user.surname} src={user.image}/>
-                                ))}
-                                {undV.map((user, index) => (
-                                    <Image key={index} className="user-vote-image und-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                {element.data.metadata.votes.filter(v => v.answer === "0").map((elementx, index) => (
+                                    <Image key={index} className="user-vote-image out-vote" alt={elementx.user.name + " voted: out"} src={elementx.user.picture}/>
                                 ))}
                             </div>
                             <div className="votes">
-                                {outV.map((user, index) => (
-                                    <Image key={index} className="user-vote-image out-vote" alt={user.name + " " + user.surname} src={user.image}/>
+                                {element.data.metadata.votes.filter(v => v.answer === "2").map((elementx, index) => (
+                                    <Image key={index} className="user-vote-image und-vote" alt={elementx.user.name + " is undecided"} src={elementx.user.picture}/>
                                 ))}
                             </div>
                         </div>

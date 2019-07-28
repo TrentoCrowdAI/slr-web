@@ -20,7 +20,7 @@ import { projectScreeningDao } from "dao/projectScreening.dao";
 /**
  * this is the screening sub-tab
  */
-const ScreeningBacklog = function ({project_id}) {
+const ScreeningBacklog = function ({project_id, project}) {
 
     //bool to control visualization of form
     const [displayManualForm, setDisplayManualForm] = useState(false);
@@ -37,12 +37,15 @@ const ScreeningBacklog = function ({project_id}) {
     //number of papers hooks, used to check if there are papers
     const [totalResults, setTotalResults] = useState(0);
 
+    //flag to check if manual screening was started successfully(in order to disable the button afterwards)
+    const [manualStarted, setManualStarted] = useState(false);
+
     useEffect(() => {
         let mnt = true;
         
         async function checkStatus() {
             let res = await projectScreeningDao.getAutoScreeningStatus({project_id});
-            if(res !== 0){
+            if(res !== 0 && res !== null){
                 setAutoScreeningFlag(true);
             }
         }
@@ -64,7 +67,7 @@ const ScreeningBacklog = function ({project_id}) {
             poll = setInterval(async () => {
                 let resx = await projectScreeningDao.getAutoScreeningStatus({project_id});
                 setAutoScreeningStatus(3016 - 3016*resx/100)
-                if(resx === 100){
+                if(resx === 100 || resx === null){
                     setAutoScreeningFlag(false);
                 }
 
@@ -88,6 +91,7 @@ const ScreeningBacklog = function ({project_id}) {
                 <div className="screening-strategy-buttons">
                     <div className="screening-strategy-btn-holder">
                         <button className="screening-strategy-btn manual" type="button"
+                            disabled = {project.data.manual_screening_type || manualStarted}
                             onClick={() => {setDisplayManualForm(true)}}
                         > 
                         <ManualScreeningIcon/>
@@ -130,7 +134,7 @@ const ScreeningBacklog = function ({project_id}) {
         <>
 
             <Cover cls={displayManualForm ? "full-screen" : ""} handler={setDisplayManualForm}/>
-            <ManualScreeningForm visibility={displayManualForm} setVisibility={setDisplayManualForm} project_id={project_id}/>
+            <ManualScreeningForm visibility={displayManualForm} setManualStarted={setManualStarted}setVisibility={setDisplayManualForm} project_id={project_id}/>
             
             <Cover cls={displayAutoForm ? "full-screen" : ""} handler={setDisplayAutoForm}/>
             <AutoScreeningForm visibility={displayAutoForm} setVisibility={setDisplayAutoForm} project_id={project_id} setAutoScreeningFlag={setAutoScreeningFlag}/>

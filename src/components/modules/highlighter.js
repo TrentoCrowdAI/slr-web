@@ -5,7 +5,7 @@ import RemoveHighlights from "components/svg/removeHighlights";
  * this is component form to search for the paper in project page
  * */
 
-const HighLighter = function ({data, highlightedData, setHighlightedData, className}) {
+const HighLighter = function ({data, disabled, highlightedData, setHighlightedData, className}) {
 
     const startingBlock = useRef(0);
     const endingBlock = useRef(0);
@@ -134,64 +134,73 @@ const HighLighter = function ({data, highlightedData, setHighlightedData, classN
     }
 
     //useEffect(() => {console.log("local data change"); console.log(localData)}, [localData])
-    let output = (
-        <div className={className}
-            onMouseDown={() => {
-                clicking.current = true;
-            }}
-            onMouseUp={() => {
-                clicking.current = false;
-            }}
-            onMouseLeave={() => {
-                clicking.current = false;
-            }}
-        >
-            <div className={className+"-head"}>
-                <button className="clear-highlight" onClick={()=>{
-                        setHighlightedData([{data: data, start: 0, end: data.length-1, type:"not_highlighted"}]);
-                    }}
-                    style={{opacity: (highlightedData.length === 1 && (highlightedData[0].type === "not_highlighted" || highlightedData[0].type === "disabled")) ? "0.0" : "1.0",
-                            pointerEvents: (highlightedData.length === 1 && highlightedData[0].type === "not_highlighted") ? "none" : ""}}
-                >
-                    <RemoveHighlights/> 
-                </button>
-            </div>
-            {highlightedData.map((dataChunk, index) => {
-                if(dataChunk.type === "disabled"){
-                    return (
-                        <span className="not_highlighted disa" key={index}>{dataChunk.data}</span>
-                    );
-                }else{
-                    return (
-                        <span className={dataChunk.type} key={index}
-                            onMouseDown={() => {
-                                startingBlock.current = index;
-                                clearTimeout(selectingInterval.current)
-                            }}
-                            onMouseEnter={() => {
-                                if(!clicking.current){
-                                    console.log("casual enter on -> " + index)
-                                    clicking.current = true;
+    let output = <></>;
+    console.log(disabled)
+    if(!disabled){
+        output = (
+            <div className={className}
+                onMouseDown={() => {
+                    clicking.current = true;
+                }}
+                onMouseUp={() => {
+                    clicking.current = false;
+                }}
+                onMouseLeave={() => {
+                    clicking.current = false;
+                }}
+            >
+                <div className={className+"-head"}>
+                    <button className="clear-highlight" onClick={()=>{
+                            setHighlightedData([{data: data, start: 0, end: data.length-1, type:"not_highlighted"}]);
+                        }}
+                        style={{opacity: (highlightedData.length === 1 && (highlightedData[0].type === "not_highlighted" || highlightedData[0].type === "disabled")) ? "0.0" : "1.0",
+                                pointerEvents: (highlightedData.length === 1 && highlightedData[0].type === "not_highlighted") ? "none" : ""}}
+                    >
+                        <RemoveHighlights/> 
+                    </button>
+                </div>
+                {highlightedData.map((dataChunk, index) => {
+                    if(dataChunk.type === "disabled"){
+                        return (
+                            <span className="not_highlighted disa" key={index}>{dataChunk.data}</span>
+                        );
+                    }else{
+                        return (
+                            <span className={dataChunk.type} key={index}
+                                onMouseDown={() => {
                                     startingBlock.current = index;
+                                    clearTimeout(selectingInterval.current)
+                                }}
+                                onMouseEnter={() => {
+                                    if(!clicking.current){
+                                        console.log("casual enter on -> " + index)
+                                        clicking.current = true;
+                                        startingBlock.current = index;
+                                        clearTimeout(selectingInterval.current);
+                                    }
+                                }}
+                                onDoubleClick={(e) => {
+                                    //console.log("double");
                                     clearTimeout(selectingInterval.current);
+                                    document.getSelection().empty();}
                                 }
-                            }}
-                            onDoubleClick={(e) => {
-                                //console.log("double");
-                                clearTimeout(selectingInterval.current);
-                                document.getSelection().empty();}
-                            }
-                            onMouseUp={() => {
-                                endingBlock.current=index; 
-                                selectingFunction();
-                            }}
-                        >{dataChunk.data}</span>
-                    );
-                }
-            })}
+                                onMouseUp={() => {
+                                    endingBlock.current=index; 
+                                    selectingFunction();
+                                }}
+                            >{dataChunk.data}</span>
+                        );
+                    }
+                })}
+            </div>
+        );
+    }else{
+        output = (
+        <div className={className}>
+            {data}
         </div>
-    );
-
+        );
+    }
     return output;
 };
 

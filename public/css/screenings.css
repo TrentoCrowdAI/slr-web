@@ -85,6 +85,12 @@ div.s-paper div.paragraph{
   position: relative;
   color: #2f2f2f;
   text-align: justify;
+  margin-top: 6px;
+}
+div.s-paper div.paragraph a{
+  font-size: 16px;
+  color: #2f2f2f;
+  text-decoration: underline;
 }
 div.paragraph div.paragraph-head{
   display: block;

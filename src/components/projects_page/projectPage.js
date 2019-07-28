@@ -150,7 +150,7 @@ const ProjectPage = (props) => {
 
                     <Route path={props.match.url + "/screening"} render={function(props){
                         setNotFound(false);
-                        return (<ScreeningTab project_id={project_id} notFound={notFound} setNotFound={setNotFound}/>);
+                        return (<ScreeningTab project_id={project_id} project={project} notFound={notFound} setNotFound={setNotFound}/>);
                     }}/>
 
                     <Route exact path={props.match.url + "/searchautomated"} render={function(props){

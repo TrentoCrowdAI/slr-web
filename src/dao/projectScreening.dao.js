@@ -34,6 +34,19 @@ async function getAutoScreeningStatus(project_id) {
  * @param queryData
  * @return {array[objects]}
  */
+async function getProjectPaperToScreen(project_id) {
+    let url = config.home + config.screenings_list + "/" + project_id;
+    let res = await http.get(url);
+    return res;
+
+
+}
+
+/**
+ * dao to get next paper to screen in a project
+ * @param queryData
+ * @return {array[objects]}
+ */
 async function getProjectsToScreen(queryData = "") {
     let url = config.home + config.screenings_list;
     let res = await http.get(url, queryData);
@@ -42,11 +55,21 @@ async function getProjectsToScreen(queryData = "") {
 
 }
 
+/**
+ * sumbit a vote
+ */
+async function submitVote(bodyData){
+    let url = config.home + config.votes;
+    return await http.post(url, bodyData)
+}
+
 const projectScreeningDao = {
     startAutoScreening,
     startManualScreening,
     getAutoScreeningStatus,
+    getProjectPaperToScreen,
     getProjectsToScreen,
+    submitVote,
     "abortRequest" : http.abortRequest
 }
 

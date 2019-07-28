@@ -125,11 +125,11 @@ const ScreeningPage = (props) => {
            <div>
                <Switch>
                     {/*route the form of search*/}
-                    <Route exact path={props.match.url + "/single_predicate"} render={function(props){
+                    <Route exact path={props.match.url + "/single-predicate"} render={function(props){
                         return (<SinglePredicateScreening project_id={project_id} filtersList={filtersList} filtersFetch={filtersFetch}/>);
                     }}/>
 
-                    <Route exact path={props.match.url + "/multi_predicate"} render={function(props){
+                    <Route exact path={props.match.url + "/multi-predicate"} render={function(props){
                         return (<MultiPredicateScreening project_id={project_id} filtersList={filtersList} filtersFetch={filtersFetch}/>);
                     }}/>
                 </Switch>
