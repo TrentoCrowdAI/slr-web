@@ -1,8 +1,9 @@
 import React, {useEffect, useContext, useRef, useState} from "react";
 import { Formik, Form, Field } from "formik";
 
-import {projectsDao} from 'dao/projects.dao'
-import {projectFiltersDao} from 'dao/projectFilters.dao'
+import {projectsDao} from 'dao/projects.dao';
+import {projectScreeningDao} from 'dao/projectScreening.dao';
+import {projectFiltersDao} from 'dao/projectFilters.dao';
 
 import RadioBox from "components/forms_elements/radioboxFormik";
 import UserCheckbox from 'components/projects_page/screening_tab/backlog_subtab/forms/userCheckboxFormik';
@@ -88,24 +89,21 @@ function ManualScreeningForm(props) {
         <Formik
             initialValues={{screeners: [], screening_mode: "single-predicate"}}
             onSubmit={async (values, { setSubmitting }) => {
-                let bodyData = {project_id: props.project_id, screeners: values.screeners, screening_mode: values.screening_mode};
+                let bodyData = {project_id: props.project_id, array_user_ids: values.screeners, manual_screening_type: values.screening_mode};
                 console.log(bodyData);
                 if(values.screeners.length > 0){
-                    console.log("can submit")
+                    let res = await projectScreeningDao.startManualScreening(bodyData);
+                    //let res = 1;
+                    //error checking
+                    if(mountRef.current && res.message){
+                        //pass error object to global context
+                        appConsumer.setError(res);
+                    }else if(mountRef.current){
+                        setSubmitting(false);
+                        props.setVisibility(!props.visibility);
+                    }
                 }
-                /*
-                //call dao
-                let res = await projectsDao.postProject(bodyData);
 
-                //error checking
-                if(mountRef.current && res.message){
-                    //pass error object to global context
-                    appConsumer.setError(res);
-                }else 
-                */
-                if(mountRef.current){
-                    setSubmitting(false);
-                }
             }}
             validateOnBlur={false}
         >
@@ -123,15 +121,11 @@ function ManualScreeningForm(props) {
                             name="screeners"
                             render={({ field, form }) => (
                                 <>
-                                    <div>
-                                        <UserCheckbox selected={values.screeners.includes(-1)} 
-                                            user={{id: -1, ...(appConsumer.user), name:"you", surname: ""}} {...field} form={form}/>
-                                    </div>
                                     {collaborators.map(function (user) {
                                         if(user.data.name !== ""){
                                             return (
                                                 <div key={user.id}>
-                                                    <UserCheckbox user={user.data} {...field} form={form}/>
+                                                    <UserCheckbox user={user} {...field} form={form}/>
                                                 </div>
                                             );
                                         }

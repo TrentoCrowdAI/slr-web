@@ -15,6 +15,8 @@ const config = {
     "customPapers": "customPapers",
     "filters": "filters",
     "auto_screening": "screenings/automated",
+    "screenings_list": "screenings/myProjects",
+    "screenings": "screenings",
     "userLogin": "auth/login",
     "userInfo": "https://www.googleapis.com/oauth2/v3/tokeninfo",
     "userLogout": "auth/logout",

@@ -50,7 +50,7 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
             }
             //if the component is still mounted and res isn't null
             else if (mountRef.current &&  res) {
-                setCollaborators(res);
+                setCollaborators(res.filter(x => x.data.email !== appConsumer.user.email));
                 //show the page
                 setLoadIconDisplay(false);
             }

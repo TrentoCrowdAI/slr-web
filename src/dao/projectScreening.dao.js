@@ -10,6 +10,14 @@ async function startAutoScreening(bodyData){
 }
 
 /**
+ * start manual screening
+ */
+async function startManualScreening(bodyData){
+    let url = config.home + config.screenings;
+    return await http.post(url, bodyData)
+}
+
+/**
  * auto screening status
  * @param project_id
  * @return {Number} completion percentage
@@ -22,42 +30,23 @@ async function getAutoScreeningStatus(project_id) {
 }
 
 /**
- * dao to post a new filter
- * @param bodyData
- * @return {Object} filter created
+ * dao to get projects to screen list
+ * @param queryData
+ * @return {array[objects]}
  */
-async function postFilterIntoProject(bodyData) {
-    let url = config.home + config.filters;
-    return await http.post(url, bodyData);
-}
+async function getProjectsToScreen(queryData = "") {
+    let url = config.home + config.screenings_list;
+    let res = await http.get(url, queryData);
+    return res;
 
-/**
- * dao to delete a filter
- * @param filter_id
- * @return {String} empty string
- */
-async function deleteFilter(filter_id) {
-    let url = config.home + config.filters + "/" + filter_id;
-    return await http.delete(url);
-}
 
-/**
- * dao to update a filter
- * @param filter_id
- * @param bodyData
- * @return {String} empty string
- */
-async function putFilter(filter_id, bodyData) {
-    let url = config.home + config.filters + "/" + filter_id;
-    return await http.put(url, bodyData);
 }
 
 const projectScreeningDao = {
     startAutoScreening,
+    startManualScreening,
     getAutoScreeningStatus,
-    postFilterIntoProject,
-    deleteFilter,
-    putFilter,
+    getProjectsToScreen,
     "abortRequest" : http.abortRequest
 }
 

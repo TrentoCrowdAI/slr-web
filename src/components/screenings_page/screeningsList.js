@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext, useRef} from "react";
 import {Link, withRouter} from 'react-router-dom';
 
 
-import {projectsDao} from 'dao/projects.dao';
+import {projectScreeningDao} from 'dao/projectScreening.dao';
 import LoadIcon from 'components/svg/loadIcon';
 import Pagination from 'components/modules/pagination';
 import {join} from 'utils';
@@ -65,7 +65,7 @@ const ScreeningsList = function (props) {
             setDisplay(false);
             console.log(queryData);
             //call the dao
-            const res = await projectsDao.getProjectsList({orderBy: "date_last_modified", ...queryData});
+            const res = await projectScreeningDao.getProjectsToScreen({orderBy: "date_last_modified", ...queryData});
 
             //error checking
             //if the component is still mounted and  is 404 error
@@ -152,8 +152,8 @@ const PrintList = function ({screeningsList, path}) {
         maps = (screeningsList.map((element, index) =>
                 <div key={element.id} className="light-modal project-card for-screening">
                     <Link to={join(path, "/" + element.id) + "/single_predicate?question_id=3"}>
-                        <h3>{element.data.name}</h3>
-                        <p className="description">{element.data.description}</p>
+                        <h3>{element.project_data.name}</h3>
+                        <p className="description">{element.project_data.description}</p>
                     </Link>
                 </div>
         ));
