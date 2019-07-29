@@ -1,12 +1,17 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useRef, useContext} from "react";
 import KeyboardEventHandler from 'react-keyboard-event-handler';
 import InfoTooltip from "components/modules/infoTooltip";
+
+import {projectScreeningDao} from 'dao/projectScreening.dao';
+
+import {AppContext} from 'components/providers/appProvider';
 
 import PositiveAnswer from 'components/svg/positiveAnswer';
 import NegativeAnswer from 'components/svg/negativeAnswer';
 import UndecidedAnswer from 'components/svg/undecidedAnswer';
 
-const MultiPredicateForm = function ({filtersList, clearHighlights, highlightedData, setHighlightedData, display, mountRef}) {
+const MultiPredicateForm = function ({isFinished, paperData, tagsData, filtersList, nextPaper, setNextPaper,
+                                      clearHighlights, highlightedData, setHighlightedData, display, mountRef}) {
 
     const [displayedFilter, setDisplayedFilter] = useState(filtersList[0]);
     
@@ -15,6 +20,9 @@ const MultiPredicateForm = function ({filtersList, clearHighlights, highlightedD
     const [filterHighlights, setFilterHighlights] = useState(undefined);
 
     const [underlineOffset, setUnderlineOffset] = useState(0);
+
+    //get data from global context
+    const appConsumer = useContext(AppContext);
 
     useEffect(() => {
         setDisplayedFilter(filtersList[0]);
@@ -63,43 +71,72 @@ const MultiPredicateForm = function ({filtersList, clearHighlights, highlightedD
     async function sendResults(){
         let dataToSend = filterVotes.map((filterVote, index) => {
             if(filterHighlights[index].length === 1 && filterHighlights[index][0].type === "not_highlighted"){
-                return {...filterVote, highlights: []};
+                return {...filterVote, filterHighlights: []};
             }else{
-                return {...filterVote, highlights: filterHighlights[index]};
+                return {...filterVote, filterHighlights: filterHighlights[index]};
             }
         });
-        console.log(dataToSend);
+        let screeningData = {
+            project_paper_id: paperData.id,
+            vote:{
+                answer: 
+                    (filterVotes.filter(v => v.outcome === "1").length >= filterVotes.filter(v => v.outcome === "0").length) ?
+                        "1"
+                    :
+                        "0"
+                    ,
+                metadata: {type: "multi-predicate", highlights: dataToSend, tags: tagsData}
+            }
+        };
+        console.log("data to send _>")
+        console.log(screeningData);
         if(filterVotes.findIndex((vote) => (vote.outcome === "")) === -1){
             console.log("sening")
+            //call the dao
+            let resx = await projectScreeningDao.submitVote(screeningData);
+            
+            //error checking
+            if (mountRef.current && resx && resx.message) {
+                //pass error object to global context
+                appConsumer.setError(resx);  
+            }
+
+            else if(mountRef.current && resx.data){
+                //I trigger the effect to get a new paper
+                setNextPaper(!nextPaper);
+            }   
         }
     }
 
-    let output = (
-        <form className="light-modal m-p-form" onSubmit={sendResults}>
-            <InfoTooltip className={"s-p-form"}>
-                You can cast your vote by using the keyboard:<br/>
-                <b>A : </b> <i>yes</i><br/>
-                <b>S : </b> <i>no</i><br/>
-                <b>D : </b> <i>undecided</i><br/>
-            </InfoTooltip>
-            <div className="filters-nav">
-            {filtersList.map((element) =>
-                <button key={element.id} type="button" className="filter-btn" onClick={() => {setDisplayedFilter(element)}}>
-                    {element.data.name || "[!]"}
+    let output = <></>;
+    if(paperData && paperData.data && paperData.data.title!=="Finished!"){
+        output = (
+            <form className="light-modal m-p-form" onSubmit={sendResults}>
+                <InfoTooltip className={"s-p-form"}>
+                    You can cast your vote by using the keyboard:<br/>
+                    <b>A : </b> <i>yes</i><br/>
+                    <b>S : </b> <i>no</i><br/>
+                    <b>D : </b> <i>undecided</i><br/>
+                </InfoTooltip>
+                <div className="filters-nav">
+                {filtersList.map((element) =>
+                    <button key={element.id} type="button" className="filter-btn" onClick={() => {setDisplayedFilter(element)}}>
+                        {element.data.name || "[!]"}
+                    </button>
+                )}
+                <button className="filter-btn summary" type="button" onClick={() => {setDisplayedFilter("summary")}}>
+                    {"[V]"}
                 </button>
-            )}
-            <button className="filter-btn summary" type="button" onClick={() => {setDisplayedFilter("summary")}}>
-                {"[V]"}
-            </button>
-            <div className="underline" style={{left: underlineOffset + "px"}}></div>
-            </div>
-            <FilterScreen filter={displayedFilter} display={display} 
-                filterHighlights={filterHighlights} setFilterHighlights={setFilterHighlights}
-                filterVotes={filterVotes} setFilterVotes={setFilterVotes} 
-                highlightedData={highlightedData} setHighlightedData={setHighlightedData}
-            mountRef={mountRef}/>
-        </form>
-    );
+                <div className="underline" style={{left: underlineOffset + "px"}}></div>
+                </div>
+                <FilterScreen filter={displayedFilter} display={display} 
+                    filterHighlights={filterHighlights} setFilterHighlights={setFilterHighlights}
+                    filterVotes={filterVotes} setFilterVotes={setFilterVotes} 
+                    highlightedData={highlightedData} setHighlightedData={setHighlightedData}
+                mountRef={mountRef}/>
+            </form>
+        );
+    }
 
     return output;
 
@@ -137,16 +174,16 @@ const FilterScreen = function({ filter, display,
         
         switch (key) {
             case "s":
-                setCurrentOutcome("no");
-                localOutcome = "no";
+                setCurrentOutcome("0");
+                localOutcome = "0";
                 break;
             case "a":
-                setCurrentOutcome("yes");
-                localOutcome = "yes";
+                setCurrentOutcome("1");
+                localOutcome = "1";
                 break;
             case "d":
-                setCurrentOutcome("und");
-                localOutcome = "und";
+                setCurrentOutcome("2");
+                localOutcome = "2";
                 break;
             default:
                 break;
@@ -190,26 +227,26 @@ const FilterScreen = function({ filter, display,
                     
                     <div className="yes-no-und">
                         <div className="btn-decision-holder">
-                            <button className="yes" type="button" style={{backgroundColor: (currentOutcome === "yes") ? "#0b8a42" : ""}}
+                            <button className="yes" type="button" style={{backgroundColor: (currentOutcome === "1") ? "#0b8a42" : ""}}
                                 onClick={() => {handleKey("a")}}
                             >
-                                <PositiveAnswer color={(currentOutcome === "yes") ? "white" : "#696969"}/>
+                                <PositiveAnswer color={(currentOutcome === "1") ? "white" : "#696969"}/>
                             </button>
                             <div className="decision-tooltip">yes</div>
                         </div>
                         <div className="btn-decision-holder">
-                            <button className="no" type="button" style={{backgroundColor: (currentOutcome === "no") ? "#c31f1f" : ""}}
+                            <button className="no" type="button" style={{backgroundColor: (currentOutcome === "0") ? "#c31f1f" : ""}}
                                 onClick={() => {handleKey("s")}}
                             >
-                                <NegativeAnswer color={(currentOutcome === "no") ? "white" : "#696969"}/>
+                                <NegativeAnswer color={(currentOutcome === "0") ? "white" : "#696969"}/>
                             </button>
                             <div className="decision-tooltip">no</div>
                         </div>
                         <div className="btn-decision-holder">
-                            <button className="und" type="button" style={{backgroundColor: (currentOutcome=== "und") ? "#4242e1" : ""}}
+                            <button className="und" type="button" style={{backgroundColor: (currentOutcome=== "2") ? "#4242e1" : ""}}
                                 onClick={() => {handleKey("d")}}
                             >
-                                <UndecidedAnswer color={(currentOutcome === "und") ? "white" : "#696969"}/>
+                                <UndecidedAnswer color={(currentOutcome === "2") ? "white" : "#696969"}/>
                             </button>
                             <div className="decision-tooltip">undecided</div>
                         </div>

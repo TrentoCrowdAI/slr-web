@@ -8,6 +8,7 @@ import Forbidden from 'components/svg/forbidden';
 import {AppContext} from 'components/providers/appProvider';
 import SinglePredicateScreening from 'components/screenings_page/singlePredicate';
 import MultiPredicateScreening from 'components/screenings_page/multiPredicate';
+import LoadIcon from "components/svg/loadIcon";
 
 
 /**
@@ -31,8 +32,8 @@ const ScreeningPage = (props) => {
     //filters of the project
     const [filtersList, setFiltersList] = useState([]);
 
-    //filtersFetch flag
-    const [filtersFetch, setFiltersFetch] = useState(true);
+    //display flag
+    const [display, setDisplay] = useState(false)
 
     //set the project title
     useEffect(() => {
@@ -55,12 +56,12 @@ const ScreeningPage = (props) => {
 
             //call the dao for main project data
             let res = await projectsDao.getProject(project_id);
+            console.log(res);
 
             //error checking
             //if unauthorized user
             if(mountRef.current && res.payload && (res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
                 setUnauthorized(true);
-                //setDisplay(true);
                 setProject({data: {name: "UNAUTHORIZED OR INEXISTENT PROJECTS"}});
             }
             //if the component is still mounted and there is some other errors
@@ -74,7 +75,6 @@ const ScreeningPage = (props) => {
                 //update state
                 setProject(res);
                 //show the page
-                //setDisplay(true);
             }
 
 
@@ -97,7 +97,7 @@ const ScreeningPage = (props) => {
                 //update state
                 setFiltersList([...resx.results]);
             }
-            setFiltersFetch(false);
+            setDisplay(true);
             
         };
 
@@ -120,21 +120,17 @@ const ScreeningPage = (props) => {
             </div>
         )
     }
-    else {
+    else if(display && project.data.manual_screening_type === "single-predicate"){
         output = (
-           <div>
-               <Switch>
-                    {/*route the form of search*/}
-                    <Route exact path={props.match.url + "/single-predicate"} render={function(props){
-                        return (<SinglePredicateScreening project_id={project_id} filtersList={filtersList} filtersFetch={filtersFetch}/>);
-                    }}/>
-
-                    <Route exact path={props.match.url + "/multi-predicate"} render={function(props){
-                        return (<MultiPredicateScreening project_id={project_id} filtersList={filtersList} filtersFetch={filtersFetch}/>);
-                    }}/>
-                </Switch>
-            </div>
+            <SinglePredicateScreening project_id={project_id} filtersList={filtersList}/>
         );
+    }
+    else if(display && project.data.manual_screening_type === "multi-predicate"){
+        output = (
+            <MultiPredicateScreening project_id={project_id} filtersList={filtersList}/>
+        );
+    }else{
+        output = <LoadIcon/>
     }
 
     return output;
