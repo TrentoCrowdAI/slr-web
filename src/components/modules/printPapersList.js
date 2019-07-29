@@ -194,7 +194,7 @@ const PrintScreenedPapersList_w = function ({papersList}) {
                               (element.data.metadata.screening.source === "manual screening") ? "Manual" : "Crowd"}
                         </div>
                         <div className="in-out">
-                            {(element.data.metadata.screening.result === 1) ? "IN" : "OUT"}
+                            {(parseInt(element.data.metadata.screening.result) === 1) ? "IN" : "OUT"}
                         </div>
                     </div>
                     <div className="extra-info">
