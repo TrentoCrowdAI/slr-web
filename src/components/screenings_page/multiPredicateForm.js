@@ -10,7 +10,7 @@ import PositiveAnswer from 'components/svg/positiveAnswer';
 import NegativeAnswer from 'components/svg/negativeAnswer';
 import UndecidedAnswer from 'components/svg/undecidedAnswer';
 
-const MultiPredicateForm = function ({isFinished, paperData, tagsData, filtersList, nextPaper, setNextPaper,
+const MultiPredicateForm = function ({paperData, tagsData, filtersList, nextPaper, setNextPaper,
                                       clearHighlights, highlightedData, setHighlightedData, display, mountRef}) {
 
     const [displayedFilter, setDisplayedFilter] = useState(filtersList[0]);

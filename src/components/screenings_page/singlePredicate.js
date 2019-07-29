@@ -18,11 +18,13 @@ import NegativeAnswer from 'components/svg/negativeAnswer';
 import UndecidedAnswer from 'components/svg/undecidedAnswer';
 
 
+const _array = require('lodash/array');
+
 /**
  * this is component form to search for the paper in project page
  * */
 
-const SinglePredicateScreening = function ({project_id, filtersList}) {
+const SinglePredicateScreening = function ({screening, filtersList}) {
 
     const mountRef = useRef(false);
 
@@ -41,8 +43,11 @@ const SinglePredicateScreening = function ({project_id, filtersList}) {
     //highlighted data
     const [highlightedData, setHighlightedData] = useState(undefined);
 
-    //tags data
-    const [tagsData, setTagsData] = useState([]);
+    //selected tags
+    const [selectedTags, setSelectedTags] = useState([]);
+
+    //available tags
+    const availableTags = useRef(screening.data.tags);
 
     //get data from global context
     const appConsumer = useContext(AppContext);
@@ -69,9 +74,11 @@ const SinglePredicateScreening = function ({project_id, filtersList}) {
 
             setDisplay(false);
             setDecision("");
+            availableTags.current = _array.union(availableTags.current, selectedTags);
+            setSelectedTags([]);
             console.log("FETCHING NWE PAPAER")
             //call dao for getting next paper
-            let res = await projectScreeningDao.getProjectPaperToScreen(project_id);
+            let res = await projectScreeningDao.getProjectPaperToScreen(screening.id);
             console.log(res);
             //error checking
             //if the component is still mounted and  is 404 error
@@ -112,7 +119,7 @@ const SinglePredicateScreening = function ({project_id, filtersList}) {
             mnt = false;
         };
 
-    }, [project_id, nextPaper]);  //re-execute when these variables change
+    }, [screening, nextPaper]);  //re-execute when these variables change
 
     useEffect(() =>{
         if(display){
@@ -125,7 +132,7 @@ const SinglePredicateScreening = function ({project_id, filtersList}) {
             project_paper_id: paperData.id,
             vote:{
                 answer: "0",
-                metadata: {type: "single-predicate", highlights: highlightedData, tags: tagsData}
+                metadata: {type: "single-predicate", highlights: highlightedData, tags: selectedTags}
             }
         };
 
@@ -248,8 +255,8 @@ const SinglePredicateScreening = function ({project_id, filtersList}) {
                 </div>
             </div>
             <div style={{display: (paperData && paperData.data && paperData.data.title==="Finished!") ? "none" : ""}}>
-                <Tags question_id={1} display={display}
-                    setTagsData={setTagsData}
+                <Tags display={display} selectedTags={selectedTags} setSelectedTags={setSelectedTags}
+                    availableTags={availableTags}
                 />
             </div>
             {formPart}

@@ -12,11 +12,13 @@ import MultiPredicateForm from "components/screenings_page/multiPredicateForm";
 import HighLighter from 'components/modules/highlighter';
 import Tags from 'components/modules/paperTags';
 
+const _array = require('lodash/array');
+
 /**
  * this is component form to search for the paper in project page
  * */
 
-const MultiPredicateScreening = function ({project_id, filtersList}) {
+const MultiPredicateScreening = function ({screening, filtersList}) {
 
     const mountRef = useRef(false);
 
@@ -32,8 +34,11 @@ const MultiPredicateScreening = function ({project_id, filtersList}) {
     //highlighted data
     const [highlightedData, setHighlightedData] = useState([]);
 
-    //tags data
-    const [tagsData, setTagsData] = useState([]);
+    //selected tags
+    const [selectedTags, setSelectedTags] = useState([]);
+
+    //available tags
+    const availableTags = useRef(screening.data.tags);
 
     //get data from global context
     const appConsumer = useContext(AppContext);
@@ -67,8 +72,10 @@ const MultiPredicateScreening = function ({project_id, filtersList}) {
 
             setDisplay(false);
             console.log("Fetching paper")
+            availableTags.current = _array.union(availableTags.current, selectedTags);
+            setSelectedTags([]);
             //call dao for getting next paper
-            let res = await projectScreeningDao.getProjectPaperToScreen(project_id);
+            let res = await projectScreeningDao.getProjectPaperToScreen(screening.id);
             
             console.log(res);
             //error checking
@@ -109,7 +116,7 @@ const MultiPredicateScreening = function ({project_id, filtersList}) {
             mnt = false;
         };
 
-    }, [project_id, nextPaper]);  //re-execute when these variables change
+    }, [screening, nextPaper]);  //re-execute when these variables change
 
     function clearHighlights(type = "not_highlighted"){
         if(highlightedData && paperData){
@@ -136,8 +143,8 @@ const MultiPredicateScreening = function ({project_id, filtersList}) {
     resultPart = (
         <>
             <div className="right-side-wrapper tags-holder" style={{display: (paperData && paperData.data && paperData.data.title==="Finished!") ? "none" : ""}}>
-                <Tags class="right" question_id={1} display={display}
-                    setTagsData={setTagsData}
+                <Tags className={"right"} display={display} selectedTags={selectedTags} setSelectedTags={setSelectedTags}
+                    availableTags={availableTags}
                 />
             </div>
             {/*div wrapper to set height animation*/}
@@ -152,7 +159,7 @@ const MultiPredicateScreening = function ({project_id, filtersList}) {
                 :
                 <>
                 <MultiPredicateForm paperData={paperData}
-                    tagsData={tagsData} nextPaper={nextPaper} setNextPaper={setNextPaper}
+                    tagsData={selectedTags} nextPaper={nextPaper} setNextPaper={setNextPaper}
                     filtersList={filtersList} display={display} mountRef={mountRef}
                     clearHighlights={clearHighlights}
                     highlightedData={highlightedData} setHighlightedData={setHighlightedData}

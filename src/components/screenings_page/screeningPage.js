@@ -3,6 +3,7 @@ import {Route, Switch, withRouter} from 'react-router-dom';
 
 import {projectsDao} from 'dao/projects.dao';
 import {projectFiltersDao} from 'dao/projectFilters.dao';
+import {projectScreeningDao} from 'dao/projectScreening.dao';
 import Forbidden from 'components/svg/forbidden';
 
 import {AppContext} from 'components/providers/appProvider';
@@ -12,14 +13,14 @@ import LoadIcon from "components/svg/loadIcon";
 
 
 /**
- *this component will show a projects page
+ *this component will show a screenings page
  */
 const ScreeningPage = (props) => {
 
     const mountRef = useRef(false); 
 
-    //project object of page
-    const [project, setProject] = useState({data: {name: "loading..."}});
+    //screening object of page
+    const [screening, setScreening] = useState({data: {name: "loading..."}});
 
     //flag for unauthorized user
     const [unauthorized, setUnauthorized] = useState(false);
@@ -27,7 +28,7 @@ const ScreeningPage = (props) => {
     //get data from global context
     const appConsumer = useContext(AppContext);
 
-    const project_id = props.match.params.id;
+    const screening_id = props.match.params.id;
 
     //filters of the project
     const [filtersList, setFiltersList] = useState([]);
@@ -37,14 +38,14 @@ const ScreeningPage = (props) => {
 
     //set the project title
     useEffect(() => {
-        if(mountRef.current && (project.data.name === "loading..." || project.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS")){
-            appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name}</h2> </div>);//I set the page title
+        if(mountRef.current && (screening.data.name === "loading..." || screening.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS")){
+            appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{screening.data.name}</h2> </div>);//I set the page title
         }else if(mountRef.current){
-            appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{project.data.name} screening</h2> </div>);//I set the page title
-            appConsumer.setProjectName(project.data.name);
+            appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{screening.data.name} screening</h2> </div>);//I set the page title
+            appConsumer.setProjectName(screening.data.name);
         }
 
-    }, [project.data.name]);
+    }, [screening.data.name]);
 
     useEffect(() => {
 
@@ -54,15 +55,15 @@ const ScreeningPage = (props) => {
         //a wrapper function ask by react hook
         const fetchProjectData = async () => {
 
-            //call the dao for main project data
-            let res = await projectsDao.getProject(project_id);
+
+            let res = await projectScreeningDao.getScreening(screening_id);
             console.log(res);
 
             //error checking
             //if unauthorized user
-            if(mountRef.current && res.payload && (res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
+            if(mountRef.current && res.payload && (res.payload.statusCode === 404 || res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
                 setUnauthorized(true);
-                setProject({data: {name: "UNAUTHORIZED OR INEXISTENT PROJECTS"}});
+                setScreening({data: {name: "UNAUTHORIZED OR INEXISTENT SCREENING"}});
             }
             //if the component is still mounted and there is some other errors
             else if (mountRef.current && res && res.message) {
@@ -73,30 +74,29 @@ const ScreeningPage = (props) => {
             else if (mountRef.current && res ) {
                 setUnauthorized(false);
                 //update state
-                setProject(res);
-                //show the page
+                setScreening(res);
+
+                //call the dao
+                let resx = await projectFiltersDao.getFiltersList({"project_id" : res.project_id});
+                console.log(resx);
+
+                //error checking
+                //if the component is still mounted and  is 404 error
+                if (mountRef.current && resx && resx.message === "Not Found") {
+                    setFiltersList([]);
+                }
+                //if the component is still mounted and  there are some other errors
+                else if (mountRef.current && resx && resx.message) {
+                    //pass error object to global context
+                    appConsumer.setError(resx);
+                }
+                //if the component is still mounted and  res isn't null
+                else if (mountRef.current && resx) {
+                    //update state
+                    setFiltersList([...resx.results]);
+                }
             }
 
-
-            //call the dao
-            let resx = await projectFiltersDao.getFiltersList({"project_id" : project_id});
-            console.log(resx);
-
-            //error checking
-            //if the component is still mounted and  is 404 error
-            if (mountRef.current && resx && resx.message === "Not Found") {
-                setFiltersList([]);
-            }
-            //if the component is still mounted and  there are some other errors
-            else if (mountRef.current && resx && resx.message) {
-                //pass error object to global context
-                appConsumer.setError(resx);
-            }
-            //if the component is still mounted and  res isn't null
-            else if (mountRef.current && resx) {
-                //update state
-                setFiltersList([...resx.results]);
-            }
             setDisplay(true);
             
         };
@@ -106,7 +106,7 @@ const ScreeningPage = (props) => {
         return () => {
             mountRef.current = false;
         };
-    }, [project_id, appConsumer.user]); //re-execute when these variables change
+    }, [screening_id, appConsumer.user]); //re-execute when these variables change
 
 
     let output;
@@ -116,18 +116,18 @@ const ScreeningPage = (props) => {
         output = (
             <div className="forbidden-wrapper">
                 <Forbidden/>
-                <p>This project does not exist or maybe you are not allowed to see it</p>
+                <p>This screening does not exist or maybe you are not allowed to see it</p>
             </div>
         )
     }
-    else if(display && project.data.manual_screening_type === "single-predicate"){
+    else if(display && screening.data.manual_screening_type === "single-predicate"){
         output = (
-            <SinglePredicateScreening project_id={project_id} filtersList={filtersList}/>
+            <SinglePredicateScreening screening={screening} filtersList={filtersList}/>
         );
     }
-    else if(display && project.data.manual_screening_type === "multi-predicate"){
+    else if(display && screening.data.manual_screening_type === "multi-predicate"){
         output = (
-            <MultiPredicateScreening project_id={project_id} filtersList={filtersList}/>
+            <MultiPredicateScreening screening={screening} filtersList={filtersList}/>
         );
     }else{
         output = <LoadIcon/>
