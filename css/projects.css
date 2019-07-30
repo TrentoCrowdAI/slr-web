@@ -23,6 +23,10 @@ div.project-cards-holder div.project-card{
   box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
   background-color: #fcfcff;
 }
+div.project-cards-holder div.project-card.for-screening{
+  padding-bottom: 10px;
+  border: solid 1px #d5b9f0;
+}
 div.project-cards-holder div.project-card div.project-card-options div.options-list{
   box-shadow: 0px 0px 2px -1px rgba(0, 0, 0, 0.25);
 }
@@ -90,12 +94,12 @@ form.add-project button[type=submit]{
   padding: 10px 10px 10px 10px;
 }
 form.add-project input{
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   width: 100%;
 }
 form.add-project textarea{
   margin-bottom: 15px;
-  height: 100px;
+  height: 120px;
   width: 100%;
   font-family: inherit;
   background-color: transparent;
@@ -119,13 +123,6 @@ form.add-csv-papers{
   padding: 20px 30px 10px 30px;
   width: 650px;
   min-height: 300px;
-}
-form.add-csv-papers h2{
-  margin: 0px auto 5px auto;
-  text-align: center;
-}
-form.add-csv-papers p{
-  font-size: 16px;
 }
 form.add-csv-papers p span{
   font-weight: 100;
@@ -179,9 +176,9 @@ div.project-nav-link-wrapper div.underline{
   background-color: black;
   position: absolute;
   width: 130px;
-  height: 2px;
+  height: 3px;
   bottom: 0px;
-  border-radius: 1px 1px 0px 0px;
+  border-radius: 3px 3px 0px 0px;
   left: 20px;
   transition: all 0.4s ease-in-out;
 }
@@ -192,10 +189,19 @@ div.paper-card-holder div.order{
   flex-direction: row;
   height: 20px;
   padding: 0px 0px 0px 10px;
+  margin-top: 5px;
+  justify-content: space-between;
+}
+div.paper-card-holder div.order div.order-flex-item{
+  display: flex;
 }
 div.paper-card-holder div.order label{
   font-weight: 300;
-  margin-right: 20px;
+  margin-right: 5px;
+  margin-left: 20px;
+}
+div.paper-card-holder div.order label:first-child{
+  margin-left: 0px;
 }
 div.paper-card-holder div.order button{
   margin-left: 5px;
@@ -209,6 +215,9 @@ div.paper-card-holder div.order button svg#order-arrow{
 div.paper-card-holder{
   width: 700px;
   z-index: 10;
+}
+div.center-side-wrapper div.paper-card-holder{
+  margin: auto;
 }
 div.centerd-wrapper{
   margin: 0 auto;
@@ -339,10 +348,19 @@ div.form-filter-wrapper{
 
 div.filter-card{
   margin-bottom: 20px; 
+  width: 600px;
 }
 div.filter-card h3{
   font-size: 25px;
   margin: 0px 20px 5px 0px;
+}
+div.filter-card h3 span{
+  margin: 0px 2px 0px 0px;
+  padding: 0px 4px;
+  border-radius: 4px;
+  border: solid 1px #5f5f5f;
+  font-size: 20px;
+  color: #1c1c1c;
 }
 div.filter-card div.answer{
   font-size: 17px;
@@ -491,27 +509,6 @@ form.add-filter:focus-within button{
 div.search-automated-right-wrapper{
   width: 280px;
 }
-div.search-automated-right-wrapper div.search-automated-description{
-  text-align: center;
-  font-weight: 300;
-  font-size: 14px;
-  margin: 25px 0px 5px 0px;
-  padding: 5px 5px 5px 5px;
-  border-top: solid 1px #acacac;
-  border-bottom: solid 1px #acacac;
-}
-div.search-automated-right-wrapper div.search-automated-description p{
-  text-align: justify;
-  word-wrap: break-word;
-  hyphens: auto;
-  margin: 0px 0px 5px 0px;
-}
-div.search-automated-right-wrapper div.search-automated-description a{
-  display: inline-block;
-  text-align: center;
-  line-height: 20px;
-  border-bottom: 1px dotted #696969;
-}
 div.search-automated-right-wrapper div.filters-holder h2{
   margin: 15px 0px 5px 0px;
 }
@@ -531,4 +528,334 @@ div.search-automated-right-wrapper div.filters-holder a{
   text-align: center;
   text-decoration: underline;
   font-weight: 300;
+}
+
+/*screening tab*/
+div.screening-nav-link-wrapper{
+  position: absolute;
+  top: 85px;
+  left: -150px;
+  width: 140px;
+}
+div.screening-nav-link-wrapper div.nav-link a {
+  padding-right: 10px;
+  font-size: 18px;
+  height: 22px;
+  width: 130px;
+  display: inline-block;
+  line-height: 22px;
+  text-align: right;
+  color: #4a545d;
+  margin: 1px 0px 1px 0px;
+  transition: all 0.3s;
+}
+div.screening-nav-link-wrapper div.verline{
+  background-color: #2f2f2f;
+  position: absolute;
+  width: 2px;
+  height: 18px;
+  top: 4px;
+  border-radius: 2px 0px 0px 2px;
+  right: 0px;
+  transition: all 0.4s ease-in-out;
+}
+div.paper-card-holder.large div.generic-card{
+  width: 100%;
+}
+div.bottom-right-screening-strategy-box{
+  position: fixed;
+  padding: 15px 15px 0px 15px;
+  width: 300px;
+  bottom: 0px;
+  right: 40px;
+  text-align: center;
+  border: solid 1px #b7b7b7;
+  box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.25);
+  border-bottom: none;
+  border-radius: 30px 30px 0px 0px;
+  background-color: #fcfcff;
+  transition: all 0.3s;
+  z-index: 0;
+}
+div.bottom-right-screening-strategy-box h3 {
+	font-size: 19px;
+  margin: 0 auto 10px auto;
+  position: relative;
+  line-height: 16px;
+  border-bottom: solid 1px #e0e0e0;
+  padding: 0px 0px 10px 0px;
+  width: 230px;
+  color: #2f2f2f;
+  transition: all 0.3s;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons{
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  width: 240px;
+  padding-bottom: 5px;
+  font-size: 12px
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.screening-strategy-btn{
+  border: solid 1px #c4c4c4;
+  height: 50px;
+  transition: all 0.3s;
+  background-color: #fcfcff;
+  border-radius: 25px;
+  width: 50px;
+  margin: 5px 5px 0px 5px;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons button.screening-strategy-btn svg{
+  width: 60%;
+  height: 60%;
+  margin: 20%;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder:hover button.screening-strategy-btn{
+  border: solid 1px #696969;
+  box-shadow: 0px 0px 3px -1px rgba(0, 0, 0, 0.25);
+}
+div.bottom-right-screening-strategy-box div.strategy-tooltip{
+  opacity: 0.0;
+  height: 10px;
+  line-height: 10px;
+  color: #3e3e3e;
+  transition-delay: 0.1s;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder:hover div.strategy-tooltip{
+  opacity: 1.0;
+}
+div.bottom-right-screening-strategy-box:hover{
+  border: solid 1px #b7b7b7;
+  border-bottom: none;
+  box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.50);
+}
+div.bottom-right-screening-strategy-box:hover h3{
+  color: black;
+  border-bottom: solid 1px #c4c4c4;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder{
+  width: 80px;
+  position: relative;
+}
+div.bottom-right-screening-strategy-box div.screening-strategy-buttons div.screening-strategy-btn-holder svg#circle-progress{
+  position: absolute;
+  width: 100%;
+  height: 60px;
+  top: 0px;
+  left: 0px;
+  pointer-events: none;
+  transform: rotate(-90deg);
+}
+/*backlog > autoScreening form*/
+form.start-auto-screening{
+  font-size: 14px;
+  padding: 20px 30px 10px 30px;
+  width: 450px;
+}
+form.start-auto-screening p{
+  font-weight: 300;
+  margin: 7px auto 15px auto;
+  text-align: center;
+}
+form.start-auto-screening div.custom-select{
+  margin: 7px auto 15px auto;
+  font-size: 20px;
+}
+form.start-auto-screening div.custom-select div.selected div.arrow{
+  height: 26px;
+  width: 26px;
+}
+form.start-auto-screening div.custom-select div.options-holder{
+  max-height: 70px;
+}
+form.start-auto-screening button.start-btn, form.start-manual-screening button.start-btn{
+  font-size: 18px;
+  margin: 10px auto 10px auto;
+  padding: 10px 10px 10px 10px;
+  display: inherit;
+}
+/*backlog > manualScreening form*/
+form.start-manual-screening{
+  padding: 20px 30px 10px 30px;
+  width: 550px;
+}
+form.start-manual-screening h2{
+  margin-bottom: 1px;
+}
+form.start-manual-screening p.tip{
+  margin: 0px 0 0px 0;
+  font-weight: 300;
+  text-align: center;
+  font-style: italic;
+}
+form.start-manual-screening div.users-list{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px 0 5px 0;
+  max-height: 300px;
+  overflow: auto;
+  padding: 5px 0 5px 0;
+  border-top: solid 1px #e0e0e0;
+  border-bottom: solid 1px #e0e0e0;
+  justify-content: space-between;
+}
+form.start-manual-screening div.users-list button.user-data{
+  border: none;
+  display: inline-flex;
+  width: 230px;
+  height: 50px;
+  margin: 0px 0px 5px 0px;
+}
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper{
+  height: 40px;
+  width: 40px;
+  margin: 5px 20px 5px 5px;
+  border-radius: 50%;
+  border: solid 1px grey;
+  position: relative;
+  overflow: hidden;
+}
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper div.img-wrapper-cover{
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  z-index: 0;
+  top: 0px;
+  left: 0px;
+  background-color: chartreuse;
+  transition: opacity 0.1s;
+  opacity: 0.0;
+}
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper div.img-wrapper-cover svg#select-tick{
+  width: 60%;
+  height: 60%;
+  margin: 20%;
+}
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper img.user-data-image, 
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper div.user-data-image{
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  z-index: -1;
+  top: 0px;
+  left: 0px;
+}
+form.start-manual-screening div.users-list button.user-data p.user-data-names{
+  margin: 0px;
+  line-height: 26px;
+  height: 26px;
+  margin: 12px 0px 12px 0px;
+  width: 150px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+  vertical-align: middle;
+}
+form.start-manual-screening div.users-list button.user-data:hover p.user-data-names{
+  text-decoration: underline;
+}
+form.start-manual-screening div.screening-type{
+  text-align: center;
+}
+form.start-manual-screening div.screening-type label:first-child{
+  line-height: 32px;
+  vertical-align: middle;
+  font-weight: bold;
+}
+p.manual-description span.color-code{
+  margin: 2px 0px 0px 0px;
+  display: inline-block;
+}
+p.manual-description span.color-code.green-color{
+  color: #0b8a42;
+}
+p.manual-description span.color-code.red-color{
+  color: #c31f1f;
+}
+p.manual-description span.color-code.grey-color{
+  color:  grey;
+}
+p.manual-description span.color-code.blue-color{
+  color: #4242e1;
+}
+/*screened papers tab*/
+div.paper-card.screened h3{
+  margin-right: 100px;
+}
+div.paper-card.screened div.screened-label{
+  position: absolute;
+  right: 0px;
+  top: 1px;
+  height: 30px;
+  display: flex;
+  border: solid 1px grey;
+  border-radius: 5px;
+  justify-content: space-between;
+}
+div.paper-card.screened div.screened-label div{
+  font-size: 14px;
+}
+div.paper-card.screened div.screened-label div.type{
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 28px;
+  vertical-align: middle;
+  margin: 0 4px 0 4px;
+}
+div.paper-card.screened div.screened-label div.in-out{
+  font-size: 16px;
+  padding-left: 5px;
+  text-align: center;
+  margin: 5px 5px 5px 0;
+  border-left: solid 1px gray;
+}
+div.right-side-wrapper.status{
+  width: 250px;
+}
+div.right-side-wrapper.status h2.screened-status{
+  color: #2f2f2f;
+  font-weight: lighter;
+  font-size: 20px;
+}
+div.right-side-wrapper.status h2.screened-status span{
+  color: black;
+  font-size: 23px;
+}
+/*manually screened papers tab*/
+div.right-side-wrapper.manual{
+  width: 280px;
+}
+div.paper-card.manual div.paragraph{
+  margin-bottom: 5px;
+}
+div.paper-card.manual div.users-votes{
+  width: 690px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px 0px 0px 10px;
+}
+div.paper-card.manual div.users-votes div.votes{
+  display: inline-flex;
+}
+div.paper-card.manual div.users-votes div.votes div.user-vote-image, img.user-vote-image{
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin: 0 2px 0 2px;
+}
+div.user-vote-image.in-vote, img.user-vote-image.in-vote{
+  border: solid 2px #0b8a42;
+}
+div.user-vote-image.out-vote, img.user-vote-image.out-vote{
+  border: solid 2px #c31f1f;
+}
+div.user-vote-image.no-vote, img.user-vote-image.no-vote{
+  border: solid 2px grey;
+}
+div.user-vote-image.und-vote, img.user-vote-image.und-vote{
+  border: solid 2px #4242e1;
+}
+div.user-vote-image.empty-slot, img.user-vote-image.empty-slot{
+  border: dashed 2px #b7b7b7;
 }

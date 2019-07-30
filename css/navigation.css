@@ -270,8 +270,10 @@ div.navigation-wrapper div.menu div.side-menu div.user{
   height: 150px;
   padding: 15px 15px 5px 15px;
   border-bottom: solid 1px black;
+  display: flex;
+  justify-content: space-between;
 }
-div.navigation-wrapper div.menu div.side-menu div.user img.face, div.navigation-wrapper div.menu div.side-menu div.user div.no-face{
+div.navigation-wrapper div.menu div.side-menu div.user img.face, div.navigation-wrapper div.menu div.side-menu div.user div.face{
   float: left;
   margin: 10px 15px 0px 5px;
   height: 100px;
@@ -287,14 +289,23 @@ div.navigation-wrapper div.menu div.side-menu div.user div.no-face svg#no-image{
   width: 103px;
 }
 div.navigation-wrapper div.menu div.side-menu div.user div.user-info{
-  margin:30px 10px 0px 0px;
+  margin:36px 0px 0px 0px;
   padding: 0px;
-  float: right;
   width: 135px;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 300;
-  line-height: 30px;
-  text-align: center;
+  line-height: 20px;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  height: 50px;
+}
+div.navigation-wrapper div.menu div.side-menu div.user div.user-info span{
+  width: 100%;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  display: inline-block;
 }
 div.navigation-wrapper div.menu h3.not-logged{
   text-align: center;
