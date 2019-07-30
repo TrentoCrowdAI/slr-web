@@ -47,11 +47,7 @@ const Main = function(props){
         );
     }
 
-    return (
-        <div className="main-wrapper">
-            {output}
-        </div>
-    );
+    return output;
 };
 
 export default Main;

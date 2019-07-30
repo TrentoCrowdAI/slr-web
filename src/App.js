@@ -36,10 +36,14 @@ const App = function(props) {
 
                         <Notification/>
 
-                        <Main/>
+                        <div className="main-wrapper">
 
-                        <UsersLogin/>
+                            <Main/>
 
+                            <UsersLogin/>
+
+                        </div>
+                        
                     </AppProvider>
                 </div>
         );
