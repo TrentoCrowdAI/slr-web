@@ -4,8 +4,8 @@
 
 
 const config = {
-    //"home": "https://crowdai-slr-api-dev.herokuapp.com/",
-    "home": "http://localhost:3001/",
+    "home": "https://crowdai-slr-api-dev.herokuapp.com/",
+    //"home": "http://localhost:3001/",
     "search": "search",
     "scopus_search": "search-scopus",
     "search_similar": "search/similar",
