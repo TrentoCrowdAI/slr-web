@@ -88,7 +88,7 @@ function AutoScreeningForm(props) {
                     )}
                 />
 
-                <button className="start-btn" type="submit">Start Auto-screening</button>
+                <button className="start-btn" type="submit" disabled={isSubmitting}>Start Auto-screening</button>
             </Form>
             );
             return output;

@@ -159,15 +159,7 @@ function ManualScreeningForm(props) {
 
                 <h2>Select screeners</h2>
                 {result}
-                {/*
-                <Field
-                    name="threshold"
-                    render={({ field, form }) => (
-                            <Select options={confidenceValues} {...field} form={form} type={"mini"}/>
-                    )}
-                />
-                */}
-                <button className="start-btn" type="submit" style={{visibility: (collaboratorsFetch) ? 'hidden' : '' }} disabled={(values.screeners.length === 0)}>
+                <button className="start-btn" type="submit" style={{visibility: (collaboratorsFetch) ? 'hidden' : '' }} disabled={(values.screeners.length === 0 || isSubmitting)}>
                     Start Manual-screening
                 </button>
             </Form>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef, useContext} from "react";
 import CustomPaperForm from 'components/projects_page/papers_tab/forms/customPaperForm';
-import LoadIcon from "components/svg/loadIcon";
+import HLoad from "components/svg/hLoad";
 
 import {updateFileDao} from "dao/updateFile.dao";
 
@@ -95,8 +95,8 @@ function CustomPaperPage({projectId, url, history}) {
             <div className="new-paper-page-wrapper">
                 <div className="file-input-container">
                     <input type="file" id="real-input"/>
-                    <button type="button" className="browse-btn">
-                        <LoadIcon/>
+                    <button type="button" className="browse-btn" disabled="true">
+                        <HLoad/>
                     </button>
                 </div>
                     or<br/>

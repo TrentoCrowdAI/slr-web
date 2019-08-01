@@ -24,7 +24,7 @@ const UserCheckbox = ({ user, form, name }) => {
             <div className="img-wrapper-cover" style={{opacity: (form.values.screeners.includes(user.id)) ? "0.9" : "0.0"}}>
                 <SelectTick color={"white"}/>
             </div>
-            <Image className="user-data-image" alt={"profile image"} src={user.data.picture || user.data.image}/>
+            <Image className="user-data-image" alt={"profile image"} src={user.data.picture || user.data.image} type= {"profile-pic"}/>
         </div>
         <p className="user-data-names">{user.data.name} {user.data.surname}</p>
         </button>

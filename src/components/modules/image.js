@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react";
 import NoImage from "components/svg/noImage";
+import NoProfileImage from "components/svg/noProfileImage";
 
 /*
 * image component which deals with fetching error
 * */
-const Image = function({className, alt, src, style}){
+const Image = function({className, alt, src, style, type}){
 
     //profile image fetch error
     const [fetchError, setFetchError] = useState(false);
@@ -22,7 +23,11 @@ const Image = function({className, alt, src, style}){
     let img = <></>;
 
     if(fetchError){
-        img = <div className={className} alt="error loading image" style={style}><NoImage/></div>
+        if(type === "profile-pic"){
+            img = <div className={className} alt="error loading image" style={style}><NoProfileImage/></div>
+        }else{
+            img = <div className={className} alt="error loading image" style={style}><NoImage/></div>
+        }
     }else{
         img = <img className={className} alt={alt} title={alt} src={src} onError={() => {setFetchError(true)}} style={style}/>
     }

@@ -16,6 +16,7 @@ import InfoTooltip from "components/modules/infoTooltip";
 import PositiveAnswer from 'components/svg/positiveAnswer';
 import NegativeAnswer from 'components/svg/negativeAnswer';
 import UndecidedAnswer from 'components/svg/undecidedAnswer';
+import HLoad from "components/svg/hLoad";
 
 
 const _array = require('lodash/array');
@@ -54,6 +55,9 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
 
     //bool to trigger next paper fetch
     const [nextPaper, setNextPaper] = useState(false);
+
+    //bool for vote submission
+    const [voteSubmission, setVoteSubmission] = useState(false);
 
     useEffect(() => {
         mountRef.current = true;
@@ -105,6 +109,7 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
                 //setHighlightedData([{data: res.results[queryData.question_id].abstract, start: 0, end: res.results[queryData.question_id].abstract.length-1, type:"not_highlighted"}]);
                 //show the page
                 setDisplay(true);
+                setVoteSubmission(false);
             }
             console.log("DONE FETCHING NWE PAER")
         };
@@ -157,6 +162,7 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
         console.log("data to send _> ");
         console.log(screeningData)
         
+        setVoteSubmission(true);
         //call the dao
         let res = await projectScreeningDao.submitVote(screeningData);
         
@@ -174,7 +180,7 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
     }
     
     function handleKey(key){
-        if(document.activeElement.type !== "text" && display){
+        if(document.activeElement.type !== "text" && display && !voteSubmission){
             sendSubmission(key);
         }
     }
@@ -193,6 +199,9 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
                 </InfoTooltip>
                 <h2 className="question">Is the paper relevant to the review?</h2>
                 <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
+                <div className="vote-submission-load">
+                    {(voteSubmission) ? <HLoad className={"delayed"}/> : <></>}
+                </div>
                 <div className="screening-choice">
                     <div className="yes-no-und">
                         <div className="btn-decision-holder">

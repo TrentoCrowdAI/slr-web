@@ -20,13 +20,15 @@ const MultiPredicateForm = function ({paperData, tagsData, filtersList, nextPape
     const [filterHighlights, setFilterHighlights] = useState(undefined);
 
     const [underlineOffset, setUnderlineOffset] = useState(0);
+    const [underlineWidth, setUnderlineWidth] = useState(26);
+
+    //bool for vote submission
+    const [voteSubmission, setVoteSubmission] = useState(false);
 
     //get data from global context
     const appConsumer = useContext(AppContext);
 
     useEffect(() => {
-        setDisplayedFilter(filtersList[0]);
-        setFilterVotes(filtersList.map((filter) => ({filter_id: filter.id, filter_predicate: filter.data.predicate, outcome: ""})));
         setFilterHighlights(filtersList.map(() => []));
     }, [display])
     
@@ -50,9 +52,27 @@ const MultiPredicateForm = function ({paperData, tagsData, filtersList, nextPape
 
     useEffect(() => {
         let index = filtersList.findIndex((filter) => (filter.id === displayedFilter.id));
+        let btnWidth = undefined;
+        let btnOffset = 0;
+        if(document.getElementsByClassName("filters-nav")[0]) {
+            if(index >= 0){
+                btnWidth =  document.getElementsByClassName("filters-nav")[0].childNodes[index];
+                for(let i = 0; i < index; i++){
+                    btnOffset = btnOffset + document.getElementsByClassName("filters-nav")[0].childNodes[i].getBoundingClientRect().width;
+                }
+            }else{
+                btnWidth =  document.getElementsByClassName("filters-nav")[0].childNodes[filterVotes.length];
+                for(let i = 0; i < filterVotes.length; i++){
+                    btnOffset = btnOffset + document.getElementsByClassName("filters-nav")[0].childNodes[i].getBoundingClientRect().width;
+                }
+            }
+            btnWidth = btnWidth.getBoundingClientRect().width;
+            console.log("width -> " + btnWidth);
+            setUnderlineWidth(btnWidth-4);
+        }
         if(index >= 0){
             console.log("GOING NEXT FILTER");
-            setUnderlineOffset(index * 30 + 2);
+            setUnderlineOffset(btnOffset + 2);
             if(filterHighlights && filterHighlights[index].length !== 0){
                 console.log("__settting highligerhe data");
                 console.log(filterHighlights[index]);
@@ -64,7 +84,7 @@ const MultiPredicateForm = function ({paperData, tagsData, filtersList, nextPape
         }else{
             console.log("___summary tab")
             clearHighlights("disabled");
-            setUnderlineOffset(filterVotes.length * 30 + 2);
+            setUnderlineOffset(btnOffset + 2);
         }
     }, [displayedFilter])
 
@@ -91,6 +111,7 @@ const MultiPredicateForm = function ({paperData, tagsData, filtersList, nextPape
         console.log("data to send _>")
         console.log(screeningData);
         if(filterVotes.findIndex((vote) => (vote.outcome === "")) === -1){
+            setVoteSubmission(true);
             console.log("sening")
             //call the dao
             let resx = await projectScreeningDao.submitVote(screeningData);
@@ -104,6 +125,8 @@ const MultiPredicateForm = function ({paperData, tagsData, filtersList, nextPape
             else if(mountRef.current && resx.data){
                 //I trigger the effect to get a new paper
                 setNextPaper(!nextPaper);
+                setFilterVotes(filtersList.map((filter) => ({filter_id: filter.id, filter_predicate: filter.data.predicate, outcome: ""})));
+                setVoteSubmission(false);
             }   
         }
     }
@@ -125,15 +148,14 @@ const MultiPredicateForm = function ({paperData, tagsData, filtersList, nextPape
                     </button>
                 )}
                 <button className="filter-btn summary" type="button" onClick={() => {setDisplayedFilter("summary")}}>
-                    {"[V]"}
+                    Summary
                 </button>
-                <div className="underline" style={{left: underlineOffset + "px"}}></div>
+                <div className="underline" style={{left: underlineOffset + "px", width: underlineWidth+"px"}}></div>
                 </div>
                 <FilterScreen filter={displayedFilter} display={display} 
                     filterHighlights={filterHighlights} setFilterHighlights={setFilterHighlights}
                     filterVotes={filterVotes} setFilterVotes={setFilterVotes} 
-                    highlightedData={highlightedData} setHighlightedData={setHighlightedData}
-                mountRef={mountRef}/>
+                    highlightedData={highlightedData} voteSubmission={voteSubmission}/>
             </form>
         );
     }
@@ -146,7 +168,7 @@ const MultiPredicateForm = function ({paperData, tagsData, filtersList, nextPape
 const FilterScreen = function({ filter, display, 
                                 filterHighlights, setFilterHighlights,
                                 filterVotes, setFilterVotes, 
-                                highlightedData, setHighlightedData, mountRef}) {
+                                highlightedData, voteSubmission}) {
 
 
     const [currentOutcome, setCurrentOutcome] = useState("");
@@ -259,10 +281,11 @@ const FilterScreen = function({ filter, display,
             <div className="m-p-screening-summary">
                 {filterVotes.map((vote, index)=>(
                     <div key={index} className="filter-vote-summary"><p>{vote.filter_predicate}</p> <div className="outcome-result">
-                        {(vote.outcome === "und") ? "undecided" : vote.outcome}
+                        {(vote.outcome === "2") ? "undecided" : 
+                         ((vote.outcome === "1") ? "yes" : "no")}
                     </div></div>
                 ))}
-                <button type="sumbit" className="outcomes-submission" disabled={(filterVotes.findIndex((vote) => (vote.outcome === "")) !== -1)}>
+                <button type="sumbit" className="outcomes-submission" disabled={((filterVotes.findIndex((vote) => (vote.outcome === "")) !== -1) || voteSubmission)}>
                     Submit your outcomes
                 </button>
             </div>

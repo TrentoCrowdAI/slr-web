@@ -77,7 +77,7 @@ const ScreeningPage = (props) => {
                 setScreening(res);
 
                 //call the dao
-                let resx = await projectFiltersDao.getFiltersList({"project_id" : res.project_id});
+                let resx = await projectFiltersDao.getFiltersList({"project_id" : res.project_id, "sort":"ASC"});
                 console.log(resx);
 
                 //error checking
