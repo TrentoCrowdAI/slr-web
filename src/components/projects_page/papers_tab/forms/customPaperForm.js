@@ -57,7 +57,7 @@ function CustomPaperForm(props) {
                 doi: (props.customPaper && props.customPaper.doi) || ""
             }}
             validationSchema={paperValidationSchema}
-            onSubmit={async (values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting, resetForm }) => {
                 //if doi is not specified I set it as empty string
                 if(values.doi === undefined){
                     values.doi = "";
@@ -83,10 +83,13 @@ function CustomPaperForm(props) {
                     //pass error object to global context
                     appConsumer.setError(res);
                 }else if(mountRef.current){
-                    props.history.push(props.url);
-                }
-                if(mountRef.current){
+                    appConsumer.setNotificationMessage("Paper added successfully");
+                    resetForm({
+                        title: '', authors: '', year: '', abstract: '',
+                        document_type:  '', doi: ""
+                    });
                     setSubmitting(false);
+                    props.history.push(props.url);
                 }
             }}
             validateOnBlur={false}
