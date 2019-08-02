@@ -4,7 +4,8 @@ import Image from 'components/modules/image';
 import SelectTick from 'components/svg/selectTick';
 
 /**
- * userCheckBox for Formik
+ * userCheckBox for Formik. It's a component, displaying the user data,
+ * that acts like a checkbox
  */
 const UserCheckbox = ({ user, form, name }) => {
 

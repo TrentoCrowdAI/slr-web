@@ -27,7 +27,7 @@ const queryParams = [
 ];
 
 /**
- * the local component that manages the papers in the backlog of a project
+ * the local component that manages the screened papers
  */
 const ScreenedPapers = ({project_id, match, location, history}) => {
 
@@ -35,7 +35,7 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
     //fetch data
     const [papersList, setPapersList] = useState([]);
 
-    //bool to show the pagination list
+    //bool to show the pagination list (numbers of papers in the list)
     const [totalResults, setTotalResults] = useState(0);
 
     //number of total papers in the project
@@ -50,16 +50,19 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
     //set query params from url
     const queryData = createQueryData(location.search, queryParams);
 
+    //state for the sorting arrow animation
     const [up, setUp] = useState(queryData.sort);
 
+    //effect for getting the list of papers on mount and query parameters changes
     useEffect(() => {
 
         //flag that represents the state of component
         let  mnt = true;
-        console.log(queryData);
+
+        //check sort parameter for animation
         if(queryData.orderBy !== "date_created" && up !== queryData.sort){
             setUp(queryData.sort);
-            console.log("calling animation")
+            //trigger animation when sorting changes
             document.getElementById("ani-order-arrow").beginElement();
         }
 
@@ -70,9 +73,7 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
 
             //call the dao for getting the papers
             let resx = await projectPapersDao.getPapersList({project_id, type: "screened", ...queryData});
-            console.log(resx);
 
-            console.log(resx);
             //error checking
             //if is 404 error
             if (mnt && resx && resx.message === "Not Found") {
@@ -129,7 +130,7 @@ const ScreenedPapers = ({project_id, match, location, history}) => {
 
     //handler for order selection(ASC|DESC)
     function handelOrder(e){
-        console.log("doing my part")
+
         //trigger svg animation
         if(queryData.sort === "ASC"){
             queryData.sort = "DESC";

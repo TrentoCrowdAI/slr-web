@@ -25,7 +25,7 @@ const Main = function(props){
     if(appConsumer.userFetch){
         output = (<LoadIcon/>);
     }
-    //I render routes only if the user is logged
+    //I render all the routes only if the user is logged
     else if(appConsumer.user){
         output = (
             <Switch>
@@ -39,6 +39,7 @@ const Main = function(props){
         );
     }
     else{
+        //two routes accessible to unlogged users
         output = (
             <Switch>
                 <Route path="/projects/:id" render={(props) => <ProjectPage {...props} />}/>

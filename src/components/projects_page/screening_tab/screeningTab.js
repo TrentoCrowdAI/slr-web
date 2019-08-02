@@ -51,29 +51,30 @@ const ScreeningTab = ({project_id, project, match, notFound, setNotFound}) => {
  * this is the local component to print the navigation tabs of the screening page
  */
 const ScreeningPageNavigation = function ({notFound, match}) {
-    //hash  -> #/projects/6/search/ || #/projects/6/search/
+
     const lc = window.location.hash.split("?")[0];
     var slider = "hide";
     switch (true) {
-        case /#\/projects\/\d+\/screening\/backlog\/?/.test(lc): //papers tab
+        case /#\/projects\/\d+\/screening\/backlog\/?/.test(lc): //backloag sub-tab
             slider = "4px";
             break;
 
-        case /#\/projects\/\d+\/screening\/manual\/?/.test(lc): //filters tab
+        case /#\/projects\/\d+\/screening\/manual\/?/.test(lc): //manual sub-tab
             slider = "28px";
             break;
 
-        case /#\/projects\/\d+\/screening\/crowdsource\/?/.test(lc): //search tab
+        case /#\/projects\/\d+\/screening\/crowdsource\/?/.test(lc): //crowdsource sub-tab
             slider = "52px";
             break;
 
-        case /#\/projects\/\d+\/screening\/screened\/?/.test(lc): //screening tab
+        case /#\/projects\/\d+\/screening\/screened\/?/.test(lc): //screened sub-tab
             slider = "76px";
             break;
 
         default:
             break;
     }
+
     let output = (
         <>
             <div className="screening-nav-link-wrapper" style={{display: (notFound || slider === "hide") ? "none" : ""}}>
@@ -89,7 +90,6 @@ const ScreeningPageNavigation = function ({notFound, match}) {
                 <div className="nav-link">
                     <Link to={join(match.url, "/screened")} style={{paddingRight: (slider === "76px") ? "0px" : "", color: (slider === "76px") ? "black" : ""}}>screened</Link>
                 </div>
-                {/*<div className="verline" style={{top: slider}}/>*/}
             </div>
         </>
     );

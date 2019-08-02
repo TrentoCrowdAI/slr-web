@@ -75,10 +75,11 @@ const BacklogPapers = ({project_id, totalResults, setTotalResults, match, locati
 
         //flag that represents the state of component
         let  mnt = true;
-        console.log(queryData);
+
+        //check sort parameter for animation
         if(queryData.orderBy !== "date_created" && up !== queryData.sort){
             setUp(queryData.sort);
-            console.log("calling animation")
+            //trigger animation when sorting changes
             document.getElementById("ani-order-arrow").beginElement();
         }
 
@@ -92,7 +93,7 @@ const BacklogPapers = ({project_id, totalResults, setTotalResults, match, locati
             //min confidence that can be selected must be below the max value
             minConfidenceValues = confidenceValues.filter(c => c.value < parseFloat(queryData.max_confidence));
 
-            //call the dao for getting the filters
+            //call the dao for getting the filters, this way I can match the data with the filters confidence array
             let res = await projectFiltersDao.getFiltersList({"project_id" : project_id});
 
             //error checking

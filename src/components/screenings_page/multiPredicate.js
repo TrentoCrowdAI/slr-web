@@ -15,14 +15,14 @@ import Tags from 'components/modules/paperTags';
 const _array = require('lodash/array');
 
 /**
- * this is component form to search for the paper in project page
+ * multi-predicate screening page
  * */
 
 const MultiPredicateScreening = function ({screening, filtersList}) {
 
     const mountRef = useRef(false);
 
-    //fetch data
+    //paper to screen data
     const [paperData, setPaperData] = useState(undefined);
 
     //bool to control the visualization of page
@@ -37,7 +37,7 @@ const MultiPredicateScreening = function ({screening, filtersList}) {
     //selected tags
     const [selectedTags, setSelectedTags] = useState([]);
 
-    //available tags
+    //available tags (there's no need to re-render the page when these changes because they're hidden, that's why I use useRef)
     const availableTags = useRef(screening.data.tags);
 
     //get data from global context
@@ -46,7 +46,7 @@ const MultiPredicateScreening = function ({screening, filtersList}) {
     //bool to trigger next paper fetch
     const [nextPaper, setNextPaper] = useState(false);
 
-
+    //component lifecycle hook
     useEffect(() => {
         mountRef.current = true;
         //execute only on unmount
@@ -55,13 +55,14 @@ const MultiPredicateScreening = function ({screening, filtersList}) {
         };
     },[]);
 
+    //effect for updating the paper wrapper height once it's displayed
     useEffect(() =>{
         if(display){
             setPaperHeight(document.getElementsByClassName('s-paper')[0].clientHeight+20);
         }
     }, [display])
 
-    //this will run on mount and every time the url params change
+    //this will run on mount and every time the user votes a paper so we ask for a new one to vote
     useEffect(() => {
 
         //flag that represents the state of component
@@ -70,17 +71,21 @@ const MultiPredicateScreening = function ({screening, filtersList}) {
         //a wrapper function ask by react hook
         const fetchData = async () => {
 
+            //I hide the page before fetching a new paper
             setDisplay(false);
-            console.log("Fetching paper")
+
+            //I reset the tags
             availableTags.current = _array.union(availableTags.current, selectedTags);
             setSelectedTags([]);
+
             //call dao for getting next paper
             let res = await projectScreeningDao.getProjectPaperToScreen(screening.id);
-            
-            console.log(res);
+
             //error checking
-            //if the component is still mounted and  is 404 error
+            //if the component is still mounted and  is 404 error it means there are no more papers to screen
             if (mnt && res && res.message === "Not Found") {
+
+                //I create a 'fake' paper data so the user knows he's done
                 setPaperData({data: {title:"Finished!", 
                 abstract:(
                     <>There are no more papers to screen in this project<br/>
@@ -95,11 +100,12 @@ const MultiPredicateScreening = function ({screening, filtersList}) {
                 //pass error object to global context
                 appConsumer.setError(res);
             }
-            //if the component is still mounted and  res isn't null
+            //otherwise it means I got a paper to screen
             else if (mnt && res) {
-                //update state
-                //console.log(res.results[2])
+
+                //I set the paper
                 setPaperData(res);
+                //and reset the highlighted data
                 setHighlightedData([{data: res.data.abstract, start: 0, end: res.data.abstract.length-1, type:"not_highlighted"}])
                 //show the page
                 setDisplay(true);
@@ -118,18 +124,25 @@ const MultiPredicateScreening = function ({screening, filtersList}) {
 
     }, [screening, nextPaper]);  //re-execute when these variables change
 
+    //function to clear highlights
     function clearHighlights(type = "not_highlighted"){
         if(highlightedData && paperData){
             setHighlightedData([{data: paperData.data.abstract, start: 0, end: paperData.data.abstract.length-1, type: type}])
         }
     }
-    let resultPart = "";
-    let paperToDisplay = "";
+
+    //page parts
+    let resultPart = <></>;
+    let paperToDisplay = <></>;
 
     //if I don't have paper to display yet
     if(display === false){
+        //I display a loading icon
         paperToDisplay = <LoadIcon class="small"/>
-    }else if(paperData.data){
+    }
+    //otherwise
+    else if(paperData.data){
+        //I display the paper
         paperToDisplay = (
             <>
                 <h2 className="paper-title">{paperData.data.title}</h2>
@@ -140,6 +153,7 @@ const MultiPredicateScreening = function ({screening, filtersList}) {
         )
     }
 
+    //I create the resulting page to display
     resultPart = (
         <>
             <div className="right-side-wrapper tags-holder" style={{display: (paperData && paperData.data && paperData.data.title==="Finished!") ? "none" : ""}}>
@@ -147,6 +161,7 @@ const MultiPredicateScreening = function ({screening, filtersList}) {
                     availableTags={availableTags}
                 />
             </div>
+            
             {/*div wrapper to set height animation*/}
             <div style={{height: paperHeight+"px",overflow:"hidden", transition: "all 0.5s linear"}}>
                 {/*content of the animated div*/}
@@ -154,6 +169,8 @@ const MultiPredicateScreening = function ({screening, filtersList}) {
                 {paperToDisplay}
                 </div>
             </div>
+
+            {/*I check whether there are filters*/}
             {(filtersList.length === 0) ? 
                 <p className="empty-filters-description"> There are no filters here, add new filters before starting here</p>
                 :

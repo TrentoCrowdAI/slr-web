@@ -40,6 +40,7 @@ const ScreeningBacklog = function ({project_id, project}) {
     //flag to check if manual screening was started successfully(in order to disable the button afterwards)
     const [manualStarted, setManualStarted] = useState(false);
 
+    //effect on mount to check if auto-screening is running
     useEffect(() => {
         let mnt = true;
         
@@ -58,6 +59,7 @@ const ScreeningBacklog = function ({project_id, project}) {
         };
     },[]);
 
+    //effect that will start checking auto-screening status once I start it
     useEffect(() => {
         let mnt = true;
         let poll = undefined;
@@ -130,6 +132,7 @@ const ScreeningBacklog = function ({project_id, project}) {
             </div>
         );
     }
+
     return (
         <>
 

@@ -18,7 +18,7 @@ const queryParams = [
 ]
 
 /**
- *this component will show the projects where the user is a screener
+ *this component will show the screenings list for a user
  */
 
 const ScreeningsList = function (props) {
@@ -63,7 +63,7 @@ const ScreeningsList = function (props) {
 
             //hide the page
             setDisplay(false);
-            console.log(queryData);
+
             //call the dao
             const res = await projectScreeningDao.getProjectsToScreen({orderBy: "date_last_modified", ...queryData});
 
@@ -112,14 +112,13 @@ const ScreeningsList = function (props) {
         //print svg image
         output = <LoadIcon/>;
     }
-
+    //else print the list of screenings
     else {
 
         output = (
             <div>
-                {/*print list of projects*/}
+
                 <PrintList screeningsList={screeningsList} path={props.match.url}/>
-                {/*set listId and continues value*/}
                 <Pagination start={queryData.start} count={queryData.count} totalResults={totalResults} path={props.match.url}/>
 
             </div>
@@ -135,7 +134,7 @@ const ScreeningsList = function (props) {
 
 /**
  *  internal component only to print the list
- * @param screeningsList projects list data
+ * @param screeningsList list data
  * @param path current page url
  * */
 const PrintList = function ({screeningsList, path}) {
@@ -147,7 +146,7 @@ const PrintList = function ({screeningsList, path}) {
             <div className="empty-folder-wrapper"> <EmptyFolder/> <p className="empty-folder-description"> You don't have any projects to screen yet </p></div>
         );
     }
-    //if list isn't empty, print list of projects
+    //if list isn't empty, print list of screenings
     else {
         maps = (screeningsList.map((element, index) =>
                 <div key={element.id} className="light-modal project-card for-screening">

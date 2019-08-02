@@ -36,9 +36,10 @@ const ScreeningPage = (props) => {
     //display flag
     const [display, setDisplay] = useState(false)
 
-    //set the project title
+    //set the project title of the screening
     useEffect(() => {
-        if(mountRef.current && (screening.data.name === "loading..." || screening.data.name === "UNAUTHORIZED OR INEXISTENT PROJECTS")){
+
+        if(mountRef.current && (screening.data.name === "loading..." || screening.data.name === "UNAUTHORIZED OR INEXISTENT SCREENING")){
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{screening.data.name}</h2> </div>);//I set the page title
         }else if(mountRef.current){
             appConsumer.setTitle(<div className="nav-elements"> <h2 className="static-title">{screening.data.name} screening</h2> </div>);//I set the page title
@@ -51,16 +52,17 @@ const ScreeningPage = (props) => {
 
         mountRef.current = true;
 
-        //setDisplay(false);
+        //hide the page before fetching new data
+        setDisplay(false);
+
         //a wrapper function ask by react hook
         const fetchProjectData = async () => {
 
-
+            //call dao
             let res = await projectScreeningDao.getScreening(screening_id);
-            console.log(res);
 
             //error checking
-            //if unauthorized user
+            //if unauthorized user or inexistent screening
             if(mountRef.current && res.payload && (res.payload.statusCode === 404 || res.payload.statusCode === 401 || res.payload.message === "the token does not match any user!" || res.payload.message === "empty token id in header, the user must first login!")){
                 setUnauthorized(true);
                 setScreening({data: {name: "UNAUTHORIZED OR INEXISTENT SCREENING"}});
@@ -72,13 +74,14 @@ const ScreeningPage = (props) => {
             }
             //if the component is still mounted and res isn't null
             else if (mountRef.current && res ) {
+
+                //the user has access to the screening
                 setUnauthorized(false);
                 //update state
                 setScreening(res);
 
-                //call the dao
+                //call the dao to also get the filters
                 let resx = await projectFiltersDao.getFiltersList({"project_id" : res.project_id, "sort":"ASC"});
-                console.log(resx);
 
                 //error checking
                 //if the component is still mounted and  is 404 error
@@ -97,11 +100,13 @@ const ScreeningPage = (props) => {
                 }
             }
 
+            //I show the page after I fetched all the data
             setDisplay(true);
             
         };
 
         fetchProjectData();
+
         //when the component will unmount
         return () => {
             mountRef.current = false;
@@ -111,7 +116,7 @@ const ScreeningPage = (props) => {
 
     let output;
 
-    //if the page is loading
+    //if the user doesn't have access
     if(unauthorized){
         output = (
             <div className="forbidden-wrapper">
@@ -120,16 +125,22 @@ const ScreeningPage = (props) => {
             </div>
         )
     }
+    //else if there's a single-predicate screening
     else if(display && screening.data.manual_screening_type === "single-predicate"){
+        //I get the page for single-predicate screening
         output = (
             <SinglePredicateScreening screening={screening} filtersList={filtersList}/>
         );
     }
+    //else if there's a multi-predicate screening
     else if(display && screening.data.manual_screening_type === "multi-predicate"){
+        //I get the page for multi-predicate screening
         output = (
             <MultiPredicateScreening screening={screening} filtersList={filtersList}/>
         );
-    }else{
+    }
+    //otherwise it means I'm fetching data and I should display a loading icon
+    else{
         output = <LoadIcon/>
     }
 

@@ -22,14 +22,14 @@ import HLoad from "components/svg/hLoad";
 const _array = require('lodash/array');
 
 /**
- * this is component form to search for the paper in project page
+ * single-predicate screening page
  * */
 
 const SinglePredicateScreening = function ({screening, filtersList}) {
 
     const mountRef = useRef(false);
 
-    //fetch data
+    //paper to screen
     const [paperData, setPaperData] = useState(undefined);
 
     //paper wrapper-height js animation
@@ -47,7 +47,7 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
     //selected tags
     const [selectedTags, setSelectedTags] = useState([]);
 
-    //available tags
+    //available tags (there's no need to re-render the page when these changes because they're hidden, that's why I use useRef)
     const availableTags = useRef(screening.data.tags);
 
     //get data from global context
@@ -59,6 +59,7 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
     //bool for vote submission
     const [voteSubmission, setVoteSubmission] = useState(false);
 
+    //component lifecycle hook
     useEffect(() => {
         mountRef.current = true;
         //execute only on unmount
@@ -67,7 +68,7 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
         };
     },[]);
 
-    //this will run on mount and every time the url params change
+    //this will run on mount and every time the user votes a paper so we ask for a new one to vote
     useEffect(() => {
 
         //flag that represents the state of component
@@ -76,17 +77,22 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
         //a wrapper function ask by react hook
         const fetchData = async () => {
 
+            //I hide the page
             setDisplay(false);
+
+            //I reset decision and selected tags
             setDecision("");
             availableTags.current = _array.union(availableTags.current, selectedTags);
             setSelectedTags([]);
-            console.log("FETCHING NWE PAPAER")
+
             //call dao for getting next paper
             let res = await projectScreeningDao.getProjectPaperToScreen(screening.id);
-            console.log(res);
+
             //error checking
-            //if the component is still mounted and  is 404 error
+            //if the component is still mounted and  is 404 error it means there are no more papers to screen
             if (mnt && res && res.message === "Not Found") {
+
+                //I create a 'fake' paper data so the user knows he's done 
                 setPaperData({data: {title:"Finished!", 
                     abstract:(
                         <>There are no more papers to screen in this project<br/>
@@ -103,15 +109,17 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
             }
             //if the component is still mounted and  res isn't null
             else if (mnt && res) {
-                //update state
+                //set paper data
                 setPaperData(res);
+                //set text to not be highlighted at first
                 setHighlightedData([{data: res.data.abstract, start: 0, end: res.data.abstract.length-1, type:"not_highlighted"}])
-                //setHighlightedData([{data: res.results[queryData.question_id].abstract, start: 0, end: res.results[queryData.question_id].abstract.length-1, type:"not_highlighted"}]);
+
                 //show the page
                 setDisplay(true);
+                //submission flag set to false, once the page is displayed the user still needs to submit data
                 setVoteSubmission(false);
             }
-            console.log("DONE FETCHING NWE PAER")
+
         };
 
 
@@ -126,13 +134,17 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
 
     }, [screening, nextPaper]);  //re-execute when these variables change
 
+    //effect for updating the paper wrapper height once it's displayed
     useEffect(() =>{
         if(display){
             setPaperHeight(document.getElementsByClassName('s-paper')[0].clientHeight+20);
         }
     }, [display])
 
+    //function for submitting the vote
     async function sendSubmission(key) {
+
+        //I create the basic submission data with the highlights included
         let screeningData = {
             project_paper_id: paperData.id,
             vote:{
@@ -141,6 +153,7 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
             }
         };
 
+        //switch-case for the vote
         switch (key) {
             case "s":
                 console.log("NO");
@@ -162,10 +175,12 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
         console.log("data to send _> ");
         console.log(screeningData)
         
+        //I update the flag for the vote submission
         setVoteSubmission(true);
         //call the dao
         let res = await projectScreeningDao.submitVote(screeningData);
         
+        //if no error
         if(mountRef.current && res.data){
             //I trigger the effect to get a new paper
             setNextPaper(!nextPaper);
@@ -179,18 +194,26 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
         
     }
     
+    //wrapper function for the vote submission in order to stop submission if necessary
     function handleKey(key){
+        //I check if I'm not in a textfiled and display and voteSubmission flags
         if(document.activeElement.type !== "text" && display && !voteSubmission){
             sendSubmission(key);
         }
     }
 
-    let resultPart = "";
-    let paperToDisplay = "";
+    //part of the page
+    let resultPart = <></>;
+    let paperToDisplay = <></>;
     let formPart = <></>;
+
+    //if there's a paper to display
     if(paperData && paperData.data && paperData.data.title!=="Finished!"){
+
+        //I create the form
         formPart = (
             <form className="light-modal screening-outcome">
+
                 <InfoTooltip className={"s-p-form"}>
                     You can cast your vote by using the keyboard:<br/>
                     <b>A : </b> <i>yes</i><br/>
@@ -199,9 +222,11 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
                 </InfoTooltip>
                 <h2 className="question">Is the paper relevant to the review?</h2>
                 <p className="hl-tip">Please highlight in the text the evidence that supports your answer</p>
+
                 <div className="vote-submission-load">
                     {(voteSubmission) ? <HLoad className={"delayed"}/> : <></>}
                 </div>
+
                 <div className="screening-choice">
                     <div className="yes-no-und">
                         <div className="btn-decision-holder">
@@ -229,33 +254,40 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
                             <div className="decision-tooltip">undecided</div>
                         </div>
                     </div>
-
                 </div>
             </form>
         );
     }
 
-
+    //if display is false (because I'm fetching data)
     if(display === false){
+        //the paper to display will simply contain a loading icon
         paperToDisplay = <LoadIcon class="small"/>
-    }else if (paperData.data){
+    }
+    //else if there's a paper
+    else if (paperData.data){
         paperToDisplay = (
             <>
                 <h2 className="paper-title">{paperData.data.title}</h2>
-                <HighLighter data={paperData.data.abstract} disabled={paperData.data.title==="Finished!"} className={"paragraph"} 
+
+                <HighLighter data={paperData.data.abstract} disabled={paperData.data.title==="Finished!"} /* I disable the highlighter if the paper is the fake one telling the use he has finished*/
+                    className={"paragraph"} 
                     highlightedData={highlightedData} setHighlightedData={setHighlightedData}
                 />
             </>
         )
     }
 
+    //I create the resulting page to display
     resultPart = (
         <>
+            {/*add keyboard handler to deal with keayboard commands */}
             <KeyboardEventHandler handleKeys={['a', 's', 'd']}  handleFocusableElements onKeyEvent={(key) => handleKey(key)} />
             <div className="right-side-wrapper filters">
                 <h2>Filters:</h2>
                 <FiltersAccordion filtersList={filtersList}/>
             </div>
+
             {/*div wrapper to set height animation*/}
             <div style={{height: paperHeight+"px",overflow:"hidden", transition: "all 0.5s linear"}}>
                 {/*content of the animated div*/}
@@ -263,11 +295,13 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
                     {paperToDisplay}
                 </div>
             </div>
+
             <div style={{display: (paperData && paperData.data && paperData.data.title==="Finished!") ? "none" : ""}}>
                 <Tags display={display} selectedTags={selectedTags} setSelectedTags={setSelectedTags}
                     availableTags={availableTags}
                 />
             </div>
+
             {formPart}
         </>
     );

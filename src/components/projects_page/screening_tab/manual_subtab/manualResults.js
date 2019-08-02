@@ -32,7 +32,7 @@ const queryParams = [
 const ManualResults = ({project_id, match, location, history}) => {
 
 
-    //fetch data
+    //list of papers to display
     const [papersList, setPapersList] = useState([]);
 
     //bool to show the pagination list
@@ -47,16 +47,19 @@ const ManualResults = ({project_id, match, location, history}) => {
     //set query params from url
     const queryData = createQueryData(location.search, queryParams);
 
+    //state for the sorting arrow animation
     const [up, setUp] = useState(queryData.sort);
 
+    //effect for getting the list of papers on mount and query parameters changes
     useEffect(() => {
 
         //flag that represents the state of component
         let  mnt = true;
-        console.log(queryData);
+
+        //check sort parameter for animation
         if(queryData.orderBy !== "date_created" && up !== queryData.sort){
             setUp(queryData.sort);
-            console.log("calling animation")
+            //trigger animation when sorting changes
             document.getElementById("ani-order-arrow").beginElement();
         }
 
@@ -122,7 +125,7 @@ const ManualResults = ({project_id, match, location, history}) => {
 
     //handler for order selection(ASC|DESC)
     function handelOrder(e){
-        console.log("doing my part")
+
         //trigger svg animation
         if(queryData.sort === "ASC"){
             queryData.sort = "DESC";

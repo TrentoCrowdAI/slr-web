@@ -40,7 +40,7 @@ function ManualScreeningForm(props) {
 
             //call the dao for getting collaborators
             let res = await projectsDao.getProjectCollaborators(props.project_id);
-            console.log(res);
+
             //error checking
             //if the component is still mounted and there is some other errors
             if (mountRef.current && res && res.message) {
@@ -55,8 +55,9 @@ function ManualScreeningForm(props) {
                 //call the dao for getting the filters(this way I know if the user can start multi predicate screening)
                 let resx = await projectFiltersDao.getFiltersList({"project_id" : props.project_id});
                 //error checking
-                //if the component is still mounted and  is 404 error
+                //if the component is still mounted and  is 404 error it means that there are no filters
                 if (mountRef.current && resx && resx.message === "Not Found") {
+                    //so I set multi-predicate option availability to false
                     setIsMpAvailable(false);
                 }
                 //if the component is still mounted and  there are some other errors
@@ -73,9 +74,8 @@ function ManualScreeningForm(props) {
                 setCollaboratorsFetch(false);
             }
         }
-        setTimeout(() => {
-            fetchData();
-        }, 3000);
+            
+        fetchData();
         
 
         //execute only on unmount
@@ -89,11 +89,12 @@ function ManualScreeningForm(props) {
         <Formik
             initialValues={{screeners: [], screening_mode: "single-predicate"}}
             onSubmit={async (values, { setSubmitting }) => {
+
                 let bodyData = {project_id: props.project_id, array_user_ids: values.screeners, manual_screening_type: values.screening_mode};
-                console.log(bodyData);
+
                 if(values.screeners.length > 0){
                     let res = await projectScreeningDao.startManualScreening(bodyData);
-                    //let res = 1;
+
                     //error checking
                     if(mountRef.current && res.message){
                         //pass error object to global context
