@@ -50,7 +50,9 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
             }
             //if the component is still mounted and res isn't null
             else if (mountRef.current &&  res) {
-                setCollaborators(res.filter(x => x.data.email !== appConsumer.user.email));
+                if(appConsumer.user){
+                    setCollaborators(res.filter(x => x.data.email !== appConsumer.user.email));
+                }
                 //show the page
                 setLoadIconDisplay(false);
             }
@@ -191,8 +193,9 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
                 <p className="project-date-info"> <span>Created</span> {formatDate(project.date_created)} </p>
                 <p className="project-date-info"> <span>Last edited</span> {formatDate(project.date_last_modified)} </p>
                 <h2>Collaborators:</h2>
-                {(collaborators.length === 0) ? "You're not sharing this project with anyone" : ""}
-                {collaborators.map((element, index) =>
+                {(!collaborators || collaborators.length === 0) ? "You're not sharing this project with anyone" : ""}
+                {(collaborators) ?
+                    collaborators.map((element, index) =>
                     <div className="collaborator-wrapper" key={index}>
                         <p className="collaborator">{element.data.email}</p>
                         <button type="button" className="remove-btn" name={element.data.email}
@@ -202,8 +205,10 @@ const ProjectDescription = function({project, setProject, collaborators, setColl
                             }}>
                             <RemoveButton/>
                         </button>
-                    </div>
-                )}
+                    </div>)
+                    :
+                    <></>
+                }
                 <form className="add-collaborator" onSubmit={addCollaborator}>
                     <input type="text" id="edit-project-description-input" placeholder="add a collaborator" value={input}
                         onChange={(e) => {setInput(e.target.value);}}

@@ -1,11 +1,12 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import  {AppProvider} from 'components/providers/appProvider';
+import config from 'config/index'
 
 import nock from 'nock';
 nock.disableNetConnect();
 
-const TEST_HOME = "http://localhost:3001";
+const TEST_HOME = config.home;
 
 const optionsHeaders = { 
     'access-control-allow-origin': '*',
@@ -13,10 +14,25 @@ const optionsHeaders = {
     'access-Control-Allow-Methods': 'GET, POST, OPTIONS, DELETE, PUT',
     'access-Control-Allow-Headers': 'Origin, X-Requested-With, Accept, Cache-Control, Content-Type, Authorization' 
 };
-const responseHeaders = { 
+const responseHeadersJson = { 
     'access-control-allow-origin': '*',
     'Content-Type': 'application/json'
 };
+
+const responseHeadersGeneric = { 
+    'access-control-allow-origin': '*'
+};
+
+const errorRes = {
+    "statusCode": 505,
+        "payload": {
+          "statusCode": 505,
+          "error": "error",
+          "message": "test error"
+        },
+    "headers": {}
+      
+}
 
 /**
  * this function will wrap the component inside the router and provider
@@ -53,18 +69,34 @@ function nockOptions(url = "/", query = {}){
  * @param {string} url request
  * @param {JSON} query request
  * @param {JSON} data response
+ * @param {number} statusCode response
  */
-function nockGet(url = "/", query = {}, data) {
+function nockGet(url = "/", query = {}, data, statusCode = 200) {
     return nock(TEST_HOME)
-        .defaultReplyHeaders(responseHeaders)
+        .defaultReplyHeaders(responseHeadersJson)
         .get(url)
         .query(query)
         .delay(20)
-        .reply(200, data);
+        .reply(statusCode, data);
+}
+
+/**
+ * this will mock the PUT request
+ * @param {string} url request
+ * @param {JSON} payload request
+ */
+function nockPut(url = "/", payload = {}) {
+    return nock(TEST_HOME)
+        .defaultReplyHeaders(responseHeadersGeneric)
+        .put(url, payload)
+        .delay(20)
+        .reply(204, "");
 }
 
 export {
+    errorRes,
     testWrap,
     nockOptions,
-    nockGet
+    nockGet,
+    nockPut
 };

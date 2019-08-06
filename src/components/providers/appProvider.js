@@ -70,11 +70,12 @@ const AppProvider = function (props) {
             }
             getUserData();
         }else if(props.testing){ //data setup for testing
-            let user = {"email": "gmail@gmail", 
-                        "name": "bob", 
-                        "surname": "man", 
-                        "image": "invalid"};
-            setUser(user);
+            setUser({
+                "email": "gmail@gmail", 
+                "name": "bob", 
+                "surname": "man", 
+                "image": "invalid"});
+            setNotificationMessage("this is a test!");
             setUserFetch(false);
         }else{
             setUserFetch(false);
