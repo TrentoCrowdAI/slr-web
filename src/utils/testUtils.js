@@ -31,8 +31,18 @@ const errorRes = {
           "message": "test error"
         },
     "headers": {}
-      
+};
+
+const notFoundRes = {
+    "statusCode": 404,
+        "payload": {
+          "statusCode": 404,
+          "error": "error",
+          "message": "Not Found"
+        },
+    "headers": {}
 }
+
 
 /**
  * this function will wrap the component inside the router and provider
@@ -93,10 +103,26 @@ function nockPut(url = "/", payload = {}) {
         .reply(204, "");
 }
 
+/**
+ * this will mock the POST request
+ * @param {string} url request
+ * @param {JSON} payload request
+ * @param {JSON} response
+ */
+function nockPost(url = "/", payload = {}, response= {}) {
+    return nock(TEST_HOME)
+        .defaultReplyHeaders(responseHeadersJson)
+        .post(url, payload)
+        .delay(20)
+        .reply(201, response);
+}
+
 export {
     errorRes,
+    notFoundRes,
     testWrap,
     nockOptions,
     nockGet,
-    nockPut
+    nockPut,
+    nockPost
 };
