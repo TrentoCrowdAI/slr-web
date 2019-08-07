@@ -108,13 +108,14 @@ function nockPut(url = "/", payload = {}) {
  * @param {string} url request
  * @param {JSON} payload request
  * @param {JSON} response
+ * @param {number} statusCode response
  */
-function nockPost(url = "/", payload = {}, response= {}) {
+function nockPost(url = "/", payload = {}, response= {}, statusCode = 201) {
     return nock(TEST_HOME)
         .defaultReplyHeaders(responseHeadersJson)
         .post(url, payload)
         .delay(20)
-        .reply(201, response);
+        .reply(statusCode, response);
 }
 
 export {
