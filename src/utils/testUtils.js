@@ -43,6 +43,16 @@ const notFoundRes = {
     "headers": {}
 }
 
+const unauthRes = {
+    "statusCode": 401,
+        "payload": {
+          "statusCode": 401,
+          "error": "unauth",
+          "message": "Not allowed"
+        },
+    "headers": {}
+}
+
 
 /**
  * this function will wrap the component inside the router and provider
@@ -64,14 +74,25 @@ const testWrap = function (component, route= "/") {
  * this will mock the OPTONS request (which the app sends before every request to a new enpoint)
  * @param {string} url request
  * @param {JSON} query request
+ * @param {boolean} isPersistent makes mocked connection persistent
  */
-function nockOptions(url = "/", query = {}){
-    return nock(TEST_HOME)
-            .defaultReplyHeaders(optionsHeaders)
-            .options(url)
-            .query(query)
-            .delay(10)
-            .reply(200, 'OK');
+function nockOptions(url = "/", query = {}, isPersistent = false){
+    if(isPersistent){
+        return nock(TEST_HOME)
+                .persist()
+                .defaultReplyHeaders(optionsHeaders)
+                .options(url)
+                .query(query)
+                .delay(10)
+                .reply(200, 'OK');
+    }else{
+        return nock(TEST_HOME)
+                .defaultReplyHeaders(optionsHeaders)
+                .options(url)
+                .query(query)
+                .delay(10)
+                .reply(200, 'OK');
+    }
 }
 
 /**
@@ -80,14 +101,26 @@ function nockOptions(url = "/", query = {}){
  * @param {JSON} query request
  * @param {JSON} data response
  * @param {number} statusCode response
+ * @param {JSON} headers response
+ * @param {boolean} isPersistent makes mocked connection persistent
  */
-function nockGet(url = "/", query = {}, data, statusCode = 200) {
-    return nock(TEST_HOME)
-        .defaultReplyHeaders(responseHeadersJson)
-        .get(url)
-        .query(query)
-        .delay(20)
-        .reply(statusCode, data);
+function nockGet(url = "/", query = {}, data, statusCode = 200, headers = responseHeadersJson, isPersistent = false) {
+    if(isPersistent){
+        return nock(TEST_HOME)
+            .persist()
+            .defaultReplyHeaders(headers)
+            .get(url)
+            .query(query)
+            .delay(20)
+            .reply(statusCode, data);
+    }else{
+        return nock(TEST_HOME)
+            .defaultReplyHeaders(headers)
+            .get(url)
+            .query(query)
+            .delay(20)
+            .reply(statusCode, data);
+    }
 }
 
 /**
@@ -125,5 +158,6 @@ export {
     nockOptions,
     nockGet,
     nockPut,
-    nockPost
+    nockPost,
+    unauthRes
 };
