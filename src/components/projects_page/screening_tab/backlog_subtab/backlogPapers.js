@@ -115,7 +115,6 @@ const BacklogPapers = ({project_id, totalResults, setTotalResults, match, locati
             //call the dao for getting the papers
             let resx = await projectPapersDao.getPapersList({project_id, type: "backlog", ...queryData});
 
-            console.log(resx);
             //error checking
             //if is 404 error
             if (mnt && resx && resx.message === "Not Found") {
@@ -137,7 +136,6 @@ const BacklogPapers = ({project_id, totalResults, setTotalResults, match, locati
                 //show the page
                 setDisplay(true);
             }
-            console.log(resx.results)
         }
 
         fetchData();
@@ -171,7 +169,6 @@ const BacklogPapers = ({project_id, totalResults, setTotalResults, match, locati
 
     //handler for order selection(ASC|DESC)
     function handelOrder(e){
-        console.log("doing my part")
         //trigger svg animation
         if(queryData.sort === "ASC"){
             queryData.sort = "DESC";
