@@ -27,6 +27,12 @@ div.project-cards-holder div.project-card.for-screening{
   padding-bottom: 10px;
   border: solid 1px #d5b9f0;
 }
+div.project-cards-holder div.project-card.for-screening div.screening-progress{
+  margin: 0px 10px 0px 10px;
+  font-size: 12px;
+  font-weight: 300;
+  text-align: right;
+}
 div.project-cards-holder div.project-card div.project-card-options div.options-list{
   box-shadow: 0px 0px 2px -1px rgba(0, 0, 0, 0.25);
 }
@@ -740,6 +746,10 @@ form.start-manual-screening div.users-list button.user-data div.user-data-image-
   top: 0px;
   left: 0px;
 }
+form.start-manual-screening div.users-list button.user-data div.user-data-image-wrapper div.user-data-image svg#no-profile-image{
+  padding-top: 5px;
+  background-color: white;
+}
 form.start-manual-screening div.users-list button.user-data p.user-data-names{
   margin: 0px;
   line-height: 26px;
@@ -839,10 +849,12 @@ div.paper-card.manual div.users-votes div.votes{
   display: inline-flex;
 }
 div.paper-card.manual div.users-votes div.votes div.user-vote-image, img.user-vote-image{
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   margin: 0 2px 0 2px;
+  padding: 2px;
+  background-color: aliceblue;
 }
 div.user-vote-image.in-vote, img.user-vote-image.in-vote{
   border: solid 2px #0b8a42;

@@ -240,8 +240,8 @@ form.screening-outcome h2.question{
 }
 div.screening-choice{
   width: 240px;
-  margin: 20px auto 0px auto;
-  padding: 0px 0px 15px 0px;
+  margin: 0px auto 0px auto;
+  padding: 0px 0px 6px 0px;
 }
 div.screening-choice div.yes-no-und{
   display: flex;
@@ -255,7 +255,7 @@ div.screening-choice div.yes-no-und div.btn-decision-holder:hover div.decision-t
 }
 div.screening-choice div.yes-no-und div.decision-tooltip{
   height: 10px;
-  line-height: 10px;
+  line-height: 6px;
   opacity: 0.0;
   transition-delay: 0.1s;
   color: #3e3e3e;
@@ -271,6 +271,14 @@ div.screening-choice div.yes-no-und button svg{
   height: 70%;
   width: 70%;
   margin: 15%;
+}
+div.vote-submission-load{
+  position: relative;
+  height: 20px;
+  margin: 0px auto 0px auto;
+  width: 240px;
+  background-color: white;
+  text-align: center;
 }
 p.hl-tip{
   text-align: center;
@@ -322,6 +330,7 @@ div.screening-choice.multi-predicate{
 div.screening-choice.multi-predicate div.yes-no-und{
   width: 200px;
   margin: 15px auto 0px auto;
+  animation: delayed-showup 0.3s forwards;
 }
 p.empty-filters-description{
   width: 100%;
@@ -343,7 +352,7 @@ form.m-p-form div.filters-nav{
   height: 24px;
 }
 form.m-p-form div.filters-nav button.filter-btn{
-  width: 30px;
+  padding: 0px 6px 0px 5px;
   height: 20px;
 }
 form.m-p-form div.filters-nav div.underline{
