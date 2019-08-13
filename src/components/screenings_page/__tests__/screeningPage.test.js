@@ -20,12 +20,12 @@ const screeningsRes =
         [
             {
                 "id":"2","date_created":"2019-08-06T09:15:46.132Z","date_last_modified":"2019-08-06T09:15:46.132Z","date_deleted":null,
-                "project_id":"7","data":{"tags":[],"manual_screening_type":"multi-predicate"},
+                "project_id":"7","data":{"tags":[],"manual_screening_type":"multi-predicate"},"progress": {},
                 "project_data":{"name":"project 2","user_id":["2"],"description":"ab2","manual_screening_type":"multi-predicate"}
             },
             {
                 "id":"1","date_created":"2019-08-06T09:14:49.842Z","date_last_modified":"2019-08-06T09:14:49.842Z","date_deleted":null,
-                "project_id":"6","data":{"tags":[],"manual_screening_type":"single-predicate"},
+                "project_id":"6","data":{"tags":[],"manual_screening_type":"single-predicate"},"progress": {},
                 "project_data":{"name":"project 1","user_id":["2"],"description":"ab1","manual_screening_type":"single-predicate"}
             }
         ],
@@ -46,7 +46,7 @@ const nextPaperRes =
 const screeningData = 
     {
         "id":"1","date_created":"2019-08-06T09:14:49.842Z","date_last_modified":"2019-08-06T09:14:49.842Z","date_deleted":null,
-        "data":{"tags":[],"manual_screening_type":"single-predicate","name":"project 1"},
+        "data":{"tags":[],"manual_screening_type":"single-predicate","name":"project 1"}, "progress": {},
         "user_id":"2","project_id":"6"
     }
 
@@ -55,14 +55,13 @@ const votePostDataSinglePredicate =
         project_paper_id: '2',
         vote:
             { 
-                answer: '1',
                 metadata: { type: 'single-predicate', highlights: [
-                    {
+                    {highlightedData: [{
                         data:"Objective: To explore older adults’ preferences regarding e-health applications through use of generated concepts that inform wellness tool design. Methods: The 6-8-5 method and affinity mapping were used to create e-health design ideas that were translated into storyboards and scenarios. Focus groups were conducted to obtain feedback on the prototypes and included participant sketching. A qualitative analysis of the focus groups for emerging themes was conducted, and sketches were analyzed. Results: Forty-three older adults participated in six focus group sessions. The majority of participants found the wellness tools useful. Preferences included features that supported participants in areas of unmet needs, such as ability to find reliable health information, cognitive training, or maintaining social ties. Participants favored features such as use of voice navigation, but were concerned over cost and the need for technology skills and access. Sketches reinforced these wants, including portability, convenience, and simplicity. Conclusions: Several factors were found to increase the desirability of such devices including convenient access to their health and health information, a simple, accessible interface, and support for memory issues. Researchers and designers should incorporate the feedback of older adults regarding wellness tools, so that future designs meet the needs of older adults.",
                         start: 0,
                         end: 1412,
                         type: "not_highlighted"
-                    }
+                    }], outcome: '1'}
                 ], tags: [] } 
             }
     }
@@ -71,7 +70,6 @@ const votePostDataMultiPredicate =
     {
         "project_paper_id": "2",
         "vote": {
-            "answer":"1",
             "metadata":{
                 "type":"multi-predicate",
                 "highlights":[
@@ -191,7 +189,7 @@ describe('screenings list', () => {
 })
 
 describe('single predicate screening page', () => {
-
+    
     test('it should render the received paper data and the screening form', async () => {
         
         //will intercept the OPTIONS request
@@ -281,7 +279,7 @@ describe('single predicate screening page', () => {
         scope.done();
         
     })
-
+    
     test('it fetches a new paper once the user casts a vote', async () => {
         
         //will intercept the OPTIONS request
@@ -390,7 +388,7 @@ describe('multi predicate screening page', () => {
         scope.done();
 
     })
-    
+
     test('it should tell the user there are no papers to screen when it gets 404 answer', async () => {
         
         //will intercept the OPTIONS request

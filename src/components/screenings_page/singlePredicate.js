@@ -148,8 +148,7 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
         let screeningData = {
             project_paper_id: paperData.id,
             vote:{
-                answer: "0",
-                metadata: {type: "single-predicate", highlights: highlightedData, tags: selectedTags}
+                metadata: {type: "single-predicate", highlights: [{highlightedData, outcome: "0"}], tags: selectedTags}
             }
         };
 
@@ -162,12 +161,12 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
             case "a":
                 console.log("YES");
                 setDecision("yes");
-                screeningData.vote.answer = "1";
+                screeningData.vote.metadata.highlights[0].outcome = "1";
                 break;
             case "d":
                 console.log("UND");
                 setDecision("und");
-                screeningData.vote.answer = "2";
+                screeningData.vote.metadata.highlights[0].outcome = "2";
                 break;
             default:
                 break;
@@ -180,17 +179,17 @@ const SinglePredicateScreening = function ({screening, filtersList}) {
         //call the dao
         let res = await projectScreeningDao.submitVote(screeningData);
         
-        //if no error
-        if(mountRef.current && res.data){
-            //I trigger the effect to get a new paper
-            setNextPaper(!nextPaper);
-        }   
         //error checking
         //if is other error
-        else if (mountRef.current && res && res.message) {
+        if (mountRef.current && res && res.message) {
             //pass error object to global context
             appConsumer.setError(res);  
         }
+        //if no error        
+        else if(mountRef.current && res.data){
+            //I trigger the effect to get a new paper
+            setNextPaper(!nextPaper);
+        }   
         
     }
     

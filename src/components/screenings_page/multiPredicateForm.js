@@ -133,12 +133,6 @@ const MultiPredicateForm = function ({paperData, tagsData, filtersList, nextPape
         let screeningData = {
             project_paper_id: paperData.id,
             vote:{
-                answer: 
-                    (filterVotes.filter(v => v.outcome === "1").length >= filterVotes.filter(v => v.outcome === "0").length) ?
-                        "1"
-                    :
-                        "0"
-                    ,
                 metadata: {type: "multi-predicate", highlights: dataToSend, tags: tagsData}
             }
         };
