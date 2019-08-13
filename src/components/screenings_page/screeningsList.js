@@ -154,6 +154,10 @@ const PrintList = function ({screeningsList, path}) {
                         <h3>{element.project_data.name}</h3>
                         <p className="description">{element.project_data.description}</p>
                     </Link>
+                    <div className="screening-progress">
+                        <span>{element.progress.screenedPapers} </span>
+                        <span> screened out of <i>{element.progress.totalPapers}</i></span> 
+                    </div>
                 </div>
         ));
     }

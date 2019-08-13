@@ -377,6 +377,11 @@ svg#loading-icon path#loading-circle2{
   animation: complete-big 5s linear infinite, rotate-big 1s linear infinite;
 }
 
+.rotate-generic{
+  animation: rotate-big 1s linear infinite;
+  transform-origin: center;
+}
+
 /*horizontal load icon*/
 svg#h-load{
   height: 100%;
