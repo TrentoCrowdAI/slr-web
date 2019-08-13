@@ -31,9 +31,6 @@ const ScreeningBacklog = function ({project_id, project}) {
     //autoScreening flag
     const [autoScreeningFlag, setAutoScreeningFlag] = useState(false);
 
-    //autoScreeningStatus
-    const [autoScreeningStatus, setAutoScreeningStatus] = useState(3016);
-
     //number of papers hooks, used to check if there are papers
     const [totalResults, setTotalResults] = useState(0);
 
@@ -46,7 +43,7 @@ const ScreeningBacklog = function ({project_id, project}) {
         
         async function checkStatus() {
             let res = await projectScreeningDao.getAutoScreeningStatus({project_id});
-            if(res !== 0 && res !== null){
+            if(res === true){
                 setAutoScreeningFlag(true);
             }
         }
@@ -68,8 +65,7 @@ const ScreeningBacklog = function ({project_id, project}) {
             clearInterval(poll);
             poll = setInterval(async () => {
                 let resx = await projectScreeningDao.getAutoScreeningStatus({project_id});
-                setAutoScreeningStatus(3016 - 3016*resx/100)
-                if(resx === 100 || resx === null){
+                if(resx === false || resx === null){
                     setAutoScreeningFlag(false);
                 }
 
@@ -107,11 +103,12 @@ const ScreeningBacklog = function ({project_id, project}) {
                             version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                             viewBox="0 0 1000 1000">
                             <ellipse fill="none" stroke="#0b8a42" strokeWidth="30" cx="500" cy="500" rx="480" ry="480"
-                                style={{strokeDasharray: "3016", strokeDashoffset: autoScreeningStatus, transition: "all 0.2s"}}
+                                className="rotate-generic"
+                                style={{strokeDasharray: "3016", strokeDashoffset: (autoScreeningFlag) ? "2016" : "3016", transition: "all 0.2s"}}
                             />
                         </svg>
                         <button className="screening-strategy-btn auto" type="button"
-                            disabled={autoScreeningStatus !== 3016}
+                            disabled={autoScreeningFlag}
                             onClick={() => {setDisplayAutoForm(true)}}
                         > 
                         <AutoScreeningIcon/>
