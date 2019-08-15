@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext} from "react";
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
+import { Range } from 'react-range';
 
 import RadioBox from "components/forms_elements/radiobox";
 
@@ -38,6 +39,9 @@ const SearchStandardForm = function ({history, queryData, project_id}){
     const [source, setSource] = useState({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
     const [searchBy, setSearchBy] = useState(queryData.searchBy);
     const [year, setYear] = useState(queryData.year);
+
+    //state for year slider (not currently used)
+    const [values, setValues] = useState([1900, endYear]);
 
     //I update the state every time the query data changes
     useEffect(() => {
@@ -189,6 +193,41 @@ const SearchStandardForm = function ({history, queryData, project_id}){
                             )
                         }
                     </div>
+                    {/* (year slider, not currently used)
+                    <div className="year-slider-holder">
+                        <Range
+                            step={1}
+                            min={1900}
+                            max={endYear}
+                            values={values}
+                            onChange={values => setValues(values)}
+                            renderTrack={({ props, children }) => (
+                            <div
+                                {...props}
+                                className={"range-slider"}
+                                style={{
+                                ...props.style
+                                }}
+                            >
+                                {children}
+                            </div>
+                            )}
+                            renderThumb={({ props }) => (
+                            <div
+                                {...props}
+                                className={"range-thumb"}
+                                style={{
+                                ...props.style,
+                                height: '20px',
+                                width: '20px',
+                                backgroundColor: 'white'
+                                }}
+                            />
+                            )}
+                        />
+                        <p className="year-range">{values[0]} to {values[1]}</p>
+                    </div>
+                    */}
                 </div>
 
             </form>
