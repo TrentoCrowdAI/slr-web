@@ -68,42 +68,40 @@ const SearchStandardForm = function ({history, queryData, project_id}){
                 setKeyWords(event.target.value);
                 break;
             case "scopus":
-                //copy the old source
-                newSource = {...source};
                 //switch between true and false
-                newSource.scopus = true;
-                newSource.googleScholar = false;
-                newSource.arXiv = false;
-                setSource(newSource);
+                queryData.scopus = true;
+                queryData.googleScholar = false;
+                queryData.arXiv = false;
+                setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
                 break;
 
             case "googleScholar":
-                //copy the old source
-                newSource = {...source};
                 //switch between true and false
-                newSource.scopus = false;
-                newSource.googleScholar = true;
-                newSource.arXiv = false;
-                setSource(newSource);
+                queryData.scopus = false;
+                queryData.googleScholar = true;
+                queryData.arXiv = false;
+                setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
                 break;
             case "arXiv":
-                //copy the old source
-                newSource = {...source};
                 //switch between true and false
-                newSource.scopus = false;
-                newSource.googleScholar = false;
-                newSource.arXiv = true;
-                setSource(newSource);
+                queryData.scopus = false;
+                queryData.googleScholar = false;
+                queryData.arXiv = true;
+                setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
                 break;
             case "searchBy":
+                queryData.searchBy = event.target.value;
                 setSearchBy(event.target.value);
                 break;
             case "year":
+                queryData.year = event.target.value;
                 setYear(event.target.value);
                 break;
             default:
                 break;
+
         }
+        history.push(createQueryStringFromObject(queryData));
 
     }
 
