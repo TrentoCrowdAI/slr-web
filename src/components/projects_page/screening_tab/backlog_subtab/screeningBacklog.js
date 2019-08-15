@@ -89,7 +89,6 @@ const ScreeningBacklog = function ({project_id, project}) {
                 <div className="screening-strategy-buttons">
                     <div className="screening-strategy-btn-holder">
                         <button className="screening-strategy-btn manual" type="button"
-                            disabled = {project.data.manual_screening_type || manualStarted}
                             onClick={() => {setDisplayManualForm(true)}}
                         > 
                         <ManualScreeningIcon/>
@@ -104,7 +103,7 @@ const ScreeningBacklog = function ({project_id, project}) {
                             viewBox="0 0 1000 1000">
                             <ellipse fill="none" stroke="#0b8a42" strokeWidth="30" cx="500" cy="500" rx="480" ry="480"
                                 className="rotate-generic"
-                                style={{strokeDasharray: "3016", strokeDashoffset: (autoScreeningFlag) ? "2016" : "3016", transition: "all 0.2s"}}
+                                style={{strokeDasharray: "3016", opacity: (autoScreeningFlag) ? "1.0" : "0.0", strokeDashoffset: (autoScreeningFlag) ? "2016" : "3016", transition: "all 0.2s"}}
                             />
                         </svg>
                         <button className="screening-strategy-btn auto" type="button"
