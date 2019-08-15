@@ -45,6 +45,7 @@ const SearchStandardForm = function ({history, queryData, project_id}){
 
     //I update the state every time the query data changes
     useEffect(() => {
+        console.log("query data change effect");
         setKeyWords(queryData.query);
         //we can't allow multiple sources yet
         if((queryData.scopus && queryData.arXiv && queryData.googleScholar) || !(queryData.scopus ^ queryData.arXiv ^ queryData.googleScholar)){
@@ -55,7 +56,7 @@ const SearchStandardForm = function ({history, queryData, project_id}){
         setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
         setSearchBy(queryData.searchBy);
         setYear(queryData.year);
-    }, [queryData.query, queryData.orderBy, queryData.searchBy, queryData.sort, queryData.year, queryData.start, queryData.count, queryData.scopus, queryData.googleScholar, queryData.arXiv])
+    }, [queryData])
 
     //get data from global context
     const appConsumer = useContext(AppContext);
@@ -72,41 +73,40 @@ const SearchStandardForm = function ({history, queryData, project_id}){
                 setKeyWords(event.target.value);
                 break;
             case "scopus":
-                //copy the old source
-                newSource = {...source};
                 //switch between true and false
-                newSource.scopus = true;
-                newSource.googleScholar = false;
-                newSource.arXiv = false;
-                setSource(newSource);
+                queryData.scopus = true;
+                queryData.googleScholar = false;
+                queryData.arXiv = false;
                 break;
 
             case "googleScholar":
-                //copy the old source
-                newSource = {...source};
                 //switch between true and false
-                newSource.scopus = false;
-                newSource.googleScholar = true;
-                newSource.arXiv = false;
-                setSource(newSource);
+                queryData.scopus = false;
+                queryData.googleScholar = true;
+                queryData.arXiv = false;
                 break;
             case "arXiv":
-                //copy the old source
-                newSource = {...source};
                 //switch between true and false
-                newSource.scopus = false;
-                newSource.googleScholar = false;
-                newSource.arXiv = true;
-                setSource(newSource);
+                queryData.scopus = false;
+                queryData.googleScholar = false;
+                queryData.arXiv = true;
                 break;
             case "searchBy":
-                setSearchBy(event.target.value);
+                queryData.searchBy = event.target.value;
                 break;
             case "year":
-                setYear(event.target.value);
+                queryData.year = event.target.value;
                 break;
             default:
                 break;
+        }
+        
+        if(queryData.query){
+            history.push(createQueryStringFromObject(queryData));
+        }else{
+            setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
+            setSearchBy(queryData.searchBy);
+            setYear(queryData.year);
         }
 
     }
