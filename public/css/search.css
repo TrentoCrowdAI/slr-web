@@ -197,6 +197,29 @@ div.option-holder div.checkboxes-holder label:last-child {
   text-align: right;
 }
 
+div.year-slider-holder{
+  font-size: 15px;
+  margin-top: 20px;
+  font-weight: 300;
+}
+div.range-slider{
+  width: 80%;
+  height: 2px;
+  background-color: gray;
+}
+form.small div.range-slider{
+  margin: 0 auto;
+}
+div.range-thumb{
+  border-radius: 50%;
+  border: solid 1px #898989;
+}
+p.year-range{
+  margin: 10px 0px 0px 0px;
+  text-align: center;
+}
+
+
 /*options when results are shown*/
 form.small{
   width: 680px;
