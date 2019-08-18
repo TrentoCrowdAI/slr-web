@@ -421,6 +421,13 @@ describe('manual screening form', () => {
         //will intercept the GET request
         const scope_2 = nockGet("/projects/"+ 7 + "/collaborators", {}, collaboratorsRes);
 
+        //will intercept the OPTIONS request
+        const optionsScope_3 = nockOptions("/projects/"+ 7 + "/screeners");
+
+        //will intercept the GET request
+        const scope_3 = nockGet("/projects/"+ 7 + "/screeners", {}, []);
+
+
         const {container} = render(
             testWrap(<ManualScreeningForm visibility={true} setManualStarted={() => undefined} setVisibility={() => undefined} project_id={7}/>)
         );
@@ -442,6 +449,8 @@ describe('manual screening form', () => {
         scope_1.done();
         optionsScope_2.done();
         scope_2.done();
+        optionsScope_3.done();
+        scope_3.done();
 
     })
 

@@ -11,7 +11,9 @@ import UserCheckbox from 'components/projects_page/screening_tab/backlog_subtab/
 import LoadIcon from 'components/svg/loadIcon';
 import CloseButton from 'components/svg/closeButton';
 
-import { AppContext } from 'components/providers/appProvider'
+import { AppContext } from 'components/providers/appProvider';
+
+const _array = require('lodash/array');
 
 /**
  * this is the form for starting the manual screening
@@ -28,6 +30,9 @@ function ManualScreeningForm(props) {
 
     //collaborators list
     const [collaborators, setCollaborators] = useState([]);
+
+    //screeners ref
+    const screeners = useRef([])
 
     //bool for multi predicate option availability
     const [isMpAvailable, setIsMpAvailable] = useState(false);
@@ -49,7 +54,6 @@ function ManualScreeningForm(props) {
             }
             //if the component is still mounted and res isn't null
             else if (mountRef.current && res) {
-                //setCollaborators(res);
                 setCollaborators(res);
 
                 //call the dao for getting the filters(this way I know if the user can start multi predicate screening)
@@ -70,6 +74,14 @@ function ManualScreeningForm(props) {
                     //update state
                     setIsMpAvailable(true);
                 }
+
+                let resz = await projectsDao.getProjectScreeners(props.project_id);
+                if(mountRef.current && resz && resz.message){
+                    //pass error object to global context
+                    appConsumer.setError(resz);
+                }else{
+                    screeners.current = resz.map((user) => user.id);
+                }
                 //show the list
                 setCollaboratorsFetch(false);
             }
@@ -88,12 +100,21 @@ function ManualScreeningForm(props) {
         <>
         <Formik
             initialValues={{screeners: [], screening_mode: "single-predicate"}}
-            onSubmit={async (values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting, resetForm }) => {
 
-                let bodyData = {project_id: props.project_id, array_user_ids: values.screeners, manual_screening_type: values.screening_mode};
+                let bodyData = {array_user_ids: values.screeners, manual_screening_type: values.screening_mode};
+
 
                 if(values.screeners.length > 0){
-                    let res = await projectScreeningDao.startManualScreening(bodyData);
+                    //If the project has not any screnners yet I do the POST
+                    let res;
+                    if(screeners.current.length === 0){
+                        res = await projectsDao.postProjectManualScreeningData(props.project_id, bodyData);
+                    }
+                    //otherwise I do the update
+                    else{
+                        res = await projectsDao.putProjectManualScreeningData(props.project_id, bodyData);
+                    }
 
                     //error checking
                     if(mountRef.current && res.message){
@@ -103,6 +124,8 @@ function ManualScreeningForm(props) {
                         setSubmitting(false);
                         props.setVisibility(!props.visibility);
                         props.setManualStarted(true);
+                        screeners.current = _array.union(values.screeners, screeners.current);
+                        resetForm({screeners: [], screening_mode: "-"});
                     }
                 }
 
@@ -117,7 +140,7 @@ function ManualScreeningForm(props) {
             }else{
                 result = (
                     <>
-                    <p className="tip">Is a good practice to select at least two people for screening</p>
+                    <p className="tip">{(screeners.current.length === 0) ? "Is a good practice to select at least two people for screening" : ""}</p>
                     <div className="users-list">
                         <Field
                             name="screeners"
@@ -127,7 +150,7 @@ function ManualScreeningForm(props) {
                                         if(user.data.name !== ""){
                                             return (
                                                 <div key={user.id}>
-                                                    <UserCheckbox user={user} {...field} form={form}/>
+                                                    <UserCheckbox user={user} alreadyScreeners={screeners} {...field} form={form}/>
                                                 </div>
                                             );
                                         }
@@ -136,16 +159,19 @@ function ManualScreeningForm(props) {
                             )}
                         />
                     </div>
-                    <div className="screening-type">
+                    <div className={(screeners.current.length !== 0) ? "screening-type disabled" : "screening-type"} 
+                        style={{height: (screeners.current.length !== 0) ? "0px" : "", overflow: (screeners.current.length !== 0) ? "hidden" : ""}}>
                         <label>Screening mode : </label>
                         <Field
                             name="screening_mode"
                             render={({ field, form }) => (
                                 <>
                                     <RadioBox label={"single-predicate"} {...field} val={"single-predicate"} form={form}
-                                            isChecked={(values.screening_mode === "single-predicate")} />
+                                            isChecked={(values.screening_mode === "single-predicate")} 
+                                            disabled={(screeners.current.length !== 0)}/>
                                     <RadioBox className={(isMpAvailable) ? "" : "disabled"} label={"multi-predicate"} {...field} val={"multi-predicate"} form={form}
-                                            isChecked={(values.screening_mode === "multi-predicate")}/>
+                                            isChecked={(values.screening_mode === "multi-predicate")}
+                                            disabled={(screeners.current.length !== 0)}/>
                                 </>
                             )}
                         />
@@ -161,7 +187,7 @@ function ManualScreeningForm(props) {
                 <h2>Select screeners</h2>
                 {result}
                 <button className="start-btn" type="submit" style={{visibility: (collaboratorsFetch) ? 'hidden' : '' }} disabled={(values.screeners.length === 0 || isSubmitting)}>
-                    Start Manual-screening
+                    {(screeners.current.length === 0) ? "Start Manual-screening" : "Add extra screeners"}
                 </button>
             </Form>
             );

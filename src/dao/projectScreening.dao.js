@@ -10,14 +10,6 @@ async function startAutoScreening(bodyData){
 }
 
 /**
- * start manual screening
- */
-async function startManualScreening(bodyData){
-    let url = config.home + config.screenings;
-    return await http.post(url, bodyData)
-}
-
-/**
  * auto screening status
  * @param project_id
  * @return {Number} completion percentage
@@ -76,7 +68,6 @@ async function submitVote(bodyData){
 
 const projectScreeningDao = {
     startAutoScreening,
-    startManualScreening,
     getAutoScreeningStatus,
     getScreening,
     getProjectPaperToScreen,

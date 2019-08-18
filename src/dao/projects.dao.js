@@ -37,6 +37,41 @@ async function getProjectCollaborators(project_id) {
 }
 
 /**
+ * dao to get project screeners
+ * @param project_id
+ * @return {array[objects]} array of screeners
+ */
+async function getProjectScreeners(project_id) {
+    let url = config.home + config.projects + "/" + project_id + "/screeners";
+    let res = await http.get(url);
+    return res;
+}
+
+/**
+ * dao to add project manual screenning
+ * @param project_id
+ * @param bodyData
+ * @return {Object} screening data
+ */
+async function postProjectManualScreeningData(project_id, bodyData) {
+    let url = config.home + config.projects + "/" + project_id + "/screeners";
+    return await http.post(url, bodyData);
+}
+
+/**
+ * dao to update project manual screenning
+ * @param project_id
+ * @param bodyData
+ * @return {Object} screening data
+ */
+async function putProjectManualScreeningData(project_id, bodyData) {
+    let url = config.home + config.projects + "/" + project_id + "/screeners";
+    return await http.put(url, bodyData);
+}
+
+
+
+/**
  * dao to post a new project
  * @param bodyData
  * @return {Object} project created
@@ -101,6 +136,9 @@ const projectsDao = {
     deleteProject,
     "abortRequest": http.abortRequest,
     getProjectCollaborators,
+    getProjectScreeners,
+    postProjectManualScreeningData,
+    putProjectManualScreeningData,
     removeProjectCollaborator,
     addProjectCollaborator
 }
