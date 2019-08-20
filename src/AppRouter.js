@@ -11,7 +11,7 @@ const AppRouter = function(props) {
 
 
         return (
-            <Router>
+            <Router basename={"/"}>
                 <App/>
             </Router>
         );
