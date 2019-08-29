@@ -43,7 +43,7 @@ const ScreeningBacklog = function ({project_id, project}) {
         
         async function checkStatus() {
             let res = await projectScreeningDao.getAutoScreeningStatus({project_id});
-            if(res === true){
+            if(res === false){
                 setAutoScreeningFlag(true);
             }
         }
@@ -65,7 +65,7 @@ const ScreeningBacklog = function ({project_id, project}) {
             clearInterval(poll);
             poll = setInterval(async () => {
                 let resx = await projectScreeningDao.getAutoScreeningStatus({project_id});
-                if(resx === false || resx === null){
+                if(resx === true){
                     setAutoScreeningFlag(false);
                 }
 
