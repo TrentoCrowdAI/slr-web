@@ -46,7 +46,6 @@ const SearchStandardForm = function ({history, queryData, project_id}){
     //I update the state every time the query data changes
     useEffect(() => {
         console.log("query data change effect");
-        setKeyWords(queryData.query);
         //we can't allow multiple sources yet
         if((queryData.scopus && queryData.arXiv && queryData.googleScholar) || !(queryData.scopus ^ queryData.arXiv ^ queryData.googleScholar)){
             queryData.arXiv = false;
@@ -101,7 +100,8 @@ const SearchStandardForm = function ({history, queryData, project_id}){
                 break;
         }
         
-        if(queryData.query){
+        if(event.target.name !== "query" && queryData.query && keywords){
+            queryData.query = keywords;
             history.push(createQueryStringFromObject(queryData));
         }else{
             setSource({"scopus": queryData.scopus, "googleScholar": queryData.googleScholar, "arXiv": queryData.arXiv});
