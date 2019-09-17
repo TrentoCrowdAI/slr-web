@@ -12,7 +12,8 @@ const PaperConfidence = function ({filtersList, confidence}) {
         //I combine two arrays in an array of pairs: from [a,b,c] and [1,2,3] to [{a,1}, {b,2}, {c,3}]
         function pairCoupleArray(confArray,filterArray){
             let pairArray = [];
-            for(let i = 0; i < confArray.length; i++){
+            let min_length = (confArray.length < filterArray.length) ? confArray.length : filterArray.length;
+            for(let i = 0; i < min_length; i++){
                 //in case the 2 array filters are in the same order
                 if(confArray[i].id === filterArray[i].id){
                     pairArray.push({"label" : filterArray[i].data.name, "tooltip" : filterArray[i].data.predicate, "value" : confArray[i].filterValue});
@@ -20,7 +21,9 @@ const PaperConfidence = function ({filtersList, confidence}) {
                 //otherwise I need to search for the correct pair
                 else{
                     let correctFilter = filterArray.find(filter => filter.id === confArray[i].id);
-                    pairArray.push({"label" : correctFilter.data.name, "tooltip" : correctFilter.data.predicate, "value" : confArray[i].filterValue});
+                    if(correctFilter && correctFilter.data){
+                        pairArray.push({"label" : correctFilter.data.name, "tooltip" : correctFilter.data.predicate, "value" : confArray[i].filterValue});
+                    }
                 }
             }
             return pairArray;

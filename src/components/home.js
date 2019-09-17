@@ -34,12 +34,14 @@ const Home = function (props) {
             </h1>
             <h2 style={{fontSize: 22, fontWeight: "normal"}}>the system right now allows you to</h2>
             <ul style={{fontSize: 18, fontWeight: "lighter"}}>
-                <li>browse a list of prjects</li>
-                <li>add a new project</li>
+                <li>browse and manage a list of prjects</li>
                 <li>browse the list of papers on a project</li>
-                <li>search(from scopus) and add papers to a project</li>
+                <li>search(from Scopus or arXiv) and add papers to a project</li>
                 <li>add custom papers based on a file or form data</li>
-                <li>'fake search' similar papers</li>
+                <li>'fake search' similar papers or relevant papers</li>
+                <li>select collaborators and screeners</li>
+                <li>browse and manage a list of screenings</li>
+                <li>screen project papers</li>
             </ul>
             <h2 style={{fontSize: 22, fontWeight: "normal"}}>notes</h2>
             <ul style={{fontSize: 18, fontWeight: "lighter"}}>
