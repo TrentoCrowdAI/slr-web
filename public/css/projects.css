@@ -839,16 +839,16 @@ div.right-side-wrapper.manual{
 div.paper-card.manual div.paragraph{
   margin-bottom: 5px;
 }
-div.paper-card.manual div.users-votes{
+div.paper-card.screened div.users-votes, div.paper-card.manual div.users-votes{
   width: 690px;
   display: flex;
   flex-wrap: wrap;
   margin: 0px 0px 0px 10px;
 }
-div.paper-card.manual div.users-votes div.votes{
+div.paper-card.screened div.users-votes div.votes, div.paper-card.manual div.users-votes div.votes{
   display: inline-flex;
 }
-div.paper-card.manual div.users-votes div.votes div.user-vote-image, img.user-vote-image{
+div.paper-card.screened div.users-votes div.votes div.user-vote-image, div.paper-card.manual div.users-votes div.votes div.user-vote-image, img.user-vote-image{
   width: 38px;
   height: 38px;
   border-radius: 50%;

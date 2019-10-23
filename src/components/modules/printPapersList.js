@@ -210,6 +210,23 @@ const PrintScreenedPapersList_w = function ({papersList}) {
                         moreText="more"
                         lessText="less"
                     />
+                    <div className="users-votes">
+                        <div className="votes">
+                            {element.data.metadata.votes.filter(v => v.answer === "1").map((elementx, index) => (
+                                <Image key={index} className="user-vote-image in-vote" alt={elementx.user.name + " voted: in"} src={elementx.user.picture}/>
+                            ))}
+                        </div>
+                        <div className="votes">
+                            {element.data.metadata.votes.filter(v => v.answer === "0").map((elementx, index) => (
+                                <Image key={index} className="user-vote-image out-vote" alt={elementx.user.name + " voted: out"} src={elementx.user.picture}/>
+                            ))}
+                        </div>
+                        <div className="votes">
+                            {element.data.metadata.votes.filter(v => v.answer === "2").map((elementx, index) => (
+                                <Image key={index} className="user-vote-image und-vote" alt={elementx.user.name + " is undecided"} src={elementx.user.picture}/>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             )
         );
