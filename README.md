@@ -1,10 +1,6 @@
 # slr-web
 
-Front-end for the slr-api
-
-## status
-
-Under development.
+SLR, a system for supporting the search phase of systematic literature reviews. Frontend layer. Backend [here](https://github.com/TrentoCrowdAI/slr-api).
 
 ## deployment
 
